@@ -42,7 +42,7 @@ export const AdvancedSidebar: React.FC<AdvancedSidebarProps> = ({
       <div className="p-6">
         {/* Logo */}
         <div className="flex items-center space-x-3 mb-8">
-          <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center shadow-lg">
+          <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg">
             <Brain className="w-8 h-8 text-white" />
           </div>
           <div>
