@@ -469,450 +469,52 @@ const App: React.FC = () => {
     setShowDebugMenu(!showDebugMenu);
   }, [showDebugMenu]);
 
-  const renderComponent = useCallback(() => {
-    switch (currentPath) {
-      // Builder.io routes
-      case "/builder":
-        return (
-          <RouteWrapper routeName="Builder.io Example">
-            <Suspense
-              fallback={
-                <LoadingFallback message="Loading Builder.io example..." />
-              }
-            >
-              {React.createElement(
-                lazy(() => import("./pages/BuilderExample.tsx")),
-              )}
-            </Suspense>
-          </RouteWrapper>
-        );
-      case "/builder-test":
-        return (
-          <RouteWrapper routeName="Builder.io Test">
-            <Suspense
-              fallback={
-                <LoadingFallback message="Loading Builder.io test..." />
-              }
-            >
-              {React.createElement(
-                lazy(() => import("./pages/BuilderTest.tsx")),
-              )}
-            </Suspense>
-          </RouteWrapper>
-        );
+  // Simple render - just show the unified dashboard like the prototype
+  const renderMainApp = () => (
+    <RouteWrapper routeName="Unified Dashboard">
+      <SuspenseWrapper loadingMessage="Loading A1Betting Platform...">
+        <UnifiedDashboard />
+      </SuspenseWrapper>
+    </RouteWrapper>
+  );
 
-      // Core Money Makers
-      case "/":
-      case "/dashboard":
-        return (
-          <RouteWrapper routeName="Unified Dashboard">
-            <SuspenseWrapper loadingMessage="Loading Unified Dashboard...">
-              <UnifiedDashboard />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/money-maker":
-        return (
-          <RouteWrapper routeName="Money Maker">
-            <UltimateMoneyMaker />
-          </RouteWrapper>
-        );
-      case "/money-maker-advanced":
-        return (
-          <RouteWrapper routeName="Advanced Money Maker">
-            <MoneyMakerAdvanced />
-          </RouteWrapper>
-        );
-      case "/money-maker-enhanced":
-        return (
-          <RouteWrapper routeName="Enhanced Money Maker">
-            <UltimateMoneyMakerEnhanced />
-          </RouteWrapper>
-        );
-
-      // Advanced ML & Analytics
-      case "/advanced-ml":
-        return (
-          <RouteWrapper routeName="Advanced ML Dashboard">
-            <SuspenseWrapper loadingMessage="Loading Advanced ML Dashboard...">
-              <AdvancedMLDashboard models={[]} />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/hyper-ml":
-        return (
-          <RouteWrapper routeName="Hyper ML Insights">
-            <SuspenseWrapper loadingMessage="Loading Hyper ML Insights...">
-              <HyperMLInsights />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/evolutionary":
-        return (
-          <RouteWrapper routeName="Evolutionary Insights">
-            <SuspenseWrapper loadingMessage="Loading Evolutionary Analytics...">
-              <EvolutionaryInsights />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/analytics":
-        return (
-          <RouteWrapper routeName="Advanced Analytics">
-            <SuspenseWrapper loadingMessage="Loading Analytics Dashboard...">
-              <AdvancedAnalytics />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/performance":
-        return (
-          <RouteWrapper routeName="Performance Analytics">
-            <SuspenseWrapper loadingMessage="Loading Performance Analytics...">
-              <PerformanceAnalyticsDashboard />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/analytics-hub":
-        return (
-          <RouteWrapper routeName="Analytics Hub">
-            <SuspenseWrapper loadingMessage="Loading Analytics Hub...">
-              <AdvancedAnalyticsHub />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/mobile":
-        return (
-          <RouteWrapper routeName="Mobile Interface">
-            <SuspenseWrapper loadingMessage="Loading Mobile Experience...">
-              <MobileOptimizedInterface />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-
-      // Real-time & Live Data
-      case "/real-time":
-        return (
-          <RouteWrapper routeName="Real-time Data">
-            <SuspenseWrapper loadingMessage="Connecting to Real-time Data Stream...">
-              <RealTimeDataStream />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-
-      // Unified Interfaces
-      case "/unified-dashboard":
-        return (
-          <RouteWrapper routeName="Unified Dashboard">
-            <SuspenseWrapper loadingMessage="Loading Unified Dashboard...">
-              <UnifiedDashboard />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/unified-betting":
-        return (
-          <RouteWrapper routeName="Unified Betting">
-            <SuspenseWrapper loadingMessage="Loading Betting Interface...">
-              <UnifiedBettingInterface />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/unified-predictions":
-        return (
-          <RouteWrapper routeName="Unified Predictions">
-            <SuspenseWrapper loadingMessage="Loading Prediction Interface...">
-              <UnifiedPredictionInterface />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-
-      // Ultra-Advanced Accuracy Suite
-      case "/ultra-accuracy-overview":
-        return (
-          <RouteWrapper routeName="Ultra-Accuracy Overview">
-            <SuspenseWrapper loadingMessage="Loading Ultra-Accuracy Overview...">
-              <UltraAccuracyOverview />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/ultra-ml-dashboard":
-        return (
-          <RouteWrapper routeName="Ultra ML Dashboard">
-            <SuspenseWrapper loadingMessage="Initializing Ultra-Advanced ML Dashboard...">
-              <UltraAdvancedMLDashboard />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/confidence-visualizer":
-        return (
-          <RouteWrapper routeName="Confidence Visualizer">
-            <SuspenseWrapper loadingMessage="Loading Advanced Confidence Analysis...">
-              <AdvancedConfidenceVisualizer />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/accuracy-monitor":
-        return (
-          <RouteWrapper routeName="Accuracy Monitor">
-            <SuspenseWrapper loadingMessage="Connecting to Real-time Accuracy Monitor...">
-              <RealTimeAccuracyDashboard />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/quantum-predictions":
-        return (
-          <RouteWrapper routeName="Quantum Predictions">
-            <SuspenseWrapper loadingMessage="Initializing Quantum Prediction Engine...">
-              <QuantumPredictionsInterface />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-
-      // Revolutionary 2024 Research
-      case "/revolutionary-accuracy":
-        return (
-          <RouteWrapper routeName="Revolutionary Accuracy Engine">
-            <SuspenseWrapper loadingMessage="Loading Revolutionary 2024 ML Research Engine...">
-              <RevolutionaryAccuracyInterface />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/enhanced-revolutionary":
-        return (
-          <RouteWrapper routeName="Enhanced Mathematical Engine">
-            <SuspenseWrapper loadingMessage="Loading Enhanced Mathematical Revolutionary Engine...">
-              <EnhancedRevolutionaryInterface />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/neuromorphic-interface":
-        return (
-          <RouteWrapper routeName="Neuromorphic Computing">
-            <SuspenseWrapper loadingMessage="Initializing Neuromorphic Computing Interface...">
-              <div className="p-6">
-                <Card className="max-w-4xl mx-auto">
-                  <div className="text-center p-8">
-                    <div className="text-6xl mb-4">🧠</div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                      Neuromorphic Computing Interface
-                    </h1>
-                    <p className="text-gray-600 mb-6">
-                      Brain-inspired spiking neural networks with STDP learning
-                      (2024 Research)
-                    </p>
-                    <div className="bg-gradient-to-r from-indigo-100 to-purple-100 p-6 rounded-lg">
-                      <h3 className="text-lg font-semibold text-indigo-800 mb-2">
-                        Neuromorphic Features Available
-                      </h3>
-                      <ul className="text-indigo-700 space-y-2 text-left max-w-md mx-auto">
-                        <li>• Spike-timing dependent plasticity (STDP)</li>
-                        <li>• Adaptive thresholds with homeostasis</li>
-                        <li>• Energy-efficient computation</li>
-                        <li>• Temporal pattern recognition</li>
-                        <li>�� Asynchronous event processing</li>
-                      </ul>
-                    </div>
-                  </div>
-                </Card>
+  // Debug menu for development (only shown when explicitly requested)
+  const renderDebugMenu = () => (
+    <div className="p-6">
+      <Card className="max-w-4xl mx-auto">
+        <div className="text-center p-8">
+          <h1 className="text-2xl font-bold mb-4">Development Debug Menu</h1>
+          <p className="text-gray-600 mb-6">
+            This menu is only available in development mode. Add ?debug to the
+            URL to access individual components.
+          </p>
+          <Button onClick={() => setShowDebugMenu(false)} className="mb-4">
+            ← Back to Main Dashboard
+          </Button>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+            {navigationConfig.slice(0, 3).map((group) => (
+              <div key={group.group} className="space-y-2">
+                <h3 className="font-semibold text-sm text-gray-700">
+                  {group.group}
+                </h3>
+                {group.items.slice(0, 5).map((item) => (
+                  <Button
+                    key={item.href}
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-xs"
+                    onClick={() => (window.location.hash = item.href)}
+                  >
+                    {item.label}
+                  </Button>
+                ))}
               </div>
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/physics-informed":
-        return (
-          <RouteWrapper routeName="Physics-Informed ML">
-            <SuspenseWrapper loadingMessage="Loading Physics-Informed Neural Networks...">
-              <div className="p-6">
-                <Card className="max-w-4xl mx-auto">
-                  <div className="text-center p-8">
-                    <div className="text-6xl mb-4">⚗️</div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                      Physics-Informed Machine Learning
-                    </h1>
-                    <p className="text-gray-600 mb-6">
-                      Neural networks with physics constraints and domain
-                      knowledge integration
-                    </p>
-                    <div className="bg-gradient-to-r from-emerald-100 to-green-100 p-6 rounded-lg">
-                      <h3 className="text-lg font-semibold text-emerald-800 mb-2">
-                        Physics Integration Features
-                      </h3>
-                      <ul className="text-emerald-700 space-y-2 text-left max-w-md mx-auto">
-                        <li>• Conservation laws integration</li>
-                        <li>• Sports-specific physics constraints</li>
-                        <li>• Energy and momentum conservation</li>
-                        <li>• Performance bounds enforcement</li>
-                        <li>• Fatigue effect modeling</li>
-                      </ul>
-                    </div>
-                  </div>
-                </Card>
-              </div>
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/causal-discovery":
-        return (
-          <RouteWrapper routeName="Causal Inference">
-            <SuspenseWrapper loadingMessage="Loading Causal Inference with Do-Calculus...">
-              <div className="p-6">
-                <Card className="max-w-4xl mx-auto">
-                  <div className="text-center p-8">
-                    <div className="text-6xl mb-4">🔀</div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                      Causal Inference Engine
-                    </h1>
-                    <p className="text-gray-600 mb-6">
-                      Advanced causal discovery and inference using do-calculus
-                      and Pearl's framework
-                    </p>
-                    <div className="bg-gradient-to-r from-orange-100 to-yellow-100 p-6 rounded-lg">
-                      <h3 className="text-lg font-semibold text-orange-800 mb-2">
-                        Causal Analysis Features
-                      </h3>
-                      <ul className="text-orange-700 space-y-2 text-left max-w-md mx-auto">
-                        <li>• Automated causal graph discovery</li>
-                        <li>• Do-calculus implementation</li>
-                        <li>• Confounding variable identification</li>
-                        <li>• Intervention effect estimation</li>
-                        <li>• Backdoor and frontdoor criteria</li>
-                      </ul>
-                    </div>
-                  </div>
-                </Card>
-              </div>
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/manifold-learning":
-        return (
-          <RouteWrapper routeName="Manifold Learning">
-            <SuspenseWrapper loadingMessage="Loading Geometric Deep Learning on Manifolds...">
-              <div className="p-6">
-                <Card className="max-w-4xl mx-auto">
-                  <div className="text-center p-8">
-                    <div className="text-6xl mb-4">🌐</div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                      Geometric Manifold Learning
-                    </h1>
-                    <p className="text-gray-600 mb-6">
-                      Advanced geometric deep learning on Riemannian manifolds
-                      for complex relationships
-                    </p>
-                    <div className="bg-gradient-to-r from-cyan-100 to-blue-100 p-6 rounded-lg">
-                      <h3 className="text-lg font-semibold text-cyan-800 mb-2">
-                        Geometric Learning Features
-                      </h3>
-                      <ul className="text-cyan-700 space-y-2 text-left max-w-md mx-auto">
-                        <li>• Riemannian geometry integration</li>
-                        <li>• Geodesic distance computation</li>
-                        <li>• Parallel transport operations</li>
-                        <li>• Curvature-aware learning</li>
-                        <li>• Exponential and logarithmic maps</li>
-                      </ul>
-                    </div>
-                  </div>
-                </Card>
-              </div>
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-
-      // Advanced Tools & Simulators
-      case "/what-if":
-        return (
-          <RouteWrapper routeName="What-If Simulator">
-            <SuspenseWrapper loadingMessage="Loading What-If Simulator...">
-              <WhatIfSimulator />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/lineup-builder":
-        return (
-          <RouteWrapper routeName="Lineup Builder">
-            <SuspenseWrapper loadingMessage="Loading Lineup Builder...">
-              <SmartLineupBuilder onLineupSubmit={() => {}} />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/market-analysis":
-        return (
-          <RouteWrapper routeName="Market Analysis">
-            <SuspenseWrapper loadingMessage="Loading Market Analysis...">
-              <MarketAnalysisDashboard eventId="sample-event" />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/arbitrage":
-        return (
-          <RouteWrapper routeName="Arbitrage Opportunities">
-            <SuspenseWrapper loadingMessage="Loading Arbitrage Opportunities...">
-              <ArbitrageOpportunities />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-
-      // Model Management
-      case "/ml-center":
-        return (
-          <RouteWrapper routeName="ML Model Center">
-            <SuspenseWrapper loadingMessage="Loading ML Model Center...">
-              <MLModelCenter />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-
-      // User Management
-      case "/profile":
-        return (
-          <RouteWrapper routeName="User Profile">
-            <SuspenseWrapper loadingMessage="Loading Profile...">
-              <UnifiedProfile />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-      case "/settings":
-        return (
-          <RouteWrapper routeName="Settings">
-            <SuspenseWrapper loadingMessage="Loading Settings...">
-              <UnifiedSettingsInterface />
-            </SuspenseWrapper>
-          </RouteWrapper>
-        );
-
-      // Enhanced Pages
-      case "/prizepicks-enhanced":
-        return (
-          <RouteWrapper routeName="PrizePicks Enhanced">
-            <PrizePicksPageEnhanced />
-          </RouteWrapper>
-        );
-      case "/premium-dashboard":
-        return (
-          <RouteWrapper routeName="Premium Dashboard">
-            <PremiumDashboard />
-          </RouteWrapper>
-        );
-
-      // Core Features
-      case "/ml-predictions":
-        return (
-          <RouteWrapper routeName="ML Predictions">
-            <MLPredictions />
-          </RouteWrapper>
-        );
-      case "/security":
-        return (
-          <RouteWrapper routeName="Security Dashboard">
-            <WebSocketSecurityDashboard />
-          </RouteWrapper>
-        );
-      default:
-        return (
-          <RouteWrapper routeName="Elite Sports Intelligence Platform">
-            <UltimateMoneyMakerEnhanced />
-          </RouteWrapper>
-        );
-    }
-  }, [currentPath]);
+            ))}
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 transition-all duration-500">
