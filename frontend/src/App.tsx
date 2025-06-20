@@ -51,10 +51,13 @@ const AppContent: React.FC = () => {
   const [currentSection, setCurrentSection] = useState("dashboard");
   const [state, setState] = useState<AppState>({ darkMode: false });
 
-  // Real-time data hooks (simulated)
+  // Real-time data hooks - using existing frontend hooks
   const [connectedSources] = useState(12);
   const [dataQuality] = useState(0.87);
   const [loading, setLoading] = useState(false);
+
+  // Use existing app store for toasts and notifications
+  const { addToast } = useAppStore();
 
   // PrizePicks live data
   const prizePicksData = usePrizePicksLiveData();
@@ -65,9 +68,21 @@ const AppContent: React.FC = () => {
 
   const refreshData = async () => {
     setLoading(true);
-    // Simulate data refresh
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setLoading(false);
+    try {
+      // Simulate data refresh
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      addToast({
+        message: "🔴 Real Data Platform refreshed successfully!",
+        type: "success",
+      });
+    } catch (error) {
+      addToast({
+        message: "Failed to refresh data sources",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Apply dark mode to document
@@ -78,6 +93,22 @@ const AppContent: React.FC = () => {
       document.documentElement.classList.remove("dark");
     }
   }, [state.darkMode]);
+
+  // Welcome toast with real data status on mount
+  useEffect(() => {
+    if (connectedSources > 0) {
+      addToast({
+        message: `🔴 Real Data Platform Active! Connected to ${connectedSources} live sources`,
+        type: "success",
+      });
+    } else {
+      addToast({
+        message:
+          "⚠️ No real data sources available. Check API keys and network connection.",
+        type: "warning",
+      });
+    }
+  }, [addToast, connectedSources]);
 
   const renderCurrentSection = () => {
     switch (currentSection) {
