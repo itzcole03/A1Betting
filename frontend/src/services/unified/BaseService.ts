@@ -1,9 +1,36 @@
-import axios from 'axios';
-import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import { UnifiedServiceRegistry } from './UnifiedServiceRegistry';
-import { UnifiedConfig } from '../unified/UnifiedConfig';
-import { UnifiedLogger } from '../unified/UnifiedLogger';
-import { UnifiedCache } from '../unified/UnifiedCache';
+import axios from "axios";
+import type {
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+} from "axios";
+import { UnifiedServiceRegistry } from "./UnifiedServiceRegistry";
+import { UnifiedConfig } from "../unified/UnifiedConfig";
+import { UnifiedLogger } from "../unified/UnifiedLogger";
+import { UnifiedCache } from "../unified/UnifiedCache";
+
+// Browser-compatible EventEmitter
+class EventEmitter {
+  private events: { [key: string]: Function[] } = {};
+
+  on(event: string, listener: Function) {
+    if (!this.events[event]) {
+      this.events[event] = [];
+    }
+    this.events[event].push(listener);
+  }
+
+  off(event: string, listener: Function) {
+    if (!this.events[event]) return;
+    this.events[event] = this.events[event].filter((l) => l !== listener);
+  }
+
+  emit(event: string, ...args: any[]) {
+    if (!this.events[event]) return;
+    this.events[event].forEach((listener) => listener(...args));
+  }
+}
 
 export interface ServiceError {
   code: string;
@@ -11,7 +38,7 @@ export interface ServiceError {
   details?: any;
 }
 
-export abstract class BaseService {
+export abstract class BaseService extends EventEmitter {
   protected config: UnifiedConfig;
   protected logger: UnifiedLogger;
   protected api: AxiosInstance;
@@ -19,7 +46,7 @@ export abstract class BaseService {
 
   constructor(
     protected readonly name: string,
-    protected readonly serviceRegistry: UnifiedServiceRegistry
+    protected readonly serviceRegistry: UnifiedServiceRegistry,
   ) {
     this.config = UnifiedConfig.getInstance();
     this.logger = new UnifiedLogger(this.name);
@@ -30,7 +57,7 @@ export abstract class BaseService {
       baseURL: this.config.getApiUrl(),
       timeout: 10000,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -47,9 +74,9 @@ export abstract class BaseService {
         return config;
       },
       (error: AxiosError) => {
-        this.logger.error('Request error:', error);
+        this.logger.error("Request error:", error);
         return Promise.reject(error);
-      }
+      },
     );
 
     this.api.interceptors.response.use(
@@ -57,20 +84,24 @@ export abstract class BaseService {
         return response;
       },
       (error: AxiosError) => {
-        this.logger.error('Response error:', error);
+        this.logger.error("Response error:", error);
         return Promise.reject(error);
-      }
+      },
     );
   }
 
   protected handleError(error: any, serviceError: ServiceError): void {
-    this.logger.error(`Error in ${serviceError.source}: ${error.message}`, this.name, {
-      error,
-      serviceError,
-    });
+    this.logger.error(
+      `Error in ${serviceError.source}: ${error.message}`,
+      this.name,
+      {
+        error,
+        serviceError,
+      },
+    );
 
     // Emit error event
-    this.serviceRegistry.emit('error', {
+    this.serviceRegistry.emit("error", {
       ...serviceError,
       error: error.message,
       timestamp: Date.now(),
@@ -80,7 +111,7 @@ export abstract class BaseService {
   protected async retry<T>(
     operation: () => Promise<T>,
     maxRetries: number = 3,
-    delay: number = 1000
+    delay: number = 1000,
   ): Promise<T> {
     let lastError: any;
     for (let i = 0; i < maxRetries; i++) {
@@ -89,7 +120,7 @@ export abstract class BaseService {
       } catch (error) {
         lastError = error;
         if (i < maxRetries - 1) {
-          await new Promise(resolve => setTimeout(resolve, delay * (i + 1)));
+          await new Promise((resolve) => setTimeout(resolve, delay * (i + 1)));
         }
       }
     }
@@ -97,10 +128,14 @@ export abstract class BaseService {
   }
 
   protected getCacheKey(...parts: (string | number)[]): string {
-    return `${this.name}:${parts.join(':')}`;
+    return `${this.name}:${parts.join(":")}`;
   }
 
-  protected async withCache<T>(key: string, operation: () => Promise<T>, ttl?: number): Promise<T> {
+  protected async withCache<T>(
+    key: string,
+    operation: () => Promise<T>,
+    ttl?: number,
+  ): Promise<T> {
     const cached = this.cache.get<T>(key);
     if (cached) return cached;
 
@@ -124,7 +159,7 @@ export abstract class BaseService {
     try {
       return await request();
     } catch (error) {
-      this.logger.error('Request failed:', error);
+      this.logger.error("Request failed:", error);
       throw error;
     }
   }
