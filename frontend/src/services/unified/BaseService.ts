@@ -48,6 +48,7 @@ export abstract class BaseService extends EventEmitter {
     protected readonly name: string,
     protected readonly serviceRegistry: UnifiedServiceRegistry,
   ) {
+    super();
     this.config = UnifiedConfig.getInstance();
     this.logger = new UnifiedLogger(this.name);
     this.cache = UnifiedCache.getInstance();
