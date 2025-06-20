@@ -84,9 +84,17 @@ const AppContent: React.FC = () => {
       case "dashboard":
         return <UnifiedDashboard />;
       case "prizepicks":
-        return <PrizePicksEdgeDisplay />;
+        return (
+          <div className="p-8 text-center text-gray-600">
+            PrizePicks Engine Coming Soon...
+          </div>
+        );
       case "analytics":
-        return <PerformanceAnalyticsDashboard />;
+        return (
+          <div className="p-8 text-center text-gray-600">
+            Analytics Dashboard Coming Soon...
+          </div>
+        );
       default:
         return <UnifiedDashboard />;
     }
