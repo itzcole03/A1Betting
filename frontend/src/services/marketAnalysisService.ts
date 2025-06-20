@@ -397,4 +397,148 @@ export class MarketAnalysisService extends EventEmitter {
 
     return this.calculateMarketEfficiency(eventId, []);
   }
+
+  // Missing methods required by MarketAnalysisDashboard
+  public async getOddsMovements(
+    eventId: string,
+    timeRange: string,
+  ): Promise<any> {
+    const cacheKey = `odds_movements_${eventId}_${timeRange}`;
+    const cached = this.cache?.get(cacheKey);
+    if (cached) return cached;
+
+    // Mock implementation - replace with actual API call
+    const movements = {
+      eventId,
+      timeRange,
+      movements: [
+        { timestamp: Date.now() - 3600000, odds: 1.85, direction: "up" },
+        { timestamp: Date.now() - 1800000, odds: 1.9, direction: "up" },
+        { timestamp: Date.now(), odds: 1.88, direction: "down" },
+      ],
+      totalChange: 0.03,
+      volatility: 0.15,
+    };
+
+    this.cache?.set(cacheKey, movements, 300000); // 5 minutes cache
+    return movements;
+  }
+
+  public async getVolumeAnalysis(
+    eventId: string,
+    timeRange: string,
+  ): Promise<any> {
+    const metrics = this.marketMetrics.get(eventId);
+    if (!metrics) {
+      return {
+        eventId,
+        totalVolume: 0,
+        averageVolume: 0,
+        peakVolume: 0,
+        volumeGrowth: 0,
+      };
+    }
+
+    return {
+      eventId,
+      totalVolume: metrics.volume.totalVolume,
+      averageVolume:
+        metrics.volume.totalVolume / (metrics.volume.volumeHistory.length || 1),
+      peakVolume: Math.max(
+        ...metrics.volume.volumeHistory.map((v) => v.volume),
+      ),
+      volumeGrowth: metrics.trend || 0,
+    };
+  }
+
+  public async getSentimentData(eventId: string): Promise<any> {
+    // Mock sentiment data - replace with actual sentiment analysis
+    return {
+      eventId,
+      sentiment: "positive",
+      score: 0.65,
+      confidence: 0.8,
+      sources: ["twitter", "reddit", "news"],
+      breakdown: {
+        positive: 65,
+        neutral: 25,
+        negative: 10,
+      },
+    };
+  }
+
+  public async getArbitrageOpportunities(eventId: string): Promise<any[]> {
+    // Mock arbitrage opportunities - replace with actual detection
+    return [
+      {
+        id: `arb_${eventId}_1`,
+        eventId,
+        bookmakers: ["bookmaker1", "bookmaker2"],
+        profit: 0.025,
+        stake: 1000,
+        confidence: 0.9,
+      },
+    ];
+  }
+
+  public async getMarketDepth(eventId: string): Promise<any> {
+    const metrics = this.marketMetrics.get(eventId);
+    if (!metrics) {
+      return {
+        eventId,
+        depth: 0,
+        liquidityScore: 0,
+      };
+    }
+
+    return {
+      eventId,
+      depth: metrics.liquidity || 0,
+      liquidityScore: Math.min(metrics.liquidity / 1000, 1), // Normalized score
+    };
+  }
+
+  public async getLiquidityMetrics(eventId: string): Promise<any> {
+    const metrics = this.marketMetrics.get(eventId);
+    if (!metrics) {
+      return {
+        eventId,
+        liquidity: 0,
+        spread: 0,
+        marketDepth: 0,
+      };
+    }
+
+    return {
+      eventId,
+      liquidity: metrics.liquidity,
+      spread: 0.02, // Mock spread
+      marketDepth: metrics.liquidity,
+    };
+  }
+
+  public async getVolatilityData(
+    eventId: string,
+    timeRange: string,
+  ): Promise<any> {
+    const metrics = this.marketMetrics.get(eventId);
+    if (!metrics) {
+      return {
+        eventId,
+        volatility: 0,
+        historicalVolatility: 0,
+        impliedVolatility: 0,
+      };
+    }
+
+    return {
+      eventId,
+      volatility: metrics.volatility,
+      historicalVolatility: metrics.volatility * 0.9,
+      impliedVolatility: metrics.volatility * 1.1,
+    };
+  }
+
+  // Add cache property for the methods above
+  private cache = new Map<string, any>();
 }
