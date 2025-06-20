@@ -1,14 +1,11 @@
-// EliteSportsHeader migrated from prototype Header
-import React from 'react';
-import { RefreshCw, Moon, Sun, Wifi, WifiOff } from 'lucide-react';
-// TODO: Adapt these hooks/context to your frontend or reimplement as needed
-// import { useApp } from '../../contexts/AppContext';
-// import { useRealDataSources } from '../../hooks/useRealDataSources';
+import React from "react";
+import { RefreshCw, Moon, Sun, Wifi, WifiOff } from "lucide-react";
+import { useAppStore } from "../../stores/useAppStore";
 
 interface EliteSportsHeaderProps {
   connectedSources: number;
   dataQuality: number;
-  state: any;
+  state?: { darkMode?: boolean };
   toggleDarkMode: () => void;
   refreshData: () => Promise<void>;
   loading: boolean;
@@ -23,15 +20,15 @@ export const EliteSportsHeader: React.FC<EliteSportsHeaderProps> = ({
   loading,
 }) => {
   const getDataStatusColor = () => {
-    if (connectedSources === 0) return 'text-red-600';
-    if (dataQuality > 0.7) return 'text-green-600';
-    return 'text-yellow-600';
+    if (connectedSources === 0) return "text-red-600";
+    if (dataQuality > 0.7) return "text-green-600";
+    return "text-yellow-600";
   };
 
   const getDataStatusText = () => {
-    if (connectedSources === 0) return 'No Real Data';
-    if (dataQuality > 0.7) return 'High Quality Real Data';
-    return 'Limited Real Data';
+    if (connectedSources === 0) return "No Real Data";
+    if (dataQuality > 0.7) return "High Quality Real Data";
+    return "Limited Real Data";
   };
 
   return (
@@ -68,14 +65,18 @@ export const EliteSportsHeader: React.FC<EliteSportsHeaderProps> = ({
             disabled={loading}
             className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 flex items-center space-x-2"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            <span>{loading ? 'Refreshing...' : 'Refresh Real Data'}</span>
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+            <span>{loading ? "Refreshing..." : "Refresh Real Data"}</span>
           </button>
           <button
             onClick={toggleDarkMode}
             className="p-3 rounded-2xl glass-morphism hover:bg-white/20 transition-all"
           >
-            {state.darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {state.darkMode ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>
