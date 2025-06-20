@@ -1,0 +1,3 @@
+"use strict";
+// Ported from Newfolder: Firefly optimization model
+// ...existing code from Newfolder's Firefly.ts...

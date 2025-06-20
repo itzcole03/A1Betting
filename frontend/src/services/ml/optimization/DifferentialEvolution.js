@@ -1,0 +1,3 @@
+"use strict";
+// Ported from Newfolder: Differential Evolution optimization model
+// ...existing code from Newfolder's DifferentialEvolution.ts...

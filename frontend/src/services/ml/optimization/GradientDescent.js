@@ -1,0 +1,3 @@
+"use strict";
+// Ported from Newfolder: Gradient Descent optimization model
+// ...existing code from Newfolder's GradientDescent.ts...
