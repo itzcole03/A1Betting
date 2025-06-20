@@ -160,6 +160,16 @@ const AppContent: React.FC = () => {
           </ErrorBoundary>
         </div>
       </div>
+
+      {/* Toast Container - use existing store system */}
+      <ToastContainer
+        toasts={toasts.map((toast) => ({
+          id: toast.id,
+          message: toast.message,
+          type: toast.type as "success" | "warning" | "error" | "info",
+        }))}
+        onRemove={removeToast}
+      />
     </div>
   );
 };
