@@ -4,7 +4,7 @@ import { AdvancedSidebar } from "./components/layout/AdvancedSidebar";
 import { EliteSportsHeader } from "./components/layout/EliteSportsHeader";
 import UnifiedDashboard from "./components/dashboard/UnifiedDashboard";
 import { usePrizePicksLiveData } from "./hooks/usePrizePicksLiveData";
-import { useAppStore } from "./stores/useAppStore";
+import { useAppStore } from "./store/useAppStore";
 import { ToastContainer } from "./components/common/ToastContainer";
 import { ToastNotification } from "./utils/formatters";
 
