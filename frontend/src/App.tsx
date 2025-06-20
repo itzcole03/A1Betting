@@ -511,9 +511,7 @@ const App: React.FC = () => {
             </>
           )}
 
-          {/* Global Components */}
-          <Toaster position="top-right" richColors />
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/* Global Components can be added here later */}
         </div>
       </ErrorBoundary>
     </QueryClientProvider>
