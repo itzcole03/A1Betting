@@ -59,7 +59,7 @@ const AppContent: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   // Use existing app store for toasts and notifications
-  const { addToast } = useAppStore();
+  const { addToast, toasts, removeToast } = useAppStore();
 
   // PrizePicks live data
   const prizePicksData = usePrizePicksLiveData();
