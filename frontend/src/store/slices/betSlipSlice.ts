@@ -1,7 +1,7 @@
-import { StateCreator } from 'zustand';
-import { ParlayLeg } from '../../../../shared/betting';
-import { bettingStrategyService } from '../../services/bettingStrategy';
-import { AppStore } from '../../stores/useAppStore';
+import { StateCreator } from "zustand";
+import { ParlayLeg } from "../../../../shared/betting";
+import { bettingStrategyService } from "../../strategies/bettingStrategy";
+import { AppStore } from "../../stores/useAppStore";
 
 // Helper for Odds Conversion (Simplified)
 const americanToDecimal = (americanOdds: number): number => {
@@ -18,7 +18,7 @@ export interface BetSlipSlice {
   isSubmitting: boolean;
   error: string | null; // Slice-specific error
   addLeg: (leg: ParlayLeg) => void;
-  removeLeg: (propId: string, pick: 'over' | 'under') => void; // Requires pick to uniquely identify
+  removeLeg: (propId: string, pick: "over" | "under") => void; // Requires pick to uniquely identify
   updateStake: (stake: number) => void;
   calculatePotentialPayout: () => void;
   clearSlip: () => void;
@@ -27,7 +27,7 @@ export interface BetSlipSlice {
 
 export const initialBetSlipState: Pick<
   BetSlipSlice,
-  'legs' | 'stake' | 'potentialPayout' | 'isSubmitting' | 'error'
+  "legs" | "stake" | "potentialPayout" | "isSubmitting" | "error"
 > = {
   legs: [],
   stake: 0,
@@ -36,35 +36,49 @@ export const initialBetSlipState: Pick<
   error: null,
 };
 
-export const createBetSlipSlice: StateCreator<AppStore, [], [], BetSlipSlice> = (set, get) => ({
+export const createBetSlipSlice: StateCreator<
+  AppStore,
+  [],
+  [],
+  BetSlipSlice
+> = (set, get) => ({
   ...initialBetSlipState,
-  addLeg: leg => {
+  addLeg: (leg) => {
     const { legs, addToast } = get();
     if (!leg.odds) {
       addToast({
-        message: 'Cannot add leg without odds. Please select a valid prop line.',
-        type: 'error',
+        message:
+          "Cannot add leg without odds. Please select a valid prop line.",
+        type: "error",
       });
-      console.error('Attempted to add leg without odds:', leg);
+      console.error("Attempted to add leg without odds:", leg);
       return;
     }
-    if (legs.some(l => l.propId === leg.propId && l.pick === leg.pick)) {
-      addToast({ message: 'This specific pick is already in your bet slip.', type: 'warning' });
+    if (legs.some((l) => l.propId === leg.propId && l.pick === leg.pick)) {
+      addToast({
+        message: "This specific pick is already in your bet slip.",
+        type: "warning",
+      });
       return;
     }
     if (legs.length >= 6) {
       // Max 6 legs for PrizePicks style parlays, adjust if needed
-      addToast({ message: 'Maximum 6 legs allowed in a parlay.', type: 'warning' });
+      addToast({
+        message: "Maximum 6 legs allowed in a parlay.",
+        type: "warning",
+      });
       return;
     }
-    set(state => ({ legs: [...state.legs, leg] }));
+    set((state) => ({ legs: [...state.legs, leg] }));
     get().calculatePotentialPayout();
   },
   removeLeg: (propId, pick) => {
-    set(state => ({ legs: state.legs.filter(l => !(l.propId === propId && l.pick === pick)) }));
+    set((state) => ({
+      legs: state.legs.filter((l) => !(l.propId === propId && l.pick === pick)),
+    }));
     get().calculatePotentialPayout();
   },
-  updateStake: stake => {
+  updateStake: (stake) => {
     set({ stake: Math.max(0, stake) });
     get().calculatePotentialPayout();
   },
@@ -101,16 +115,22 @@ export const createBetSlipSlice: StateCreator<AppStore, [], [], BetSlipSlice> = 
   submitSlip: async () => {
     const { legs, stake, addToast, clearSlip, user } = get();
     if (!user) {
-      addToast({ message: 'Please log in to submit a bet.', type: 'error' });
+      addToast({ message: "Please log in to submit a bet.", type: "error" });
       return false;
     }
     if (legs.length < 2 || legs.length > 6) {
       // Typical PrizePicks rules
-      addToast({ message: 'Parlays must have between 2 and 6 legs.', type: 'warning' });
+      addToast({
+        message: "Parlays must have between 2 and 6 legs.",
+        type: "warning",
+      });
       return false;
     }
     if (stake <= 0) {
-      addToast({ message: 'Please enter a valid stake amount.', type: 'warning' });
+      addToast({
+        message: "Please enter a valid stake amount.",
+        type: "warning",
+      });
       return false;
     }
     set({ isSubmitting: true, error: null });
@@ -119,11 +139,11 @@ export const createBetSlipSlice: StateCreator<AppStore, [], [], BetSlipSlice> = 
         bets: [
           {
             id: `bet_${Date.now()}`,
-            description: 'User parlay',
-            type: 'parlay',
-            legs: legs.map(l => ({
+            description: "User parlay",
+            type: "parlay",
+            legs: legs.map((l) => ({
               propId: l.propId,
-              marketKey: '', // Fill as needed
+              marketKey: "", // Fill as needed
               outcome: l.pick,
               odds: l.odds!,
               line: l.line,
@@ -140,18 +160,18 @@ export const createBetSlipSlice: StateCreator<AppStore, [], [], BetSlipSlice> = 
       if (confirmation && confirmation.length > 0 && confirmation[0].success) {
         addToast({
           message: `Bet submitted successfully! ID: ${confirmation[0].betId.substring(0, 8)}`,
-          type: 'success',
+          type: "success",
         });
       } else {
-        addToast({ message: `Bet submission failed.`, type: 'error' });
+        addToast({ message: `Bet submission failed.`, type: "error" });
       }
       clearSlip();
       set({ isSubmitting: false });
       return true;
     } catch (e: any) {
-      const errorMsg = e.message || 'Failed to submit bet';
+      const errorMsg = e.message || "Failed to submit bet";
       set({ error: errorMsg, isSubmitting: false });
-      addToast({ message: `Error submitting bet: ${errorMsg}`, type: 'error' });
+      addToast({ message: `Error submitting bet: ${errorMsg}`, type: "error" });
       return false;
     }
   },
