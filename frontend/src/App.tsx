@@ -78,9 +78,7 @@ const AppContent: React.FC = () => {
 
       {/* Main Homepage Content */}
       <ErrorBoundary>
-        <Suspense fallback={<LoadingScreen />}>
-          <HomePage />
-        </Suspense>
+        <HomePage />
       </ErrorBoundary>
 
       {/* Toast notifications */}
