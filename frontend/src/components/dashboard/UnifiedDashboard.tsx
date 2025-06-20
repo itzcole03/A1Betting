@@ -392,7 +392,14 @@ const UnifiedDashboard: React.FC = () => {
   const getTabProps = () => {
     switch (activeTab) {
       case "overview":
-        return { metrics, recentActivity, winRate, roi, profitLoss };
+        return {
+          metrics,
+          recentActivity,
+          winRate,
+          roi,
+          profitLoss,
+          dataQuality: 0.87,
+        };
       case "prizepicks":
         return { livePrizePicksData, showDebug };
       case "strategyEngine":
