@@ -36,7 +36,7 @@ export const EliteSportsHeader: React.FC<EliteSportsHeaderProps> = ({
     <header className="bg-white dark:bg-gray-800 shadow-sm p-6 border-b border-gray-200 dark:border-gray-700">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-800 bg-clip-text text-transparent">
             Elite Sports Intelligence Platform
           </h2>
           <div className="flex items-center space-x-4 mt-2">
