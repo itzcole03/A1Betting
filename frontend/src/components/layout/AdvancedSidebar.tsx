@@ -15,8 +15,9 @@ export const AdvancedSidebar: React.FC<AdvancedSidebarProps> = ({
   onSectionChange,
   connectedSources,
   dataQuality,
-  state,
+  state = { darkMode: false },
 }) => {
+  const { user, toasts } = useAppStore();
   const navItems = [
     { id: "dashboard", label: "Real Data Dashboard", icon: Zap },
     { id: "prizepicks", label: "PrizePicks Engine", icon: Target },
