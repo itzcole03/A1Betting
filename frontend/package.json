@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@builder.io/react": "^8.2.4",
+    "@builder.io/sdk": "^6.1.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@heroicons/react": "^2.2.0",
