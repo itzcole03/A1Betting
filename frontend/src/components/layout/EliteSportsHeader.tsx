@@ -1,6 +1,6 @@
 import React from "react";
 import { RefreshCw, Moon, Sun, Wifi, WifiOff } from "lucide-react";
-import { useAppStore } from "../../stores/useAppStore";
+import { useAppStore } from "../../store/useAppStore";
 
 interface EliteSportsHeaderProps {
   connectedSources: number;
