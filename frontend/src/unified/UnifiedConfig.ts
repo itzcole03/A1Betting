@@ -40,21 +40,31 @@ export class UnifiedConfig {
       enableAnalytics: { enabled: true },
       enableSocialSentiment: { enabled: true },
       socialSentiment: {
-        provider: 'default',
-        enabled: true
-      }
+        provider: "default",
+        enabled: true,
+      },
     };
     // Set default for api.baseUrl if not present
-    if (!this.extraConfig['api.baseUrl']) {
-      this.extraConfig['api.baseUrl'] = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL) ? import.meta.env.VITE_API_BASE_URL : 'https://api.betproai.com';
+    if (!this.extraConfig["api.baseUrl"]) {
+      this.extraConfig["api.baseUrl"] =
+        typeof import.meta !== "undefined" &&
+        import.meta.env &&
+        import.meta.env.VITE_API_BASE_URL
+          ? import.meta.env.VITE_API_BASE_URL
+          : "https://api.betproai.com";
     }
     // Set default for news config if not present
-    if (!this.extraConfig['news']) {
-      this.extraConfig['news'] = {
-        apiBaseUrl: (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_NEWS_API_BASE_URL) ? import.meta.env.VITE_NEWS_API_BASE_URL : 'https://api.betproai.com',
-        backendPrefix: '/api/news',
+    if (!this.extraConfig["news"]) {
+      this.extraConfig["news"] = {
+        apiBaseUrl:
+          typeof import.meta !== "undefined" &&
+          import.meta.env &&
+          import.meta.env.VITE_NEWS_API_BASE_URL
+            ? import.meta.env.VITE_NEWS_API_BASE_URL
+            : "https://api.betproai.com",
+        backendPrefix: "/api/news",
         timeout: 10000,
-        enableFeatureFlag: true
+        enableFeatureFlag: true,
       };
     }
   }
@@ -74,8 +84,14 @@ export class UnifiedConfig {
       return this.extraConfig[key];
     }
     // Provide default for api.baseUrl
-    if (key === 'api.baseUrl') {
-      return ((typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL) ? import.meta.env.VITE_API_BASE_URL : 'https://api.betproai.com') as T;
+    if (key === "api.baseUrl") {
+      return (
+        typeof import.meta !== "undefined" &&
+        import.meta.env &&
+        import.meta.env.VITE_API_BASE_URL
+          ? import.meta.env.VITE_API_BASE_URL
+          : "https://api.betproai.com"
+      ) as T;
     }
     throw new Error(`Configuration key "${key}" not found`);
   }
@@ -90,7 +106,7 @@ export class UnifiedConfig {
 
   public getNested<T extends keyof Config, K extends keyof Config[T]>(
     section: T,
-    key: K
+    key: K,
   ): Config[T][K] {
     return this.config[section][key];
   }
@@ -98,7 +114,7 @@ export class UnifiedConfig {
   public setNested<T extends keyof Config, K extends keyof Config[T]>(
     section: T,
     key: K,
-    value: Config[T][K]
+    value: Config[T][K],
   ): void {
     this.config[section][key] = value;
   }
@@ -120,9 +136,24 @@ export class UnifiedConfig {
       enableAnalytics: { enabled: true },
       enableSocialSentiment: { enabled: true },
       socialSentiment: {
-        provider: 'default',
-        enabled: true
-      }
+        provider: "default",
+        enabled: true,
+      },
     };
+  }
+
+  public getAuthToken(): string | null {
+    // Check for token in localStorage, sessionStorage, or environment
+    if (typeof window !== "undefined") {
+      return (
+        localStorage.getItem("auth_token") ||
+        sessionStorage.getItem("auth_token")
+      );
+    }
+    return null;
+  }
+
+  public getApiUrl(): string {
+    return this.get("api.baseUrl") || "https://api.betproai.com";
   }
 }
