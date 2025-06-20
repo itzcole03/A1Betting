@@ -516,157 +516,34 @@ const App: React.FC = () => {
     </div>
   );
 
+  // Render the clean app like the prototype - main dashboard with optional debug access
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 transition-all duration-500">
-      {/* Enhanced Navigation with Premium Design System */}
-      <nav
-        className="sticky top-0 z-60 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 shadow-lg"
-        role="navigation"
-        aria-label="Main navigation"
-      >
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex-between h-16">
-            {/* Responsive Navigation Container */}
-            <div className="flex-1 flex items-center">
-              <div className="flex space-x-1 overflow-x-auto scrollbar-thin">
-                {navigationConfig.map((group, groupIndex) => (
-                  <div
-                    key={group.group}
-                    className="flex items-center space-x-1"
-                  >
-                    {groupIndex > 0 && (
-                      <div
-                        className="h-6 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent dark:via-gray-600 mx-2"
-                        aria-hidden="true"
-                      />
-                    )}
-                    {group.items.map((item) => (
-                      <button
-                        key={item.href}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleNavigation(item.href);
-                        }}
-                        onMouseEnter={() => prefetchRoute(item.href.slice(1))}
-                        onKeyDown={(e) => handleKeyDown(e, item.href)}
-                        className={cn(
-                          "inline-flex items-center px-3 py-2 text-sm font-medium rounded-xl",
-                          "transition-all duration-300 ease-out whitespace-nowrap",
-                          "hover:scale-105 active:scale-95 focus:outline-none",
-                          "focus:ring-2 focus:ring-brand-500 focus:ring-offset-2",
-                          currentPath === item.href.slice(1)
-                            ? "bg-gradient-to-r from-brand-500 to-brand-600 text-white shadow-brandShadow transform scale-105"
-                            : `${item.color} hover:bg-white/10 hover:backdrop-blur-lg hover:text-white hover:shadow-soft`,
-                        )}
-                        tabIndex={0}
-                        aria-current={
-                          currentPath === item.href.slice(1)
-                            ? "page"
-                            : undefined
-                        }
-                      >
-                        {item.label}
-                      </button>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
+    <div className="min-h-screen">
+      {/* Main App - Clean like prototype */}
+      {!showDebugMenu && renderMainApp()}
 
-            {/* Navigation Actions */}
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => window.location.reload()}
-                aria-label="Refresh application"
-                title="Refresh"
-                className="hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/20"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Debug Menu - Only for development */}
+      {showDebugMenu && renderDebugMenu()}
 
-      {/* Main Content with Enhanced Design System */}
-      <main
-        className="max-w-8xl mx-auto py-8 px-4 sm:px-6 lg:px-8"
-        role="main"
-        aria-label="Main content"
-      >
-        <div
-          className={cn(
-            "transition-all duration-500 ease-out",
-            isTransitioning
-              ? "opacity-50 scale-95 blur-sm"
-              : "opacity-100 scale-100 blur-none",
-          )}
+      {/* Development Debug Toggle */}
+      {import.meta.env.MODE === "development" && (
+        <button
+          onClick={toggleDebugMenu}
+          className="fixed top-4 right-4 z-50 p-2 bg-gray-800 text-white rounded-full text-xs"
+          title="Toggle Debug Menu"
         >
-          <div className="min-h-[calc(100vh-8rem)]">{renderComponent()}</div>
-        </div>
-      </main>
+          {showDebugMenu ? "🏠" : "🛠️"}
+        </button>
+      )}
 
       {/* Development Performance Monitor */}
       {typeof window !== "undefined" &&
-        process.env.NODE_ENV === "development" && (
-          <div className="fixed bottom-20 left-4 z-40">
+        import.meta.env.MODE === "development" &&
+        !showDebugMenu && (
+          <div className="fixed bottom-4 left-4 z-40">
             <PerformanceMonitor />
           </div>
         )}
-
-      {/* Enhanced Real-time Status Bar */}
-      <Card
-        variant="glass"
-        className="fixed bottom-4 right-4 z-30 p-3 text-xs border-success-200/50"
-        role="status"
-        aria-live="polite"
-        aria-label="Application status"
-      >
-        <div className="flex items-center space-x-3">
-          <div className="relative">
-            <div className="w-2 h-2 bg-success-500 rounded-full animate-pulse shadow-successShadow"></div>
-            <div className="absolute inset-0 w-2 h-2 bg-success-400 rounded-full animate-ping opacity-75"></div>
-          </div>
-          <Badge variant="success" size="sm" className="font-medium">
-            All Systems Active
-          </Badge>
-          <span className="text-gray-600 dark:text-gray-400 font-mono">
-            {navigationConfig.reduce(
-              (total, group) => total + group.items.length,
-              0,
-            )}{" "}
-            Features
-          </span>
-        </div>
-      </Card>
-
-      {/* Hidden navigation helper for screen readers */}
-      <div className="sr-only">
-        <h2>Available Features:</h2>
-        <ul>
-          {navigationConfig.map((group) =>
-            group.items.map((item) => (
-              <li key={item.href}>
-                <a href={item.href}>{item.label}</a>
-              </li>
-            )),
-          )}
-        </ul>
-      </div>
     </div>
   );
 };
