@@ -49,42 +49,16 @@ interface AppState {
   darkMode: boolean;
 }
 
+// Import our polished homepage
+const HomePage = lazy(() =>
+  import("./pages/index").then((m) => ({ default: m.default })),
+);
+
 const AppContent: React.FC = () => {
-  const [currentSection, setCurrentSection] = useState("dashboard");
   const [state, setState] = useState<AppState>({ darkMode: false });
-
-  // Real-time data hooks - using existing frontend hooks
-  const [connectedSources] = useState(12);
-  const [dataQuality] = useState(0.87);
-  const [loading, setLoading] = useState(false);
-
-  // Use existing app store for toasts and notifications
-  const { addToast } = useAppStore();
-
-  // PrizePicks live data
-  const prizePicksData = usePrizePicksLiveData();
 
   const toggleDarkMode = () => {
     setState((prev) => ({ ...prev, darkMode: !prev.darkMode }));
-  };
-
-  const refreshData = async () => {
-    setLoading(true);
-    try {
-      // Simulate data refresh
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      addToast({
-        message: "🔴 Real Data Platform refreshed successfully!",
-        type: "success",
-      });
-    } catch (error) {
-      addToast({
-        message: "Failed to refresh data sources",
-        type: "error",
-      });
-    } finally {
-      setLoading(false);
-    }
   };
 
   // Apply dark mode to document
@@ -96,70 +70,23 @@ const AppContent: React.FC = () => {
     }
   }, [state.darkMode]);
 
-  // Welcome toast with real data status on mount
-  useEffect(() => {
-    if (connectedSources > 0) {
-      addToast({
-        message: `🔴 Real Data Platform Active! Connected to ${connectedSources} live sources`,
-        type: "success",
-      });
-    } else {
-      addToast({
-        message:
-          "⚠️ No real data sources available. Check API keys and network connection.",
-        type: "warning",
-      });
-    }
-  }, [addToast, connectedSources]);
-
-  const renderCurrentSection = () => {
-    switch (currentSection) {
-      case "dashboard":
-        return <UnifiedDashboard />;
-      case "prizepicks":
-        return (
-          <div className="p-8 text-center text-gray-600">
-            PrizePicks Engine Coming Soon...
-          </div>
-        );
-      case "analytics":
-        return (
-          <div className="p-8 text-center text-gray-600">
-            Analytics Dashboard Coming Soon...
-          </div>
-        );
-      default:
-        return <UnifiedDashboard />;
-    }
-  };
-
   return (
-    <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100">
-      <AdvancedSidebar
-        currentSection={currentSection}
-        onSectionChange={setCurrentSection}
-        connectedSources={connectedSources}
-        dataQuality={dataQuality}
-        state={state}
-      />
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100">
+      {/* Dark mode toggle in top-right corner */}
+      <button
+        onClick={toggleDarkMode}
+        className="fixed top-4 right-4 p-3 bg-white/10 dark:bg-gray-800/50 backdrop-blur-sm text-gray-600 dark:text-gray-300 rounded-full shadow-lg hover:bg-white/20 dark:hover:bg-gray-700/50 transition-all duration-200 z-50"
+        title="Toggle Dark Mode"
+      >
+        {state.darkMode ? "☀️" : "🌙"}
+      </button>
 
-      <div className="flex-1 overflow-auto">
-        <EliteSportsHeader
-          connectedSources={connectedSources}
-          dataQuality={dataQuality}
-          state={state}
-          toggleDarkMode={toggleDarkMode}
-          refreshData={refreshData}
-          loading={loading}
-        />
-        <div className="p-6" style={{ marginTop: "-2px" }}>
-          <ErrorBoundary>
-            <Suspense fallback={<LoadingScreen />}>
-              {renderCurrentSection()}
-            </Suspense>
-          </ErrorBoundary>
-        </div>
-      </div>
+      {/* Main Homepage Content */}
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingScreen />}>
+          <HomePage />
+        </Suspense>
+      </ErrorBoundary>
 
       {/* Toast notifications */}
       <Toaster />
