@@ -64,7 +64,7 @@ export const EliteSportsHeader: React.FC<EliteSportsHeaderProps> = ({
           <button
             onClick={refreshData}
             disabled={loading}
-            className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 flex items-center space-x-2"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 flex items-center space-x-2"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             <span>{loading ? "Refreshing..." : "Refresh Real Data"}</span>
