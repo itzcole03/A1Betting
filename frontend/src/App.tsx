@@ -1,14 +1,8 @@
 import React, { Suspense, useState, useEffect, lazy } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Toaster } from "sonner";
-import { LoadingScreen } from "./components/core/LoadingScreen";
-import { ErrorBoundary } from "./components/core/ErrorBoundary";
 import { AdvancedSidebar } from "./components/layout/AdvancedSidebar";
 import { EliteSportsHeader } from "./components/layout/EliteSportsHeader";
 import UnifiedDashboard from "./components/dashboard/UnifiedDashboard";
-import { PrizePicksEdgeDisplay } from "./components/betting/PrizePicksEdgeDisplay";
-import { PerformanceAnalyticsDashboard } from "./components/analytics/PerformanceAnalyticsDashboard";
 import { usePrizePicksLiveData } from "./hooks/usePrizePicksLiveData";
 
 // ============================================================================
