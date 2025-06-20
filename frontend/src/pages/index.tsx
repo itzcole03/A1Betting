@@ -300,3 +300,4 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+/* HMR test */
