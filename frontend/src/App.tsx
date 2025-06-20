@@ -142,7 +142,7 @@ const UltraAdvancedMLDashboard = lazy(() =>
 // Betting Components
 const ArbitrageOpportunities = lazy(() =>
   import("./components/ArbitrageOpportunities.tsx").then((m) => ({
-    default: m.ArbitrageOpportunities,
+    default: m.default,
   })),
 );
 
