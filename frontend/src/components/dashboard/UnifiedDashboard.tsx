@@ -71,7 +71,8 @@ const OverviewTab: React.FC<{
   winRate: any;
   roi: any;
   profitLoss: any;
-}> = ({ metrics, recentActivity, winRate, roi, profitLoss }) => (
+  dataQuality: number;
+}> = ({ metrics, recentActivity, winRate, roi, profitLoss, dataQuality }) => (
   <>
     <HeroSection
       connectedSources={50}
