@@ -15,6 +15,7 @@
     "test:ci": "jest --coverage --ci --watchAll=false"
   },
   "dependencies": {
+    "@builder.io/react": "^8.2.4",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@heroicons/react": "^2.2.0",
