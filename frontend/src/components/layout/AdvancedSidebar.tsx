@@ -1,6 +1,6 @@
 import React from "react";
 import { Brain, Target, BarChart3, Zap, Wifi, WifiOff } from "lucide-react";
-import { useAppStore } from "../../stores/useAppStore";
+import { useAppStore } from "../../store/useAppStore";
 
 interface AdvancedSidebarProps {
   currentSection: string;
