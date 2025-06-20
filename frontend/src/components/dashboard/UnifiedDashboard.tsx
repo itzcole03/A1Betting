@@ -136,6 +136,44 @@ const OverviewTab: React.FC<{
       </Card>
     </div>
 
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-8">
+      <DataSourcesPanel
+        connectedSources={metrics.activePredictions}
+        totalSources={15}
+      />
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
+          <h3 className="text-lg font-bold mb-4 dark:text-white">
+            Real-Time System Status
+          </h3>
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">
+                Connection Status:
+              </span>
+              <span className="font-medium dark:text-white">Connected</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">
+                Data Quality:
+              </span>
+              <span className="font-medium text-green-600">
+                {(dataQuality * 100).toFixed(1)}%
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">
+                Active Predictions:
+              </span>
+              <span className="font-medium text-purple-600">
+                {metrics.activePredictions}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
       <LiveGamesDisplay games={[]} />
       <RealTimePredictions predictions={[]} loading={false} />
