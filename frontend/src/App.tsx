@@ -5,8 +5,7 @@ import { EliteSportsHeader } from "./components/layout/EliteSportsHeader";
 import UnifiedDashboard from "./components/dashboard/UnifiedDashboard";
 import { usePrizePicksLiveData } from "./hooks/usePrizePicksLiveData";
 import { useAppStore } from "./store/useAppStore";
-import { ToastContainer } from "./components/common/ToastContainer";
-import { ToastNotification } from "./utils/formatters";
+import Toaster from "./components/base/Toaster";
 
 // ============================================================================
 // QUERY CLIENT
