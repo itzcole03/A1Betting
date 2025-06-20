@@ -14,11 +14,12 @@ interface EliteSportsHeaderProps {
 export const EliteSportsHeader: React.FC<EliteSportsHeaderProps> = ({
   connectedSources,
   dataQuality,
-  state,
+  state = { darkMode: false },
   toggleDarkMode,
   refreshData,
   loading,
 }) => {
+  const { addToast } = useAppStore();
   const getDataStatusColor = () => {
     if (connectedSources === 0) return "text-red-600";
     if (dataQuality > 0.7) return "text-green-600";
