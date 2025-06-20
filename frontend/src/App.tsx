@@ -6,6 +6,7 @@ import UnifiedDashboard from "./components/dashboard/UnifiedDashboard";
 import { usePrizePicksLiveData } from "./hooks/usePrizePicksLiveData";
 import { useAppStore } from "./stores/useAppStore";
 import { ToastContainer } from "./components/common/ToastContainer";
+import { ToastNotification } from "./utils/formatters";
 
 // ============================================================================
 // QUERY CLIENT
