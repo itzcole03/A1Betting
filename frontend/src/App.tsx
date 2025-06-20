@@ -5,7 +5,7 @@ import React, {
   lazy,
   useCallback,
   useEffect,
-  useState
+  useState,
 } from "react";
 import PremiumDashboard from "./components/dashboard/PremiumDashboard.tsx";
 import { MLPredictions } from "./components/MLPredictions.tsx";
@@ -103,15 +103,9 @@ const LoadingFallback: React.FC<LoadingFallbackProps> = ({
       {message}
     </div>
     <div className="flex space-x-1">
-      <div
-        className="w-2 h-2 bg-brand-500 rounded-full animate-bounce dot-delay-0"
-      />
-      <div
-        className="w-2 h-2 bg-brand-500 rounded-full animate-bounce dot-delay-150"
-      />
-      <div
-        className="w-2 h-2 bg-brand-500 rounded-full animate-bounce dot-delay-300"
-      />
+      <div className="w-2 h-2 bg-brand-500 rounded-full animate-bounce dot-delay-0" />
+      <div className="w-2 h-2 bg-brand-500 rounded-full animate-bounce dot-delay-150" />
+      <div className="w-2 h-2 bg-brand-500 rounded-full animate-bounce dot-delay-300" />
     </div>
   </div>
 );
@@ -458,18 +452,16 @@ const SuspenseWrapper: React.FC<SuspenseWrapperProps> = ({
 );
 
 const App: React.FC = () => {
-  // Redirect to #/unified-dashboard if no hash is present
-  useEffect(() => {
-    if (!window.location.hash || window.location.hash === "#/") {
-      window.location.hash = "#/unified-dashboard";
-    }
-  }, []);
+  // Always show UnifiedDashboard by default - no complex routing needed
+  const [showDebugMenu, setShowDebugMenu] = useState(false);
 
-  // State-based routing for better performance and reactivity
-  const [currentPath, setCurrentPath] = useState(
-    () => window.location.hash.slice(1) || "/",
-  );
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  // Show debug menu only in development or when explicitly requested
+  useEffect(() => {
+    const showMenu =
+      import.meta.env.MODE === "development" &&
+      new URLSearchParams(window.location.search).has("debug");
+    setShowDebugMenu(showMenu);
+  }, []);
 
   // Listen for hash changes to update current path
   useEffect(() => {
@@ -593,16 +585,28 @@ const App: React.FC = () => {
       case "/builder":
         return (
           <RouteWrapper routeName="Builder.io Example">
-            <Suspense fallback={<LoadingFallback message="Loading Builder.io example..." />}>
-              {React.createElement(lazy(() => import("./pages/BuilderExample.tsx")))}
+            <Suspense
+              fallback={
+                <LoadingFallback message="Loading Builder.io example..." />
+              }
+            >
+              {React.createElement(
+                lazy(() => import("./pages/BuilderExample.tsx")),
+              )}
             </Suspense>
           </RouteWrapper>
         );
       case "/builder-test":
         return (
           <RouteWrapper routeName="Builder.io Test">
-            <Suspense fallback={<LoadingFallback message="Loading Builder.io test..." />}>
-              {React.createElement(lazy(() => import("./pages/BuilderTest.tsx")))}
+            <Suspense
+              fallback={
+                <LoadingFallback message="Loading Builder.io test..." />
+              }
+            >
+              {React.createElement(
+                lazy(() => import("./pages/BuilderTest.tsx")),
+              )}
             </Suspense>
           </RouteWrapper>
         );
@@ -935,7 +939,7 @@ const App: React.FC = () => {
         return (
           <RouteWrapper routeName="Lineup Builder">
             <SuspenseWrapper loadingMessage="Loading Lineup Builder...">
-              <SmartLineupBuilder onLineupSubmit={() => { }} />
+              <SmartLineupBuilder onLineupSubmit={() => {}} />
             </SuspenseWrapper>
           </RouteWrapper>
         );
