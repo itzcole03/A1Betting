@@ -447,33 +447,33 @@ const App: React.FC = () => {
   // Main render
   return (
     <QueryClientProvider client={queryClient}>
-      <ErrorBoundary>
-        <div className="min-h-screen">
-          {isDebugMode ? (
-            selectedDebugComponent ? (
-              renderDebugComponent()
+      <ThemeProvider defaultTheme="light">
+        <ErrorBoundary>
+          <div className="min-h-screen">
+            {isDebugMode ? (
+              selectedDebugComponent ? (
+                renderDebugComponent()
+              ) : (
+                renderDebugMenu()
+              )
             ) : (
-              renderDebugMenu()
-            )
-          ) : (
-            <>
-              {/* Main Application - Prototype Style */}
-              <AppContent />
+              <>
+                {/* Main Application - Prototype Style */}
+                <AppContent />
 
-              {/* Debug Mode Toggle (bottom-right corner) */}
-              <button
-                onClick={() => setIsDebugMode(true)}
-                className="fixed bottom-4 right-4 p-3 bg-gray-800 dark:bg-gray-600 text-white rounded-full shadow-lg hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors z-50"
-                title="Open Debug Menu"
-              >
-                🛠️
-              </button>
-            </>
-          )}
-
-          {/* Global Components can be added here later */}
-        </div>
-      </ErrorBoundary>
+                {/* Debug Mode Toggle (bottom-right corner) */}
+                <button
+                  onClick={() => setIsDebugMode(true)}
+                  className="fixed bottom-4 left-4 p-3 bg-gray-800/80 dark:bg-gray-600/80 backdrop-blur-sm text-white rounded-full shadow-lg hover:bg-gray-700/80 dark:hover:bg-gray-500/80 transition-all duration-200 z-50"
+                  title="Open Debug Menu"
+                >
+                  🛠️
+                </button>
+              </>
+            )}
+          </div>
+        </ErrorBoundary>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
