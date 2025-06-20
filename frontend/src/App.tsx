@@ -1,9 +1,6 @@
 import React, { Suspense, useState, useEffect, lazy } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AdvancedSidebar } from "./components/layout/AdvancedSidebar";
-import { EliteSportsHeader } from "./components/layout/EliteSportsHeader";
-import UnifiedDashboard from "./components/dashboard/UnifiedDashboard";
-import { usePrizePicksLiveData } from "./hooks/usePrizePicksLiveData";
+import { ThemeProvider } from "./theme/ThemeProvider";
 import { useAppStore } from "./store/useAppStore";
 import Toaster from "./components/base/Toaster";
 
