@@ -47,9 +47,7 @@ interface AppState {
 }
 
 // Import our polished homepage
-const HomePage = lazy(() =>
-  import("./pages/index").then((m) => ({ default: m.default })),
-);
+import HomePage from "./pages/index";
 
 const AppContent: React.FC = () => {
   const [state, setState] = useState<AppState>({ darkMode: false });
