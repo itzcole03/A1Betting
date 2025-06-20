@@ -26,6 +26,7 @@ import { Toast } from "../ui/UnifiedUI";
 import { HeroSection } from "./HeroSection";
 import { LiveGamesDisplay } from "./LiveGamesDisplay";
 import { RealTimePredictions } from "./RealTimePredictions";
+import { DataSourcesPanel } from "./DataSourcesPanel";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -426,8 +427,8 @@ const UnifiedDashboard: React.FC = () => {
         className={`
           fixed lg:static top-0 left-0 h-full w-72 z-50
           lg:translate-x-0 lg:opacity-100
-          bg-gradient-to-b from-blue-600/95 to-purple-700/95 
-          backdrop-blur-xl shadow-2xl rounded-none lg:rounded-2xl 
+          bg-gradient-to-b from-blue-600/95 to-purple-700/95
+          backdrop-blur-xl shadow-2xl rounded-none lg:rounded-2xl
           flex flex-col gap-4 text-white overflow-y-auto
         `}
       >
@@ -461,7 +462,7 @@ const UnifiedDashboard: React.FC = () => {
             <button
               key={tab.key}
               className={`
-                w-full flex items-center gap-4 px-4 py-3 rounded-xl 
+                w-full flex items-center gap-4 px-4 py-3 rounded-xl
                 transition-all duration-200 font-semibold text-left
                 ${
                   activeTab === tab.key
