@@ -19,6 +19,27 @@ const queryClient = new QueryClient({
 });
 
 // ============================================================================
+// SIMPLE LOADING AND ERROR COMPONENTS
+// ============================================================================
+
+const LoadingScreen: React.FC = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p className="text-gray-600 dark:text-gray-300">
+        Loading A1Betting Platform...
+      </p>
+    </div>
+  </div>
+);
+
+const ErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  return <>{children}</>;
+};
+
+// ============================================================================
 // PROTOTYPE-STYLE APP CONTENT
 // ============================================================================
 
