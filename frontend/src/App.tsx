@@ -164,10 +164,11 @@ const AppContent: React.FC = () => {
 
       {/* Toast Container - use existing store system */}
       <ToastContainer
-        toasts={toasts.map((toast) => ({
+        toasts={toasts.map((toast: ToastNotification) => ({
           id: toast.id,
           message: toast.message,
-          type: toast.type as "success" | "warning" | "error" | "info",
+          type: toast.type,
+          duration: toast.duration,
         }))}
         onRemove={removeToast}
       />
