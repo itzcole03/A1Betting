@@ -49,6 +49,56 @@
     @apply inline-flex items-center px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium rounded-full shadow-sm;
   }
 
+  /* === GLASS MORPHISM (PROTOTYPE STYLE) === */
+  .glass-morphism {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  }
+
+  .dark .glass-morphism {
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* === ULTIMATE BUTTON (PROTOTYPE STYLE) === */
+  .ultimate-btn {
+    background: linear-gradient(135deg, #ffd700 0%, #ff6b35 50%, #5d5cde 100%);
+    animation: glow 3s ease-in-out infinite alternate;
+  }
+
+  /* === PROP CARDS (PROTOTYPE STYLE) === */
+  .prop-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .prop-card:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
+
+  /* === ANIMATIONS === */
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 20px rgba(93, 92, 222, 0.4);
+    }
+    to {
+      box-shadow: 0 0 40px rgba(93, 92, 222, 0.8);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .badge-glass {
     @apply inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-lg border border-white/30 text-gray-700 text-sm font-medium rounded-full;
   }
