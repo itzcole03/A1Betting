@@ -1,550 +1,499 @@
-import React, {
-  Component,
-  ErrorInfo,
-  Suspense,
-  lazy,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-import PremiumDashboard from "./components/dashboard/PremiumDashboard.tsx";
-import { MLPredictions } from "./components/MLPredictions.tsx";
-import PerformanceMonitor from "./components/PerformanceMonitor.tsx";
-import WebSocketSecurityDashboard from "./components/WebSocketSecurityDashboard.tsx";
-import PrizePicksPageEnhanced from "./pages/PrizePicksPageEnhanced.tsx";
+import React, { Suspense, useState, useEffect, lazy } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "sonner";
+import { LoadingScreen } from "./components/core/LoadingScreen";
+import { ErrorBoundary } from "./components/core/ErrorBoundary";
+import { AdvancedSidebar } from "./components/layout/AdvancedSidebar";
+import { EliteSportsHeader } from "./components/layout/EliteSportsHeader";
+import UnifiedDashboard from "./components/dashboard/UnifiedDashboard";
+import { PrizePicksEdgeDisplay } from "./components/betting/PrizePicksEdgeDisplay";
+import { PerformanceAnalyticsDashboard } from "./components/analytics/PerformanceAnalyticsDashboard";
+import { usePrizePicksLiveData } from "./hooks/usePrizePicksLiveData";
 
-// Core Money-Making Components
-import UltimateMoneyMaker from "./components/betting/UltimateMoneyMaker.tsx";
-import MoneyMakerAdvanced from "./components/MoneyMaker/MoneyMakerAdvanced.tsx";
-import UltimateMoneyMakerEnhanced from "./components/UltimateMoneyMakerEnhanced.tsx";
+// ============================================================================
+// QUERY CLIENT
+// ============================================================================
 
-// Enhanced Design System
-import {
-  Badge,
-  Button,
-  Card,
-  Spinner,
-} from "./components/ui/design-system.tsx";
-import { cn } from "./lib/utils.ts";
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
+    },
+  },
+});
 
-// Builder.io components and initialization
-import "./components/builder";
+// ============================================================================
+// PROTOTYPE-STYLE APP CONTENT
+// ============================================================================
 
-// Ultra-Advanced Accuracy Components
-const UltraAdvancedMLDashboard = lazy(
-  () => import("./components/ml/UltraAdvancedMLDashboard.tsx"),
-);
-const AdvancedConfidenceVisualizer = lazy(
-  () => import("./components/prediction/AdvancedConfidenceVisualizer.tsx"),
-);
-const RealTimeAccuracyDashboard = lazy(
-  () => import("./components/analytics/RealTimeAccuracyDashboard.tsx"),
-);
-const QuantumPredictionsInterface = lazy(
-  () => import("./components/prediction/QuantumPredictionsInterface.tsx"),
-);
-const UltraAccuracyOverview = lazy(
-  () => import("./components/overview/UltraAccuracyOverview.tsx"),
-);
-const RevolutionaryAccuracyInterface = lazy(
-  () => import("./components/revolutionary/RevolutionaryAccuracyInterface.tsx"),
-);
-const EnhancedRevolutionaryInterface = lazy(
-  () => import("./components/revolutionary/EnhancedRevolutionaryInterface.tsx"),
-);
-
-// TypeScript interfaces
-interface NavigationItem {
-  href: string;
-  label: string;
-  color: string;
+interface AppState {
+  darkMode: boolean;
 }
 
-interface NavigationGroup {
-  group: string;
-  items: NavigationItem[];
-}
+const AppContent: React.FC = () => {
+  const [currentSection, setCurrentSection] = useState("dashboard");
+  const [state, setState] = useState<AppState>({ darkMode: false });
 
-interface LoadingFallbackProps {
-  message?: string;
-}
+  // Real-time data hooks (simulated)
+  const [connectedSources] = useState(12);
+  const [dataQuality] = useState(0.87);
+  const [loading, setLoading] = useState(false);
 
-interface RouteErrorBoundaryProps {
-  children: React.ReactNode;
-  routeName: string;
-}
+  // PrizePicks live data
+  const prizePicksData = usePrizePicksLiveData();
 
-interface RouteErrorBoundaryState {
-  hasError: boolean;
-  error: Error | null;
-}
+  const toggleDarkMode = () => {
+    setState((prev) => ({ ...prev, darkMode: !prev.darkMode }));
+  };
 
-interface SuspenseWrapperProps {
-  children: React.ReactNode;
-  loadingMessage?: string;
-}
+  const refreshData = async () => {
+    setLoading(true);
+    // Simulate data refresh
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setLoading(false);
+  };
 
-interface RouteWrapperProps {
-  children: React.ReactNode;
-  routeName: string;
-}
-
-// Enhanced Loading Component with Design System
-const LoadingFallback: React.FC<LoadingFallbackProps> = ({
-  message = "Loading...",
-}) => (
-  <div
-    className="flex-center flex-col h-64 space-y-6"
-    role="status"
-    aria-live="polite"
-  >
-    <Spinner variant="brand" size="xl" />
-    <div className="text-gray-600 dark:text-gray-300 font-medium text-lg">
-      {message}
-    </div>
-    <div className="flex space-x-1">
-      <div className="w-2 h-2 bg-brand-500 rounded-full animate-bounce dot-delay-0" />
-      <div className="w-2 h-2 bg-brand-500 rounded-full animate-bounce dot-delay-150" />
-      <div className="w-2 h-2 bg-brand-500 rounded-full animate-bounce dot-delay-300" />
-    </div>
-  </div>
-);
-
-// Enhanced Error Boundary
-class RouteErrorBoundary extends Component<
-  RouteErrorBoundaryProps,
-  RouteErrorBoundaryState
-> {
-  constructor(props: RouteErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error(`Error in route ${this.props.routeName}:`, error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <Card
-          variant="premium"
-          className="flex-center flex-col h-64 space-y-6 text-center max-w-md mx-auto"
-        >
-          <div className="text-6xl animate-bounce">⚠️</div>
-          <div className="space-y-3">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Component Error
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              There was an error loading the {this.props.routeName} component.
-            </p>
-          </div>
-          <Button
-            variant="premium"
-            onClick={() => window.location.reload()}
-            aria-label="Reload page to fix error"
-            className="min-w-32"
-          >
-            Reload Page
-          </Button>
-        </Card>
-      );
+  // Apply dark mode to document
+  useEffect(() => {
+    if (state.darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
     }
+  }, [state.darkMode]);
 
-    return this.props.children;
-  }
-}
+  const renderCurrentSection = () => {
+    switch (currentSection) {
+      case "dashboard":
+        return <UnifiedDashboard />;
+      case "prizepicks":
+        return <PrizePicksEdgeDisplay />;
+      case "analytics":
+        return <PerformanceAnalyticsDashboard />;
+      default:
+        return <UnifiedDashboard />;
+    }
+  };
 
-// Lazy-loaded Advanced Components with optimized loading
-const AdvancedMLDashboard = lazy(() =>
-  import("./components/MoneyMaker/AdvancedMLDashboard.tsx").then((m) => ({
-    default: m.AdvancedMLDashboard,
+  return (
+    <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100">
+      <AdvancedSidebar
+        currentSection={currentSection}
+        onSectionChange={setCurrentSection}
+        connectedSources={connectedSources}
+        dataQuality={dataQuality}
+        state={state}
+      />
+
+      <div className="flex-1 overflow-auto">
+        <EliteSportsHeader
+          connectedSources={connectedSources}
+          dataQuality={dataQuality}
+          state={state}
+          toggleDarkMode={toggleDarkMode}
+          refreshData={refreshData}
+          loading={loading}
+        />
+        <div className="p-6" style={{ marginTop: "-2px" }}>
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingScreen />}>
+              {renderCurrentSection()}
+            </Suspense>
+          </ErrorBoundary>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// DEBUG COMPONENTS (lazy loaded for better performance)
+// ============================================================================
+
+// Analytics Components
+const PerformanceAnalyticsDebug = lazy(() =>
+  import("./components/analytics/PerformanceAnalyticsDashboard.tsx").then(
+    (m) => ({
+      default: m.PerformanceAnalyticsDashboard,
+    }),
+  ),
+);
+
+const AdvancedAnalyticsHub = lazy(() =>
+  import("./components/analytics/AdvancedAnalyticsHub.tsx").then((m) => ({
+    default: m.AdvancedAnalyticsHub,
   })),
 );
-const HyperMLInsights = lazy(
-  () => import("./components/analytics/HyperMLInsights.tsx"),
-);
-const EvolutionaryInsights = lazy(
-  () => import("./components/analytics/EvolutionaryInsights.tsx"),
-);
-const RealTimeDataStream = lazy(
-  () => import("./components/realtime/RealTimeDataStream.tsx"),
-);
-const UnifiedDashboard = lazy(() =>
-  import("./components/dashboard/UnifiedDashboard.tsx").then((m) => ({
-    default: m.default,
+
+const MLInsights = lazy(() =>
+  import("./components/analytics/MLInsights.tsx").then((m) => ({
+    default: m.MLInsights,
   })),
 );
-const UnifiedBettingInterface = lazy(
-  () => import("./components/betting/UnifiedBettingInterface.tsx"),
-);
-const WhatIfSimulator = lazy(
-  () => import("./components/advanced/WhatIfSimulator.tsx"),
-);
-const SmartLineupBuilder = lazy(() =>
-  import("./components/lineup/SmartLineupBuilder.tsx").then((m) => ({
-    default: m.SmartLineupBuilder,
+
+const UltraAdvancedMLDashboard = lazy(() =>
+  import("./components/ml/UltraAdvancedMLDashboard.tsx").then((m) => ({
+    default: m.UltraAdvancedMLDashboard,
   })),
 );
+
+// Betting Components
+const ArbitrageOpportunities = lazy(() =>
+  import("./components/ArbitrageOpportunities.tsx").then((m) => ({
+    default: m.ArbitrageOpportunities,
+  })),
+);
+
+const BetBuilder = lazy(() =>
+  import("./components/features/betting/BetBuilder.tsx").then((m) => ({
+    default: m.BetBuilder,
+  })),
+);
+
+const BettingHistory = lazy(() =>
+  import("./components/BettingHistory.tsx").then((m) => ({
+    default: m.BettingHistory,
+  })),
+);
+
+const RealtimePredictionDisplay = lazy(() =>
+  import(
+    "./components/features/predictions/RealtimePredictionDisplay.tsx"
+  ).then((m) => ({
+    default: m.RealtimePredictionDisplay,
+  })),
+);
+
+const MLPredictions = lazy(() =>
+  import("./components/MLPredictions.tsx").then((m) => ({
+    default: m.MLPredictions,
+  })),
+);
+
+// Strategy Components
+const UnifiedStrategyEngineDisplay = lazy(() =>
+  import("./components/strategy/UnifiedStrategyEngineDisplay.tsx").then(
+    (m) => ({
+      default: m.UnifiedStrategyEngineDisplay,
+    }),
+  ),
+);
+
+const UnifiedMoneyMaker = lazy(() =>
+  import("./components/money-maker/UnifiedMoneyMaker.tsx").then((m) => ({
+    default: m.UnifiedMoneyMaker,
+  })),
+);
+
+// Market Analysis
 const MarketAnalysisDashboard = lazy(() =>
   import("./components/MarketAnalysisDashboard.tsx").then((m) => ({
     default: m.MarketAnalysisDashboard,
   })),
 );
-const MLModelCenter = lazy(() =>
-  import("./components/ml/MLModelCenter.tsx").then((m) => ({
-    default: m.default,
+
+// Other Components
+const SmartLineupBuilder = lazy(() =>
+  import("./components/lineup/SmartLineupBuilder.tsx").then((m) => ({
+    default: m.SmartLineupBuilder,
   })),
 );
-const UnifiedPredictionInterface = lazy(() =>
-  import("./components/prediction/UnifiedPredictionInterface.tsx").then(
-    (m) => ({ default: m.UnifiedPredictionInterface }),
-  ),
+
+const MLModelCenter = lazy(() =>
+  import("./components/ml/MLModelCenter.tsx").then((m) => ({
+    default: m.MLModelCenter,
+  })),
 );
+
 const UnifiedSettingsInterface = lazy(() =>
   import("./components/settings/UnifiedSettingsInterface.tsx").then((m) => ({
     default: m.UnifiedSettingsInterface,
   })),
 );
+
 const UnifiedProfile = lazy(() =>
   import("./components/profile/UnifiedProfile.tsx").then((m) => ({
     default: m.UnifiedProfile,
   })),
 );
-const ArbitrageOpportunities = lazy(
-  () => import("./components/ArbitrageOpportunities.tsx"),
-);
-const AdvancedAnalytics = lazy(() =>
-  import("./components/analytics/AdvancedAnalytics.tsx").then((m) => ({
-    default: m.AdvancedAnalytics,
-  })),
-);
-const PerformanceAnalyticsDashboard = lazy(
-  () => import("./components/analytics/PerformanceAnalyticsDashboard.tsx"),
-);
-const AdvancedAnalyticsHub = lazy(
-  () => import("./components/analytics/AdvancedAnalyticsHub.tsx"),
-);
-const MobileOptimizedInterface = lazy(
-  () => import("./components/mobile/MobileOptimizedInterface.tsx"),
-);
 
-// Navigation configuration for better maintainability
-const navigationConfig: NavigationGroup[] = [
+// ============================================================================
+// DEBUG MENU CONFIGURATION
+// ============================================================================
+
+interface DebugMenuItem {
+  label: string;
+  component: React.ComponentType;
+  description: string;
+  category: string;
+}
+
+const debugMenuItems: DebugMenuItem[] = [
+  // Analytics
   {
-    group: "Core",
-    items: [
-      {
-        href: "#/",
-        label: "🏠 Premium Dashboard",
-        color: "text-gray-900 dark:text-gray-100",
-      },
-      {
-        href: "#/prizepicks-enhanced",
-        label: "🎯 PrizePicks Pro",
-        color: "text-indigo-600",
-      },
-    ],
+    label: "Performance Dashboard",
+    component: PerformanceAnalyticsDebug,
+    description: "Comprehensive analytics and performance metrics",
+    category: "Analytics",
   },
   {
-    group: "Money Making Suite",
-    items: [
-      {
-        href: "#/money-maker",
-        label: "💰 Money Maker",
-        color: "text-blue-600",
-      },
-      {
-        href: "#/money-maker-advanced",
-        label: "🚀 Advanced",
-        color: "text-green-600",
-      },
-      {
-        href: "#/money-maker-enhanced",
-        label: "⚡ Enhanced",
-        color: "text-purple-600",
-      },
-    ],
+    label: "Advanced Analytics Hub",
+    component: AdvancedAnalyticsHub,
+    description: "Advanced ML analytics and insights",
+    category: "Analytics",
   },
   {
-    group: "Advanced ML Suite",
-    items: [
-      {
-        href: "#/advanced-ml",
-        label: "🧠 Advanced ML",
-        color: "text-indigo-600",
-      },
-      { href: "#/hyper-ml", label: "🔥 Hyper ML", color: "text-pink-600" },
-      {
-        href: "#/evolutionary",
-        label: "🧬 Evolutionary",
-        color: "text-orange-600",
-      },
-      { href: "#/ml-center", label: "🎯 ML Center", color: "text-cyan-600" },
-    ],
+    label: "ML Insights",
+    component: MLInsights,
+    description: "Machine learning insights and analysis",
+    category: "Analytics",
   },
   {
-    group: "Ultra-Accuracy Suite",
-    items: [
-      {
-        href: "#/ultra-accuracy-overview",
-        label: "🎯 Accuracy Overview",
-        color: "text-purple-600",
-      },
-      {
-        href: "#/ultra-ml-dashboard",
-        label: "🧠 Ultra ML Dashboard",
-        color: "text-purple-600",
-      },
-      {
-        href: "#/confidence-visualizer",
-        label: "📊 Confidence Analysis",
-        color: "text-blue-600",
-      },
-      {
-        href: "#/accuracy-monitor",
-        label: "🔍 Real-time Monitor",
-        color: "text-green-600",
-      },
-      {
-        href: "#/quantum-predictions",
-        label: "⚛️ Quantum Predictions",
-        color: "text-violet-600",
-      },
-    ],
+    label: "Ultra Advanced ML",
+    component: UltraAdvancedMLDashboard,
+    description: "Ultra-advanced ML dashboard",
+    category: "Analytics",
+  },
+
+  // Betting
+  {
+    label: "Arbitrage Opportunities",
+    component: ArbitrageOpportunities,
+    description: "Real-time arbitrage betting opportunities",
+    category: "Betting",
   },
   {
-    group: "Revolutionary 2024 Research",
-    items: [
-      {
-        href: "#/revolutionary-accuracy",
-        label: "🚀 Revolutionary Engine",
-        color: "text-pink-600",
-      },
-      {
-        href: "#/enhanced-revolutionary",
-        label: "🧮 Enhanced Mathematical Engine",
-        color: "text-purple-700",
-      },
-      {
-        href: "#/neuromorphic-interface",
-        label: "🧠 Neuromorphic Computing",
-        color: "text-indigo-600",
-      },
-      {
-        href: "#/physics-informed",
-        label: "⚗️ Physics-Informed ML",
-        color: "text-emerald-600",
-      },
-      {
-        href: "#/causal-discovery",
-        label: "🔀 Causal Inference",
-        color: "text-orange-600",
-      },
-      {
-        href: "#/manifold-learning",
-        label: "🌐 Manifold Learning",
-        color: "text-cyan-600",
-      },
-    ],
+    label: "Bet Builder",
+    component: BetBuilder,
+    description: "Advanced bet building interface",
+    category: "Betting",
   },
   {
-    group: "Analytics & Real-time",
-    items: [
-      { href: "#/analytics", label: "📊 Analytics", color: "text-emerald-600" },
-      {
-        href: "#/analytics-hub",
-        label: "🚀 Analytics Hub",
-        color: "text-purple-600",
-      },
-      {
-        href: "#/performance",
-        label: "📈 Performance",
-        color: "text-blue-600",
-      },
-      { href: "#/real-time", label: "⚡ Real-time", color: "text-red-600" },
-      {
-        href: "#/market-analysis",
-        label: "📈 Market Analysis",
-        color: "text-teal-600",
-      },
-    ],
+    label: "Betting History",
+    component: BettingHistory,
+    description: "Historical betting performance",
+    category: "Betting",
+  },
+
+  // Predictions
+  {
+    label: "Realtime Predictions",
+    component: RealtimePredictionDisplay,
+    description: "Live prediction updates",
+    category: "Predictions",
   },
   {
-    group: "Mobile & PWA",
-    items: [
-      {
-        href: "#/mobile",
-        label: "📱 Mobile Experience",
-        color: "text-pink-600",
-      },
-    ],
+    label: "ML Predictions",
+    component: MLPredictions,
+    description: "Machine learning predictions",
+    category: "Predictions",
+  },
+
+  // Strategy
+  {
+    label: "Strategy Engine",
+    component: UnifiedStrategyEngineDisplay,
+    description: "Unified strategy engine interface",
+    category: "Strategy",
   },
   {
-    group: "Unified Interfaces",
-    items: [
-      {
-        href: "#/unified-dashboard",
-        label: "🌟 Unified Dashboard",
-        color: "text-violet-600",
-      },
-      {
-        href: "#/unified-betting",
-        label: "🎲 Unified Betting",
-        color: "text-amber-600",
-      },
-      {
-        href: "#/unified-predictions",
-        label: "🔮 Unified Predictions",
-        color: "text-lime-600",
-      },
-    ],
+    label: "Money Maker",
+    component: UnifiedMoneyMaker,
+    description: "Automated money-making strategies",
+    category: "Strategy",
+  },
+
+  // Market Analysis
+  {
+    label: "Market Analysis",
+    component: MarketAnalysisDashboard,
+    description: "Comprehensive market analysis",
+    category: "Market Analysis",
+  },
+
+  // Tools
+  {
+    label: "Lineup Builder",
+    component: SmartLineupBuilder,
+    description: "Smart DFS lineup builder",
+    category: "Tools",
   },
   {
-    group: "Advanced Tools",
-    items: [
-      {
-        href: "#/what-if",
-        label: "🔬 What-If Simulator",
-        color: "text-slate-600",
-      },
-      {
-        href: "#/lineup-builder",
-        label: "🏗️ Lineup Builder",
-        color: "text-stone-600",
-      },
-      { href: "#/arbitrage", label: "⚖️ Arbitrage", color: "text-rose-600" },
-    ],
+    label: "ML Model Center",
+    component: MLModelCenter,
+    description: "Machine learning model management",
+    category: "Tools",
+  },
+
+  // Settings & Profile
+  {
+    label: "Settings",
+    component: UnifiedSettingsInterface,
+    description: "Application settings and configuration",
+    category: "Settings",
   },
   {
-    group: "User & Core Features",
-    items: [
-      { href: "#/profile", label: "👤 Profile", color: "text-blue-500" },
-      { href: "#/settings", label: "⚙️ Settings", color: "text-gray-600" },
-      {
-        href: "#/ml-predictions",
-        label: "🧠 ML Predictions",
-        color: "text-indigo-600",
-      },
-      { href: "#/security", label: "🔒 Security", color: "text-red-600" },
-    ],
+    label: "Profile",
+    component: UnifiedProfile,
+    description: "User profile and preferences",
+    category: "Settings",
   },
 ];
 
-// Route wrapper with error boundary and loading
-const RouteWrapper: React.FC<RouteWrapperProps> = ({ children, routeName }) => (
-  <RouteErrorBoundary routeName={routeName}>{children}</RouteErrorBoundary>
-);
-
-// Suspense wrapper with custom loading
-const SuspenseWrapper: React.FC<SuspenseWrapperProps> = ({
-  children,
-  loadingMessage,
-}) => (
-  <Suspense fallback={<LoadingFallback message={loadingMessage} />}>
-    {children}
-  </Suspense>
-);
+// ============================================================================
+// MAIN APP COMPONENT
+// ============================================================================
 
 const App: React.FC = () => {
-  // Always show UnifiedDashboard by default - no complex routing needed
-  const [showDebugMenu, setShowDebugMenu] = useState(false);
+  const [isDebugMode, setIsDebugMode] = useState(false);
+  const [selectedDebugComponent, setSelectedDebugComponent] = useState<
+    string | null
+  >(null);
 
-  // Show debug menu only in development or when explicitly requested
+  // Check for debug mode in URL params
   useEffect(() => {
-    const showMenu =
-      import.meta.env.MODE === "development" &&
-      new URLSearchParams(window.location.search).has("debug");
-    setShowDebugMenu(showMenu);
+    const urlParams = new URLSearchParams(window.location.search);
+    const debugParam = urlParams.get("debug");
+    if (debugParam === "true" || debugParam === "1") {
+      setIsDebugMode(true);
+    }
   }, []);
 
-  // No complex routing needed - just render the main dashboard
-  // Debug mode toggle for development
-  const toggleDebugMenu = useCallback(() => {
-    setShowDebugMenu(!showDebugMenu);
-  }, [showDebugMenu]);
-
-  // Simple render - just show the unified dashboard like the prototype
-  const renderMainApp = () => (
-    <RouteWrapper routeName="Unified Dashboard">
-      <SuspenseWrapper loadingMessage="Loading A1Betting Platform...">
-        <UnifiedDashboard />
-      </SuspenseWrapper>
-    </RouteWrapper>
+  // Group debug menu items by category
+  const groupedDebugItems = debugMenuItems.reduce(
+    (acc, item) => {
+      if (!acc[item.category]) {
+        acc[item.category] = [];
+      }
+      acc[item.category].push(item);
+      return acc;
+    },
+    {} as Record<string, DebugMenuItem[]>,
   );
 
-  // Debug menu for development (only shown when explicitly requested)
-  const renderDebugMenu = () => (
-    <div className="p-6">
-      <Card className="max-w-4xl mx-auto">
-        <div className="text-center p-8">
-          <h1 className="text-2xl font-bold mb-4">Development Debug Menu</h1>
-          <p className="text-gray-600 mb-6">
-            This menu is only available in development mode. Add ?debug to the
-            URL to access individual components.
-          </p>
-          <Button onClick={() => setShowDebugMenu(false)} className="mb-4">
-            ← Back to Main Dashboard
-          </Button>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-            {navigationConfig.slice(0, 3).map((group) => (
-              <div key={group.group} className="space-y-2">
-                <h3 className="font-semibold text-sm text-gray-700">
-                  {group.group}
-                </h3>
-                {group.items.slice(0, 5).map((item) => (
-                  <Button
-                    key={item.href}
-                    variant="outline"
-                    size="sm"
-                    className="w-full text-xs"
-                    onClick={() => (window.location.hash = item.href)}
-                  >
-                    {item.label}
-                  </Button>
-                ))}
-              </div>
-            ))}
+  // Render selected debug component
+  const renderDebugComponent = () => {
+    if (!selectedDebugComponent) return null;
+
+    const item = debugMenuItems.find(
+      (item) => item.label === selectedDebugComponent,
+    );
+    if (!item) return null;
+
+    const Component = item.component;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900">
+        <div className="container mx-auto p-4">
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                {item.label}
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">
+                {item.description}
+              </p>
+            </div>
+            <button
+              onClick={() => setSelectedDebugComponent(null)}
+              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+            >
+              ← Back to Debug Menu
+            </button>
           </div>
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingScreen />}>
+              <Component />
+            </Suspense>
+          </ErrorBoundary>
         </div>
-      </Card>
+      </div>
+    );
+  };
+
+  // Render debug menu
+  const renderDebugMenu = () => (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900 p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            🛠️ Developer Debug Menu
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Access individual components for testing and development
+          </p>
+          <button
+            onClick={() => setIsDebugMode(false)}
+            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            → Go to Main App
+          </button>
+        </div>
+
+        {Object.entries(groupedDebugItems).map(([category, items]) => (
+          <div key={category} className="mb-8">
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4 border-b-2 border-blue-200 dark:border-blue-700 pb-2">
+              {category}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {items.map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => setSelectedDebugComponent(item.label)}
+                  className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 text-left group"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                    {item.label}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {item.description}
+                  </p>
+                  <div className="mt-3 inline-flex items-center text-sm text-blue-600 dark:text-blue-400">
+                    Open Component →
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
-  // Render the clean app like the prototype - main dashboard with optional debug access
+  // Main render
   return (
-    <div className="min-h-screen">
-      {/* Main App - Clean like prototype */}
-      {!showDebugMenu && renderMainApp()}
+    <QueryClientProvider client={queryClient}>
+      <ErrorBoundary>
+        <div className="min-h-screen">
+          {isDebugMode ? (
+            selectedDebugComponent ? (
+              renderDebugComponent()
+            ) : (
+              renderDebugMenu()
+            )
+          ) : (
+            <>
+              {/* Main Application - Prototype Style */}
+              <AppContent />
 
-      {/* Debug Menu - Only for development */}
-      {showDebugMenu && renderDebugMenu()}
+              {/* Debug Mode Toggle (bottom-right corner) */}
+              <button
+                onClick={() => setIsDebugMode(true)}
+                className="fixed bottom-4 right-4 p-3 bg-gray-800 dark:bg-gray-600 text-white rounded-full shadow-lg hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors z-50"
+                title="Open Debug Menu"
+              >
+                🛠️
+              </button>
+            </>
+          )}
 
-      {/* Development Debug Toggle */}
-      {import.meta.env.MODE === "development" && (
-        <button
-          onClick={toggleDebugMenu}
-          className="fixed top-4 right-4 z-50 p-2 bg-gray-800 text-white rounded-full text-xs"
-          title="Toggle Debug Menu"
-        >
-          {showDebugMenu ? "🏠" : "🛠️"}
-        </button>
-      )}
-
-      {/* Development Performance Monitor */}
-      {typeof window !== "undefined" &&
-        import.meta.env.MODE === "development" &&
-        !showDebugMenu && (
-          <div className="fixed bottom-4 left-4 z-40">
-            <PerformanceMonitor />
-          </div>
-        )}
-    </div>
+          {/* Global Components */}
+          <Toaster position="top-right" richColors />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </div>
+      </ErrorBoundary>
+    </QueryClientProvider>
   );
 };
 
