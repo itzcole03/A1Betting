@@ -117,21 +117,55 @@ export const isFeatureEnabled = async (
  */
 export const fetchAllFeatureFlags = async (): Promise<FeatureFlags> => {
   try {
-    let config;
-    try {
-      config = getInitializedUnifiedConfig();
-    } catch (e) {
-      throw new Error(
-        "Feature flags requested before UnifiedConfig was initialized. Ensure initializeUnifiedConfig() is awaited before any feature flag checks.",
-      );
+    const config = getInitializedUnifiedConfig();
+
+    // Get feature flags from the config
+    const features = config.get<any>("features");
+    if (!features) {
+      // Return default feature flags
+      return {
+        INJURIES: true,
+        NEWS: true,
+        WEATHER: true,
+        REALTIME: true,
+        ESPN: true,
+        ODDS: true,
+        ANALYTICS: true,
+        enableNews: true,
+        enableWeather: true,
+        enableInjuries: true,
+        enableAnalytics: true,
+        enableSocialSentiment: true,
+      } as FeatureFlags;
     }
-    return config.getAllFeatureFlags();
-  } catch (error) {
-    unifiedMonitor.reportError(error, {
-      service: "configService",
-      operation: "fetchAllFeatureFlags",
+
+    // Convert feature object to flat flags
+    const flags: any = {};
+    Object.entries(features).forEach(([key, value]) => {
+      if (typeof value === "boolean") {
+        flags[key] = value;
+      } else if (
+        typeof value === "object" &&
+        value !== null &&
+        "enabled" in value
+      ) {
+        flags[key] = value.enabled;
+      }
     });
-    return {} as FeatureFlags;
+
+    return flags as FeatureFlags;
+  } catch (error) {
+    console.warn("Failed to fetch feature flags:", error);
+    // Return safe defaults
+    return {
+      INJURIES: true,
+      NEWS: true,
+      WEATHER: true,
+      REALTIME: true,
+      ESPN: true,
+      ODDS: true,
+      ANALYTICS: true,
+    } as FeatureFlags;
   }
 };
 
