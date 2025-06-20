@@ -153,7 +153,7 @@ const BetBuilder = lazy(() =>
 );
 
 const BettingHistory = lazy(() =>
-  import("./components/BettingHistory.tsx").then((m) => ({
+  import("./components/features/betting/BettingHistory.tsx").then((m) => ({
     default: m.BettingHistory,
   })),
 );
