@@ -106,6 +106,42 @@
   }
 }
 
+/* Ensure inputs work properly on mobile */
+input[type="number"],
+select {
+  font-size: 16px !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
 /* Gradient Backgrounds */
 .gradient-premium {
   background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
