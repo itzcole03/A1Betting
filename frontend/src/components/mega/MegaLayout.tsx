@@ -433,7 +433,7 @@ export const MegaSidebar: React.FC<{
               transition: "all 0.3s ease",
               border: "1px solid rgba(255, 255, 255, 0.1)",
               background: "rgba(255, 255, 255, 0.05)",
-              color: CYBER_COLORS.text.secondary,
+              color: "#e2e8f0",
               backdropFilter: "blur(20px) saturate(1.8)",
               boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
             }}
