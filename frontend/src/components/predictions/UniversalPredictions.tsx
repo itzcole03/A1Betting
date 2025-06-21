@@ -923,8 +923,8 @@ ThemedText
             style={{ fontSize: "24px", color: "#06ffa5" }}
           >
             {filteredPredictions.length}
-          </CyberText>
-          <CyberText variant="caption" color="secondary">
+          </ThemedText>
+          <ThemedText variant="caption" color="secondary">
             Total Predictions
           </CyberText>
         </div>
