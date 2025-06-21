@@ -1,0 +1,3 @@
+"use strict";
+// Ported from Newfolder: Evolutionary Strategy optimization model
+// ...existing code from Newfolder's EvolutionaryStrategy.ts...

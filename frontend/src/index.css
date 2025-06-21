@@ -1,9 +1,9 @@
+/* Import Beautiful Cyber Theme */
+@import "./styles/cyber-theme.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Import Beautiful Cyber Theme */
-@import "./styles/cyber-theme.css";
 
 @layer base {
   body {

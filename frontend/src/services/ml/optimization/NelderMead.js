@@ -1,0 +1,3 @@
+"use strict";
+// Ported from Newfolder: Nelder-Mead optimization model
+// ...existing code from Newfolder's NelderMead.ts...

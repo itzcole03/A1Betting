@@ -1,0 +1,3 @@
+"use strict";
+// Ported from Newfolder: Feature selector for advanced feature selection logic
+// ...existing code from Newfolder's featureSelector.ts...
