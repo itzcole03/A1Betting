@@ -166,18 +166,30 @@ export const MegaCard: React.FC<{
   const getVariantStyle = () => {
     const variants = {
       default: {
-        backgroundColor: "rgba(255, 255, 255, 0.05)",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
+        backgroundColor: "rgba(255, 255, 255, 0.03)",
+        border: "1px solid rgba(255, 255, 255, 0.08)",
+        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(20px) saturate(180%)",
       },
-      glass: CYBER_GLASS.card,
-      glowing: {
+      glass: {
         ...CYBER_GLASS.card,
-        boxShadow: `0 0 20px ${CYBER_COLORS.primary}40, 0 8px 32px rgba(0, 0, 0, 0.1)`,
-        border: `1px solid ${CYBER_COLORS.primary}30`,
+        backgroundColor: "rgba(255, 255, 255, 0.04)",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        boxShadow:
+          "0 8px 32px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255, 255, 255, 0.05) inset",
+        backdropFilter: "blur(40px) saturate(200%)",
+      },
+      glowing: {
+        backgroundColor: "rgba(255, 255, 255, 0.04)",
+        border: `1px solid rgba(6, 255, 165, 0.3)`,
+        boxShadow: `0 0 32px rgba(6, 255, 165, 0.2), 0 8px 32px rgba(0, 0, 0, 0.2)`,
+        backdropFilter: "blur(40px) saturate(200%)",
       },
       bordered: {
         backgroundColor: "rgba(255, 255, 255, 0.02)",
-        border: `2px solid ${CYBER_COLORS.primary}60`,
+        border: `1px solid rgba(6, 255, 165, 0.4)`,
+        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(20px) saturate(180%)",
       },
     };
     return variants[variant];
