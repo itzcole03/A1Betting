@@ -233,25 +233,6 @@ export const AdvancedSidebar: React.FC<AdvancedSidebarProps> = ({
               <Shield className="w-3 h-3 text-yellow-400" />
             )}
             {item.submenu && (
-            <div className="relative float-element">
-              <div className="absolute inset-0 bg-gradient-to-r from-electric-400 to-neon-blue rounded-xl blur-lg opacity-75"></div>
-              <motion.div
-                className="relative w-12 h-12 bg-gradient-to-br from-electric-400 to-neon-blue rounded-xl flex items-center justify-center shadow-xl"
-                whileHover={{ scale: 1.05 }}
-              >
-                <Brain className="w-7 h-7 text-black font-bold" />
-              </motion.div>
-            </div>
-            {!isCollapsed && (
-              <div>
-                <HolographicText size="xl" className="text-xl font-black tracking-tight">
-                  A1BETTING
-                </HolographicText>
-                <p className="text-xs text-gray-400 uppercase tracking-widest">
-                  Quantum Intelligence
-                </p>
-              </div>
-            )}
             )}
           </div>
         </motion.button>
