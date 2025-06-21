@@ -8,6 +8,8 @@ import {
 import MegaDashboard from "./MegaDashboard";
 import MegaBetting from "./MegaBetting";
 import MegaAnalytics from "./MegaAnalytics";
+import MegaAdminPanel from "./MegaAdminPanel";
+import MegaPrizePicks from "./MegaPrizePicks";
 import { MegaSidebar, MegaHeader, MegaAppShell } from "./MegaLayout";
 import { MegaCard, MegaButton } from "./MegaUI";
 import {
@@ -35,6 +37,8 @@ import {
   LogOut,
   Moon,
   Sun,
+  Trophy,
+  UserCog,
 } from "lucide-react";
 
 // MASTER MEGA APP - Consolidates all functionality with cyber theme
