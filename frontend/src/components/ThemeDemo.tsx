@@ -26,7 +26,23 @@ const ThemeDemo: React.FC = () => {
           <h1 style={{ margin: "0", color: theme.colors.text.primary }}>
             🎨 Cyber Theme System Demo
           </h1>
-          <CyberThemeToggle variant="button" showLabel={true} />
+          <button
+            onClick={toggleDarkMode}
+            style={{
+              background: theme.gradients.primary,
+              border: "none",
+              padding: "8px 16px",
+              borderRadius: "8px",
+              color: "#000",
+              fontWeight: "600",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            {isDark ? "☀️" : "🌙"} {isDark ? "Light Mode" : "Dark Mode"}
+          </button>
         </div>
 
         <div
