@@ -33,10 +33,13 @@ import "./styles/enhanced-animations.css";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 30000,
-      cacheTime: 300000,
+      staleTime: 300000, // 5 minutes
+      cacheTime: 600000, // 10 minutes
       refetchOnWindowFocus: false,
-      retry: 2,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: false, // Disable retries to prevent fetch errors
+      refetchInterval: false, // Disable automatic refetching
     },
   },
 });
