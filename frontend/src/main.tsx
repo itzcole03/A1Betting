@@ -5,6 +5,7 @@ import App from "./App.tsx";
 // Import styles exactly like the prototype
 import "./index.css";
 import "./styles/prototype-override.css";
+import "./styles/force-prototype.css";
 
 console.log("🚀 A1Betting Platform Loading - Prototype Match Mode");
 
