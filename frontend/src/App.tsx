@@ -2,7 +2,10 @@ import React, { useState, useEffect, createContext, useContext } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-// Import cyber-enhanced components
+// Import consolidated mega components with cyber theme
+import { MegaApp } from "./components/mega";
+
+// Preserve cyber-enhanced components for legacy compatibility
 import CyberUltimateMoneyMaker from "./components/cyber/CyberUltimateMoneyMaker";
 import CyberAnalyticsHub from "./components/cyber/CyberAnalyticsHub";
 import CyberMLDashboard from "./components/cyber/CyberMLDashboard";
