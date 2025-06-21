@@ -1003,21 +1003,22 @@ export const MegaHeader: React.FC<{
 
       {/* Center Section - Search */}
       {showSearch && (
-        <div style={{ flex: 1, maxWidth: "400px", margin: "0 24px" }}>
+        <div style={{ flex: 1, maxWidth: "480px", margin: "0 32px" }}>
           <div style={{ position: "relative" }}>
             <Search
-              size={16}
+              size={18}
               style={{
                 position: "absolute",
-                left: "12px",
+                left: "16px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: safeTheme.colors?.text?.muted || "#64748b",
+                color: "#94a3b8",
+                zIndex: 1,
               }}
             />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search anything..."
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -1025,15 +1026,28 @@ export const MegaHeader: React.FC<{
               }}
               style={{
                 width: "100%",
-                padding: "8px 16px 8px 40px",
-                borderRadius: "20px",
-                border: `1px solid ${safeTheme.colors?.border || "rgba(15, 23, 42, 0.1)"}`,
-                backgroundColor:
-                  safeTheme.colors?.surface || "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(10px)",
-                color: safeTheme.colors?.text?.primary || "#0f172a",
-                fontSize: "14px",
+                padding: "14px 20px 14px 48px",
+                borderRadius: "16px",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
+                backdropFilter: "blur(20px) saturate(180%)",
+                color: "#ffffff",
+                fontSize: "15px",
+                fontWeight: "500",
                 outline: "none",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = "rgba(6, 255, 165, 0.3)";
+                e.target.style.backgroundColor = "rgba(255, 255, 255, 0.08)";
+                e.target.style.boxShadow =
+                  "0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(6, 255, 165, 0.2)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = "rgba(255, 255, 255, 0.1)";
+                e.target.style.backgroundColor = "rgba(255, 255, 255, 0.05)";
+                e.target.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.1)";
               }}
             />
           </div>
