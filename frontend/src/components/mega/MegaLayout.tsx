@@ -772,58 +772,7 @@ export const MegaSidebar: React.FC<{
               marginBottom: "6px",
               pointerEvents: "auto",
             }}
-          >
-            <button
-              style={{
-                display: "flex",
-                alignItems: "center",
-                backdropFilter: "blur(20px) saturate(1.8)",
-                backgroundColor: "rgba(0, 0, 0, 0)",
-                backgroundImage:
-                  "linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(0, 255, 136, 0.9))",
-                borderColor: "rgba(6, 255, 165, 0.3)",
-                boxShadow:
-                  "rgba(6, 255, 165, 0.25) 0px 8px 32px 0px, rgba(0, 0, 0, 0.1) 0px 2px 8px 0px",
-                color: "rgb(0, 0, 0)",
-                fontSize: "14px",
-                fontWeight: "600",
-                justifyContent: "flex-start",
-                letterSpacing: "-0.14px",
-                overflowX: "hidden",
-                overflowY: "hidden",
-                position: "relative",
-                width: "100%",
-                transform: "matrix(1, 0, 0, 1, 0, -1)",
-                pointerEvents: "auto",
-                padding: "14px 18px",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "600",
-                  minWidth: "18px",
-                  textShadow: "rgba(0, 0, 0, 0.2) 0px 1px 2px",
-                  pointerEvents: "auto",
-                }}
-              >
-                👤
-              </span>
-              <div
-                style={{
-                  flexBasis: "0%",
-                  flexGrow: "1",
-                  fontWeight: "600",
-                  textAlign: "left",
-                  textShadow: "rgba(0, 0, 0, 0.2) 0px 1px 2px",
-                  pointerEvents: "auto",
-                  marginLeft: "14px",
-                }}
-              >
-                Profile
-              </div>
-            </button>
-          </div>
+          />
         </div>
       </div>
 
