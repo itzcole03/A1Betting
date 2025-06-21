@@ -24,7 +24,7 @@ export { default as UniversalAnalytics } from "./analytics/UniversalAnalytics";
 export { default as UniversalPredictions } from "./predictions/UniversalPredictions";
 
 // Settings Systems
-export { default as UltimateSettingsPage } from "./settings/UltimateSettingsPage";
+export { UltimateSettingsPage } from "./settings/UltimateSettingsPage";
 export { UnifiedSettingsInterface } from "./settings/UnifiedSettingsInterface";
 
 // Mega System Components
