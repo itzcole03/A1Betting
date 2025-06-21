@@ -319,19 +319,77 @@ export const UniversalDashboard: React.FC<UniversalDashboardProps> = ({
         className={`transition-all duration-300 ${sidebarOpen || window.innerWidth >= 1024 ? "lg:ml-64" : ""}`}
       >
         <div className="p-6 lg:p-8">
-          {/* Header */}
-          <div className="mb-8">
-            <CyberText
-              variant="title"
-              style={{ fontSize: "28px" }}
-              className="mb-2"
-            >
-              {currentTab?.label || "Dashboard"}
-            </CyberText>
-            <CyberText variant="body" color="secondary">
-              Welcome back, {user.name}. Here's your performance overview.
-            </CyberText>
-          </div>
+          {/* Enhanced Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="mb-12"
+          >
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+              <div className="mb-6 lg:mb-0">
+                <div className="flex items-center gap-4 mb-3">
+                  <div
+                    className="p-3 rounded-xl"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, rgba(6, 255, 165, 0.2), rgba(0, 255, 136, 0.1))",
+                      boxShadow: "0 8px 32px rgba(6, 255, 165, 0.2)",
+                    }}
+                  >
+                    <Brain size={28} style={{ color: "#06ffa5" }} />
+                  </div>
+                  <div>
+                    <CyberText
+                      variant="title"
+                      style={{
+                        fontSize: "36px",
+                        fontWeight: "800",
+                        lineHeight: "1.1",
+                        marginBottom: "4px",
+                        background: "linear-gradient(135deg, #ffffff, #94a3b8)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      {currentTab?.label || "Dashboard"}
+                    </CyberText>
+                  </div>
+                </div>
+                <CyberText
+                  variant="body"
+                  style={{
+                    fontSize: "18px",
+                    color: "#94a3b8",
+                    fontWeight: "500",
+                    lineHeight: "1.5",
+                  }}
+                >
+                  Welcome back, {user.name}. Your AI-powered betting
+                  intelligence is ready. 🚀
+                </CyberText>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div
+                  className="px-4 py-2 rounded-xl"
+                  style={{
+                    background: "rgba(6, 255, 165, 0.1)",
+                    border: "1px solid rgba(6, 255, 165, 0.3)",
+                    backdropFilter: "blur(20px)",
+                  }}
+                >
+                  <CyberText
+                    variant="caption"
+                    style={{ color: "#06ffa5", fontWeight: "600" }}
+                  >
+                    ⚡ System Online
+                  </CyberText>
+                </div>
+              </div>
+            </div>
+          </motion.div>
 
           {/* Tab Content */}
           <AnimatePresence mode="wait">
