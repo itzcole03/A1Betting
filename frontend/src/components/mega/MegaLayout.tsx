@@ -667,7 +667,9 @@ export const MegaHeader: React.FC<{
             style={{
               width: "32px",
               height: "32px",
-              background: theme.gradients.primary,
+              background:
+                safeTheme.gradients?.primary ||
+                "linear-gradient(135deg, #06ffa5, #00ff88)",
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
