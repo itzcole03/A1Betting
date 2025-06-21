@@ -274,8 +274,7 @@ export const MegaSidebar: React.FC<{
 
           return (
             <div key={item.id} style={{ marginBottom: "4px" }}>
-              <MegaButton
-                variant={isActive ? "primary" : "secondary"}
+              <button
                 onClick={() => {
                   if (hasSubmenu && !isCompact) {
                     toggleSubmenu(item.id);
@@ -283,14 +282,40 @@ export const MegaSidebar: React.FC<{
                     onNavigate(item.id);
                   }
                 }}
-                icon={<Icon size={16} />}
                 style={{
-                  marginBottom: 0,
-                  justifyContent: isCompact ? "center" : "space-between",
-                  padding: isCompact ? "12px" : "12px 16px",
+                  display: "flex",
+                  alignItems: "center",
                   width: "100%",
+                  borderRadius: "12px",
+                  padding: isCompact ? "12px" : "12px 16px",
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  marginBottom: "4px",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  justifyContent: isCompact ? "center" : "space-between",
+                  border: "none",
+                  background: isActive
+                    ? "linear-gradient(135deg, rgba(6, 255, 165, 0.9), rgba(0, 255, 136, 0.8))"
+                    : "rgba(255, 255, 255, 0.05)",
+                  color: isActive ? "#000" : CYBER_COLORS.text.secondary,
+                  backdropFilter: "blur(20px) saturate(1.8)",
+                  ...(isActive
+                    ? {
+                        border: "1px solid rgba(6, 255, 165, 0.5)",
+                        boxShadow:
+                          "0 4px 20px rgba(6, 255, 165, 0.4), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
+                      }
+                    : {
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+                      }),
                 }}
               >
+                <Icon
+                  size={16}
+                  style={{ color: isActive ? "#000" : CYBER_COLORS.text.muted }}
+                />
                 {!isCompact && (
                   <div
                     style={{ display: "flex", alignItems: "center", flex: 1 }}
@@ -325,7 +350,7 @@ export const MegaSidebar: React.FC<{
                     )}
                   </div>
                 )}
-              </MegaButton>
+              </button>
 
               {/* Submenu */}
               {hasSubmenu && isExpanded && !isCompact && (
