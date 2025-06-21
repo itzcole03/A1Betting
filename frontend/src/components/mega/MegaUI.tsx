@@ -60,33 +60,47 @@ export const MegaButton: React.FC<{
   const getVariantStyle = () => {
     const variants = {
       primary: {
-        ...CYBER_GLASS.button.active,
-        color: "#000",
-        fontWeight: "600",
         background:
           "linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(0, 255, 136, 0.9))",
+        border: "1px solid rgba(6, 255, 165, 0.3)",
+        color: "#000",
+        fontWeight: "700",
+        boxShadow:
+          "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(20px) saturate(180%)",
       },
       secondary: {
-        ...CYBER_GLASS.button.inactive,
-        color: CYBER_COLORS.text.secondary,
+        background: "rgba(255, 255, 255, 0.04)",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        color: "#ffffff",
+        fontWeight: "600",
+        boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(20px) saturate(180%)",
       },
       ghost: {
-        background: "rgba(6, 255, 165, 0.1)",
-        border: `1px solid ${CYBER_COLORS.primary}80`,
-        color: CYBER_COLORS.primary,
-        fontWeight: "500",
+        background: "rgba(6, 255, 165, 0.08)",
+        border: "1px solid rgba(6, 255, 165, 0.2)",
+        color: "#06ffa5",
+        fontWeight: "600",
+        backdropFilter: "blur(20px) saturate(180%)",
       },
       danger: {
         background:
-          "linear-gradient(135deg, rgba(255, 71, 87, 0.8), rgba(255, 107, 107, 0.6))",
-        border: "1px solid rgba(255, 71, 87, 0.3)",
+          "linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(255, 71, 87, 0.8))",
+        border: "1px solid rgba(255, 107, 107, 0.3)",
         color: "#fff",
+        fontWeight: "600",
+        boxShadow:
+          "0 8px 32px rgba(255, 107, 107, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)",
       },
       success: {
-        background: `linear-gradient(135deg, ${CYBER_COLORS.primary}90, ${CYBER_COLORS.secondary}80)`,
-        border: `1px solid ${CYBER_COLORS.primary}50`,
+        background:
+          "linear-gradient(135deg, rgba(6, 255, 165, 0.9), rgba(0, 255, 136, 0.8))",
+        border: "1px solid rgba(6, 255, 165, 0.3)",
         color: "#000",
-        fontWeight: "600",
+        fontWeight: "700",
+        boxShadow:
+          "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)",
       },
     };
     return variants[variant];
