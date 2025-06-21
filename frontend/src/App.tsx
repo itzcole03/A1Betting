@@ -112,7 +112,10 @@ const mockSystemStatus = {
  *
  * 98.5% component consolidation achieved while preserving ALL functionality!
  */
-function App() {
+
+// Inner component that has access to theme context
+const AppContent: React.FC = () => {
+  const { isDark, toggleDarkMode } = useTheme();
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -217,6 +220,6 @@ function App() {
       </UniversalThemeProvider>
     </QueryClientProvider>
   );
-}
+};
 
 export default App;
