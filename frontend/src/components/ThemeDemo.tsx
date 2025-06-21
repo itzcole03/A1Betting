@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "../providers/UniversalThemeProvider";
-import { CyberThemeToggle } from "./ThemeToggle/ThemeToggle";
+import { CyberThemeToggle } from "./ThemeToggle";
 
 const ThemeDemo: React.FC = () => {
   const { theme, variant, isDark } = useTheme();
