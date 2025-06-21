@@ -130,178 +130,20 @@ export const UltimateSettingsPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState("account");
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  // Consolidated settings state
-  const [settings, setSettings] = useState({
-    // Account & Profile
-    account: {
-      name: "Pro Bettor",
-      email: "pro@a1betting.com",
-      phone: "+1 (555) 123-4567",
-      timezone: "America/New_York",
-      language: "en",
-      currency: "USD",
-      subscriptionTier: "Premium",
-      twoFactorEnabled: true,
-    },
-
-    // Betting Preferences
-    betting: {
-      riskProfile: "medium",
-      defaultStake: 50,
-      maxStake: 500,
-      minStake: 5,
-      kellyMultiplier: 0.25,
-      autoHedging: false,
-      followMLRecommendations: true,
-      confidenceThreshold: 0.75,
-      maxDailyLoss: 1000,
-      maxExposure: 2500,
-      excludedSports: [],
-      favoriteBookmakers: ["DraftKings", "FanDuel", "BetMGM"],
-    },
-
-    // Appearance & Display
-    appearance: {
-      theme: themeVariant,
-      colorScheme: isDark ? "dark" : "light",
-      compactMode: false,
-      showAnimations: true,
-      oddsFormat: "decimal",
-      chartStyle: "modern",
-      dashboardLayout: "default",
-      sidebarCollapsed: false,
-      highContrast: false,
-      reduceMotion: false,
-    },
-
-    // Notifications & Alerts
-    notifications: {
-      betAlerts: true,
-      priceChanges: true,
-      dailyReports: false,
-      weeklyReports: true,
-      monthlyReports: true,
-      promotions: true,
-      systemUpdates: true,
-      emailNotifications: true,
-      pushNotifications: true,
-      soundEnabled: true,
-      vibrationEnabled: true,
-      quietHours: { enabled: true, start: "22:00", end: "08:00" },
-    },
-
-    // Privacy & Security
-    privacy: {
-      shareStats: false,
-      publicProfile: false,
-      dataCollection: true,
-      analyticsOptIn: true,
-      marketingOptIn: false,
-      thirdPartySharing: false,
-      sessionTimeout: 120, // minutes
-      loginAlerts: true,
-      ipWhitelist: [],
-    },
-
-    // Analytics & Data
-    analytics: {
-      enabledSources: ["espn", "sportradar", "prizepicks"],
-      refreshInterval: 300, // seconds
-      cacheEnabled: true,
-      cacheDuration: 3600, // seconds
-      dataRetention: 365, // days
-      exportFormat: "json",
-      autoBackup: true,
-      backupFrequency: "weekly",
-    },
-
-    // Automation & AI
-    automation: {
-      autoExecute: false,
-      autoExecuteThreshold: 0.9,
-      maxAutoStake: 100,
-      enableAI: true,
-      aiModel: "ensemble",
-      smartAlerts: true,
-      adaptiveBetting: true,
-      riskManagement: true,
-      stopLoss: true,
-      takeProfit: true,
-    },
-
-    // System & Performance
-    system: {
-      performanceMode: "balanced",
-      memoryUsage: "normal",
-      networkOptimization: true,
-      offlineMode: false,
-      debugMode: false,
-      logLevel: "info",
-      maxLogSize: 100, // MB
-      autoUpdate: true,
-      preloadData: true,
-    },
-  });
-
-  const updateSetting = (section: string, key: string, value: any) => {
-    setSettings((prev) => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [key]: value,
-      },
-    }));
-    setHasChanges(true);
-  };
-
-  const saveSettings = async () => {
-    setIsLoading(true);
-    try {
-      // Save to various services/stores
-      await updateBettingSettings(settings.betting);
-      await updateAppSettings(settings.appearance);
-
-      // Save to localStorage for persistence
-      localStorage.setItem("ultimateSettings", JSON.stringify(settings));
-
-      setHasChanges(false);
-
-      // Show success message
-      setTimeout(() => setIsLoading(false), 1000);
-    } catch (error) {
-      console.error("Failed to save settings:", error);
-      setIsLoading(false);
-    }
-  };
-
-  const resetSection = (sectionId: string) => {
-    // Reset specific section to defaults
-    setHasChanges(true);
-  };
-
-  const exportSettings = () => {
-    const dataStr = JSON.stringify(settings, null, 2);
-    const dataBlob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "a1betting-settings.json";
-    link.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const importSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImportSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const importedSettings = JSON.parse(e.target?.result as string);
-        setSettings(importedSettings);
-        setHasChanges(true);
+        const jsonString = e.target?.result as string;
+        const result = importSettings(jsonString);
+        if (!result.success) {
+          console.error("Failed to import settings:", result.error);
+        }
       } catch (error) {
-        console.error("Failed to import settings:", error);
+        console.error("Failed to read file:", error);
       }
     };
     reader.readAsText(file);
