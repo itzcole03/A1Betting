@@ -1,11 +1,5 @@
 import React, { useState, useEffect, ReactNode } from "react";
-import {
-  CYBER_GRADIENTS,
-  CYBER_GLASS,
-  CyberContainer,
-  CyberText,
-  CyberButton,
-} from "./CyberTheme";
+import { CyberContainer, CyberText, CyberButton } from "./CyberTheme";
 import { useTheme } from "../../providers/UniversalThemeProvider";
 import { MegaButton } from "./MegaUI";
 // Removed problematic import
