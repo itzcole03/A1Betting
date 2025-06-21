@@ -155,8 +155,6 @@ const AppContent: React.FC = () => {
       notifications={3}
       onNotificationsClick={() => console.log("Notifications clicked")}
       user={mockUser}
-      darkMode={isDark}
-      onDarkModeToggle={toggleDarkMode}
     />
   );
 
