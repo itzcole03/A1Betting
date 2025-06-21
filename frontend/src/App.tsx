@@ -512,45 +512,69 @@ const Sidebar: React.FC = () => {
   const location = useLocation();
 
   const navigation = [
-    { name: "Dashboard", key: "dashboard", icon: "fa-home", category: "main" },
+    {
+      name: "Dashboard",
+      key: "dashboard",
+      icon: "fa-home",
+      category: "main",
+      path: "/",
+    },
     {
       name: "Premium Dashboard",
       key: "premium-dashboard",
       icon: "fa-crown",
       category: "premium",
+      path: "/premium-dashboard",
     },
     {
       name: "Money Maker",
       key: "money-maker",
       icon: "fa-dollar-sign",
       category: "main",
+      path: "/money-maker",
     },
     {
       name: "PrizePicks Pro",
       key: "prizepicks",
       icon: "fa-trophy",
       category: "main",
+      path: "/prizepicks",
     },
-    { name: "ML Center", key: "ml-center", icon: "fa-brain", category: "ai" },
+    {
+      name: "ML Center",
+      key: "ml-center",
+      icon: "fa-brain",
+      category: "ai",
+      path: "/ml-center",
+    },
     {
       name: "Quantum Predictions",
       key: "quantum",
       icon: "fa-atom",
       category: "ai",
+      path: "/quantum",
     },
     {
       name: "Analytics",
       key: "analytics",
       icon: "fa-chart-line",
       category: "insights",
+      path: "/analytics",
     },
     {
       name: "Real-time Monitor",
       key: "realtime",
       icon: "fa-eye",
       category: "insights",
+      path: "/realtime",
     },
-    { name: "Settings", key: "settings", icon: "fa-cog", category: "account" },
+    {
+      name: "Settings",
+      key: "settings",
+      icon: "fa-cog",
+      category: "account",
+      path: "/settings",
+    },
   ];
 
   const categories: any = {
