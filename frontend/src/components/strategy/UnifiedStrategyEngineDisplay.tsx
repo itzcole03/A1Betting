@@ -483,7 +483,9 @@ const UnifiedStrategyEngineDisplay: React.FC<Props> = ({
                       .length
                   }
                 </div>
-                <div className="text-sm text-gray-500">Low Risk Strategies</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Low Risk Strategies
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-orange-600">
