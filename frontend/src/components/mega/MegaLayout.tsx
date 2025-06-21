@@ -356,7 +356,7 @@ export const MegaSidebar: React.FC<{
                       <span
                         style={{
                           marginLeft: "auto",
-                          background: CYBER_COLORS.primary,
+                          background: "#06ffa5",
                           color: "#000",
                           borderRadius: "10px",
                           padding: "2px 6px",
