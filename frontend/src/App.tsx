@@ -234,16 +234,7 @@ const AppContent: React.FC = () => {
                 border: "1px solid rgba(0, 212, 255, 0.3)",
                 backdropFilter: "blur(10px)",
               }}
-            >
-              <div className="flex items-center gap-2 text-sm">
-                <span style={{ color: CYBER_COLORS.accent }}>
-                  ⚡ Performance
-                </span>
-                <span style={{ color: CYBER_COLORS.text.muted }}>
-                  +800% DX | -65% Bundle
-                </span>
-              </div>
-            </div>
+            />
           </div>
         </MegaAppShell>
       </div>
