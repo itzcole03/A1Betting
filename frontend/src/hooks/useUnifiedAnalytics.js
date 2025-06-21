@@ -67,8 +67,27 @@ export const useUnifiedAnalytics = (config = {}) => {
         };
       }
     },
-    enabled: !!config.ml,
+    enabled: !!config.ml && !!analyticsService,
     refetchInterval: config.ml?.autoUpdate ? config.ml.updateInterval : false,
+    retry: (failureCount, error) => {
+      // Don't retry network errors more than once
+      if (error?.message?.includes("Network Error")) {
+        return failureCount < 1;
+      }
+      return failureCount < 3;
+    },
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    onError: (error) => {
+      console.warn("ML Analytics query failed:", error);
+      setState((prev) => ({
+        ...prev,
+        ml: {
+          data: null,
+          loading: false,
+          error: error.message || "Network error",
+        },
+      }));
+    },
   });
   // --- Performance Metrics ---
   const performanceQuery = useQuery({
