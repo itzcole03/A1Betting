@@ -1,6 +1,16 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import { BrowserRouter } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// Import existing components to integrate
+import PrizePicksPage from "./pages/PrizePicksPage";
+import { UnifiedMoneyMaker } from "./components/money-maker/UnifiedMoneyMaker";
 
 // Query Client
 const queryClient = new QueryClient({
