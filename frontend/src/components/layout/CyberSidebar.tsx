@@ -1,87 +1,77 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import HolographicText from "../ui/HolographicText";
-import StatusIndicator from "../ui/StatusIndicator";
-import { cn } from "../../lib/utils";
-import {
-  Brain,
-  Home,
-  TrendingUp,
-  DollarSign,
-  Trophy,
-  BarChart3,
-  Eye,
-  Settings,
-  Crown,
-  Atom,
-  Zap,
-  Target,
-  Shield,
-  User,
-  X,
-} from "lucide-react";
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-interface CyberSidebarProps {
-  currentPage?: string;
-  onPageChange?: (page: string) => void;
-  isOpen?: boolean;
-  onClose?: () => void;
-  className?: string;
-}
+const CyberSidebar: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-interface NavigationItem {
-  name: string;
-  key: string;
-  icon: React.ComponentType<{ className?: string }>;
-  category: string;
-}
-
-const CyberSidebar: React.FC<CyberSidebarProps> = ({
-  currentPage = "dashboard",
-  onPageChange,
-  isOpen = true,
-  onClose,
-  className = "",
-}) => {
-  const navigation: NavigationItem[] = [
-    { name: "Dashboard", key: "dashboard", icon: Home, category: "main" },
+  const navigation = [
+    {
+      name: "Dashboard",
+      key: "dashboard",
+      icon: "fa-home",
+      category: "main",
+      path: "/",
+    },
     {
       name: "Premium Dashboard",
       key: "premium-dashboard",
-      icon: Crown,
+      icon: "fa-crown",
       category: "premium",
+      path: "/premium-dashboard",
     },
     {
       name: "Money Maker",
       key: "money-maker",
-      icon: DollarSign,
+      icon: "fa-dollar-sign",
       category: "main",
+      path: "/money-maker",
     },
     {
       name: "PrizePicks Pro",
       key: "prizepicks",
-      icon: Trophy,
+      icon: "fa-trophy",
       category: "main",
+      path: "/prizepicks",
     },
-    { name: "ML Center", key: "ml-center", icon: Brain, category: "ai" },
-    { name: "Quantum Predictions", key: "quantum", icon: Atom, category: "ai" },
+    {
+      name: "ML Center",
+      key: "ml-center",
+      icon: "fa-brain",
+      category: "ai",
+      path: "/ml-center",
+    },
+    {
+      name: "Quantum Predictions",
+      key: "quantum",
+      icon: "fa-atom",
+      category: "ai",
+      path: "/quantum",
+    },
     {
       name: "Analytics",
       key: "analytics",
-      icon: BarChart3,
+      icon: "fa-chart-line",
       category: "insights",
+      path: "/analytics",
     },
     {
       name: "Real-time Monitor",
       key: "realtime",
-      icon: Eye,
+      icon: "fa-eye",
       category: "insights",
+      path: "/realtime",
     },
-    { name: "Settings", key: "settings", icon: Settings, category: "account" },
+    {
+      name: "Settings",
+      key: "settings",
+      icon: "fa-cog",
+      category: "account",
+      path: "/settings",
+    },
   ];
 
-  const categories = {
+  const categories: Record<string, string> = {
     main: "Core Features",
     premium: "Premium",
     ai: "AI & ML",
@@ -90,89 +80,36 @@ const CyberSidebar: React.FC<CyberSidebarProps> = ({
   };
 
   const groupedNav = navigation.reduce(
-    (acc, item) => {
+    (acc: Record<string, typeof navigation>, item) => {
       if (!acc[item.category]) acc[item.category] = [];
       acc[item.category].push(item);
       return acc;
     },
-    {} as Record<string, NavigationItem[]>,
+    {},
   );
 
-  const handleNavigation = (key: string) => {
-    if (onPageChange) {
-      onPageChange(key);
-    }
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
   };
 
   return (
     <div
-      className={cn(
-        "w-80 glass-card h-screen border-r border-white/10",
-        className,
-      )}
+      className="w-80 h-screen border-r"
       style={{
-        background: "rgba(255, 255, 255, 0.05)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        borderColor: "rgba(255, 255, 255, 0.1)",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+        background: "rgba(255, 255, 255, 0.02)",
+        backdropFilter: "blur(40px) saturate(200%)",
+        borderRight: "1px solid rgba(255, 255, 255, 0.05)",
+        boxShadow:
+          "0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05)",
       }}
     >
-      {/* Header with Beautiful Logo */}
-      <div className="p-6 border-b border-white/10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            {/* Beautiful Floating Logo */}
-            <div className="relative float-element">
-              <div className="absolute inset-0 bg-gradient-to-r from-electric-400 to-neon-blue rounded-xl blur-lg opacity-75"></div>
-              <div className="relative w-10 h-10 bg-gradient-to-br from-electric-400 to-neon-blue rounded-xl flex items-center justify-center">
-                <Brain className="w-6 h-6 text-black font-bold" />
-              </div>
-            </div>
-
-            {/* Holographic Branding */}
-            <div>
-              <HolographicText
-                size="xl"
-                className="text-xl font-black tracking-tight"
-              >
-                A1BETTING
-              </HolographicText>
-              <p className="text-xs text-gray-400 uppercase tracking-widest">
-                Quantum Intelligence
-              </p>
-            </div>
-          </div>
-
-          {/* Mobile Close Button */}
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
-        </div>
-
-        {/* Beautiful Status Indicators */}
-        <div className="mt-4 space-y-2">
-          <StatusIndicator
-            status="active"
-            label="All Systems Online"
-            size="sm"
-          />
-          <StatusIndicator
-            status="active"
-            label="47 AI Models Active"
-            size="sm"
-          />
-        </div>
-      </div>
-
-      {/* Navigation */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="p-6">
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-electric-400 mb-2 cyber-title">
+          <h2 className="text-lg font-bold text-electric-400 mb-2">
             Navigation
           </h2>
           <div className="text-sm text-gray-400">36 Advanced Features</div>
@@ -181,48 +118,54 @@ const CyberSidebar: React.FC<CyberSidebarProps> = ({
         <nav className="space-y-6">
           {Object.entries(groupedNav).map(([category, items]) => (
             <div key={category}>
-              {/* Category Header */}
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                {categories[category as keyof typeof categories]}
+                {categories[category]}
               </h3>
-
-              {/* Navigation Items */}
               <ul className="space-y-1">
-                {items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = currentPage === item.key;
-
-                  return (
-                    <li key={item.key}>
-                      <button
-                        onClick={() => handleNavigation(item.key)}
-                        className={cn(
-                          "nav-item w-full flex items-center px-4 py-3 text-left text-sm font-medium transition-all duration-300",
-                          isActive
-                            ? "active text-electric-400"
-                            : "text-gray-300 hover:text-white",
-                        )}
-                      >
-                        <Icon className="mr-3 w-4 h-4" />
-                        {item.name}
-                      </button>
-                    </li>
-                  );
-                })}
+                {items.map((item) => (
+                  <li key={item.key}>
+                    <button
+                      onClick={() => handleNavigation(item.path)}
+                      className={`nav-item w-full flex items-center px-4 py-3 text-left text-sm font-medium transition-all duration-300 ${
+                        isActive(item.path)
+                          ? "active text-electric-400"
+                          : "text-gray-300 hover:text-white"
+                      }`}
+                      style={{
+                        borderRadius: "12px",
+                        marginBottom: "4px",
+                        ...(isActive(item.path)
+                          ? {
+                              background: "rgba(0,255,136,0.2)",
+                              borderLeft: "4px solid #00ff88",
+                              paddingLeft: "16px",
+                              boxShadow: "0 4px 12px rgba(0,255,136,0.3)",
+                              color: "#06ffa5",
+                            }
+                          : {
+                              background: "rgba(255, 255, 255, 0.05)",
+                              backdropFilter: "blur(20px) saturate(180%)",
+                              border: "1px solid rgba(255, 255, 255, 0.1)",
+                              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+                              color: "#d1d5db",
+                            }),
+                      }}
+                    >
+                      <i
+                        className={`fas ${item.icon} mr-3`}
+                        style={{
+                          width: "16px",
+                          color: isActive(item.path) ? "#06ffa5" : "#9ca3af",
+                        }}
+                      />
+                      <span>{item.name}</span>
+                    </button>
+                  </li>
+                ))}
               </ul>
             </div>
           ))}
         </nav>
-      </div>
-
-      {/* Beautiful Footer */}
-      <div className="p-6 border-t border-white/10">
-        <div className="text-center text-xs text-gray-400">
-          <div className="holographic font-semibold mb-1">
-            A1BETTING QUANTUM
-          </div>
-          <div>© 2024 • 47 Neural Networks</div>
-        </div>
       </div>
     </div>
   );

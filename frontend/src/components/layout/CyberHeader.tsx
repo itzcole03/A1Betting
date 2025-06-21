@@ -1,102 +1,55 @@
 import React from "react";
-import { motion } from "framer-motion";
-import HolographicText from "../ui/HolographicText";
+import { useCyberApp } from "../../contexts/CyberAppContext";
 import StatusIndicator from "../ui/StatusIndicator";
-import { cn } from "../../lib/utils";
-import { Menu, Sun, Moon, Bell, User } from "lucide-react";
 
-interface CyberHeaderProps {
-  currentPage?: string;
-  onToggleSidebar?: () => void;
-  theme?: "light" | "dark";
-  onToggleTheme?: () => void;
-  user?: {
-    name: string;
-    email: string;
-    balance: number;
-    tier: string;
-    accuracy: number;
-  };
-  className?: string;
-}
+const CyberHeader: React.FC = () => {
+  const { user, theme, setTheme } = useCyberApp();
 
-const CyberHeader: React.FC<CyberHeaderProps> = ({
-  currentPage = "dashboard",
-  onToggleSidebar,
-  theme = "dark",
-  onToggleTheme,
-  user = {
-    name: "Alex Chen",
-    email: "alex@a1betting.com",
-    balance: 127430.5,
-    tier: "Quantum Pro",
-    accuracy: 97.3,
-  },
-  className = "",
-}) => {
-  const formatPageTitle = (page: string) => {
-    return page
-      .replace(/([A-Z])/g, " $1")
-      .trim()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   };
 
   return (
     <header
-      className={cn(
-        "glass-card border-b border-white/10 sticky top-0 z-50",
-        className,
-      )}
+      className="glass-card border-b border-white/10 sticky top-0 z-50"
       style={{
         background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(20px) saturate(180%)",
-        borderColor: "rgba(255, 255, 255, 0.1)",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
       }}
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          {/* Left Section */}
           <div className="flex items-center space-x-6">
-            {/* Mobile Menu Button */}
-            {onToggleSidebar && (
-              <button
-                onClick={onToggleSidebar}
-                className="lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
-              >
-                <Menu className="w-6 h-6" />
-              </button>
-            )}
-
-            {/* Page Title */}
-            <div>
-              <HolographicText size="2xl" className="text-2xl font-black">
-                {formatPageTitle(currentPage)}
-              </HolographicText>
-              <div className="text-sm text-gray-400 mt-1">
-                Advanced Intelligence Dashboard
+            <div className="flex items-center space-x-3">
+              <div className="relative float-element">
+                <div className="absolute inset-0 bg-gradient-to-r from-electric-400 to-neon-blue rounded-xl blur-lg opacity-75" />
+                <div className="relative w-10 h-10 bg-gradient-to-br from-electric-400 to-neon-blue rounded-xl flex items-center justify-center">
+                  <i className="fas fa-brain text-black text-lg font-bold" />
+                </div>
+              </div>
+              <div>
+                <div className="holographic text-xl font-black tracking-tight">
+                  A1BETTING
+                </div>
+                <div className="text-xs text-gray-400 uppercase tracking-widest">
+                  Quantum Intelligence
+                </div>
               </div>
             </div>
-
-            {/* Status Indicators - Hidden on Mobile */}
             <div className="hidden md:flex space-x-4">
-              <StatusIndicator
-                status="active"
-                label="All Systems Online"
-                size="sm"
-              />
-              <StatusIndicator
-                status="active"
-                label="47 AI Models Active"
-                size="sm"
-              />
+              <StatusIndicator status="active" label="All Systems Online" />
+              <StatusIndicator status="active" label="47 AI Models Active" />
             </div>
           </div>
 
-          {/* Right Section */}
           <div className="flex items-center space-x-6">
-            {/* User Stats - Hidden on Mobile */}
             <div className="hidden lg:flex items-center space-x-6 text-sm">
               <div className="text-center">
                 <div className="text-xs text-gray-400 uppercase">Balance</div>
@@ -118,38 +71,20 @@ const CyberHeader: React.FC<CyberHeaderProps> = ({
               </div>
             </div>
 
-            {/* Theme Toggle */}
-            {onToggleTheme && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={onToggleTheme}
-                className="p-3 glass-card rounded-xl hover:shadow-neon transition-all duration-300"
-              >
-                {theme === "light" ? (
-                  <Moon className="w-5 h-5 text-electric-400" />
-                ) : (
-                  <Sun className="w-5 h-5 text-electric-400" />
-                )}
-              </motion.button>
-            )}
-
-            {/* Notifications */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative p-3 glass-card rounded-xl hover:shadow-neon transition-all duration-300"
+            <button
+              onClick={toggleTheme}
+              className="p-3 glass-card rounded-xl hover:shadow-neon transition-all duration-300"
             >
-              <Bell className="w-5 h-5 text-electric-400" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-            </motion.button>
+              <i
+                className={`fas ${theme === "light" ? "fa-moon" : "fa-sun"} text-electric-400`}
+              />
+            </button>
 
-            {/* User Profile */}
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <div className="absolute inset-0 bg-electric-400 rounded-full blur-sm opacity-50"></div>
+                <div className="absolute inset-0 bg-electric-400 rounded-full blur-sm opacity-50" />
                 <img
-                  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=000&color=00ff88&bold=true`}
+                  src="https://ui-avatars.com/api/?name=Alex+Chen&background=000&color=00ff88&bold=true"
                   alt="Profile"
                   className="relative w-9 h-9 rounded-full border-2 border-electric-400"
                 />
