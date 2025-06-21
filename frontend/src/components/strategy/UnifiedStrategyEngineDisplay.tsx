@@ -252,7 +252,9 @@ const StrategyCard: React.FC<{
             <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <Target className="w-4 h-4 text-blue-600" />
-                <span className="text-xs text-gray-500">Win Probability</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Win Probability
+                </span>
               </div>
               <div className="text-lg font-bold text-blue-600">
                 {(data.winProbability * 100).toFixed(0)}%
