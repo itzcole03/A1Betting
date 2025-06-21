@@ -100,8 +100,8 @@ export const MegaSidebar: React.FC<{
     if (!systemStatus?.isOnline)
       return { icon: WifiOff, color: "#ff4757", text: "Offline" };
     if (systemStatus.connectedSources < 5)
-      return { icon: Wifi, color: CYBER_COLORS.accent, text: "Limited" };
-    return { icon: Wifi, color: CYBER_COLORS.primary, text: "Connected" };
+      return { icon: Wifi, color: "#00d4ff", text: "Limited" };
+    return { icon: Wifi, color: "#06ffa5", text: "Connected" };
   };
 
   const status = getStatusIcon();
