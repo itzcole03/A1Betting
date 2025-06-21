@@ -86,6 +86,13 @@ const MegaApp: React.FC = () => {
       description: "AI-powered betting opportunities",
     },
     {
+      id: "prizepicks",
+      label: "PrizePicks Pro",
+      icon: Trophy,
+      component: MegaPrizePicks,
+      description: "Professional prop analysis with lineup builder",
+    },
+    {
       id: "analytics",
       label: "Analytics",
       icon: BarChart3,
@@ -109,6 +116,13 @@ const MegaApp: React.FC = () => {
       label: "Quantum Predictions",
       icon: Brain,
       description: "Advanced ML predictions",
+    },
+    {
+      id: "admin",
+      label: "Admin Panel",
+      icon: UserCog,
+      component: MegaAdminPanel,
+      description: "System administration and user management",
     },
   ];
 
