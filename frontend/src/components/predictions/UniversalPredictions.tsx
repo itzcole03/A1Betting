@@ -829,7 +829,7 @@ ThemedText
         <div>
           <CyberText variant="caption" color="secondary" className="mb-2">
             Model Consensus ({prediction.modelPredictions.length} models)
-          </CyberText>
+          </ThemedText>
           <div className="space-y-1">
             {prediction.modelPredictions.slice(0, 3).map((model, index) => (
               <div key={index} className="flex items-center justify-between">
