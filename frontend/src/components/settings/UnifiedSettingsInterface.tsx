@@ -359,7 +359,7 @@ export const UnifiedSettingsInterface: React.FC = () => {
             >
               Export Settings
             </button>
-            <label className="flex-1">
+            <div className="flex-1 relative">
               <input
                 type="file"
                 accept=".json"
@@ -387,11 +387,16 @@ export const UnifiedSettingsInterface: React.FC = () => {
                     };
                     reader.readAsText(file);
                   }
+                  // Reset the input value to allow selecting the same file again
+                  e.target.value = "";
                 }}
-                className="hidden"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                style={{
+                  zIndex: 10,
+                }}
               />
               <div
-                className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg cursor-pointer text-center"
+                className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg text-center pointer-events-none"
                 style={{
                   position: "relative",
                   zIndex: 1,
@@ -400,7 +405,7 @@ export const UnifiedSettingsInterface: React.FC = () => {
               >
                 {isImporting ? "Importing..." : "Import Settings"}
               </div>
-            </label>
+            </div>
           </div>
         </CardContent>
       </Card>
