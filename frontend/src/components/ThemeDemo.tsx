@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "../providers/UniversalThemeProvider";
 
 const ThemeDemo: React.FC = () => {
-  const { theme, variant, isDark } = useTheme();
+  const { theme, variant, isDark, toggleDarkMode } = useTheme();
 
   return (
     <div
