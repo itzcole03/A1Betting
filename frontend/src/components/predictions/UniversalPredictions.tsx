@@ -181,6 +181,47 @@ export const UniversalPredictions: React.FC = () => {
   // Theme
   const { theme, isDark } = useTheme();
 
+  // Themed text helper
+  const ThemedText: React.FC<{
+    variant?: "title" | "body" | "caption";
+    color?: "primary" | "secondary" | "muted" | "accent";
+    children: React.ReactNode;
+    className?: string;
+    style?: React.CSSProperties;
+  }> = ({
+    variant = "body",
+    color = "primary",
+    children,
+    className = "",
+    style = {},
+  }) => {
+    const variants = {
+      title: { fontSize: "18px", fontWeight: "700", lineHeight: "28px" },
+      body: { fontSize: "14px", fontWeight: "400", lineHeight: "20px" },
+      caption: { fontSize: "12px", fontWeight: "400", lineHeight: "16px" },
+    };
+
+    const colors = {
+      primary: theme.colors.text.primary,
+      secondary: theme.colors.text.secondary,
+      muted: theme.colors.text.muted,
+      accent: theme.colors.primary,
+    };
+
+    return (
+      <div
+        className={className}
+        style={{
+          color: colors[color],
+          ...variants[variant],
+          ...style,
+        }}
+      >
+        {children}
+      </div>
+    );
+  };
+
   // State
   const [state, setState] = useState<PredictionState>({
     isLoading: false,
