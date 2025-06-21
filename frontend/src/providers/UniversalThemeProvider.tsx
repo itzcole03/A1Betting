@@ -234,6 +234,11 @@ export const UniversalThemeProvider: React.FC<UniversalThemeProviderProps> = ({
   const theme = createThemeConfig(variant, customColors);
   const isDark = ["cyber-dark", "premium"].includes(variant);
 
+  // Debug logging
+  if (!theme || !theme.colors) {
+    console.error("Theme creation failed:", { variant, customColors, theme });
+  }
+
   const setVariant = (newVariant: ThemeVariant) => {
     setVariantState(newVariant);
     if (enablePersistence && typeof window !== "undefined") {
