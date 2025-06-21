@@ -10,8 +10,8 @@ export const CYBER_COLORS = {
   border: "rgba(255, 255, 255, 0.1)",
   text: {
     primary: "rgb(255, 255, 255)",
-    secondary: "rgb(209, 213, 219)",
-    muted: "rgb(156, 163, 175)",
+    secondary: "rgb(229, 231, 235)",
+    muted: "rgb(185, 190, 201)",
   },
 };
 export const CYBER_GRADIENTS = {
