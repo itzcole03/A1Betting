@@ -101,8 +101,9 @@ const UserAvatarDropdown: React.FC<{
   };
 
   return (
-    <div style={{ position: "relative" }} ref={setDropdownRef}>
+    <div style={{ position: "relative" }}>
       <button
+        ref={setButtonRef}
         onClick={() => setIsOpen(!isOpen)}
         style={{
           width: "32px",
@@ -129,113 +130,115 @@ const UserAvatarDropdown: React.FC<{
         )}
       </button>
 
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: "60px",
-            right: "24px",
-            minWidth: "220px",
-            background: "rgba(15, 23, 42, 0.98)",
-            backdropFilter: "blur(40px) saturate(2)",
-            border: "1px solid rgba(6, 255, 165, 0.4)",
-            borderRadius: "16px",
-            boxShadow:
-              "0 25px 80px rgba(0, 0, 0, 0.6), 0 10px 40px rgba(6, 255, 165, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-            zIndex: 2147483647,
-            padding: "12px",
-            transform: "translateY(0)",
-            opacity: 1,
-          }}
-        >
-          {/* User Info Header */}
+      {/* Dropdown Menu using Portal */}
+      {isOpen &&
+        createPortal(
           <div
+            ref={setDropdownRef}
             style={{
-              padding: "12px 16px",
-              borderBottom: "1px solid rgba(6, 255, 165, 0.2)",
-              marginBottom: "8px",
+              position: "fixed",
+              top: `${dropdownPosition.top}px`,
+              right: `${dropdownPosition.right}px`,
+              minWidth: "220px",
+              background: "rgba(15, 23, 42, 0.98)",
+              backdropFilter: "blur(40px) saturate(2)",
+              border: "1px solid rgba(6, 255, 165, 0.4)",
+              borderRadius: "16px",
+              boxShadow:
+                "0 25px 80px rgba(0, 0, 0, 0.6), 0 10px 40px rgba(6, 255, 165, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+              zIndex: 2147483647,
+              padding: "12px",
+              transform: "translateY(0)",
+              opacity: 1,
             }}
           >
+            {/* User Info Header */}
             <div
               style={{
+                padding: "12px 16px",
+                borderBottom: "1px solid rgba(6, 255, 165, 0.2)",
+                marginBottom: "8px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  color: "#ffffff",
+                  marginBottom: "2px",
+                }}
+              >
+                {user.name}
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#94a3b8",
+                }}
+              >
+                Pro User
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <button
+              onClick={handleAccountProfile}
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                padding: "12px 16px",
+                background: "transparent",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
                 fontSize: "14px",
-                fontWeight: "600",
-                color: "#ffffff",
-                marginBottom: "2px",
+                color: "#0f172a",
+                transition: "all 0.2s ease",
+                textAlign: "left",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(6, 255, 165, 0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
               }}
             >
-              {user.name}
-            </div>
-            <div
+              <UserCircle
+                size={16}
+                style={{ marginRight: "12px", color: "#06ffa5" }}
+              />
+              Account & Profile
+            </button>
+
+            <button
+              onClick={handleSignOut}
               style={{
-                fontSize: "12px",
-                color: "#94a3b8",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                padding: "12px 16px",
+                background: "transparent",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "14px",
+                color: "#dc2626",
+                transition: "all 0.2s ease",
+                textAlign: "left",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(220, 38, 38, 0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
               }}
             >
-              Pro User
-            </div>
-          </div>
-
-          {/* Menu Items */}
-          <button
-            onClick={handleAccountProfile}
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              padding: "12px 16px",
-              background: "transparent",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "14px",
-              color: "#0f172a",
-              transition: "all 0.2s ease",
-              textAlign: "left",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(6, 255, 165, 0.1)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-            }}
-          >
-            <UserCircle
-              size={16}
-              style={{ marginRight: "12px", color: "#06ffa5" }}
-            />
-            Account & Profile
-          </button>
-
-          <button
-            onClick={handleSignOut}
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              padding: "12px 16px",
-              background: "transparent",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "14px",
-              color: "#dc2626",
-              transition: "all 0.2s ease",
-              textAlign: "left",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(220, 38, 38, 0.1)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-            }}
-          >
-            <LogOut size={16} style={{ marginRight: "12px" }} />
-            Sign Out
-          </button>
-        </div>
-      )}
+              <LogOut size={16} style={{ marginRight: "12px" }} />
+              Sign Out
+            </button>
+          </div>,
+        )}
     </div>
   );
 };
