@@ -91,12 +91,12 @@ export class BaseService {
 
   constructor(config: ServiceConfig = {}) {
     this.config = {
-      baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:3001",
+      baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3001",
       timeout: 10000,
       retries: 3,
       retryDelay: 1000,
       enableCaching: true,
-      enableMocking: process.env.NODE_ENV === "development",
+      enableMocking: import.meta.env.DEV,
       ...config,
     };
   }

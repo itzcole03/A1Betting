@@ -9,7 +9,7 @@ export class BaseService {
       retries: 3,
       retryDelay: 1000,
       enableCaching: true,
-      enableMocking: process.env.NODE_ENV === "development",
+      enableMocking: import.meta.env.DEV,
       ...config,
     };
   }
