@@ -50,30 +50,72 @@ const Button: React.FC<any> = ({
   icon = null,
   size = "md",
 }) => {
+  const baseStyle = {
+    borderRadius: "12px",
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+    transition: "all 0.3s ease",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    cursor: "pointer",
+    border: "none",
+    position: "relative",
+    overflow: "hidden",
+  };
+
   const variants = {
-    primary: "cyber-btn",
-    secondary:
-      "bg-gray-700 hover:bg-gray-600 text-white border border-gray-600",
-    success: "bg-green-600 hover:bg-green-700 text-white",
-    danger: "bg-red-600 hover:bg-red-700 text-white",
-    ghost:
-      "bg-transparent border border-electric-500 text-electric-500 hover:bg-electric-500 hover:text-black",
+    primary: {
+      background: "linear-gradient(45deg, #00ff88, #00d4ff)",
+      color: "#000",
+      fontWeight: "700",
+    },
+    secondary: {
+      background: "rgba(75, 85, 99, 0.8)",
+      color: "#fff",
+      border: "1px solid rgba(107, 114, 128, 0.6)",
+    },
+    ghost: {
+      background: "transparent",
+      color: "#06ffa5",
+      border: "1px solid #06ffa5",
+    },
   };
 
   const sizes = {
-    sm: "px-3 py-2 text-sm",
-    md: "px-6 py-3",
-    lg: "px-8 py-4 text-lg",
+    sm: { padding: "8px 12px", fontSize: "14px" },
+    md: { padding: "12px 24px", fontSize: "16px" },
+    lg: { padding: "16px 32px", fontSize: "18px" },
   };
 
   return React.createElement(
     "button",
     {
       onClick,
-      className: `${sizes[size]} rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 ${variants[variant]} ${className}`,
+      style: { ...baseStyle, ...variants[variant], ...sizes[size] },
+      className: `${className}`,
+      onMouseEnter: (e) => {
+        if (variant === "primary") {
+          e.target.style.boxShadow = "0 0 30px rgba(0,255,136,0.6)";
+          e.target.style.transform = "translateY(-2px)";
+        }
+      },
+      onMouseLeave: (e) => {
+        if (variant === "primary") {
+          e.target.style.boxShadow = "none";
+          e.target.style.transform = "translateY(0)";
+        }
+      },
     },
     [
-      icon && React.createElement("i", { key: "icon", className: icon }),
+      icon &&
+        React.createElement("i", {
+          key: "icon",
+          className: `fas ${icon}`,
+          style: { fontSize: "16px" },
+        }),
       React.createElement("span", { key: "label" }, label),
     ],
   );
@@ -516,7 +558,15 @@ const Sidebar: React.FC = () => {
 
   return React.createElement(
     "div",
-    { className: "w-80 glass-card h-screen border-r border-white/10" },
+    {
+      className: "w-80 h-screen border-r",
+      style: {
+        background: "rgba(255, 255, 255, 0.05)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        borderRight: "1px solid rgba(255, 255, 255, 0.1)",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+      },
+    },
     React.createElement("div", { className: "p-6" }, [
       React.createElement("div", { key: "nav-header", className: "mb-8" }, [
         React.createElement(
@@ -613,12 +663,30 @@ const Dashboard: React.FC = () => {
         [
           React.createElement(
             "h1",
-            { key: "title", className: "holographic text-4xl font-black mb-4" },
+            {
+              key: "title",
+              className: "holographic text-4xl font-black mb-4",
+              style: {
+                background:
+                  "linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5, #ffbe0b)",
+                backgroundSize: "400% 400%",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                animation: "gradient-shift 8s ease infinite",
+                fontWeight: "900",
+                letterSpacing: "-0.02em",
+              },
+            },
             "Welcome Back, Alex",
           ),
           React.createElement(
             "p",
-            { key: "subtitle", className: "text-xl text-gray-400" },
+            {
+              key: "subtitle",
+              className: "text-xl",
+              style: { color: "#9ca3af", marginTop: "16px" },
+            },
             "Your AI-powered sports intelligence platform is ready",
           ),
         ],
