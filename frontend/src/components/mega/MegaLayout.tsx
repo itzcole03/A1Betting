@@ -567,23 +567,47 @@ export const MegaHeader: React.FC<{
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
         {/* Dark Mode Toggle */}
         {onDarkModeToggle && (
-          <MegaButton
-            variant="ghost"
-            size="sm"
+          <button
             onClick={onDarkModeToggle}
-            icon={darkMode ? <Sun size={16} /> : <Moon size={16} />}
-          />
+            style={{
+              background: "rgba(6, 255, 165, 0.1)",
+              border: "1px solid rgba(6, 255, 165, 0.8)",
+              color: CYBER_COLORS.primary,
+              fontWeight: "500",
+              padding: "6px 12px",
+              fontSize: "12px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
         )}
 
         {/* Notifications */}
         {onNotificationsClick && (
           <div style={{ position: "relative" }}>
-            <MegaButton
-              variant="ghost"
-              size="sm"
+            <button
               onClick={onNotificationsClick}
-              icon={<Bell size={16} />}
-            />
+              style={{
+                background: "rgba(6, 255, 165, 0.1)",
+                border: "1px solid rgba(6, 255, 165, 0.8)",
+                color: CYBER_COLORS.primary,
+                fontWeight: "500",
+                padding: "6px 12px",
+                fontSize: "12px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Bell size={16} />
+            </button>
             {notifications > 0 && (
               <span
                 style={{
