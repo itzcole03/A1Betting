@@ -1268,9 +1268,20 @@ export const MegaAppShell: React.FC<{
             flex: 1,
             overflow: "auto",
             position: "relative",
+            background:
+              "linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.98) 100%)",
+            padding: "24px 32px 32px 32px",
           }}
         >
-          {children}
+          <div
+            style={{
+              maxWidth: "1400px",
+              margin: "0 auto",
+              width: "100%",
+            }}
+          >
+            {children}
+          </div>
         </main>
 
         {/* Footer */}
