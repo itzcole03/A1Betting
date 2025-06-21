@@ -362,7 +362,8 @@ export const MegaSidebar: React.FC<{
           }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
-            <div
+            <button
+              onClick={() => onNavigate("dashboard")}
               style={{
                 width: "40px",
                 height: "40px",
@@ -373,10 +374,23 @@ export const MegaSidebar: React.FC<{
                 alignItems: "center",
                 justifyContent: "center",
                 marginRight: isCompact ? "0" : "12px",
+                border: "none",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
               }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 20px rgba(6, 255, 165, 0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+              title="Return to Dashboard"
             >
               <Brain size={24} color="#000" />
-            </div>
+            </button>
             {!isCompact && (
               <div>
                 <div
