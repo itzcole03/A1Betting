@@ -166,7 +166,29 @@ const Button = ({
     </button>
   );
 };
-import { ThemeToggle, CyberThemeToggle } from "../ThemeToggle/ThemeToggle";
+// Create inline theme toggle to avoid import issues
+const SimpleThemeToggle = () => {
+  const { isDark, toggleDarkMode, variant: themeVariant } = useTheme();
+
+  return (
+    <button
+      onClick={toggleDarkMode}
+      className="flex items-center gap-2 px-4 py-2 rounded-lg border transition-all hover:bg-muted"
+      style={{
+        background: isDark
+          ? "rgba(255, 255, 255, 0.05)"
+          : "rgba(255, 255, 255, 0.8)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(15, 23, 42, 0.1)"}`,
+        color: isDark ? "#ffffff" : "#0f172a",
+      }}
+    >
+      {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+      <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
+      <div className="text-xs text-muted-foreground">({themeVariant})</div>
+    </button>
+  );
+};
 
 interface SettingsSection {
   id: string;
