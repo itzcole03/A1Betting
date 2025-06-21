@@ -88,19 +88,33 @@ export class UnifiedAnalyticsService extends BaseService {
   async getPerformanceMetrics(timeRange = "week") {
     try {
       // Add defensive checks for service availability
-      const bets = this.bettingService?.getBets
-        ? await this.bettingService.getBets(timeRange)
-        : [];
-      const predictions = this.predictionService?.getPredictions
-        ? await this.predictionService.getPredictions(timeRange)
-        : [];
+      let bets = [];
+      let predictions = [];
 
-      // If we have both services, proceed normally
-      // If not, fallback to mock data or cached data
-      const [betsData, predictionsData] = await Promise.all([
-        Promise.resolve(bets),
-        Promise.resolve(predictions),
-      ]);
+      // Try to get bets with comprehensive error handling
+      try {
+        if (this.bettingService?.getBets) {
+          bets = await this.bettingService.getBets(timeRange);
+        }
+      } catch (error) {
+        console.warn("Failed to get bets from betting service:", error);
+        bets = [];
+      }
+
+      // Try to get predictions with comprehensive error handling
+      try {
+        if (this.predictionService?.getPredictions) {
+          predictions = await this.predictionService.getPredictions(timeRange);
+        }
+      } catch (error) {
+        console.warn(
+          "Failed to get predictions from prediction service:",
+          error,
+        );
+        predictions = [];
+      }
+
+      const [betsData, predictionsData] = [bets, predictions];
       const totalBets = betsData.length;
       const activeBets = betsData.filter(
         (bet) => bet.status === "active",
