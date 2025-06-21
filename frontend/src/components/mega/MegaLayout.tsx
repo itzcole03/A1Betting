@@ -164,6 +164,27 @@ export const MegaSidebar: React.FC<{
               </div>
             )}
           </div>
+
+          {!isCompact && (
+            <button
+              onClick={onToggle}
+              style={{
+                background: "rgba(6, 255, 165, 0.1)",
+                border: "1px solid rgba(6, 255, 165, 0.8)",
+                color: CYBER_COLORS.primary,
+                fontWeight: "500",
+                padding: "6px 12px",
+                fontSize: "12px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
 
         {/* User Info */}
