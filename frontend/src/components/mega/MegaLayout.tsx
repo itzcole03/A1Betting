@@ -166,12 +166,24 @@ export const MegaSidebar: React.FC<{
           </div>
 
           {!isCompact && (
-            <MegaButton
-              variant="ghost"
-              size="sm"
+            <button
               onClick={onToggle}
-              icon={<X size={16} />}
-            />
+              style={{
+                background: "rgba(6, 255, 165, 0.1)",
+                border: "1px solid rgba(6, 255, 165, 0.8)",
+                color: CYBER_COLORS.primary,
+                fontWeight: "500",
+                padding: "6px 12px",
+                fontSize: "12px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <X size={16} />
+            </button>
           )}
         </div>
 
@@ -254,12 +266,24 @@ export const MegaSidebar: React.FC<{
         {/* Toggle Button for Compact */}
         {isCompact && (
           <div style={{ textAlign: "center", marginTop: "16px" }}>
-            <MegaButton
-              variant="ghost"
-              size="sm"
+            <button
               onClick={onToggle}
-              icon={<Menu size={16} />}
-            />
+              style={{
+                background: "rgba(6, 255, 165, 0.1)",
+                border: "1px solid rgba(6, 255, 165, 0.8)",
+                color: CYBER_COLORS.primary,
+                fontWeight: "500",
+                padding: "6px 12px",
+                fontSize: "12px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Menu size={16} />
+            </button>
           </div>
         )}
       </div>
