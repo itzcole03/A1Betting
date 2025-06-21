@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 /* Import Beautiful Cyber Theme */
 @import "./styles/cyber-theme.css";
 @import "./styles/prototype-override.css";
+=======
+/* Import custom animations first */
+@import "./styles/animations.css";
+>>>>>>> 2d39fa5fd04a40604745d55f795c6bab853c02d4
 
 @tailwind base;
 @tailwind components;

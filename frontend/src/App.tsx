@@ -85,10 +85,19 @@ const Card: React.FC<any> = ({
   className = "",
   glowing = false,
 }) => {
-  const glowClass = glowing ? "shadow-neon" : "";
   return React.createElement(
     "div",
-    { className: `glass-card rounded-2xl p-6 ${glowClass} ${className}` },
+    {
+      className: `glass-card rounded-2xl p-6 transition-all duration-300 ${className}`,
+      style: {
+        background: "rgba(255, 255, 255, 0.05)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        boxShadow: glowing
+          ? "0 0 20px rgba(0,255,136,0.6), 0 0 40px rgba(0,255,136,0.4)"
+          : "0 8px 32px rgba(0, 0, 0, 0.1)",
+      },
+    },
     [
       title &&
         React.createElement(
@@ -128,7 +137,22 @@ const MetricCard: React.FC<any> = ({
     "div",
     {
       className:
-        "glass-card rounded-xl p-6 text-center hover:shadow-neon transition-all duration-300 transform hover:scale-105",
+        "glass-card rounded-xl p-6 text-center transition-all duration-300 transform hover:scale-105 cursor-pointer",
+      style: {
+        background: "rgba(255, 255, 255, 0.05)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+      },
+      onMouseEnter: (e) => {
+        e.target.style.boxShadow =
+          "0 0 20px rgba(0,255,136,0.6), 0 0 40px rgba(0,255,136,0.4)";
+        e.target.style.borderColor = "rgba(0,255,136,0.3)";
+      },
+      onMouseLeave: (e) => {
+        e.target.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.1)";
+        e.target.style.borderColor = "rgba(255, 255, 255, 0.1)";
+      },
     },
     [
       React.createElement(
@@ -205,7 +229,14 @@ const Header: React.FC = () => {
 
   return React.createElement(
     "header",
-    { className: "glass-card border-b border-white/10 sticky top-0 z-50" },
+    {
+      className: "glass-card border-b border-white/10 sticky top-0 z-50",
+      style: {
+        background: "rgba(255, 255, 255, 0.05)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+      },
+    },
     React.createElement(
       "div",
       { className: "max-w-7xl mx-auto px-6 py-4" },
@@ -532,13 +563,30 @@ const Sidebar: React.FC = () => {
                           ? "active text-electric-400"
                           : "text-gray-300 hover:text-white"
                       }`,
+                      style: {
+                        borderRadius: "12px",
+                        marginBottom: "4px",
+                        ...(currentPage === item.key
+                          ? {
+                              background: "rgba(0,255,136,0.2)",
+                              borderLeft: "4px solid #00ff88",
+                              paddingLeft: "16px",
+                              boxShadow: "0 4px 12px rgba(0,255,136,0.3)",
+                            }
+                          : {}),
+                      },
                     },
                     [
                       React.createElement("i", {
                         key: "icon",
-                        className: `${item.icon} mr-3 w-4`,
+                        className: `fas ${item.icon} mr-3`,
+                        style: {
+                          width: "16px",
+                          color:
+                            currentPage === item.key ? "#06ffa5" : "#9ca3af",
+                        },
                       }),
-                      item.name,
+                      React.createElement("span", { key: "text" }, item.name),
                     ],
                   ),
                 ),
@@ -1063,7 +1111,14 @@ const App: React.FC = () => {
           React.createElement(Header, { key: "header" }),
           React.createElement(
             "main",
-            { key: "content", className: "flex-1 p-8" },
+            {
+              key: "content",
+              className: "flex-1 p-8",
+              style: {
+                background: "transparent",
+                minHeight: "calc(100vh - 120px)",
+              },
+            },
             renderPage(),
           ),
           React.createElement(

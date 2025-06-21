@@ -30,6 +30,7 @@ const BETTING_BACKEND_PREFIX = `${API_BASE_URL}/api/betting`;
  * }
  */
 export const calculateBettingStrategy = async (request) => {
+<<<<<<< HEAD
   const trace = unifiedMonitor.startTrace(
     "bettingStrategy.calculateBettingStrategy",
     "http.client",
@@ -89,6 +90,63 @@ export const calculateBettingStrategy = async (request) => {
       error,
     );
   }
+=======
+    // Which is BettingOpportunity[]
+    const trace = unifiedMonitor.startTrace("bettingStrategy.calculateBettingStrategy", "http.client");
+    try {
+        const endpoint = `${BETTING_BACKEND_PREFIX}/calculate-strategy`;
+        const backendRequestPayload = {
+            available_propositions: request.propositions,
+            bankroll: request.bankroll,
+            risk_level: request.riskLevel,
+        };
+        // Backend returns List[BackendStrategyBet]
+        const response = await post(endpoint, backendRequestPayload);
+        if (trace) {
+            trace.setHttpStatus(response.status);
+            unifiedMonitor.endTrace(trace);
+        }
+        const mappedResponse = response.data.map((bet) => ({
+            id: bet.bet_id,
+            // BackendStrategyBet does not have a direct description field.
+            // Construct description based on available data or set a default.
+            description: `Strategy bet for ${Array.isArray(bet.legs) ? bet.legs.length : 0} leg(s)`,
+            expectedValue: bet.potential_payout - bet.stake,
+            confidence: 0.75, // Mock confidence, backend doesn't provide this for now
+            type: bet.type ||
+                (Array.isArray(bet.legs) && bet.legs.length > 1
+                    ? "parlay"
+                    : "single"),
+            legs: (Array.isArray(bet.legs) ? bet.legs : []).map((leg) => ({
+                propId: leg.prop_id,
+                marketKey: leg.market_key,
+                outcome: leg.outcome,
+                odds: leg.odds,
+                playerId: leg.player_id,
+                gameId: leg.game_id,
+                description: leg.description,
+            })),
+            stakeSuggestion: bet.stake,
+            potentialPayout: bet.potential_payout,
+            status: bet.status,
+        }));
+        return mappedResponse;
+    }
+    catch (error) {
+        const errContext = {
+            service: "bettingStrategy",
+            operation: "calculateBettingStrategy",
+        };
+        unifiedMonitor.reportError(error, errContext);
+        if (trace) {
+            trace.setHttpStatus(error.response?.status || 500);
+            unifiedMonitor.endTrace(trace);
+        }
+        if (error instanceof APIError || error instanceof AppError)
+            throw error;
+        throw new AppError("Failed to calculate betting strategy from backend.", undefined, errContext, error);
+    }
+>>>>>>> 2d39fa5fd04a40604745d55f795c6bab853c02d4
 };
 /**
  * Places bets based on the provided opportunities.
@@ -103,6 +161,7 @@ export const calculateBettingStrategy = async (request) => {
  *   "transaction_id": "string (optional)"
  * }
  */
+<<<<<<< HEAD
 export const placeBets = async (
   request, // { bets: BettingOpportunity[] }
 ) => {
@@ -161,4 +220,56 @@ export const placeBets = async (
 export const bettingStrategyService = {
   calculateBettingStrategy,
   placeBets,
+=======
+export const placeBets = async (request) => {
+    const trace = unifiedMonitor.startTrace("bettingStrategy.placeBets", "http.client");
+    try {
+        const endpoint = `${BETTING_BACKEND_PREFIX}/place-bet`;
+        // Backend expects List[BackendStrategyBet] as BetPlacementRequest
+        const backendPayload = request.bets.map((opp) => ({
+            bet_id: opp.id,
+            legs: opp.legs.map((leg) => ({
+                prop_id: leg.propId,
+                market_key: leg.marketKey,
+                outcome: leg.outcome,
+                odds: leg.odds,
+                player_id: leg.playerId,
+                game_id: leg.gameId,
+                description: leg.description,
+            })),
+            stake: opp.stakeSuggestion || 0, // Ensure stake is a number
+            potential_payout: opp.potentialPayout || 0, // Ensure potential_payout is a number
+            status: opp.status || "pending_placement", // Pass current status or a default
+            created_at: new Date().toISOString(), // Backend will likely overwrite this
+            type: opp.type,
+        }));
+        const response = await post(endpoint, backendPayload);
+        if (trace) {
+            trace.setHttpStatus(response.status);
+            unifiedMonitor.endTrace(trace);
+        }
+        const mappedResponse = response.data.map((result) => ({
+            betId: result.bet_id,
+            success: result.status === "placed" || result.status === "accepted",
+            message: result.message,
+            transactionId: result.transaction_id,
+        }));
+        return mappedResponse;
+    }
+    catch (error) {
+        const errContext = { service: "bettingStrategy", operation: "placeBets" };
+        unifiedMonitor.reportError(error, errContext);
+        if (trace) {
+            trace.setHttpStatus(error.response?.status || 500);
+            unifiedMonitor.endTrace(trace);
+        }
+        if (error instanceof APIError || error instanceof AppError)
+            throw error;
+        throw new AppError("Failed to place bets via backend.", undefined, errContext, error);
+    }
+};
+export const bettingStrategyService = {
+    calculateBettingStrategy,
+    placeBets,
+>>>>>>> 2d39fa5fd04a40604745d55f795c6bab853c02d4
 };
