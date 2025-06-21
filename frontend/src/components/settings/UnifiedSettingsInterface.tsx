@@ -366,6 +366,7 @@ export const UnifiedSettingsInterface: React.FC = () => {
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
+                    setIsImporting(true);
                     const reader = new FileReader();
                     reader.onload = (event) => {
                       try {
@@ -373,8 +374,12 @@ export const UnifiedSettingsInterface: React.FC = () => {
                           event.target?.result as string,
                         );
                         setSettings(importedSettings);
-                        alert("Settings imported successfully!");
+                        setTimeout(() => {
+                          setIsImporting(false);
+                          alert("Settings imported successfully!");
+                        }, 500);
                       } catch (error) {
+                        setIsImporting(false);
                         alert(
                           "Error importing settings. Please check the file format.",
                         );
@@ -385,8 +390,15 @@ export const UnifiedSettingsInterface: React.FC = () => {
                 }}
                 className="hidden"
               />
-              <div className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg cursor-pointer text-center">
-                Import Settings
+              <div
+                className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg cursor-pointer text-center"
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  opacity: isImporting ? 0.7 : 1,
+                }}
+              >
+                {isImporting ? "Importing..." : "Import Settings"}
               </div>
             </label>
           </div>
