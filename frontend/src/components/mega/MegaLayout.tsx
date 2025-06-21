@@ -407,16 +407,47 @@ export const MegaSidebar: React.FC<{
       {/* Footer */}
       {!isCompact && (
         <div style={{ padding: "12px" }}>
-          <MegaButton
-            variant="secondary"
-            icon={<Settings size={16} />}
-            style={{ marginBottom: "8px" }}
+          <button
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              borderRadius: "8px",
+              padding: "12px 16px",
+              fontSize: "14px",
+              marginBottom: "8px",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              background: "rgba(255, 255, 255, 0.05)",
+              color: CYBER_COLORS.text.secondary,
+              backdropFilter: "blur(20px) saturate(1.8)",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+            }}
           >
+            <Settings size={16} style={{ marginRight: "8px" }} />
             Settings
-          </MegaButton>
-          <MegaButton variant="secondary" icon={<LogOut size={16} />}>
+          </button>
+          <button
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              borderRadius: "8px",
+              padding: "12px 16px",
+              fontSize: "14px",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              background: "rgba(255, 255, 255, 0.05)",
+              color: CYBER_COLORS.text.secondary,
+              backdropFilter: "blur(20px) saturate(1.8)",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <LogOut size={16} style={{ marginRight: "8px" }} />
             Sign Out
-          </MegaButton>
+          </button>
         </div>
       )}
     </div>
