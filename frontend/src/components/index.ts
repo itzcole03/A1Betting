@@ -33,6 +33,9 @@ export {
   MegaSkeleton,
 } from "./mega/MegaUI.tsx";
 
+// Theme Components
+export { default as ThemeToggle, CyberThemeToggle } from "./ThemeToggle";
+
 export { MegaSidebar, MegaHeader, MegaAppShell } from "./mega/MegaLayout.tsx";
 
 export {
