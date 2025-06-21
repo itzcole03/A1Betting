@@ -97,6 +97,15 @@ body {
   }
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Beautiful Glass Morphism - Exact Prototype Match */
 .glass-card {
   background: rgba(255, 255, 255, 0.05);
