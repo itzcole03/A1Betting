@@ -15,9 +15,33 @@
     />
   </head>
   <body
-    class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white font-sans"
+    style="
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(
+        135deg,
+        #0f172a 0%,
+        #7c3aed 50%,
+        #0f172a 100%
+      );
+      color: white;
+      font-family: &quot;Inter&quot;, system-ui, sans-serif;
+    "
   >
-    <div id="root"></div>
+    <div
+      id="root"
+      style="
+        min-height: 100vh;
+        background: linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #7c3aed 50%,
+          #0f172a 100%
+        );
+        color: white;
+      "
+    ></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
