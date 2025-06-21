@@ -495,18 +495,22 @@ export const MegaHeader: React.FC<{
   className = "",
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { theme, isDark } = useTheme();
 
   return (
     <header
       className={`mega-header ${className}`}
       style={{
-        ...CYBER_GLASS.panel,
-        borderBottom: `1px solid ${CYBER_COLORS.border}`,
+        background: theme.colors.surface,
+        backdropFilter: "blur(20px) saturate(180%)",
+        border: `1px solid ${theme.colors.border}`,
+        borderBottom: `1px solid ${theme.colors.border}`,
         padding: "16px 24px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         minHeight: "64px",
+        boxShadow: theme.effects.shadow,
       }}
     >
       {/* Left Section */}
