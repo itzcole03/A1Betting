@@ -30,9 +30,12 @@ export class BaseService extends EventEmitter {
     this.config = UnifiedConfig.getInstance();
     this.logger = new UnifiedLogger(this.name);
     this.cache = UnifiedCache.getInstance();
-    // Initialize API client
+    // Initialize API client with defensive checks
+    const baseURL = this.config?.getApiUrl
+      ? this.config.getApiUrl()
+      : "https://api.betproai.com";
     this.api = axios.create({
-      baseURL: this.config.getApiUrl(),
+      baseURL,
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
