@@ -155,15 +155,25 @@ export const MegaSidebar: React.FC<{
             </div>
             {!isCompact && (
               <div>
-                <CyberText
-                  variant="title"
-                  style={{ fontSize: "18px", marginBottom: "2px" }}
+                <div
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    color: "#ffffff",
+                    lineHeight: "1.2",
+                  }}
                 >
                   A1Betting
-                </CyberText>
-                <CyberText variant="caption" color="muted">
+                </div>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: "#94a3b8",
+                    lineHeight: "1.2",
+                  }}
+                >
                   Quantum Platform
-                </CyberText>
+                </div>
               </div>
             )}
           </div>
