@@ -63,6 +63,8 @@ export const MegaButton: React.FC<{
         ...CYBER_GLASS.button.active,
         color: "#000",
         fontWeight: "600",
+        background:
+          "linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(0, 255, 136, 0.9))",
       },
       secondary: {
         ...CYBER_GLASS.button.inactive,

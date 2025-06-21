@@ -47,10 +47,11 @@ export const CYBER_GLASS = {
     active: {
       backdropFilter: "blur(10px)",
       backgroundImage:
-        "linear-gradient(135deg, rgba(6, 255, 165, 0.8), rgba(0, 255, 136, 0.6))",
-      border: "1px solid rgba(6, 255, 165, 0.3)",
+        "linear-gradient(135deg, rgba(6, 255, 165, 0.9), rgba(0, 255, 136, 0.8))",
+      border: "1px solid rgba(6, 255, 165, 0.5)",
       boxShadow:
         "0 4px 20px rgba(6, 255, 165, 0.4), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
+      color: "#000", // Ensure black text on green background
     },
     inactive: {
       backdropFilter: "blur(20px) saturate(1.8)",
@@ -183,7 +184,7 @@ export const CyberButton: React.FC<{
     if (active || variant === "primary") {
       return {
         ...CYBER_GLASS.button.active,
-        color: CYBER_COLORS.primary,
+        color: "#000", // Black text for better contrast on green background
       };
     }
     return {
