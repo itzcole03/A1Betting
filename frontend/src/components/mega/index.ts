@@ -3,6 +3,8 @@ import MegaAppComponent from "./MegaApp";
 import MegaDashboardComponent from "./MegaDashboard";
 import MegaBettingComponent from "./MegaBetting";
 import MegaAnalyticsComponent from "./MegaAnalytics";
+import MegaAdminPanelComponent from "./MegaAdminPanel";
+import MegaPrizePicksComponent from "./MegaPrizePicks";
 import MegaUIComponents from "./MegaUI";
 import MegaLayoutComponents from "./MegaLayout";
 import MegaFeaturesComponents from "./MegaFeatures";
@@ -21,6 +23,8 @@ export { MegaAppComponent as MegaApp };
 export { MegaDashboardComponent as MegaDashboard };
 export { MegaBettingComponent as MegaBetting };
 export { MegaAnalyticsComponent as MegaAnalytics };
+export { MegaAdminPanelComponent as MegaAdminPanel };
+export { MegaPrizePicksComponent as MegaPrizePicks };
 
 // UI components
 export const {
