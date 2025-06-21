@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Import our consolidated Universal Systems
-import {
-  UniversalThemeProvider,
-  useTheme,
-} from "./providers/UniversalThemeProvider";
+import { SafeThemeProvider, useTheme } from "./providers/SafeThemeProvider";
 import {
   MegaAppShell,
   MegaSidebar,
