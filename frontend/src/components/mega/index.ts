@@ -5,6 +5,7 @@ import MegaBettingComponent from "./MegaBetting";
 import MegaAnalyticsComponent from "./MegaAnalytics";
 import MegaUIComponents from "./MegaUI";
 import MegaLayoutComponents from "./MegaLayout";
+import MegaFeaturesComponents from "./MegaFeatures";
 import {
   CYBER_COLORS,
   CYBER_GRADIENTS,
@@ -33,6 +34,13 @@ export const {
 
 // Layout components
 export const { MegaSidebar, MegaHeader, MegaAppShell } = MegaLayoutComponents;
+
+// Feature components
+export const {
+  MegaArbitrageEngine,
+  MegaPredictionEngine,
+  MegaRevolutionaryInterface,
+} = MegaFeaturesComponents;
 
 // Theme system
 export {
