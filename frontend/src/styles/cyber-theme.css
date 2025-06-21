@@ -1,8 +1,35 @@
 /* ===========================================
-   CYBER THEME - BEAUTIFUL ANIMATIONS & EFFECTS
+   CYBER THEME - EXACT PROTOTYPE MATCH
    =========================================== */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap");
+
+/* Force body and html styling to match prototype */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #7c3aed 50%,
+    #0f172a 100%
+  ) !important;
+  color: white !important;
+  font-family: "Inter", system-ui, sans-serif !important;
+}
+
+#root {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #7c3aed 50%,
+    #0f172a 100%
+  ) !important;
+  color: white !important;
+}
 
 /* Keyframe Animations */
 @keyframes float {
@@ -92,7 +119,7 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Holographic Text Effect */
+/* Holographic Text Effect - Exact Prototype Match */
 .holographic {
   background: linear-gradient(
     45deg,
@@ -101,13 +128,15 @@
     #3a86ff,
     #06ffa5,
     #ffbe0b
-  );
-  background-size: 400% 400%;
-  animation: gradient-shift 8s ease infinite;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
+  ) !important;
+  background-size: 400% 400% !important;
+  animation: gradient-shift 8s ease infinite !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.02em !important;
 }
 
 /* Modern Button Styles */

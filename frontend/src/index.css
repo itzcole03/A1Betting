@@ -1,13 +1,36 @@
 /* Import Beautiful Cyber Theme */
 @import "./styles/cyber-theme.css";
+@import "./styles/prototype-override.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html,
   body {
-    font-family: "Inter", system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(
+      135deg,
+      #0f172a 0%,
+      #7c3aed 50%,
+      #0f172a 100%
+    ) !important;
+    color: white !important;
+    font-family: "Inter", system-ui, sans-serif !important;
+  }
+
+  #root {
+    min-height: 100vh;
+    background: linear-gradient(
+      135deg,
+      #0f172a 0%,
+      #7c3aed 50%,
+      #0f172a 100%
+    ) !important;
+    color: white !important;
   }
 }
 
