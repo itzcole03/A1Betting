@@ -25,7 +25,6 @@ export { UniversalAnalytics } from "./analytics/UniversalAnalytics";
 export { default as UniversalAnalytics } from "./analytics/UniversalAnalytics";
 
 // Prediction Systems
-export { UniversalPredictions } from "./predictions/UniversalPredictions";
 export { default as UniversalPredictions } from "./predictions/UniversalPredictions";
 
 // Mega System Components
