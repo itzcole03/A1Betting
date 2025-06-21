@@ -704,8 +704,8 @@ export const MegaHeader: React.FC<{
               onClick={onNotificationsClick}
               style={{
                 background: `rgba(6, 255, 165, 0.1)`,
-                border: `1px solid ${safeTheme.colors.primary}`,
-                color: safeTheme.colors.primary,
+                border: `1px solid ${safeTheme.colors?.primary || "#06ffa5"}`,
+                color: safeTheme.colors?.primary || "#06ffa5",
                 fontWeight: "500",
                 padding: "6px 12px",
                 fontSize: "12px",
