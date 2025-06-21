@@ -660,6 +660,9 @@ export const MegaSkeleton: React.FC<{
   );
 };
 
+// Named exports for direct importing
+export { MegaButton, MegaCard, MegaModal, MegaInput, MegaAlert, MegaSkeleton };
+
 export default {
   MegaButton,
   MegaCard,
