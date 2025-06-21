@@ -760,12 +760,18 @@ export const MegaHeader: React.FC<{
         {rightActions}
 
         {/* Current Time */}
-        <CyberText variant="caption" color="muted">
+        <div
+          style={{
+            fontSize: "12px",
+            color: safeTheme.colors.text.muted,
+            lineHeight: "1.2",
+          }}
+        >
           {new Date().toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           })}
-        </CyberText>
+        </div>
       </div>
     </header>
   );
