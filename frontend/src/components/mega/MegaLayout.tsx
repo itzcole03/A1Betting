@@ -593,17 +593,28 @@ export const MegaHeader: React.FC<{
         {(title || subtitle) && (
           <div style={{ marginLeft: leftActions ? "16px" : "0" }}>
             {title && (
-              <CyberText
-                variant="title"
-                style={{ fontSize: "18px", marginBottom: "2px" }}
+              <div
+                style={{
+                  fontSize: "18px",
+                  marginBottom: "2px",
+                  color: safeTheme.colors.text.primary,
+                  fontWeight: "600",
+                  lineHeight: "1.2",
+                }}
               >
                 {title}
-              </CyberText>
+              </div>
             )}
             {subtitle && (
-              <CyberText variant="caption" color="muted">
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: safeTheme.colors.text.muted,
+                  lineHeight: "1.2",
+                }}
+              >
                 {subtitle}
-              </CyberText>
+              </div>
             )}
           </div>
         )}
