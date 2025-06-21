@@ -1409,13 +1409,24 @@ const DefaultPage: React.FC<any> = ({ title, description, icon }) => {
   );
 };
 
-// Main App - Exact Prototype Match
+// Main App - Enhanced with Mega Components
 const App: React.FC = () => {
   const { currentPage } = useContext(AppContext);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
+
+  // Use consolidated MegaApp for streamlined experience
+  const useMegaApp = true;
+
+  if (useMegaApp) {
+    return React.createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      React.createElement(MegaApp),
+    );
+  }
 
   const renderPage = () => {
     switch (currentPage) {
