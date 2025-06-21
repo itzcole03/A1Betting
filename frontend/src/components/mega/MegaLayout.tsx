@@ -342,7 +342,7 @@ export const MegaSidebar: React.FC<{
                 <span
                   style={{
                     fontSize: "16px",
-                    color: isActive ? "#000" : CYBER_COLORS.text.primary,
+                    color: isActive ? "#000" : "#ffffff",
                   }}
                 >
                   {item.icon}
