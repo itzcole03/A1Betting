@@ -31,9 +31,9 @@ export {
   MegaInput,
   MegaAlert,
   MegaSkeleton,
-} from "./mega/MegaUI";
+} from "./mega/MegaUI.tsx";
 
-export { MegaSidebar, MegaHeader, MegaAppShell } from "./mega/MegaLayout";
+export { MegaSidebar, MegaHeader, MegaAppShell } from "./mega/MegaLayout.tsx";
 
 export {
   CyberText,
@@ -42,7 +42,7 @@ export {
   CYBER_COLORS,
   CYBER_GRADIENTS,
   CYBER_GLASS,
-} from "./mega/CyberTheme";
+} from "./mega/CyberTheme.tsx";
 
 // ============================================================================
 // LEGACY COMPATIBILITY EXPORTS (Deprecated - Use Universal equivalents)
