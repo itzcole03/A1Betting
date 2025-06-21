@@ -203,7 +203,26 @@ export const useUnifiedAnalytics = (config = {}) => {
         };
       }
     },
-    enabled: !!config.betting,
+    enabled: !!config.betting && !!analyticsService,
+    retry: (failureCount, error) => {
+      // Don't retry network errors more than once
+      if (error?.message?.includes("Network Error")) {
+        return failureCount < 1;
+      }
+      return failureCount < 3;
+    },
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    onError: (error) => {
+      console.warn("Betting Analytics query failed:", error);
+      setState((prev) => ({
+        ...prev,
+        betting: {
+          data: null,
+          loading: false,
+          error: error.message || "Network error",
+        },
+      }));
+    },
   });
   // --- Realtime Metrics (not implemented in service, placeholder) ---
   const realtimeQuery = useQuery({
