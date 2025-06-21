@@ -7,8 +7,9 @@ import {
   CyberText,
   CyberButton,
 } from "./CyberTheme";
-import { useTheme } from "../providers/UniversalThemeProvider";
+import { useTheme } from "../../providers/UniversalThemeProvider";
 import { MegaButton } from "./MegaUI";
+import { CyberThemeToggle } from "../ThemeToggle/ThemeToggle";
 import {
   Brain,
   Menu,
