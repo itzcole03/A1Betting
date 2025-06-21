@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import CyberSidebar from "./components/layout/CyberSidebar";
 import CyberHeader from "./components/layout/CyberHeader";
+import CyberFooter from "./components/layout/CyberFooter";
 import CyberDashboard from "./components/dashboard/CyberDashboard";
 import UnifiedDashboard from "./components/dashboard/UnifiedDashboard";
 import { usePrizePicksLiveData } from "./hooks/usePrizePicksLiveData";
@@ -243,6 +244,9 @@ const AppContent: React.FC = () => {
             <CyberDashboard currentPage={state.currentSection} />
           </ErrorBoundary>
         </main>
+
+        {/* Beautiful Footer */}
+        <CyberFooter />
       </div>
 
       {/* Toast notifications */}
