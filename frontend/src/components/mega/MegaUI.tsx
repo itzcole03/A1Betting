@@ -210,10 +210,27 @@ export const MegaCard: React.FC<{
       className={`mega-card ${className}`}
       onClick={onClick}
       style={{
-        borderRadius: "12px",
-        transition: "all 0.3s ease",
+        borderRadius: "16px",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         cursor: onClick ? "pointer" : "default",
+        position: "relative",
+        overflow: "hidden",
         ...getVariantStyle(),
+      }}
+      onMouseEnter={(e) => {
+        if (onClick) {
+          e.currentTarget.style.transform = "translateY(-2px)";
+          e.currentTarget.style.boxShadow =
+            variant === "glowing"
+              ? "0 0 40px rgba(6, 255, 165, 0.3), 0 12px 48px rgba(0, 0, 0, 0.25)"
+              : "0 12px 48px rgba(0, 0, 0, 0.2), 0 2px 0 rgba(255, 255, 255, 0.08) inset";
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (onClick) {
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = getVariantStyle().boxShadow;
+        }
       }}
     >
       {(title || subtitle || headerActions) && (
