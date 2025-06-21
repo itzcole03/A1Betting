@@ -508,7 +508,8 @@ const Header: React.FC = () => {
 
 // Clean Sidebar Navigation - Exact Prototype Match
 const Sidebar: React.FC = () => {
-  const { currentPage, setCurrentPage } = useContext(AppContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navigation = [
     { name: "Dashboard", key: "dashboard", icon: "fa-home", category: "main" },
