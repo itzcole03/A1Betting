@@ -650,7 +650,7 @@ const Sidebar: React.FC = () => {
                         style: {
                           width: "16px",
                           color:
-                            currentPage === item.key ? "#06ffa5" : "#9ca3af",
+                            location.pathname === item.path ? "#06ffa5" : "#9ca3af",
                         },
                       }),
                       React.createElement("span", { key: "text" }, item.name),
