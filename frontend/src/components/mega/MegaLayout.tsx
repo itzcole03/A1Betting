@@ -611,7 +611,7 @@ export const MegaHeader: React.FC<{
                 style={{
                   fontSize: "18px",
                   marginBottom: "2px",
-                  color: safeTheme.colors.text.primary,
+                  color: safeTheme.colors?.text?.primary || "#0f172a",
                   fontWeight: "600",
                   lineHeight: "1.2",
                 }}
