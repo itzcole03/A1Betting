@@ -1055,28 +1055,39 @@ export const MegaHeader: React.FC<{
       )}
 
       {/* Right Section */}
-      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
         {/* Theme Toggle */}
         <button
           onClick={toggleDarkMode}
           style={{
-            background: safeTheme.colors?.surface || "rgba(255, 255, 255, 0.8)",
-            border: `1px solid ${safeTheme.colors?.border || "rgba(15, 23, 42, 0.1)"}`,
-            color: safeTheme.colors?.text?.primary || "#0f172a",
+            background: "rgba(255, 255, 255, 0.05)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            color: "#ffffff",
             fontWeight: "500",
-            padding: "8px",
-            fontSize: "12px",
-            borderRadius: "8px",
+            padding: "12px",
+            borderRadius: "12px",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: "40px",
-            height: "40px",
+            width: "44px",
+            height: "44px",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            backdropFilter: "blur(20px) saturate(180%)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+            e.currentTarget.style.transform = "translateY(-1px)";
+            e.currentTarget.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.15)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "none";
           }}
           title={`Switch to ${isDark ? "Light" : "Dark"} Mode`}
         >
-          {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          {isDark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
 
         {/* Notifications */}
@@ -1085,37 +1096,53 @@ export const MegaHeader: React.FC<{
             <button
               onClick={onNotificationsClick}
               style={{
-                background: `rgba(6, 255, 165, 0.1)`,
-                border: `1px solid ${safeTheme.colors?.primary || "#06ffa5"}`,
-                color: safeTheme.colors?.primary || "#06ffa5",
+                background: "rgba(6, 255, 165, 0.08)",
+                border: "1px solid rgba(6, 255, 165, 0.2)",
+                color: "#06ffa5",
                 fontWeight: "500",
-                padding: "6px 12px",
-                fontSize: "12px",
-                borderRadius: "8px",
+                padding: "12px",
+                borderRadius: "12px",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                width: "44px",
+                height: "44px",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                backdropFilter: "blur(20px) saturate(180%)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(6, 255, 165, 0.15)";
+                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.boxShadow =
+                  "0 8px 24px rgba(6, 255, 165, 0.2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(6, 255, 165, 0.08)";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
               }}
             >
-              <Bell size={16} />
+              <Bell size={18} />
             </button>
             {notifications > 0 && (
               <span
                 style={{
                   position: "absolute",
-                  top: "4px",
-                  right: "4px",
-                  background: safeTheme.colors?.primary || "#06ffa5",
+                  top: "2px",
+                  right: "2px",
+                  background: "linear-gradient(135deg, #06ffa5, #00ff88)",
                   color: "#000",
                   borderRadius: "50%",
-                  width: "16px",
-                  height: "16px",
-                  fontSize: "10px",
-                  fontWeight: "600",
+                  width: "20px",
+                  height: "20px",
+                  fontSize: "11px",
+                  fontWeight: "700",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  border: "2px solid rgba(15, 23, 42, 0.95)",
+                  boxShadow: "0 2px 8px rgba(6, 255, 165, 0.4)",
                 }}
               >
                 {notifications > 9 ? "9+" : notifications}
