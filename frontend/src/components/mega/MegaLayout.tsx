@@ -336,10 +336,14 @@ export const MegaSidebar: React.FC<{
                       }),
                 }}
               >
-                <Icon
-                  size={16}
-                  style={{ color: isActive ? "#000" : CYBER_COLORS.text.muted }}
-                />
+                <span
+                  style={{
+                    fontSize: "16px",
+                    color: isActive ? "#000" : CYBER_COLORS.text.primary,
+                  }}
+                >
+                  {item.icon}
+                </span>
                 {!isCompact && (
                   <div
                     style={{ display: "flex", alignItems: "center", flex: 1 }}
