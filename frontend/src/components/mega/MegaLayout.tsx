@@ -647,50 +647,20 @@ export const MegaSidebar: React.FC<{
         })}
       </nav>
 
-      {/* Footer */}
+      {/* Footer - Removed duplicate settings/signout buttons */}
       {!isCompact && (
         <div style={{ padding: "12px" }}>
-          <button
+          <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              fontSize: "14px",
-              marginBottom: "8px",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              background: "rgba(255, 255, 255, 0.05)",
-              color: "#e2e8f0",
-              backdropFilter: "blur(20px) saturate(1.8)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+              fontSize: "12px",
+              color: "#94a3b8",
+              textAlign: "center",
+              padding: "8px",
             }}
           >
-            <Settings size={16} style={{ marginRight: "8px" }} />
-            Settings
-          </button>
-          <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              fontSize: "14px",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              background: "rgba(255, 255, 255, 0.05)",
-              color: "#e2e8f0",
-              backdropFilter: "blur(20px) saturate(1.8)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <LogOut size={16} style={{ marginRight: "8px" }} />
-            Sign Out
-          </button>
+            Use the navigation above or the user avatar in the header for
+            account settings.
+          </div>
         </div>
       )}
     </div>
