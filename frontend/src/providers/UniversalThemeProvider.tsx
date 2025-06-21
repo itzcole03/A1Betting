@@ -164,17 +164,59 @@ const createThemeConfig = (
     ? { ...baseColors, ...customColors }
     : baseColors;
 
+  // Ensure mergedColors is valid and has required properties
+  if (!mergedColors || typeof mergedColors !== "object") {
+    console.error("Invalid theme variant or colors:", variant, mergedColors);
+    // Fallback to cyber-light theme
+    const fallbackColors = themes["cyber-light"];
+    const safeColors = fallbackColors || {
+      primary: "#06ffa5",
+      secondary: "#00ff88",
+      accent: "#00d4ff",
+      background:
+        "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%, #f8fafc 100%)",
+      surface: "rgba(255, 255, 255, 0.8)",
+      text: { primary: "#0f172a", secondary: "#334155", muted: "#64748b" },
+      border: "rgba(15, 23, 42, 0.1)",
+      success: "#06ffa5",
+      warning: "#fbbf24",
+      error: "#ff4757",
+    };
+
+    return {
+      variant,
+      colors: safeColors,
+      gradients: {
+        primary: "linear-gradient(135deg, #06ffa5, #00ff88)",
+        secondary: "linear-gradient(135deg, #00d4ff, #7c3aed)",
+        background: safeColors.background,
+      },
+      effects: {
+        glass:
+          "backdrop-filter: blur(20px) saturate(180%); background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(15, 23, 42, 0.1);",
+        blur: "backdrop-filter: blur(8px);",
+        shadow:
+          "0 8px 32px rgba(15, 23, 42, 0.1), 0 0 20px rgba(6, 255, 165, 0.1)",
+        glow: "0 0 20px rgba(6, 255, 165, 0.6), 0 0 40px rgba(6, 255, 165, 0.4)",
+      },
+      animations: {
+        duration: "300ms",
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+      },
+    };
+  }
+
   return {
     variant,
     colors: mergedColors,
     gradients: {
       primary: variant.startsWith("cyber")
         ? "linear-gradient(135deg, #06ffa5, #00ff88)"
-        : `linear-gradient(135deg, ${mergedColors.primary}, ${mergedColors.secondary})`,
+        : `linear-gradient(135deg, ${mergedColors.primary || "#3b82f6"}, ${mergedColors.secondary || "#6b7280"})`,
       secondary: variant.startsWith("cyber")
         ? "linear-gradient(135deg, #00d4ff, #7c3aed)"
-        : `linear-gradient(135deg, ${mergedColors.secondary}, ${mergedColors.accent})`,
-      background: mergedColors.background,
+        : `linear-gradient(135deg, ${mergedColors.secondary || "#6b7280"}, ${mergedColors.accent || "#10b981"})`,
+      background: mergedColors.background || "#ffffff",
     },
     effects: {
       glass:
