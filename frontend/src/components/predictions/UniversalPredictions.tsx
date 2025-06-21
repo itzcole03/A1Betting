@@ -193,7 +193,7 @@ export const UniversalPredictions: React.FC = () => {
     color = "primary",
     children,
     className = "",
-    style = {},
+    style = {}
   }) => {
     const variants = {
       title: { fontSize: "18px", fontWeight: "700", lineHeight: "28px" },
@@ -581,7 +581,7 @@ export const UniversalPredictions: React.FC = () => {
           </div>
 
           <div>
-            ThemedText
+ThemedText
             <CyberText variant="caption" className="mb-2">
               Market
             </CyberText>
@@ -918,7 +918,7 @@ export const UniversalPredictions: React.FC = () => {
     <MegaCard title="Prediction Overview" variant="glass" padding="lg">
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div className="text-center">
-          <CyberText
+            <ThemedText
             variant="title"
             style={{ fontSize: "24px", color: "#06ffa5" }}
           >
