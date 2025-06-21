@@ -680,8 +680,8 @@ export const MegaHeader: React.FC<{
         <button
           onClick={toggleDarkMode}
           style={{
-            background: safeTheme.colors.surface,
-            border: `1px solid ${safeTheme.colors.border}`,
+            background: safeTheme.colors?.surface || "rgba(255, 255, 255, 0.8)",
+            border: `1px solid ${safeTheme.colors?.border || "rgba(15, 23, 42, 0.1)"}`,
             color: safeTheme.colors?.text?.primary || "#0f172a",
             fontWeight: "500",
             padding: "8px",
