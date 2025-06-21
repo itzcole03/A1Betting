@@ -176,27 +176,28 @@ export const BetBuilder: React.FC = () => {
         </div>
       </div>
       {/* In a real app, you would render available PlayerProp[] here for selection */}
-      {selectedProps.length > 0 && (
+      {selectedPropObjects.length > 0 && (
         <div className="p-4 border-t border-gray-200">
           <h3 className="text-sm font-medium text-gray-700 mb-3">Your Picks</h3>
           <div className="space-y-2">
-            {selectedProps.map((leg, idx) => (
+            {selectedPropObjects.map((leg, idx) => (
               <div
                 key={idx}
                 className="flex justify-between items-center p-3 rounded-lg glass"
               >
                 <div>
                   <span className="font-bold text-gray-900">
-                    {leg.player.name} {leg.type} {leg.line}
+                    {leg.player?.name || "Unknown Player"}{" "}
+                    {leg.type || "Unknown Type"} {leg.line || "N/A"}
                   </span>
                   <span className="ml-2 text-2xl">
-                    {getPropEmoji(leg.confidence)}
+                    {getPropEmoji(leg.confidence || 50)}
                   </span>
                   {/* Add ESPN/news/sentiment if available on PlayerProp in the future */}
                 </div>
                 <div className="text-right">
                   <span className="font-bold text-blue-600">
-                    {leg.confidence}%
+                    {leg.confidence || 50}%
                   </span>
                 </div>
               </div>
