@@ -62,15 +62,20 @@ export const BetBuilder: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  // Get actual prop objects from selectedProps IDs
+  const selectedPropObjects = selectedProps
+    .map((propId) => props.find((p) => p.id === propId))
+    .filter(Boolean) as PlayerProp[];
+
   // Odds and payout calculation
-  const oddsArr = selectedProps.map((p) => p.odds.toString());
+  const oddsArr = selectedPropObjects.map((p) => p.odds?.toString() || "2.0");
   const payout = calculatePotentialPayout(entry, oddsArr);
   const winProb = calculateWinProbability(
-    selectedProps.map((p) => p.confidence),
+    selectedPropObjects.map((p) => p.confidence || 50),
   );
 
   // Team diversification check
-  const diversified = isTeamDiversified(selectedProps);
+  const diversified = isTeamDiversified(selectedPropObjects);
 
   // Combined odds (decimal)
   const combinedDecimal = oddsArr.reduce((acc, o) => acc * oddsToDecimal(o), 1);
