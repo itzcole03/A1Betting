@@ -755,119 +755,6 @@ export const MegaSidebar: React.FC<{
             );
           })}
         </div>
-                  <div
-                    style={{
-                      fontWeight: "400",
-                      marginBottom: "6px",
-                      pointerEvents: "auto",
-                    }}
-                  >
-                    <button
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        backdropFilter: "blur(20px) saturate(1.8)",
-                        backgroundColor: "rgba(255, 255, 255, 0.03)",
-                        borderColor: "rgba(0, 0, 0, 0)",
-                        boxShadow: "rgba(0, 0, 0, 0.05) 0px 2px 8px 0px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        justifyContent: "flex-start",
-                        letterSpacing: "-0.14px",
-                        overflowX: "hidden",
-                        overflowY: "hidden",
-                        position: "relative",
-                        width: "100%",
-                        transform: "matrix(1, 0, 0, 1, 0, 0)",
-                        pointerEvents: "auto",
-                        padding: "14px 18px",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "18px",
-                          fontWeight: "600",
-                          minWidth: "18px",
-                          textShadow: "rgba(0, 0, 0, 0.2) 0px 1px 2px",
-                          pointerEvents: "auto",
-                        }}
-                      >
-                        ⚙️
-                      </span>
-                      <div
-                        style={{
-                          flexBasis: "0%",
-                          flexGrow: "1",
-                          fontWeight: "600",
-                          textAlign: "left",
-                          textShadow: "rgba(0, 0, 0, 0.2) 0px 1px 2px",
-                          pointerEvents: "auto",
-                          marginLeft: "14px",
-                        }}
-                      >
-                        Settings
-                      </div>
-                    </button>
-                  </div>
-                  <div
-                    style={{
-                      fontWeight: "400",
-                      marginBottom: "6px",
-                      pointerEvents: "auto",
-                    }}
-                  >
-                    <button
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        backdropFilter: "blur(20px) saturate(1.8)",
-                        backgroundColor: "rgba(0, 0, 0, 0)",
-                        backgroundImage:
-                          "linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(0, 255, 136, 0.9))",
-                        borderColor: "rgba(6, 255, 165, 0.3)",
-                        boxShadow:
-                          "rgba(6, 255, 165, 0.25) 0px 8px 32px 0px, rgba(0, 0, 0, 0.1) 0px 2px 8px 0px",
-                        color: "rgb(0, 0, 0)",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        justifyContent: "flex-start",
-                        letterSpacing: "-0.14px",
-                        overflowX: "hidden",
-                        overflowY: "hidden",
-                        position: "relative",
-                        width: "100%",
-                        transform: "matrix(1, 0, 0, 1, 0, -1)",
-                        pointerEvents: "auto",
-                        padding: "14px 18px",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "18px",
-                          fontWeight: "600",
-                          minWidth: "18px",
-                          textShadow: "rgba(0, 0, 0, 0.2) 0px 1px 2px",
-                          pointerEvents: "auto",
-                        }}
-                      >
-                        👤
-                      </span>
-                      <div
-                        style={{
-                          flexBasis: "0%",
-                          flexGrow: "1",
-                          fontWeight: "600",
-                          textAlign: "left",
-                          textShadow: "rgba(0, 0, 0, 0.2) 0px 1px 2px",
-                          pointerEvents: "auto",
-                          marginLeft: "14px",
-                        }}
-                      >
-                        Profile
-                      </div>
-                    </button>
-                  </div>
-                </div>
       </nav>
 
       {/* Settings and Profile buttons outside navigation */}
@@ -944,18 +831,22 @@ export const MegaSidebar: React.FC<{
               cursor: "pointer",
               transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               border: "1px solid rgba(6, 255, 165, 0.3)",
-              background: "linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(0, 255, 136, 0.9))",
+              background:
+                "linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(0, 255, 136, 0.9))",
               color: "#000",
               backdropFilter: "blur(20px) saturate(1.8)",
-              boxShadow: "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)",
+              boxShadow:
+                "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-1px)";
-              e.currentTarget.style.boxShadow = "0 12px 48px rgba(6, 255, 165, 0.35), 0 4px 16px rgba(0, 0, 0, 0.15)";
+              e.currentTarget.style.boxShadow =
+                "0 12px 48px rgba(6, 255, 165, 0.35), 0 4px 16px rgba(0, 0, 0, 0.15)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)";
+              e.currentTarget.style.boxShadow =
+                "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)";
             }}
           >
             <span
