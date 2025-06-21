@@ -17,6 +17,7 @@ import {
   UniversalAnalytics,
   UniversalPredictions,
 } from "./components";
+import ThemeDemo from "./components/ThemeDemo";
 
 // Import the Mega system for theme consistency
 import { CYBER_COLORS } from "./components/mega/CyberTheme.tsx";
