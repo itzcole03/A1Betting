@@ -71,7 +71,7 @@ const CardHeader = ({
   children: React.ReactNode;
   className?: string;
 }) => (
-  <div className={`flex flex-col space-y-1.5 p-6 ${className}`}>{children}</div>
+  <div className={`flex flex-col space-y-2 p-8 ${className}`}>{children}</div>
 );
 
 const CardTitle = ({
@@ -82,7 +82,13 @@ const CardTitle = ({
   className?: string;
 }) => (
   <h3
-    className={`text-2xl font-semibold leading-none tracking-tight ${className}`}
+    className={`text-2xl font-bold leading-none tracking-tight ${className}`}
+    style={{
+      color: "#ffffff",
+      letterSpacing: "-0.02em",
+      fontSize: "20px",
+      fontWeight: "700",
+    }}
   >
     {children}
   </h3>
@@ -94,7 +100,7 @@ const CardContent = ({
 }: {
   children: React.ReactNode;
   className?: string;
-}) => <div className={`p-6 pt-0 ${className}`}>{children}</div>;
+}) => <div className={`p-8 pt-0 ${className}`}>{children}</div>;
 
 const Badge = ({
   children,
