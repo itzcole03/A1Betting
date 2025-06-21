@@ -129,7 +129,7 @@ const UserAvatarDropdown: React.FC<{
           <div
             style={{
               padding: "12px 16px",
-              borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+              borderBottom: "1px solid rgba(6, 255, 165, 0.2)",
               marginBottom: "8px",
             }}
           >
@@ -137,7 +137,7 @@ const UserAvatarDropdown: React.FC<{
               style={{
                 fontSize: "14px",
                 fontWeight: "600",
-                color: "#0f172a",
+                color: "#ffffff",
                 marginBottom: "2px",
               }}
             >
@@ -146,7 +146,7 @@ const UserAvatarDropdown: React.FC<{
             <div
               style={{
                 fontSize: "12px",
-                color: "#64748b",
+                color: "#94a3b8",
               }}
             >
               Pro User
