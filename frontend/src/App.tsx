@@ -161,7 +161,10 @@ const AppContent: React.FC = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="quantum-app" style={{ background: CYBER_COLORS.dark }}>
+      <div
+        className="quantum-app"
+        style={{ background: theme.colors.background }}
+      >
         <MegaAppShell
           sidebar={sidebar}
           header={header}
