@@ -78,6 +78,12 @@ const navigationItems = [
     icon: "🔮",
     component: UniversalPredictions,
   },
+  {
+    id: "settings",
+    label: "Settings",
+    icon: "⚙️",
+    component: UltimateSettingsPage,
+  },
 ];
 
 // Mock user data
