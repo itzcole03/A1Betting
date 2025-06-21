@@ -9,7 +9,7 @@ import {
 } from "./CyberTheme";
 import { useTheme } from "../../providers/UniversalThemeProvider";
 import { MegaButton } from "./MegaUI";
-import { CyberThemeToggle } from "../ThemeToggle/ThemeToggle";
+import { CyberThemeToggle } from "../ThemeToggle";
 import {
   Brain,
   Menu,
