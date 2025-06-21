@@ -166,6 +166,77 @@ html.cyber-dark #root {
 }
 
 /* ============================================================================
+   DROPDOWN OPTION OVERRIDES - HIGHEST SPECIFICITY
+   ============================================================================ */
+
+/* Light mode dropdown options */
+.cyber-light select option,
+.theme-cyber-light select option,
+html.cyber-light select option,
+body.cyber-light select option,
+html.theme-cyber-light select option,
+body.theme-cyber-light select option {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: none !important;
+  padding: 8px 12px !important;
+  font-size: 16px !important;
+  font-family: "Inter", system-ui, sans-serif !important;
+}
+
+/* Dark mode dropdown options with maximum contrast */
+.cyber-dark select option,
+.theme-cyber-dark select option,
+html.cyber-dark select option,
+body.cyber-dark select option,
+html.theme-cyber-dark select option,
+body.theme-cyber-dark select option {
+  background-color: #0f172a !important;
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 8px 12px !important;
+  font-size: 16px !important;
+  font-family: "Inter", system-ui, sans-serif !important;
+}
+
+/* Hover and selected states for dropdown options */
+.cyber-dark select option:hover,
+.theme-cyber-dark select option:hover {
+  background-color: rgba(6, 255, 165, 0.2) !important;
+  background: rgba(6, 255, 165, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.cyber-light select option:hover,
+.theme-cyber-light select option:hover {
+  background-color: rgba(6, 255, 165, 0.1) !important;
+  background: rgba(6, 255, 165, 0.1) !important;
+  color: #0f172a !important;
+}
+
+.cyber-dark select option:checked,
+.cyber-dark select option[selected],
+.theme-cyber-dark select option:checked,
+.theme-cyber-dark select option[selected] {
+  background-color: rgba(6, 255, 165, 0.3) !important;
+  background: rgba(6, 255, 165, 0.3) !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+.cyber-light select option:checked,
+.cyber-light select option[selected],
+.theme-cyber-light select option:checked,
+.theme-cyber-light select option[selected] {
+  background-color: rgba(6, 255, 165, 0.2) !important;
+  background: rgba(6, 255, 165, 0.2) !important;
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+/* ============================================================================
    NAVIGATION OVERRIDES
    ============================================================================ */
 
