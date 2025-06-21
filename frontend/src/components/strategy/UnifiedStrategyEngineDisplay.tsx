@@ -240,7 +240,9 @@ const StrategyCard: React.FC<{
             <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
               <div className="flex items-center justify-center gap-1 mb-1">
                 <TrendingUp className="w-4 h-4 text-green-600" />
-                <span className="text-xs text-gray-500">Expected Return</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Expected Return
+                </span>
               </div>
               <div className="text-lg font-bold text-green-600">
                 +{expectedReturn.toFixed(1)}%
