@@ -491,7 +491,9 @@ const UnifiedStrategyEngineDisplay: React.FC<Props> = ({
                 <div className="text-2xl font-bold text-orange-600">
                   {displayRecommendations.length}
                 </div>
-                <div className="text-sm text-gray-500">Active Strategies</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Active Strategies
+                </div>
               </div>
             </div>
           </CardContent>
