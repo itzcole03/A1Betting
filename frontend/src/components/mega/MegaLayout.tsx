@@ -765,54 +765,7 @@ export const MegaSidebar: React.FC<{
               marginBottom: "6px",
               pointerEvents: "auto",
             }}
-          >
-            <button
-              style={{
-                display: "flex",
-                alignItems: "center",
-                backdropFilter: "blur(20px) saturate(1.8)",
-                backgroundColor: "rgba(255, 255, 255, 0.03)",
-                borderColor: "rgba(0, 0, 0, 0)",
-                boxShadow: "rgba(0, 0, 0, 0.05) 0px 2px 8px 0px",
-                fontSize: "14px",
-                fontWeight: "600",
-                justifyContent: "flex-start",
-                letterSpacing: "-0.14px",
-                overflowX: "hidden",
-                overflowY: "hidden",
-                position: "relative",
-                width: "100%",
-                transform: "matrix(1, 0, 0, 1, 0, 0)",
-                pointerEvents: "auto",
-                padding: "14px 18px",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "600",
-                  minWidth: "18px",
-                  textShadow: "rgba(0, 0, 0, 0.2) 0px 1px 2px",
-                  pointerEvents: "auto",
-                }}
-              >
-                ⚙️
-              </span>
-              <div
-                style={{
-                  flexBasis: "0%",
-                  flexGrow: "1",
-                  fontWeight: "600",
-                  textAlign: "left",
-                  textShadow: "rgba(0, 0, 0, 0.2) 0px 1px 2px",
-                  pointerEvents: "auto",
-                  marginLeft: "14px",
-                }}
-              >
-                Settings
-              </div>
-            </button>
-          </div>
+          />
           <div
             style={{
               fontWeight: "400",
