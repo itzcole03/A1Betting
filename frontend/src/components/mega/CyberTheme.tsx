@@ -218,7 +218,7 @@ export const CyberButton: React.FC<{
           style={{
             marginRight: "12px",
             width: "16px",
-            color: active ? CYBER_COLORS.primary : CYBER_COLORS.text.muted,
+            color: active ? "#000" : CYBER_COLORS.text.muted,
           }}
         >
           {icon}
