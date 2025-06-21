@@ -62,7 +62,7 @@ const navigationItems = [
   {
     id: "moneymaker",
     label: "Money Maker",
-    icon: "���",
+    icon: "💰",
     component: UniversalMoneyMaker,
     isPremium: true,
   },
@@ -183,7 +183,11 @@ const AppContent: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <div
         className="quantum-app"
-        style={{ background: theme.colors.background }}
+        style={{
+          background:
+            theme?.colors?.background ||
+            "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%, #f8fafc 100%)",
+        }}
       >
         <MegaAppShell
           sidebar={sidebar}
