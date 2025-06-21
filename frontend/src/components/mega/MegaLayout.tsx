@@ -759,38 +759,65 @@ export const MegaSidebar: React.FC<{
 
       {/* Settings and Profile buttons outside navigation */}
       {!isCompact && (
-        <>
+        <div style={{ padding: "8px 16px 20px 16px" }}>
+          <div
+            style={{
+              height: "1px",
+              background:
+                "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent)",
+              marginBottom: "16px",
+            }}
+          />
+
           <button
             onClick={() => onNavigate("profile")}
             style={{
               display: "flex",
               alignItems: "center",
               width: "100%",
-              borderRadius: "12px",
-              padding: "12px 16px",
+              borderRadius: "14px",
+              padding: "14px 18px",
               fontSize: "14px",
-              fontWeight: "400",
-              marginBottom: "4px",
+              fontWeight: "500",
+              marginBottom: "8px",
               cursor: "pointer",
-              transition: "all 0.3s ease",
-              justifyContent: "space-between",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              background: "rgba(255, 255, 255, 0.05)",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              border: "1px solid transparent",
+              background: "rgba(255, 255, 255, 0.03)",
               color: "#e2e8f0",
               backdropFilter: "blur(20px) saturate(1.8)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.05)";
             }}
           >
-            <span style={{ fontSize: "16px", color: "#ffffff" }}>👤</span>
-            <div
+            <span
               style={{
-                flex: 1,
-                marginLeft: "8px",
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+                fontSize: "18px",
+                color: "#ffffff",
+                display: "flex",
+                alignItems: "center",
+                minWidth: "18px",
+              }}
+            >
+              👤
+            </span>
+            <span
+              style={{
+                marginLeft: "14px",
+                letterSpacing: "-0.01em",
               }}
             >
               Profile
-            </div>
+            </span>
           </button>
 
           <button
@@ -799,33 +826,50 @@ export const MegaSidebar: React.FC<{
               display: "flex",
               alignItems: "center",
               width: "100%",
-              borderRadius: "12px",
-              padding: "12px 16px",
+              borderRadius: "14px",
+              padding: "14px 18px",
               fontSize: "14px",
-              fontWeight: "400",
-              marginBottom: "4px",
+              fontWeight: "500",
               cursor: "pointer",
-              transition: "all 0.3s ease",
-              justifyContent: "space-between",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              background: "rgba(255, 255, 255, 0.05)",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              border: "1px solid transparent",
+              background: "rgba(255, 255, 255, 0.03)",
               color: "#e2e8f0",
               backdropFilter: "blur(20px) saturate(1.8)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.05)";
             }}
           >
-            <span style={{ fontSize: "16px", color: "#ffffff" }}>⚙️</span>
-            <div
+            <span
               style={{
-                flex: 1,
-                marginLeft: "8px",
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+                fontSize: "18px",
+                color: "#ffffff",
+                display: "flex",
+                alignItems: "center",
+                minWidth: "18px",
+              }}
+            >
+              ⚙️
+            </span>
+            <span
+              style={{
+                marginLeft: "14px",
+                letterSpacing: "-0.01em",
               }}
             >
               Settings
-            </div>
+            </span>
           </button>
-        </>
+        </div>
       )}
     </div>
   );
