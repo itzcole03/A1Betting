@@ -1,4 +1,3 @@
-
 /**
  * Represents the structure of data coming from a "Poe-like" source,
  * which might be an internal aggregation or a specific external API
@@ -45,6 +44,84 @@ export interface PoePropCardContent {
   lastUpdated: string;
 }
 
+export interface UserStats {
+  totalBets: number;
+  winRate: number;
+  totalWinnings: number;
+  avgOdds: number;
+  bestStreak: number;
+  currentStreak: number;
+  totalVolume: number;
+  roi: number;
+}
+
+export interface PerformanceData {
+  date: string;
+  winRate: number;
+  profit: number;
+  volume: number;
+  betsPlaced: number;
+}
+
+export interface Headline {
+  id: string;
+  title: string;
+  summary: string;
+  url: string;
+  source: string;
+  publishedAt: string;
+  category: string;
+  sentiment?: "positive" | "negative" | "neutral";
+}
+
+export interface Toast {
+  id: string;
+  type: "success" | "error" | "warning" | "info";
+  title?: string;
+  message: string;
+  duration?: number;
+  timestamp: number;
+}
+
+export interface BettingState {
+  activeBets: any[];
+  placeBet: (bet: any) => void;
+  updateActiveBet: (betId: string, updates: any) => void;
+  clearOpportunities: () => void;
+  opportunities: any[];
+}
+
+export interface MLState {
+  models: any[];
+  predictions: any[];
+  metrics: any;
+  isLoading: boolean;
+}
+
+export interface ModelMetrics {
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  auc: number;
+}
+
+export interface DriftAlert {
+  id: string;
+  modelId: string;
+  type: "data" | "concept" | "prediction";
+  severity: "low" | "medium" | "high";
+  message: string;
+  timestamp: number;
+}
+
+export interface RootState {
+  betting: BettingState;
+  ml: MLState;
+  ui: any;
+  websocket: any;
+}
+
 export interface PoeNewsFeedContent {
   articles: Array<{
     id: string;
@@ -60,15 +137,15 @@ export interface PoeNewsFeedContent {
 export interface PoeUserStatContent {
   statName: string; // e.g., 'Win Rate', 'Total Profit', 'ROI'
   value: string | number;
-  trend?: 'up' | 'down' | 'neutral';
+  trend?: "up" | "down" | "neutral";
   period?: string; // e.g., 'Last 7 Days'
 }
 
 // This file would be expanded based on the exact nature of the "Poe" data source
-// and how it's used by the poeToApiAdapter.ts 
+// and how it's used by the poeToApiAdapter.ts
 
 // --- Unified Betting Types Re-exports ---
-export type { PlayerProp, Opportunity, OddsUpdate } from './core.js';
-export type { Sport, PropType } from './common.js';
+export type { PlayerProp, Opportunity, OddsUpdate } from "./core.js";
+export type { Sport, PropType } from "./common.js";
 // If you need the OddsUpdate from webSocket.ts instead, add:
 // export type { OddsUpdate as WebSocketOddsUpdate } from './webSocket';
