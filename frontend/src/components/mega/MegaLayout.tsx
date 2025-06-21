@@ -661,8 +661,9 @@ export const MegaHeader: React.FC<{
                 width: "100%",
                 padding: "8px 16px 8px 40px",
                 borderRadius: "20px",
-                border: `1px solid ${safeTheme.colors.border}`,
-                backgroundColor: safeTheme.colors.surface,
+                border: `1px solid ${safeTheme.colors?.border || "rgba(15, 23, 42, 0.1)"}`,
+                backgroundColor:
+                  safeTheme.colors?.surface || "rgba(255, 255, 255, 0.8)",
                 backdropFilter: "blur(10px)",
                 color: safeTheme.colors?.text?.primary || "#0f172a",
                 fontSize: "14px",
