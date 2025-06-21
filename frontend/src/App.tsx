@@ -659,7 +659,7 @@ const Sidebar: React.FC = () => {
 
 // Page Components - Exact Prototype Match
 const Dashboard: React.FC = () => {
-  const { user } = useContext(AppContext);
+  const { user, setCurrentPage } = useContext(AppContext);
 
   return React.createElement(
     "div",
