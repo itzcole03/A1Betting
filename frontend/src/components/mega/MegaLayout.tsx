@@ -481,8 +481,6 @@ export const MegaHeader: React.FC<{
     name: string;
     avatar?: string;
   };
-  darkMode?: boolean;
-  onDarkModeToggle?: () => void;
   className?: string;
 }> = ({
   title,
@@ -494,8 +492,6 @@ export const MegaHeader: React.FC<{
   notifications = 0,
   onNotificationsClick,
   user,
-  darkMode = true,
-  onDarkModeToggle,
   className = "",
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
