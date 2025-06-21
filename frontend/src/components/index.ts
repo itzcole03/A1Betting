@@ -21,7 +21,6 @@ export { UniversalMoneyMaker } from "./moneymaker/UniversalMoneyMaker";
 export { default as UniversalMoneyMaker } from "./moneymaker/UniversalMoneyMaker";
 
 // Analytics Systems
-export { UniversalAnalytics } from "./analytics/UniversalAnalytics";
 export { default as UniversalAnalytics } from "./analytics/UniversalAnalytics";
 
 // Prediction Systems
