@@ -577,7 +577,30 @@ export const MegaHeader: React.FC<{
       {/* Right Section */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
         {/* Theme Toggle */}
-        <CyberThemeToggle variant="icon" showLabel={false} />
+        <button
+          onClick={() => {
+            const currentTheme = useTheme();
+            currentTheme.toggleDarkMode();
+          }}
+          style={{
+            background: theme.colors.surface,
+            border: `1px solid ${theme.colors.border}`,
+            color: theme.colors.text.primary,
+            fontWeight: "500",
+            padding: "8px",
+            fontSize: "12px",
+            borderRadius: "8px",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "40px",
+            height: "40px",
+          }}
+          title={`Switch to ${isDark ? "Light" : "Dark"} Mode`}
+        >
+          {isDark ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
 
         {/* Notifications */}
         {onNotificationsClick && (
