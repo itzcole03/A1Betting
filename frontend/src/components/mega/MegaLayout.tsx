@@ -768,6 +768,107 @@ export const MegaSidebar: React.FC<{
               marginBottom: "16px",
             }}
           />
+          <button
+            onClick={() => onNavigate("profile")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              borderRadius: "14px",
+              padding: "14px 18px",
+              fontSize: "14px",
+              fontWeight: "500",
+              marginBottom: "8px",
+              cursor: "pointer",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              border: "1px solid transparent",
+              background: "rgba(255, 255, 255, 0.03)",
+              color: "#e2e8f0",
+              backdropFilter: "blur(20px) saturate(1.8)",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.05)";
+            }}
+          >
+            <span
+              style={{
+                fontSize: "18px",
+                color: "#ffffff",
+                display: "flex",
+                alignItems: "center",
+                minWidth: "18px",
+              }}
+            >
+              👤
+            </span>
+            <span
+              style={{
+                marginLeft: "14px",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Profile
+            </span>
+          </button>
+          <button
+            onClick={() => onNavigate("settings")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              borderRadius: "14px",
+              padding: "14px 18px",
+              fontSize: "14px",
+              fontWeight: "500",
+              cursor: "pointer",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              border: "1px solid rgba(6, 255, 165, 0.3)",
+              background:
+                "linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(0, 255, 136, 0.9))",
+              color: "#000",
+              backdropFilter: "blur(20px) saturate(1.8)",
+              boxShadow:
+                "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-1px)";
+              e.currentTarget.style.boxShadow =
+                "0 12px 48px rgba(6, 255, 165, 0.35), 0 4px 16px rgba(0, 0, 0, 0.15)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow =
+                "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)";
+            }}
+          >
+            <span
+              style={{
+                fontSize: "18px",
+                color: "#000",
+                display: "flex",
+                alignItems: "center",
+                minWidth: "18px",
+              }}
+            >
+              ⚙️
+            </span>
+            <span
+              style={{
+                marginLeft: "14px",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Settings
+            </span>
+          </button>
         </div>
       )}
     </div>
