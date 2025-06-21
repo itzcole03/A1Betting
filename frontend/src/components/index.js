@@ -5,7 +5,13 @@
 export { UniversalDashboard } from "./dashboard/UniversalDashboard";
 export { default as UniversalDashboard } from "./dashboard/UniversalDashboard";
 // UI Components
-export { UniversalButton, CyberButton, BettingButton, GlowButton, PremiumButton, } from "./ui/UniversalButton";
+export {
+  UniversalButton,
+  CyberButton,
+  BettingButton,
+  GlowButton,
+  PremiumButton,
+} from "./ui/UniversalButton";
 export { default as UniversalButton } from "./ui/UniversalButton";
 // Money Maker Systems
 export { UniversalMoneyMaker } from "./moneymaker/UniversalMoneyMaker";
@@ -14,12 +20,25 @@ export { default as UniversalMoneyMaker } from "./moneymaker/UniversalMoneyMaker
 export { UniversalAnalytics } from "./analytics/UniversalAnalytics";
 export { default as UniversalAnalytics } from "./analytics/UniversalAnalytics";
 // Prediction Systems
-export { UniversalPredictions } from "./predictions/UniversalPredictions";
 export { default as UniversalPredictions } from "./predictions/UniversalPredictions";
 // Mega System Components
-export { MegaButton, MegaCard, MegaModal, MegaInput, MegaAlert, MegaSkeleton, } from "./mega/MegaUI";
+export {
+  MegaButton,
+  MegaCard,
+  MegaModal,
+  MegaInput,
+  MegaAlert,
+  MegaSkeleton,
+} from "./mega/MegaUI";
 export { MegaSidebar, MegaHeader, MegaAppShell } from "./mega/MegaLayout";
-export { CyberText, CyberContainer, CyberButton as MegaCyberButton, CYBER_COLORS, CYBER_GRADIENTS, CYBER_GLASS, } from "./mega/CyberTheme";
+export {
+  CyberText,
+  CyberContainer,
+  CyberButton as MegaCyberButton,
+  CYBER_COLORS,
+  CYBER_GRADIENTS,
+  CYBER_GLASS,
+} from "./mega/CyberTheme";
 // ============================================================================
 // LEGACY COMPATIBILITY EXPORTS (Deprecated - Use Universal equivalents)
 // ============================================================================
