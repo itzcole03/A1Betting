@@ -686,6 +686,7 @@ export const MegaHeader: React.FC<{
     name: string;
     avatar?: string;
   };
+  onNavigate?: (pageId: string) => void;
   className?: string;
 }> = ({
   title,
@@ -697,6 +698,7 @@ export const MegaHeader: React.FC<{
   notifications = 0,
   onNotificationsClick,
   user,
+  onNavigate,
   className = "",
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
