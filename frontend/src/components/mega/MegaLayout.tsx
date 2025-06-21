@@ -630,7 +630,7 @@ export const MegaHeader: React.FC<{
             style={{
               width: "32px",
               height: "32px",
-              background: CYBER_GRADIENTS.button,
+              background: theme.gradients.primary,
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
@@ -645,7 +645,7 @@ export const MegaHeader: React.FC<{
                 style={{ width: "100%", height: "100%", borderRadius: "50%" }}
               />
             ) : (
-              <User size={16} color="#000" />
+              <User size={16} color={isDark ? "#000" : "#fff"} />
             )}
           </div>
         )}
