@@ -190,18 +190,21 @@ const UserAvatarDropdown: React.FC<{
                 padding: "12px 16px",
                 background: "transparent",
                 border: "none",
-                borderRadius: "8px",
+                borderRadius: "12px",
                 cursor: "pointer",
                 fontSize: "14px",
-                color: "#0f172a",
+                color: "#ffffff",
                 transition: "all 0.2s ease",
                 textAlign: "left",
+                fontWeight: "500",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(6, 255, 165, 0.1)";
+                e.currentTarget.style.background = "rgba(6, 255, 165, 0.15)";
+                e.currentTarget.style.transform = "translateX(4px)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.transform = "translateX(0)";
               }}
             >
               <UserCircle
@@ -220,21 +223,27 @@ const UserAvatarDropdown: React.FC<{
                 padding: "12px 16px",
                 background: "transparent",
                 border: "none",
-                borderRadius: "8px",
+                borderRadius: "12px",
                 cursor: "pointer",
                 fontSize: "14px",
-                color: "#dc2626",
+                color: "#ff6b6b",
                 transition: "all 0.2s ease",
                 textAlign: "left",
+                fontWeight: "500",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(220, 38, 38, 0.1)";
+                e.currentTarget.style.background = "rgba(255, 107, 107, 0.15)";
+                e.currentTarget.style.transform = "translateX(4px)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.transform = "translateX(0)";
               }}
             >
-              <LogOut size={16} style={{ marginRight: "12px" }} />
+              <LogOut
+                size={16}
+                style={{ marginRight: "12px", color: "#ff6b6b" }}
+              />
               Sign Out
             </button>
           </div>,
