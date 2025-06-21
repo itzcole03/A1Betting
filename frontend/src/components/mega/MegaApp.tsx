@@ -142,20 +142,24 @@ const MegaApp: React.FC = () => {
   const renderCurrentPage = () => {
     const currentItem = navigationItems.find((item) => item.id === currentPage);
 
-    // Use actual MegaFeatures for enhanced functionality
+    // Handle components with direct implementations
+    if (currentItem?.component) {
+      const Component = currentItem.component;
+      return (
+        <Component
+          connectedSources={connectedSources}
+          dataQuality={dataQuality}
+          userBalance={user.balance}
+          userStats={user}
+          autoMode={true}
+          autoRefresh={true}
+          showAdvanced={true}
+        />
+      );
+    }
+
+    // Use MegaFeatures for enhanced functionality
     switch (currentPage) {
-      case "dashboard":
-        return (
-          <MegaDashboard
-            connectedSources={connectedSources}
-            dataQuality={dataQuality}
-            userStats={user}
-          />
-        );
-      case "money-maker":
-        return <MegaBetting userBalance={user.balance} autoMode={true} />;
-      case "analytics":
-        return <MegaAnalytics autoRefresh={true} showAdvanced={true} />;
       case "arbitrage":
         return (
           <div style={{ padding: "24px" }}>
