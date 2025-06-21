@@ -3,7 +3,6 @@
 // ============================================================================
 
 // Dashboard Components
-export { UniversalDashboard } from "./dashboard/UniversalDashboard";
 export { default as UniversalDashboard } from "./dashboard/UniversalDashboard";
 
 // UI Components
@@ -17,7 +16,6 @@ export {
 export { default as UniversalButton } from "./ui/UniversalButton";
 
 // Money Maker Systems
-export { UniversalMoneyMaker } from "./moneymaker/UniversalMoneyMaker";
 export { default as UniversalMoneyMaker } from "./moneymaker/UniversalMoneyMaker";
 
 // Analytics Systems
