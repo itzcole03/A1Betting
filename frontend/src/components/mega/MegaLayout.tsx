@@ -32,6 +32,185 @@ import {
 // MEGA LAYOUT SYSTEM - Consolidates 23 layout components
 
 // ============================================================================
+// USER AVATAR DROPDOWN COMPONENT
+// ============================================================================
+const UserAvatarDropdown: React.FC<{
+  user: { name: string; avatar?: string };
+  isDark?: boolean;
+}> = ({ user, isDark }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [dropdownRef, setDropdownRef] = useState<HTMLDivElement | null>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef && !dropdownRef.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  const handleAccountProfile = () => {
+    // Navigate to account & profile page
+    window.location.href = "/profile";
+    setIsOpen(false);
+  };
+
+  const handleSignOut = () => {
+    // Handle sign out
+    if (confirm("Are you sure you want to sign out?")) {
+      // Clear any stored auth data
+      localStorage.removeItem("authToken");
+      sessionStorage.clear();
+      // Redirect to login or home page
+      window.location.href = "/login";
+    }
+    setIsOpen(false);
+  };
+
+  return (
+    <div style={{ position: "relative" }} ref={setDropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          width: "32px",
+          height: "32px",
+          background: "linear-gradient(135deg, #06ffa5, #00ff88)",
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          border: "none",
+          transition: "all 0.2s ease",
+          transform: isOpen ? "scale(1.05)" : "scale(1)",
+        }}
+      >
+        {user.avatar ? (
+          <img
+            src={user.avatar}
+            alt={user.name}
+            style={{ width: "100%", height: "100%", borderRadius: "50%" }}
+          />
+        ) : (
+          <User size={16} color={isDark ? "#000" : "#fff"} />
+        )}
+      </button>
+
+      {/* Dropdown Menu */}
+      {isOpen && (
+        <div
+          style={{
+            position: "absolute",
+            top: "40px",
+            right: "0",
+            minWidth: "200px",
+            background: "rgba(255, 255, 255, 0.95)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            borderRadius: "12px",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+            zIndex: 1000,
+            padding: "8px",
+          }}
+        >
+          {/* User Info Header */}
+          <div
+            style={{
+              padding: "12px 16px",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+              marginBottom: "8px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "14px",
+                fontWeight: "600",
+                color: "#0f172a",
+                marginBottom: "2px",
+              }}
+            >
+              {user.name}
+            </div>
+            <div
+              style={{
+                fontSize: "12px",
+                color: "#64748b",
+              }}
+            >
+              Pro User
+            </div>
+          </div>
+
+          {/* Menu Items */}
+          <button
+            onClick={handleAccountProfile}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              padding: "12px 16px",
+              background: "transparent",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "14px",
+              color: "#0f172a",
+              transition: "all 0.2s ease",
+              textAlign: "left",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(6, 255, 165, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            <UserCircle
+              size={16}
+              style={{ marginRight: "12px", color: "#06ffa5" }}
+            />
+            Account & Profile
+          </button>
+
+          <button
+            onClick={handleSignOut}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              padding: "12px 16px",
+              background: "transparent",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "14px",
+              color: "#dc2626",
+              transition: "all 0.2s ease",
+              textAlign: "left",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(220, 38, 38, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            <LogOut size={16} style={{ marginRight: "12px" }} />
+            Sign Out
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================================
 // MEGA SIDEBAR (Consolidates CyberSidebar, AdvancedSidebar, Sidebar variants)
 // ============================================================================
 export const MegaSidebar: React.FC<{
