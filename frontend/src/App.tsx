@@ -561,10 +561,11 @@ const Sidebar: React.FC = () => {
     {
       className: "w-80 h-screen border-r",
       style: {
-        background: "rgba(255, 255, 255, 0.05)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        borderRight: "1px solid rgba(255, 255, 255, 0.1)",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+        background: "rgba(255, 255, 255, 0.02)",
+        backdropFilter: "blur(40px) saturate(200%)",
+        borderRight: "1px solid rgba(255, 255, 255, 0.05)",
+        boxShadow:
+          "0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05)",
       },
     },
     React.createElement("div", { className: "p-6" }, [
