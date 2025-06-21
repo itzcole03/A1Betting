@@ -72,6 +72,21 @@ const createThemeConfig = (
   variant: ThemeVariant,
   customColors?: Partial<ThemeColors>,
 ): ThemeConfig => {
+  // Validate variant first
+  const validVariants: ThemeVariant[] = [
+    "cyber-light",
+    "cyber-dark",
+    "standard",
+    "premium",
+    "minimal",
+  ];
+  if (!variant || !validVariants.includes(variant)) {
+    console.warn(
+      `Invalid theme variant "${variant}", falling back to "cyber-light"`,
+    );
+    variant = "cyber-light";
+  }
+
   const themes: Record<ThemeVariant, ThemeColors> = {
     // CYBER LIGHT MODE - Original cyber style but adapted for light background
     "cyber-light": {
