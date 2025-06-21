@@ -250,6 +250,9 @@ const AppContent: React.FC = () => {
 function App() {
   // Add global error handling for onClick and other DOM events
   useEffect(() => {
+    // Initialize MUI click patch to prevent onClick errors
+    initializeMUIClickPatch();
+
     const handleGlobalError = (event: ErrorEvent) => {
       if (event.error?.message?.includes("onClick is not a function")) {
         console.warn("onClick error caught and handled:", event.error);
