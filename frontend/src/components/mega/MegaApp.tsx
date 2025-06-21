@@ -5,9 +5,11 @@ import {
   CyberContainer,
   CyberText,
 } from "./CyberTheme";
-import MegaDashboard from "./MegaDashboard";
-import MegaBetting from "./MegaBetting";
-import MegaAnalytics from "./MegaAnalytics";
+import {
+  UniversalDashboard,
+  UniversalMoneyMaker,
+  UniversalAnalytics,
+} from "../index";
 import MegaAdminPanel from "./MegaAdminPanel";
 import MegaPrizePicks from "./MegaPrizePicks";
 import { MegaSidebar, MegaHeader, MegaAppShell } from "./MegaLayout";
