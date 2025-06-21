@@ -120,31 +120,34 @@ const MegaApp: React.FC = () => {
     const currentItem = navigationItems.find((item) => item.id === currentPage);
     if (!currentItem?.component) {
       return (
-        <CyberContainer
-          variant="card"
-          style={{ padding: "40px", textAlign: "center", margin: "24px" }}
-        >
-          <div style={{ marginBottom: "16px" }}>
-            {currentItem?.id === "real-time" && (
-              <Activity size={48} color={CYBER_COLORS.primary} />
-            )}
-            {currentItem?.id === "arbitrage" && (
-              <Shield size={48} color={CYBER_COLORS.secondary} />
-            )}
-            {currentItem?.id === "predictions" && (
-              <Brain size={48} color={CYBER_COLORS.accent} />
-            )}
-          </div>
-          <CyberText
-            variant="title"
-            style={{ marginBottom: "8px", fontSize: "24px" }}
+        <div style={{ padding: "24px" }}>
+          <MegaCard
+            variant="glass"
+            padding="lg"
+            style={{ textAlign: "center" }}
           >
-            {currentItem?.label}
-          </CyberText>
-          <CyberText variant="body" color="muted">
-            {currentItem?.description} - Coming Soon
-          </CyberText>
-        </CyberContainer>
+            <div style={{ marginBottom: "16px" }}>
+              {currentItem?.id === "real-time" && (
+                <Activity size={48} color={CYBER_COLORS.primary} />
+              )}
+              {currentItem?.id === "arbitrage" && (
+                <Shield size={48} color={CYBER_COLORS.secondary} />
+              )}
+              {currentItem?.id === "predictions" && (
+                <Brain size={48} color={CYBER_COLORS.accent} />
+              )}
+            </div>
+            <CyberText
+              variant="title"
+              style={{ marginBottom: "8px", fontSize: "24px" }}
+            >
+              {currentItem?.label}
+            </CyberText>
+            <CyberText variant="body" color="muted">
+              {currentItem?.description} - Coming Soon
+            </CyberText>
+          </MegaCard>
+        </div>
       );
     }
 
