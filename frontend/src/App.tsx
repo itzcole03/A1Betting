@@ -1237,7 +1237,7 @@ const FinalApp: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AppContextProvider>
-          <AppContent />
+          <App />
         </AppContextProvider>
       </BrowserRouter>
     </QueryClientProvider>
