@@ -827,7 +827,7 @@ ThemedText
 
         {/* Model Consensus */}
         <div>
-          <CyberText variant="caption" color="secondary" className="mb-2">
+            <ThemedText variant="caption" color="secondary" className="mb-2">
             Model Consensus ({prediction.modelPredictions.length} models)
           </ThemedText>
           <div className="space-y-1">
