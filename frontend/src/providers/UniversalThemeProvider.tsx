@@ -259,8 +259,18 @@ export const UniversalThemeProvider: React.FC<UniversalThemeProviderProps> = ({
   };
 
   const toggleDarkMode = () => {
-    const newVariant = isDark ? "light" : "dark";
-    setVariant(newVariant);
+    // If we're in cyber theme, create a light version of cyber
+    if (variant === "cyber") {
+      const newVariant = "light";
+      setVariant(newVariant);
+    } else if (variant === "light") {
+      const newVariant = "cyber";
+      setVariant(newVariant);
+    } else {
+      // For other themes, toggle between dark and light
+      const newVariant = isDark ? "light" : "dark";
+      setVariant(newVariant);
+    }
   };
 
   // Apply theme to document
