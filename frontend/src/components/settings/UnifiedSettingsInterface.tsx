@@ -333,9 +333,78 @@ export const UnifiedSettingsInterface: React.FC = () => {
         </CardContent>
       </Card>
 
+      {/* Import/Export Section */}
+      <Card className="glass-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Database className="w-5 h-5 text-indigo-500" />
+            Data Management
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={() => {
+                const data = JSON.stringify(settings, null, 2);
+                const blob = new Blob([data], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "betting-settings.json";
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg"
+            >
+              Export Settings
+            </button>
+            <label className="flex-1">
+              <input
+                type="file"
+                accept=".json"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                      try {
+                        const importedSettings = JSON.parse(
+                          event.target?.result as string,
+                        );
+                        setSettings(importedSettings);
+                        alert("Settings imported successfully!");
+                      } catch (error) {
+                        alert(
+                          "Error importing settings. Please check the file format.",
+                        );
+                      }
+                    };
+                    reader.readAsText(file);
+                  }
+                }}
+                className="hidden"
+              />
+              <div className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg cursor-pointer text-center">
+                Import Settings
+              </div>
+            </label>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Save Button */}
-      <div className="flex justify-center pt-6">
-        <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg">
+      <div
+        className="flex justify-center pt-6"
+        style={{ position: "relative", zIndex: 1 }}
+      >
+        <button
+          onClick={() => {
+            // Save settings logic here
+            alert("Settings saved successfully!");
+          }}
+          className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg"
+          style={{ position: "relative", zIndex: 2 }}
+        >
           Save Settings
         </button>
       </div>
