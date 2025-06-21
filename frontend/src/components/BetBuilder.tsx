@@ -87,7 +87,7 @@ export const BetBuilder: React.FC = () => {
   const handleSubmit = async () => {
     setError(null);
     setSuccess(null);
-    if (selectedProps.length < 2) {
+    if (selectedPropObjects.length < 2) {
       setError("You must select at least 2 picks.");
       return;
     }
