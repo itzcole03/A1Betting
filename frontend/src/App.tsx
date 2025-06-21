@@ -24,6 +24,7 @@ import { CYBER_COLORS } from "./components/mega/CyberTheme.tsx";
 // Import styling
 import "./App.css";
 import "./styles/enhanced-cyber-theme.css";
+import "./styles/cyber-theme-override.css";
 import "./styles/global-cyber-theme.css";
 import "./styles/cyber-theme.css";
 import "./styles/prototype-override.css";
