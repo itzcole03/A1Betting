@@ -115,14 +115,19 @@ const settingsSections: SettingsSection[] = [
 
 export const UltimateSettingsPage: React.FC = () => {
   const { theme, isDark, toggleDarkMode, variant: themeVariant } = useTheme();
-  const { settings: bettingSettings, updateSettings: updateBettingSettings } =
-    useBettingSettings();
-  const { settings: appSettings, updateSettings: updateAppSettings } =
-    useSettings();
+  const {
+    settings,
+    updateSetting,
+    updateSection,
+    saveSettings,
+    resetSection,
+    exportSettings,
+    importSettings,
+    isLoading,
+    hasUnsavedChanges,
+  } = useUltimateSettings();
 
   const [activeSection, setActiveSection] = useState("account");
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   // Consolidated settings state
