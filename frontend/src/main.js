@@ -1,19 +1,15 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx } from "react/jsx-runtime";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
-import { Toaster } from "react-hot-toast";
-import App from "./App";
-import { AppInitializer } from "./components/AppInitializer";
-// Import styles
+import App from "./App.tsx";
+// Import styles exactly like the prototype
 import "./index.css";
-import "./styles/globals.css";
-console.log("🚀 A1Betting Platform Loading - Unified Dashboard Mode");
-const queryClient = new QueryClient();
-const theme = createTheme();
+import "./styles/prototype-override.css";
+import "./styles/force-prototype.css";
+import "./styles/enhanced-animations.css";
+console.log("🚀 A1Betting Platform Loading - Prototype Match Mode");
 const rootElement = document.getElementById("root");
 if (!rootElement)
     throw new Error("Failed to find the root element");
 const root = ReactDOM.createRoot(rootElement);
-root.render(_jsx(React.StrictMode, { children: _jsx(QueryClientProvider, { client: queryClient, children: _jsxs(ThemeProvider, { theme: theme, children: [_jsx(CssBaseline, {}), _jsx(AppInitializer, { children: _jsx(App, {}) }), _jsx(Toaster, { position: "top-right" })] }) }) }));
+root.render(_jsx(React.StrictMode, { children: _jsx(App, {}) }));
