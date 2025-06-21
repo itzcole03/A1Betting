@@ -91,12 +91,14 @@ export class UnifiedAnalyticsService extends BaseService {
         Promise.resolve(bets),
         Promise.resolve(predictions),
       ]);
-      const totalBets = bets.length;
-      const activeBets = bets.filter((bet) => bet.status === "active").length;
-      const winRate = this.calculateWinRate(bets);
-      const profitLoss = this.calculateProfitLoss(bets);
-      const roi = this.calculateROI(bets);
-      const { bestStreak, currentStreak } = this.calculateStreaks(bets);
+      const totalBets = betsData.length;
+      const activeBets = betsData.filter(
+        (bet) => bet.status === "active",
+      ).length;
+      const winRate = this.calculateWinRate(betsData);
+      const profitLoss = this.calculateProfitLoss(betsData);
+      const roi = this.calculateROI(betsData);
+      const { bestStreak, currentStreak } = this.calculateStreaks(betsData);
       const averageOdds = this.calculateAverageOdds(bets);
       const averageStake = this.calculateAverageStake(bets);
       const totalPredictions = predictions.length;
