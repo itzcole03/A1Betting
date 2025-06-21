@@ -585,9 +585,9 @@ export const MegaHeader: React.FC<{
             <button
               onClick={onNotificationsClick}
               style={{
-                background: "rgba(6, 255, 165, 0.1)",
-                border: "1px solid rgba(6, 255, 165, 0.8)",
-                color: CYBER_COLORS.primary,
+                background: `rgba(6, 255, 165, 0.1)`,
+                border: `1px solid ${theme.colors.primary}`,
+                color: theme.colors.primary,
                 fontWeight: "500",
                 padding: "6px 12px",
                 fontSize: "12px",
@@ -606,7 +606,7 @@ export const MegaHeader: React.FC<{
                   position: "absolute",
                   top: "4px",
                   right: "4px",
-                  background: CYBER_COLORS.primary,
+                  background: theme.colors.primary,
                   color: "#000",
                   borderRadius: "50%",
                   width: "16px",
