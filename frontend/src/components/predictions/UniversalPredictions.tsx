@@ -178,6 +178,9 @@ export interface PredictionState {
 // ============================================================================
 
 export const UniversalPredictions: React.FC = () => {
+  // Theme
+  const { theme, isDark } = useTheme();
+
   // State
   const [state, setState] = useState<PredictionState>({
     isLoading: false,
