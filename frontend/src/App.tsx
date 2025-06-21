@@ -16,6 +16,7 @@ import {
 } from "./components";
 import ThemeDemo from "./components/ThemeDemo";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { initializeMUIClickPatch } from "./utils/muiClickPatch";
 
 // Import the Mega system for theme consistency
 import { CYBER_COLORS } from "./components/mega/CyberTheme.tsx";
