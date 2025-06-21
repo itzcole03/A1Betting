@@ -122,7 +122,9 @@ export const MegaSidebar: React.FC<{
         transition: "all 0.3s ease",
         ...CYBER_GLASS.panel,
         borderRight:
-          variant !== "floating" ? `1px solid ${CYBER_COLORS.border}` : "none",
+          variant !== "floating"
+            ? `1px solid rgba(255, 255, 255, 0.1)`
+            : "none",
         borderRadius: variant === "floating" ? "0 16px 16px 0" : "0",
         display: "flex",
         flexDirection: "column",
