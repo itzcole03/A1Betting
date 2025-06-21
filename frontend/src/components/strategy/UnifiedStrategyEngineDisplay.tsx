@@ -304,7 +304,7 @@ const StrategyCard: React.FC<{
               animate={{ opacity: 1, height: "auto" }}
               className="border-t border-gray-200 dark:border-gray-700 pt-3 space-y-2"
             >
-              <div className="text-xs font-medium text-gray-500 mb-2">
+              <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
                 Advanced Metrics:
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs">
