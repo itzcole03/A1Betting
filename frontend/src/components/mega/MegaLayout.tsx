@@ -327,7 +327,7 @@ export const MegaSidebar: React.FC<{
                   background: isActive
                     ? "linear-gradient(135deg, rgba(6, 255, 165, 0.9), rgba(0, 255, 136, 0.8))"
                     : "rgba(255, 255, 255, 0.05)",
-                  color: isActive ? "#000" : CYBER_COLORS.text.secondary,
+                  color: isActive ? "#000" : "#e2e8f0",
                   backdropFilter: "blur(20px) saturate(1.8)",
                   ...(isActive
                     ? {
