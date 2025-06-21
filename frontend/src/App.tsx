@@ -1,11 +1,5 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Import existing components to integrate
@@ -512,13 +506,7 @@ const Sidebar: React.FC = () => {
   const location = useLocation();
 
   const navigation = [
-    {
-      name: "Dashboard",
-      key: "dashboard",
-      icon: "fa-home",
-      category: "main",
-      path: "/",
-    },
+    { name: "Dashboard", key: "dashboard", icon: "fa-home", category: "main", path: "/" },
     {
       name: "Premium Dashboard",
       key: "premium-dashboard",
@@ -540,13 +528,7 @@ const Sidebar: React.FC = () => {
       category: "main",
       path: "/prizepicks",
     },
-    {
-      name: "ML Center",
-      key: "ml-center",
-      icon: "fa-brain",
-      category: "ai",
-      path: "/ml-center",
-    },
+    { name: "ML Center", key: "ml-center", icon: "fa-brain", category: "ai", path: "/ml-center" },
     {
       name: "Quantum Predictions",
       key: "quantum",
@@ -568,13 +550,7 @@ const Sidebar: React.FC = () => {
       category: "insights",
       path: "/realtime",
     },
-    {
-      name: "Settings",
-      key: "settings",
-      icon: "fa-cog",
-      category: "account",
-      path: "/settings",
-    },
+    { name: "Settings", key: "settings", icon: "fa-cog", category: "account", path: "/settings" },
   ];
 
   const categories: any = {
@@ -641,17 +617,17 @@ const Sidebar: React.FC = () => {
                   "li",
                   { key: item.key },
                   React.createElement(
-                    "button",
-                    {
-                      onClick: () => setCurrentPage(item.key),
-                      className: `nav-item w-full flex items-center px-4 py-3 text-left text-sm font-medium transition-all duration-300 ${
-                        currentPage === item.key
+                    <button
+                      onClick={() => navigate(item.path)}
+                      className={`nav-item w-full flex items-center px-4 py-3 text-left text-sm font-medium transition-all duration-300 ${
+                        location.pathname === item.path
                           ? "active text-electric-400"
                           : "text-gray-300 hover:text-white"
-                      }`,
-                      style: {
+                      }`}
+                      style={{
                         borderRadius: "12px",
                         marginBottom: "4px",
+                        ...(location.pathname === item.path
                         ...(currentPage === item.key
                           ? {
                               background: "rgba(0,255,136,0.2)",
