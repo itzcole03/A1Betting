@@ -663,7 +663,7 @@ export const MegaHeader: React.FC<{
                 border: `1px solid ${safeTheme.colors.border}`,
                 backgroundColor: safeTheme.colors.surface,
                 backdropFilter: "blur(10px)",
-                color: safeTheme.colors.text.primary,
+                color: safeTheme.colors?.text?.primary || "#0f172a",
                 fontSize: "14px",
                 outline: "none",
               }}
