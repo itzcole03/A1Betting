@@ -212,7 +212,9 @@ const StrategyCard: React.FC<{
               >
                 {(confidence * 100).toFixed(0)}%
               </div>
-              <div className="text-xs text-gray-500">Confidence</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">
+                Confidence
+              </div>
             </div>
           </div>
         </CardHeader>
