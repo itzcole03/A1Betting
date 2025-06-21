@@ -390,6 +390,41 @@ textarea:focus {
   height: 4px;
 }
 
+/* Button Variant Styling for Better Visibility */
+.mega-button[style*="background"] {
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.mega-button[style*="transparent"] {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(6, 255, 165, 0.8) !important;
+  color: #ffffff !important;
+}
+
+/* Secondary button improvements */
+.mega-button:not([style*="gradient"]) {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+/* Primary/active button improvements */
+.mega-button[style*="gradient"] {
+  color: #000 !important;
+  font-weight: 600 !important;
+}
+
+/* Hover states for better feedback */
+.mega-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.cyber-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
 /* Responsive Utilities */
 @media (max-width: 768px) {
   .glass-card {
@@ -399,5 +434,10 @@ textarea:focus {
   .cyber-btn {
     font-size: 14px;
     padding: 12px 24px;
+  }
+
+  .mega-button {
+    font-size: 14px;
+    padding: 10px 16px;
   }
 }
