@@ -1,9 +1,9 @@
 // MEGA COMPONENTS INDEX - Consolidated components with cyber theme
-export { default as MegaApp } from "./MegaApp";
-export { default as MegaDashboard } from "./MegaDashboard";
-export { default as MegaBetting } from "./MegaBetting";
-export { default as MegaAnalytics } from "./MegaAnalytics";
-export {
+import MegaAppComponent from "./MegaApp";
+import MegaDashboardComponent from "./MegaDashboard";
+import MegaBettingComponent from "./MegaBetting";
+import MegaAnalyticsComponent from "./MegaAnalytics";
+import {
   CYBER_COLORS,
   CYBER_GRADIENTS,
   CYBER_GLASS,
@@ -12,6 +12,20 @@ export {
   CyberText,
   CyberButton,
 } from "./CyberTheme";
+
+export { MegaAppComponent as MegaApp };
+export { MegaDashboardComponent as MegaDashboard };
+export { MegaBettingComponent as MegaBetting };
+export { MegaAnalyticsComponent as MegaAnalytics };
+export {
+  CYBER_COLORS,
+  CYBER_GRADIENTS,
+  CYBER_GLASS,
+  CYBER_ANIMATIONS,
+  CyberContainer,
+  CyberText,
+  CyberButton,
+};
 
 // Legacy component deprecation notice
 console.warn(`
@@ -23,10 +37,10 @@ console.warn(`
 `);
 
 export default {
-  MegaApp,
-  MegaDashboard,
-  MegaBetting,
-  MegaAnalytics,
+  MegaApp: MegaAppComponent,
+  MegaDashboard: MegaDashboardComponent,
+  MegaBetting: MegaBettingComponent,
+  MegaAnalytics: MegaAnalyticsComponent,
   CyberTheme: {
     CYBER_COLORS,
     CYBER_GRADIENTS,
