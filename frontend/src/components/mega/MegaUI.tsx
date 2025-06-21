@@ -124,14 +124,39 @@ export const MegaButton: React.FC<{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: "8px",
-        borderRadius: "8px",
+        gap: "10px",
+        borderRadius: "12px",
         cursor: disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.5 : 1,
-        transition: "all 0.3s ease",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         width: fullWidth ? "100%" : "auto",
+        position: "relative",
+        overflow: "hidden",
+        letterSpacing: "-0.01em",
         ...getVariantStyle(),
         ...getSizeStyle(),
+      }}
+      onMouseEnter={(e) => {
+        if (!disabled && !loading) {
+          e.currentTarget.style.transform = "translateY(-2px)";
+          if (variant === "primary") {
+            e.currentTarget.style.boxShadow =
+              "0 12px 48px rgba(6, 255, 165, 0.4), 0 4px 16px rgba(0, 0, 0, 0.2)";
+          } else if (variant === "secondary") {
+            e.currentTarget.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.2)";
+            e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+          } else if (variant === "ghost") {
+            e.currentTarget.style.background = "rgba(6, 255, 165, 0.15)";
+          }
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!disabled && !loading) {
+          e.currentTarget.style.transform = "translateY(0)";
+          const originalStyle = getVariantStyle();
+          e.currentTarget.style.boxShadow = originalStyle.boxShadow || "none";
+          e.currentTarget.style.background = originalStyle.background;
+        }
       }}
     >
       {loading && (
