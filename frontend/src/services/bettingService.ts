@@ -53,7 +53,7 @@ export const useOdds = (eventId: string) => {
       return data;
     },
     enabled: !!eventId,
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: false, // Disable auto-refresh to prevent errors
   });
 };
 
