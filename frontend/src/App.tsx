@@ -238,9 +238,9 @@ const AppContent: React.FC = () => {
         </div>
 
         {/* Main content */}
-        <main className="p-6">
+        <main className="p-8">
           <ErrorBoundary>
-            {state.currentSection === "dashboard" && <HomePage />}
+            <CyberDashboard currentPage={state.currentSection} />
             {state.currentSection === "realdata" && (
               <UnifiedDashboard
                 currentSection={state.currentSection}
