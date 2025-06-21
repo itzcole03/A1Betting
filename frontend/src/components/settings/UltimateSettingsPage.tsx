@@ -386,7 +386,18 @@ export const UltimateSettingsPage: React.FC = () => {
                 onChange={(e) =>
                   updateSetting("account", "email", e.target.value)
                 }
-                className="w-full px-3 py-2 border rounded-lg bg-background"
+                className="w-full border rounded-xl bg-background transition-all duration-300 focus:ring-2 focus:ring-cyan-500/50"
+                style={{
+                  padding: "14px 18px",
+                  backgroundColor: "rgba(255, 255, 255, 0.04)",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  borderRadius: "12px",
+                  color: "#ffffff",
+                  fontSize: "15px",
+                  fontWeight: "500",
+                  backdropFilter: "blur(20px) saturate(180%)",
+                  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.05)",
+                }}
               />
             </div>
             <div>
