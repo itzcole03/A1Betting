@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useBettingAnalytics } from '../hooks/useBettingAnalytics';
-import { useSmartAlerts } from '../hooks/useSmartAlerts';
-import { BettingOpportunity } from '../services/bettingStrategy';
-import { PredictionResult } from '../services/predictionService';
-import { Card } from './base/Card';
-import { Progress } from './base/Progress';
-import { Badge } from './base/Badge';
-import { Alert } from './base/Alert';
-import { Skeleton } from './base/Skeleton';
-import { Table } from './base/Table';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useBettingAnalytics } from "../hooks/useBettingAnalytics";
+import { useSmartAlerts } from "../hooks/useSmartAlerts";
+import { BettingOpportunity } from "../services/bettingStrategy";
+import { PredictionResult } from "../services/predictionService";
+import { Card } from "./base/Card";
+import { Progress } from "./base/Progress";
+import { Badge } from "./base/Badge";
+import { Alert } from "./base/Alert";
+import { Skeleton } from "./base/Skeleton";
+import { Table } from "./base/Table";
 
 interface BettingAnalyticsProps {
   onOpportunitySelect?: (opportunity: BettingOpportunity) => void;
@@ -22,46 +22,48 @@ interface PredictionFactor {
 }
 
 export const BettingAnalytics: React.FC<BettingAnalyticsProps> = ({
-  onOpportunitySelect
+  onOpportunitySelect,
 }) => {
-  const [selectedSport, setSelectedSport] = useState<string>('all');
+  const [selectedSport, setSelectedSport] = useState<string>("all");
   const [confidenceThreshold, setConfidenceThreshold] = useState(0.7);
-  const [sortField, setSortField] = useState<string>('confidence');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [sortField, setSortField] = useState<string>("confidence");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 
-  const {
-    opportunities,
-    predictions,
-    performance,
-    isLoading,
-    error
-  } = useBettingAnalytics({
-    minConfidence: confidenceThreshold,
-    autoRefresh: true,
-    refreshInterval: 30000
-  });
+  const { opportunities, predictions, performance, isLoading, error } =
+    useBettingAnalytics({
+      minConfidence: confidenceThreshold,
+      autoRefresh: true,
+      refreshInterval: 30000,
+    });
 
   const { alerts } = useSmartAlerts({
-    wsEndpoint: import.meta.env.VITE_WS_ENDPOINT || '',
-    enabledTypes: ['LINE_MOVEMENT', 'INJURY', 'WEATHER'],
-    minSeverity: 'medium'
+    wsEndpoint: import.meta.env.VITE_WS_ENDPOINT || "",
+    enabledTypes: ["LINE_MOVEMENT", "INJURY", "WEATHER"],
+    minSeverity: "medium",
   });
 
   const filteredOpportunities = useMemo(() => {
     return opportunities
-      .filter(opp => selectedSport === 'all' || opp.sport === selectedSport)
+      .filter((opp) => selectedSport === "all" || opp.sport === selectedSport)
       .sort((a, b) => {
         const aValue = a[sortField as keyof BettingOpportunity];
         const bValue = b[sortField as keyof BettingOpportunity];
-        return sortDirection === 'asc' 
-          ? (aValue > bValue ? 1 : -1)
-          : (bValue > aValue ? 1 : -1);
+        return sortDirection === "asc"
+          ? aValue > bValue
+            ? 1
+            : -1
+          : bValue > aValue
+            ? 1
+            : -1;
       });
   }, [opportunities, selectedSport, sortField, sortDirection]);
 
-  const handleOpportunityClick = useCallback((opportunity: BettingOpportunity) => {
-    onOpportunitySelect?.(opportunity);
-  }, [onOpportunitySelect]);
+  const handleOpportunityClick = useCallback(
+    (opportunity: BettingOpportunity) => {
+      onOpportunitySelect?.(opportunity);
+    },
+    [onOpportunitySelect],
+  );
 
   const renderPerformanceMetrics = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -73,16 +75,16 @@ export const BettingAnalytics: React.FC<BettingAnalyticsProps> = ({
               {(performance.winRate * 100).toFixed(1)}%
             </span>
             <Badge
-              variant={performance.winRate >= 0.55 ? 'success' : 'warning'}
+              variant={performance.winRate >= 0.55 ? "success" : "warning"}
               className="ml-2"
             >
-              {performance.winRate >= 0.55 ? 'Profitable' : 'Monitor'}
+              {performance.winRate >= 0.55 ? "Profitable" : "Monitor"}
             </Badge>
           </div>
           <Progress
             value={performance.winRate * 100}
             max={100}
-            variant={performance.winRate >= 0.55 ? 'success' : 'warning'}
+            variant={performance.winRate >= 0.55 ? "success" : "warning"}
             className="mt-2"
           />
         </div>
@@ -96,16 +98,16 @@ export const BettingAnalytics: React.FC<BettingAnalyticsProps> = ({
               {(performance.roi * 100).toFixed(1)}%
             </span>
             <Badge
-              variant={performance.roi > 0 ? 'success' : 'danger'}
+              variant={performance.roi > 0 ? "success" : "danger"}
               className="ml-2"
             >
-              {performance.roi > 0 ? 'Positive' : 'Negative'}
+              {performance.roi > 0 ? "Positive" : "Negative"}
             </Badge>
           </div>
           <Progress
             value={Math.min(Math.max(performance.roi * 100, 0), 100)}
             max={100}
-            variant={performance.roi > 0 ? 'success' : 'danger'}
+            variant={performance.roi > 0 ? "success" : "danger"}
             className="mt-2"
           />
         </div>
@@ -119,16 +121,16 @@ export const BettingAnalytics: React.FC<BettingAnalyticsProps> = ({
               {(performance.edgeRetention * 100).toFixed(1)}%
             </span>
             <Badge
-              variant={performance.edgeRetention >= 0.7 ? 'success' : 'warning'}
+              variant={performance.edgeRetention >= 0.7 ? "success" : "warning"}
               className="ml-2"
             >
-              {performance.edgeRetention >= 0.7 ? 'Strong' : 'Weak'}
+              {performance.edgeRetention >= 0.7 ? "Strong" : "Weak"}
             </Badge>
           </div>
           <Progress
             value={performance.edgeRetention * 100}
             max={100}
-            variant={performance.edgeRetention >= 0.7 ? 'success' : 'warning'}
+            variant={performance.edgeRetention >= 0.7 ? "success" : "warning"}
             className="mt-2"
           />
         </div>
@@ -164,7 +166,7 @@ export const BettingAnalytics: React.FC<BettingAnalyticsProps> = ({
             <h2 className="text-lg font-semibold">Betting Opportunities</h2>
             <div className="flex space-x-2">
               <select
-                className="form-select"
+                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 value={selectedSport}
                 onChange={(e) => setSelectedSport(e.target.value)}
               >
@@ -191,14 +193,14 @@ export const BettingAnalytics: React.FC<BettingAnalyticsProps> = ({
             {alerts.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
+                animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 className="mb-4"
               >
                 <Alert
                   type="warning"
                   title="Active Alerts"
-                  message={`${alerts.length} alert${alerts.length === 1 ? '' : 's'} require your attention`}
+                  message={`${alerts.length} alert${alerts.length === 1 ? "" : "s"} require your attention`}
                 />
               </motion.div>
             )}
@@ -208,52 +210,53 @@ export const BettingAnalytics: React.FC<BettingAnalyticsProps> = ({
             data={filteredOpportunities}
             columns={[
               {
-                key: 'sport',
-                title: 'Sport',
-                render: (value) => (
-                  <Badge variant="default">{value}</Badge>
-                )
+                key: "sport",
+                title: "Sport",
+                render: (value) => <Badge variant="default">{value}</Badge>,
               },
               {
-                key: 'description',
-                title: 'Opportunity',
+                key: "description",
+                title: "Opportunity",
                 render: (value, item) => (
                   <div className="flex items-center">
                     <span>{value}</span>
-                    {alerts.some(alert => 
-                      alert.metadata.gameId === item.gameId
+                    {alerts.some(
+                      (alert) => alert.metadata.gameId === item.gameId,
                     ) && (
                       <Badge variant="warning" className="ml-2">
                         Alert
                       </Badge>
                     )}
                   </div>
-                )
+                ),
               },
               {
-                key: 'confidence',
-                title: 'Confidence',
+                key: "confidence",
+                title: "Confidence",
                 render: (value) => (
                   <div className="w-32">
                     <Progress
                       value={value * 100}
                       max={100}
-                      variant={value >= 0.8 ? 'success' : 'warning'}
+                      variant={value >= 0.8 ? "success" : "warning"}
                       showValue
                       size="sm"
                     />
                   </div>
-                )
+                ),
               },
               {
-                key: 'expectedValue',
-                title: 'Expected Value',
+                key: "expectedValue",
+                title: "Expected Value",
                 render: (value) => (
-                  <span className={value > 0 ? 'text-green-600' : 'text-red-600'}>
-                    {value > 0 ? '+' : ''}{(value * 100).toFixed(1)}%
+                  <span
+                    className={value > 0 ? "text-green-600" : "text-red-600"}
+                  >
+                    {value > 0 ? "+" : ""}
+                    {(value * 100).toFixed(1)}%
                   </span>
-                )
-              }
+                ),
+              },
             ]}
             onRowClick={handleOpportunityClick}
             emptyMessage="No opportunities match your criteria"
@@ -261,10 +264,10 @@ export const BettingAnalytics: React.FC<BettingAnalyticsProps> = ({
             sortDirection={sortDirection}
             onSort={(key) => {
               if (key === sortField) {
-                setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+                setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
               } else {
                 setSortField(key);
-                setSortDirection('desc');
+                setSortDirection("desc");
               }
             }}
           />
@@ -272,4 +275,4 @@ export const BettingAnalytics: React.FC<BettingAnalyticsProps> = ({
       </Card>
     </div>
   );
-}; 
+};
