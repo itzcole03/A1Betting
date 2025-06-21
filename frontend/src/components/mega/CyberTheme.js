@@ -44,16 +44,17 @@ export const CYBER_GLASS = {
     active: {
       backdropFilter: "blur(10px)",
       backgroundImage:
-        "linear-gradient(135deg, rgba(6, 255, 165, 0.8), rgba(0, 255, 136, 0.6))",
-      border: "1px solid rgba(6, 255, 165, 0.3)",
+        "linear-gradient(135deg, rgba(6, 255, 165, 0.9), rgba(0, 255, 136, 0.7))",
+      border: "1px solid rgba(6, 255, 165, 0.5)",
       boxShadow:
         "0 4px 20px rgba(6, 255, 165, 0.4), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
     },
     inactive: {
       backdropFilter: "blur(20px) saturate(1.8)",
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
-      border: "1px solid rgba(255, 255, 255, 0.1)",
-      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+      backgroundColor: "rgba(255, 255, 255, 0.08)",
+      border: "1px solid rgba(255, 255, 255, 0.15)",
+      boxShadow:
+        "0 8px 32px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255, 255, 255, 0.05) inset",
     },
   },
 };
