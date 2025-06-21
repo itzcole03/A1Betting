@@ -42,20 +42,43 @@ const UserAvatarDropdown: React.FC<{
 }> = ({ user, isDark, onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownRef, setDropdownRef] = useState<HTMLDivElement | null>(null);
+  const [buttonRef, setButtonRef] = useState<HTMLButtonElement | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    right: 0,
+  });
+
+  // Calculate dropdown position based on button position
+  useEffect(() => {
+    if (isOpen && buttonRef) {
+      const rect = buttonRef.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + 8,
+        right: window.innerWidth - rect.right,
+      });
+    }
+  }, [isOpen, buttonRef]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef && !dropdownRef.contains(event.target as Node)) {
+      if (
+        dropdownRef &&
+        !dropdownRef.contains(event.target as Node) &&
+        buttonRef &&
+        !buttonRef.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownRef]);
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [dropdownRef, buttonRef, isOpen]);
 
   const handleAccountProfile = () => {
     // Navigate to profile page using app navigation
