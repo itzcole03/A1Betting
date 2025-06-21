@@ -490,10 +490,23 @@ export const MegaHeader: React.FC<{
   className = "",
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { theme, isDark, toggleDarkMode } = useTheme();
 
-  // Fallback theme in case theme context is not available
-  const safeTheme = theme || {
+  // Use try-catch to handle any theme access errors
+  let theme, isDark, toggleDarkMode;
+  try {
+    const themeContext = useTheme();
+    theme = themeContext.theme;
+    isDark = themeContext.isDark;
+    toggleDarkMode = themeContext.toggleDarkMode;
+  } catch (error) {
+    console.warn("Theme context error in MegaHeader, using fallback:", error);
+    theme = null;
+    isDark = false;
+    toggleDarkMode = () => console.warn("Theme toggle not available");
+  }
+
+  // Comprehensive fallback theme
+  const defaultTheme = {
     colors: {
       surface: "rgba(255, 255, 255, 0.8)",
       border: "rgba(15, 23, 42, 0.1)",
@@ -507,7 +520,13 @@ export const MegaHeader: React.FC<{
     effects: {
       shadow: "0 8px 32px rgba(15, 23, 42, 0.1)",
     },
+    gradients: {
+      primary: "linear-gradient(135deg, #06ffa5, #00ff88)",
+    },
   };
+
+  // Ensure we always have a complete theme object
+  const safeTheme = theme?.colors ? theme : defaultTheme;
 
   return (
     <header
