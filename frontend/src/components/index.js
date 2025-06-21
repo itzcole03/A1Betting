@@ -5,7 +5,6 @@
 export { default as UniversalDashboard } from "./dashboard/UniversalDashboard";
 // UI Components
 export {
-  UniversalButton,
   CyberButton,
   BettingButton,
   GlowButton,
