@@ -46,9 +46,14 @@ const CyberHeader: React.FC<CyberHeaderProps> = ({
   return (
     <header
       className={cn(
-        "glass-card border-b border-white/10 sticky top-0 z-40",
+        "glass-card border-b border-white/10 sticky top-0 z-50",
         className,
       )}
+      style={{
+        background: "rgba(255, 255, 255, 0.05)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        borderColor: "rgba(255, 255, 255, 0.1)",
+      }}
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex justify-between items-center">

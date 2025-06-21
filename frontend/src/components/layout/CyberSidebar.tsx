@@ -105,14 +105,17 @@ const CyberSidebar: React.FC<CyberSidebarProps> = ({
   };
 
   return (
-    <motion.div
-      initial={{ x: -320 }}
-      animate={{ x: isOpen ? 0 : -320 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+    <div
       className={cn(
-        "fixed left-0 top-0 z-50 h-screen w-80 glass-card border-r border-white/10 shadow-xl lg:relative lg:translate-x-0",
+        "w-80 glass-card h-screen border-r border-white/10",
         className,
       )}
+      style={{
+        background: "rgba(255, 255, 255, 0.05)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        borderColor: "rgba(255, 255, 255, 0.1)",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+      }}
     >
       {/* Header with Beautiful Logo */}
       <div className="p-6 border-b border-white/10">
@@ -221,7 +224,7 @@ const CyberSidebar: React.FC<CyberSidebarProps> = ({
           <div>© 2024 • 47 Neural Networks</div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
