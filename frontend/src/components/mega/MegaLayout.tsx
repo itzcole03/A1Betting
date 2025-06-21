@@ -744,33 +744,8 @@ export const MegaHeader: React.FC<{
           </div>
         )}
 
-        {/* User Avatar */}
-        {user && (
-          <div
-            style={{
-              width: "32px",
-              height: "32px",
-              background:
-                safeTheme.gradients?.primary ||
-                "linear-gradient(135deg, #06ffa5, #00ff88)",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-            }}
-          >
-            {user.avatar ? (
-              <img
-                src={user.avatar}
-                alt={user.name}
-                style={{ width: "100%", height: "100%", borderRadius: "50%" }}
-              />
-            ) : (
-              <User size={16} color={isDark ? "#000" : "#fff"} />
-            )}
-          </div>
-        )}
+        {/* User Avatar with Dropdown */}
+        {user && <UserAvatarDropdown user={user} isDark={isDark} />}
 
         {/* Custom Right Actions */}
         {rightActions}
