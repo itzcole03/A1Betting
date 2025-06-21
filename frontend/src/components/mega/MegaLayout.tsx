@@ -174,7 +174,7 @@ export const MegaSidebar: React.FC<{
               style={{
                 background: "rgba(6, 255, 165, 0.1)",
                 border: "1px solid rgba(6, 255, 165, 0.8)",
-                color: CYBER_COLORS.primary,
+                color: "#06ffa5",
                 fontWeight: "500",
                 padding: "6px 12px",
                 fontSize: "12px",
