@@ -133,7 +133,7 @@ export const MegaButton: React.FC<{
         />
       )}
       {icon && iconPosition === "left" && <span>{icon}</span>}
-      <span>{children}</span>
+      {children && <span>{children}</span>}
       {icon && iconPosition === "right" && <span>{icon}</span>}
     </button>
   );
