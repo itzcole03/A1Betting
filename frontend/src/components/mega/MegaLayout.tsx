@@ -119,7 +119,7 @@ const UserAvatarDropdown: React.FC<{
             borderRadius: "16px",
             boxShadow:
               "0 25px 80px rgba(0, 0, 0, 0.6), 0 10px 40px rgba(6, 255, 165, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-            zIndex: 999999,
+            zIndex: 2147483647,
             padding: "12px",
             transform: "translateY(0)",
             opacity: 1,
