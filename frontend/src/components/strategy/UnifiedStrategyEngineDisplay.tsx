@@ -456,7 +456,9 @@ const UnifiedStrategyEngineDisplay: React.FC<Props> = ({
                   )}
                   %
                 </div>
-                <div className="text-sm text-gray-500">Avg Expected Return</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Avg Expected Return
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">
