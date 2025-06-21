@@ -86,6 +86,12 @@ const navigationItems = [
     icon: "⚙️",
     component: UltimateSettingsPage,
   },
+  {
+    id: "profile",
+    label: "Profile",
+    icon: "👤",
+    component: ProfilePage,
+  },
 ];
 
 // Mock user data
