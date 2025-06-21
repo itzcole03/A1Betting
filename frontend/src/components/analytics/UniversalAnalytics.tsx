@@ -751,52 +751,97 @@ export const UniversalAnalytics: React.FC = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <CyberText variant="caption" color="muted">
-              Latency
-            </CyberText>
-            <CyberText variant="body">{model.latency.toFixed(0)}ms</CyberText>
-          </div>
-          <div>
-            <CyberText variant="caption" color="muted">
-              Memory
-            </CyberText>
-            <CyberText variant="body">{model.memory.toFixed(0)}MB</CyberText>
-          </div>
-        </div>
-      </div>
-    </MegaCard>
-  );
-
-  const renderControlPanel = () => (
-    <MegaCard variant="glass" padding="lg">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-4">
-          <MegaButton
-            variant="primary"
-            onClick={loadAnalyticsData}
-            loading={isLoading}
-            icon={<RefreshCw size={16} />}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {metricsData.map((metric) => (
+          <motion.div
+            key={metric.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: metricsData.indexOf(metric) * 0.1 }}
           >
-            Refresh Data
-          </MegaButton>
+            <MegaCard
+              variant="glass"
+              className="group cursor-pointer"
+              padding="lg"
+              onClick={() => setSelectedMetric(metric.id)}
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div
+                      className={`p-3 rounded-xl transition-all duration-300 group-hover:scale-110 ${
+                        metric.trend === "up"
+                          ? "bg-gradient-to-br from-green-500/20 to-emerald-500/20 text-green-400"
+                          : "bg-gradient-to-br from-red-500/20 to-pink-500/20 text-red-400"
+                      }`}
+                      style={{
+                        boxShadow: metric.trend === "up"
+                          ? "0 8px 32px rgba(34, 197, 94, 0.2)"
+                          : "0 8px 32px rgba(239, 68, 68, 0.2)"
+                      }}
+                    >
+                      {getMetricIcon(metric.id)}
+                    </div>
+                    <div>
+                      <CyberText
+                        variant="caption"
+                        color="muted"
+                        style={{
+                          fontSize: "13px",
+                          fontWeight: "600",
+                          letterSpacing: "0.5px",
+                          textTransform: "uppercase"
+                        }}
+                      >
+                        {metric.label}
+                      </CyberText>
+                    </div>
+                  </div>
 
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={state.isAutoRefresh}
-              onChange={(e) =>
-                setState((prev) => ({
-                  ...prev,
-                  isAutoRefresh: e.target.checked,
-                }))
-              }
-              className="w-4 h-4"
-            />
-            <CyberText variant="caption" color="secondary">
-              Auto Refresh
-            </CyberText>
+                  <CyberText
+                    variant="title"
+                    style={{
+                      fontSize: "28px",
+                      fontWeight: "800",
+                      lineHeight: "1.2",
+                      marginBottom: "8px",
+                      background: metric.trend === "up"
+                        ? "linear-gradient(135deg, #10b981, #059669)"
+                        : "linear-gradient(135deg, #ef4444, #dc2626)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text"
+                    }}
+                  >
+                    {metric.value}
+                  </CyberText>
+
+                  <div className="flex items-center">
+                    <TrendingUp
+                      size={14}
+                      className={`mr-2 transition-transform duration-300 ${
+                        metric.trend === "up"
+                          ? "text-green-400"
+                          : "text-red-400 rotate-180"
+                      }`}
+                    />
+                    <CyberText
+                      variant="caption"
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        color: metric.trend === "up" ? "#10b981" : "#ef4444"
+                      }}
+                    >
+                      {metric.change}
+                    </CyberText>
+                  </div>
+                </div>
+              </div>
+            </MegaCard>
+          </motion.div>
+        ))}
+      </div>
           </div>
         </div>
 
