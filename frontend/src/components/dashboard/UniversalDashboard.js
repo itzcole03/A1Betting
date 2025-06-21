@@ -96,6 +96,7 @@ export const UniversalDashboard = ({ variant = "standard", user = {
     if (predictionsLoading && metricsLoading) {
         return (_jsx("div", { className: "min-h-screen p-6", children: _jsx(DashboardSkeleton, {}) }));
     }
+    return (_jsxs("div", { className: "min-h-screen relative", children: [_jsx(AnimatePresence,
     return (_jsxs("div", { className: "min-h-screen relative", children: [_jsx("div", { className: "lg:hidden fixed top-4 left-4 z-50", children: _jsx(MegaButton, { variant: "ghost", size: "sm", onClick: () => setSidebarOpen(!sidebarOpen), icon: sidebarOpen ? _jsx(X, { size: 20 }) : _jsx(Menu, { size: 20 }) }) }), _jsx(AnimatePresence, { children: (sidebarOpen || window.innerWidth >= 1024) && (_jsx(motion.div, { initial: { x: -280 }, animate: { x: 0 }, exit: { x: -280 }, className: "fixed left-0 top-0 h-full w-72 z-40 lg:relative lg:w-64", children: _jsx(CyberContainer, { variant: "panel", className: "h-full", style: { borderRadius: "0 16px 16px 0" }, children: _jsxs("div", { className: "p-6", children: [_jsx(CyberText, { variant: "title", className: "mb-6", children: "A1Betting Dashboard" }), _jsx("nav", { className: "space-y-2", children: dashboardTabs.map((tab) => (_jsxs(MegaButton, { variant: activeTab === tab.key ? "primary" : "secondary", onClick: () => {
                                             setActiveTab(tab.key);
                                             setSidebarOpen(false);
