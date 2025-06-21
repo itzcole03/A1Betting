@@ -189,6 +189,7 @@ const AppContent: React.FC = () => {
       notifications={3}
       onNotificationsClick={() => console.log("Notifications clicked")}
       user={mockUser}
+      onNavigate={handleNavigate}
       leftActions={
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
