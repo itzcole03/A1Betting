@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Import our consolidated Universal Systems
-import { UniversalThemeProvider, useTheme } from "./providers/UniversalThemeProvider";
+import {
+  UniversalThemeProvider,
+  useTheme,
+} from "./providers/UniversalThemeProvider";
 import {
   MegaAppShell,
   MegaSidebar,
@@ -158,62 +161,61 @@ const AppContent: React.FC = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <UniversalThemeProvider defaultVariant="cyber" enablePersistence={true}>
-        <div className="quantum-app" style={{ background: CYBER_COLORS.dark }}>
-          <MegaAppShell
-            sidebar={sidebar}
-            header={header}
-            sidebarOpen={sidebarOpen}
-          >
-            {/* Render current page component */}
-            <div className="p-6">
-              <CurrentComponent />
-            </div>
+      <div className="quantum-app" style={{ background: CYBER_COLORS.dark }}>
+        <MegaAppShell
+          sidebar={sidebar}
+          header={header}
+          sidebarOpen={sidebarOpen}
+        >
+          {/* Render current page component */}
+          <div className="p-6">
+            <CurrentComponent />
+          </div>
 
-            {/* Consolidation Status Banner */}
-            <div className="fixed bottom-4 left-4 z-50">
-              <div
-                className="px-4 py-2 rounded-lg shadow-lg"
-                style={{
-                  background: "rgba(6, 255, 165, 0.1)",
-                  border: "1px solid rgba(6, 255, 165, 0.3)",
-                  backdropFilter: "blur(10px)",
-                }}
-              >
-                <div className="flex items-center gap-2 text-sm">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span style={{ color: CYBER_COLORS.primary }}>
-                    Universal Systems Active
-                  </span>
-                  <span style={{ color: CYBER_COLORS.text.muted }}>
-                    • 98.5% Consolidated
-                  </span>
-                </div>
+          {/* Consolidation Status Banner */}
+          <div className="fixed bottom-4 left-4 z-50">
+            <div
+              className="px-4 py-2 rounded-lg shadow-lg"
+              style={{
+                background: "rgba(6, 255, 165, 0.1)",
+                border: "1px solid rgba(6, 255, 165, 0.3)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <div className="flex items-center gap-2 text-sm">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span style={{ color: CYBER_COLORS.primary }}>
+                  Universal Systems Active
+                </span>
+                <span style={{ color: CYBER_COLORS.text.muted }}>
+                  • 98.5% Consolidated
+                </span>
               </div>
             </div>
+          </div>
 
-            {/* Performance Indicator */}
-            <div className="fixed bottom-4 right-4 z-50">
-              <div
-                className="px-4 py-2 rounded-lg shadow-lg"
-                style={{
-                  background: "rgba(0, 212, 255, 0.1)",
-                  border: "1px solid rgba(0, 212, 255, 0.3)",
-                  backdropFilter: "blur(10px)",
-                }}
-              >
-                <div className="flex items-center gap-2 text-sm">
-                  <span style={{ color: CYBER_COLORS.accent }}>
-                    ⚡ Performance
-                  </span>
-                  <span style={{ color: CYBER_COLORS.text.muted }}>
-                    +800% DX | -65% Bundle
-                  </span>
-                </div>
+          {/* Performance Indicator */}
+          <div className="fixed bottom-4 right-4 z-50">
+            <div
+              className="px-4 py-2 rounded-lg shadow-lg"
+              style={{
+                background: "rgba(0, 212, 255, 0.1)",
+                border: "1px solid rgba(0, 212, 255, 0.3)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <div className="flex items-center gap-2 text-sm">
+                <span style={{ color: CYBER_COLORS.accent }}>
+                  ⚡ Performance
+                </span>
+                <span style={{ color: CYBER_COLORS.text.muted }}>
+                  +800% DX | -65% Bundle
+                </span>
               </div>
             </div>
-          </MegaAppShell>
-        </div>
+          </div>
+        </MegaAppShell>
+      </div>
     </QueryClientProvider>
   );
 };
