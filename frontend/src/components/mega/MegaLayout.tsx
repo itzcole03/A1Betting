@@ -901,7 +901,13 @@ export const MegaHeader: React.FC<{
         )}
 
         {/* User Avatar with Dropdown */}
-        {user && <UserAvatarDropdown user={user} isDark={isDark} />}
+        {user && (
+          <UserAvatarDropdown
+            user={user}
+            isDark={isDark}
+            onNavigate={onNavigate}
+          />
+        )}
 
         {/* Custom Right Actions */}
         {rightActions}
