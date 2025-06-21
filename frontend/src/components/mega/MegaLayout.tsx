@@ -564,7 +564,7 @@ export const MegaHeader: React.FC<{
                 left: "12px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: theme.colors.text.muted,
+                color: safeTheme.colors.text.muted,
               }}
             />
             <input
@@ -579,10 +579,10 @@ export const MegaHeader: React.FC<{
                 width: "100%",
                 padding: "8px 16px 8px 40px",
                 borderRadius: "20px",
-                border: `1px solid ${theme.colors.border}`,
-                backgroundColor: theme.colors.surface,
+                border: `1px solid ${safeTheme.colors.border}`,
+                backgroundColor: safeTheme.colors.surface,
                 backdropFilter: "blur(10px)",
-                color: theme.colors.text.primary,
+                color: safeTheme.colors.text.primary,
                 fontSize: "14px",
                 outline: "none",
               }}
