@@ -1,36 +1,16 @@
-import { APIError, AppError } from "../core/UnifiedError";
-import { post } from "../services/api";
-import { unifiedMonitor } from "../core/UnifiedMonitor";
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-const BETTING_BACKEND_PREFIX = `${API_BASE_URL}/api/betting`;
-// --- End Backend Type Definitions ---
+import { post } from "../api/index";
+import { unifiedMonitor } from "../core/monitoring/unifiedMonitor";
+import { APIError, AppError } from "../utils/errorHandling";
+
+const BETTING_BACKEND_PREFIX =
+  process.env.REACT_APP_BETTING_BACKEND_PREFIX || "/api/betting";
+
 /**
- * Calculates a betting strategy based on selected props, bankroll, and risk level.
- * Calls the backend's /api/betting/calculate-strategy endpoint (currently mocked).
- * Expected frontend request (BettingStrategyRequest) is mapped to backend's StrategyCalculationRequest.
- * Backend StrategyCalculationRequest (from backend/routes/betting_route.py) looks like:
- * {
- *   "propositions": [
- *     { "prop_id": "string", "line": number, "over_odds": number (optional), "under_odds": number (optional),
- *       "player_name": "string" (optional), "stat_type": "string" (optional) ... }
- *   ],
- *   "bankroll": number,
- *   "risk_level": "string"
- * }
- * Expected backend mock response is a list of BackendStrategyBet (defined in this file), which gets mapped to BettingOpportunity[].
- * BackendStrategyBet example (from backend/routes/betting_route.py StrategyBet Pydantic model):
- * {
- *    "bet_id": "string",
- *    "legs": [ { "prop_id": "string", "market_key": "string", "outcome": "string", "odds": number, ... } ],
- *    "stake": number,
- *    "potential_payout": number,
- *    "status": "string",
- *    "created_at": "datetime_string",
- *    "type": "string" (optional)
- * }
+ * Calculate betting strategy using backend service
+ * @param {Object} request - Request object containing propositions, bankroll, and risk level
+ * @returns {Promise<Object>} - Betting strategy response
  */
 export const calculateBettingStrategy = async (request) => {
-<<<<<<< HEAD
   const trace = unifiedMonitor.startTrace(
     "bettingStrategy.calculateBettingStrategy",
     "http.client",
@@ -42,16 +22,17 @@ export const calculateBettingStrategy = async (request) => {
       bankroll: request.bankroll,
       risk_level: request.riskLevel,
     };
+
     // Backend returns List[BackendStrategyBet]
     const response = await post(endpoint, backendRequestPayload);
+
     if (trace) {
       trace.setHttpStatus(response.status);
       unifiedMonitor.endTrace(trace);
     }
+
     const mappedResponse = response.data.map((bet) => ({
       id: bet.bet_id,
-      // BackendStrategyBet does not have a direct description field.
-      // Construct description based on available data or set a default.
       description: `Strategy bet for ${Array.isArray(bet.legs) ? bet.legs.length : 0} leg(s)`,
       expectedValue: bet.potential_payout - bet.stake,
       confidence: 0.75, // Mock confidence, backend doesn't provide this for now
@@ -67,21 +48,29 @@ export const calculateBettingStrategy = async (request) => {
         gameId: leg.game_id,
         description: leg.description,
       })),
-      stakeSuggestion: bet.stake,
+      stake: bet.stake,
       potentialPayout: bet.potential_payout,
-      status: bet.status,
     }));
-    return mappedResponse;
+
+    return {
+      bets: mappedResponse,
+      totalStake: mappedResponse.reduce((sum, bet) => sum + bet.stake, 0),
+      totalPotentialPayout: mappedResponse.reduce(
+        (sum, bet) => sum + bet.potentialPayout,
+        0,
+      ),
+    };
   } catch (error) {
     const errContext = {
-      service: "bettingStrategy",
-      operation: "calculateBettingStrategy",
+      function: "calculateBettingStrategy",
+      request: request,
     };
-    unifiedMonitor.reportError(error, errContext);
+
     if (trace) {
-      trace.setHttpStatus(error.response?.status || 500);
+      trace.setError(error);
       unifiedMonitor.endTrace(trace);
     }
+
     if (error instanceof APIError || error instanceof AppError) throw error;
     throw new AppError(
       "Failed to calculate betting strategy from backend.",
@@ -90,87 +79,21 @@ export const calculateBettingStrategy = async (request) => {
       error,
     );
   }
-=======
-    // Which is BettingOpportunity[]
-    const trace = unifiedMonitor.startTrace("bettingStrategy.calculateBettingStrategy", "http.client");
-    try {
-        const endpoint = `${BETTING_BACKEND_PREFIX}/calculate-strategy`;
-        const backendRequestPayload = {
-            available_propositions: request.propositions,
-            bankroll: request.bankroll,
-            risk_level: request.riskLevel,
-        };
-        // Backend returns List[BackendStrategyBet]
-        const response = await post(endpoint, backendRequestPayload);
-        if (trace) {
-            trace.setHttpStatus(response.status);
-            unifiedMonitor.endTrace(trace);
-        }
-        const mappedResponse = response.data.map((bet) => ({
-            id: bet.bet_id,
-            // BackendStrategyBet does not have a direct description field.
-            // Construct description based on available data or set a default.
-            description: `Strategy bet for ${Array.isArray(bet.legs) ? bet.legs.length : 0} leg(s)`,
-            expectedValue: bet.potential_payout - bet.stake,
-            confidence: 0.75, // Mock confidence, backend doesn't provide this for now
-            type: bet.type ||
-                (Array.isArray(bet.legs) && bet.legs.length > 1
-                    ? "parlay"
-                    : "single"),
-            legs: (Array.isArray(bet.legs) ? bet.legs : []).map((leg) => ({
-                propId: leg.prop_id,
-                marketKey: leg.market_key,
-                outcome: leg.outcome,
-                odds: leg.odds,
-                playerId: leg.player_id,
-                gameId: leg.game_id,
-                description: leg.description,
-            })),
-            stakeSuggestion: bet.stake,
-            potentialPayout: bet.potential_payout,
-            status: bet.status,
-        }));
-        return mappedResponse;
-    }
-    catch (error) {
-        const errContext = {
-            service: "bettingStrategy",
-            operation: "calculateBettingStrategy",
-        };
-        unifiedMonitor.reportError(error, errContext);
-        if (trace) {
-            trace.setHttpStatus(error.response?.status || 500);
-            unifiedMonitor.endTrace(trace);
-        }
-        if (error instanceof APIError || error instanceof AppError)
-            throw error;
-        throw new AppError("Failed to calculate betting strategy from backend.", undefined, errContext, error);
-    }
->>>>>>> 2d39fa5fd04a40604745d55f795c6bab853c02d4
 };
+
 /**
- * Places bets based on the provided opportunities.
- * Calls the backend's /api/betting/place-bet endpoint (currently mocked).
- * Frontend FrontendBetPlacementRequest ({ bets: BettingOpportunity[] }) is mapped to a list of backend StrategyBet models.
- * Expected backend mock response is a list of BackendBetPlacementResult (defined in this file), mapped to BetPlacementResponse[].
- * BackendBetPlacementResult example (from backend/routes/betting_route.py BetPlacementResult Pydantic model):
- * {
- *   "bet_id": "string",
- *   "status": "string (e.g., placed, failed)",
- *   "message": "string (optional)",
- *   "transaction_id": "string (optional)"
- * }
+ * Place bets using the backend service
+ * @param {Object} request - Request object containing bets to place
+ * @returns {Promise<Object>} - Bet placement response
  */
-<<<<<<< HEAD
-export const placeBets = async (
-  request, // { bets: BettingOpportunity[] }
-) => {
+export const placeBets = async (request) => {
   const trace = unifiedMonitor.startTrace(
     "bettingStrategy.placeBets",
     "http.client",
   );
   try {
     const endpoint = `${BETTING_BACKEND_PREFIX}/place-bet`;
+
     // Backend expects List[BackendStrategyBet] as BetPlacementRequest
     const backendPayload = request.bets.map((opp) => ({
       bet_id: opp.id,
@@ -183,31 +106,35 @@ export const placeBets = async (
         game_id: leg.gameId,
         description: leg.description,
       })),
-      stake: opp.stakeSuggestion || 0, // Ensure stake is a number
-      potential_payout: opp.potentialPayout || 0, // Ensure potential_payout is a number
-      status: opp.status || "pending_placement", // Pass current status or a default
-      created_at: new Date().toISOString(), // Backend will likely overwrite this
+      stake: opp.stake,
+      potential_payout: opp.potentialPayout,
       type: opp.type,
     }));
-    const response = await post(endpoint, backendPayload);
+
+    const response = await post(endpoint, { bets: backendPayload });
+
     if (trace) {
       trace.setHttpStatus(response.status);
       unifiedMonitor.endTrace(trace);
     }
-    const mappedResponse = response.data.map((result) => ({
-      betId: result.bet_id,
-      success: result.status === "placed" || result.status === "accepted",
-      message: result.message,
-      transactionId: result.transaction_id,
-    }));
-    return mappedResponse;
+
+    return {
+      success: response.data.success,
+      placedBets: response.data.placed_bets || [],
+      totalStake: response.data.total_stake || 0,
+      errors: response.data.errors || [],
+    };
   } catch (error) {
-    const errContext = { service: "bettingStrategy", operation: "placeBets" };
-    unifiedMonitor.reportError(error, errContext);
+    const errContext = {
+      function: "placeBets",
+      request: request,
+    };
+
     if (trace) {
-      trace.setHttpStatus(error.response?.status || 500);
+      trace.setError(error);
       unifiedMonitor.endTrace(trace);
     }
+
     if (error instanceof APIError || error instanceof AppError) throw error;
     throw new AppError(
       "Failed to place bets via backend.",
@@ -217,59 +144,10 @@ export const placeBets = async (
     );
   }
 };
+
 export const bettingStrategyService = {
   calculateBettingStrategy,
   placeBets,
-=======
-export const placeBets = async (request) => {
-    const trace = unifiedMonitor.startTrace("bettingStrategy.placeBets", "http.client");
-    try {
-        const endpoint = `${BETTING_BACKEND_PREFIX}/place-bet`;
-        // Backend expects List[BackendStrategyBet] as BetPlacementRequest
-        const backendPayload = request.bets.map((opp) => ({
-            bet_id: opp.id,
-            legs: opp.legs.map((leg) => ({
-                prop_id: leg.propId,
-                market_key: leg.marketKey,
-                outcome: leg.outcome,
-                odds: leg.odds,
-                player_id: leg.playerId,
-                game_id: leg.gameId,
-                description: leg.description,
-            })),
-            stake: opp.stakeSuggestion || 0, // Ensure stake is a number
-            potential_payout: opp.potentialPayout || 0, // Ensure potential_payout is a number
-            status: opp.status || "pending_placement", // Pass current status or a default
-            created_at: new Date().toISOString(), // Backend will likely overwrite this
-            type: opp.type,
-        }));
-        const response = await post(endpoint, backendPayload);
-        if (trace) {
-            trace.setHttpStatus(response.status);
-            unifiedMonitor.endTrace(trace);
-        }
-        const mappedResponse = response.data.map((result) => ({
-            betId: result.bet_id,
-            success: result.status === "placed" || result.status === "accepted",
-            message: result.message,
-            transactionId: result.transaction_id,
-        }));
-        return mappedResponse;
-    }
-    catch (error) {
-        const errContext = { service: "bettingStrategy", operation: "placeBets" };
-        unifiedMonitor.reportError(error, errContext);
-        if (trace) {
-            trace.setHttpStatus(error.response?.status || 500);
-            unifiedMonitor.endTrace(trace);
-        }
-        if (error instanceof APIError || error instanceof AppError)
-            throw error;
-        throw new AppError("Failed to place bets via backend.", undefined, errContext, error);
-    }
 };
-export const bettingStrategyService = {
-    calculateBettingStrategy,
-    placeBets,
->>>>>>> 2d39fa5fd04a40604745d55f795c6bab853c02d4
-};
+
+export default bettingStrategyService;
