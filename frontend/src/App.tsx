@@ -2130,18 +2130,1118 @@ const App: React.FC = () => {
           ],
         );
       case "realtime":
-        return React.createElement(DefaultPage, {
-          title: "Real-time Monitor",
-          description:
-            "Live data monitoring with instant processing and intelligent alerts",
-          icon: "fa-eye",
-        });
+        return React.createElement(
+          "div",
+          { className: "space-y-8 animate-slide-in-up" },
+          [
+            React.createElement(
+              "div",
+              { key: "header", className: "text-center mb-8" },
+              [
+                React.createElement(
+                  "div",
+                  {
+                    key: "icon",
+                    className: "text-6xl mb-6 text-electric-400 float-element",
+                  },
+                  React.createElement("i", { className: "fa-eye" }),
+                ),
+                React.createElement(
+                  "h1",
+                  {
+                    key: "title",
+                    className: "holographic text-4xl font-black mb-4",
+                  },
+                  "Quantum Monitor",
+                ),
+                React.createElement(
+                  "p",
+                  {
+                    key: "desc",
+                    className: "text-xl text-gray-400 max-w-2xl mx-auto",
+                  },
+                  "Live data monitoring with instant processing and intelligent alerts",
+                ),
+              ],
+            ),
+            React.createElement(
+              "div",
+              {
+                key: "monitor-grid",
+                className: "grid grid-cols-1 lg:grid-cols-2 gap-8",
+              },
+              [
+                React.createElement(
+                  Card,
+                  {
+                    key: "live-feed",
+                    title: "Live Data Stream",
+                    glowing: true,
+                  },
+                  [
+                    React.createElement(
+                      "div",
+                      {
+                        key: "stream",
+                        className: "space-y-3 max-h-64 overflow-y-auto",
+                      },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "feed1",
+                            className:
+                              "flex items-center space-x-3 p-3 bg-green-500/20 rounded-lg animate-pulse",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "timestamp",
+                                className: "text-xs text-gray-400",
+                              },
+                              "12:34:56",
+                            ),
+                            React.createElement("div", {
+                              key: "status",
+                              className: "w-2 h-2 bg-green-400 rounded-full",
+                            }),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "message",
+                                className: "text-green-300 text-sm",
+                              },
+                              "New arbitrage opportunity detected: +$247 EV",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "feed2",
+                            className:
+                              "flex items-center space-x-3 p-3 bg-blue-500/20 rounded-lg animate-pulse",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "timestamp",
+                                className: "text-xs text-gray-400",
+                              },
+                              "12:34:52",
+                            ),
+                            React.createElement("div", {
+                              key: "status",
+                              className: "w-2 h-2 bg-blue-400 rounded-full",
+                            }),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "message",
+                                className: "text-blue-300 text-sm",
+                              },
+                              "Model prediction updated: Lakers 94.7% confidence",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "feed3",
+                            className:
+                              "flex items-center space-x-3 p-3 bg-purple-500/20 rounded-lg animate-pulse",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "timestamp",
+                                className: "text-xs text-gray-400",
+                              },
+                              "12:34:48",
+                            ),
+                            React.createElement("div", {
+                              key: "status",
+                              className: "w-2 h-2 bg-purple-400 rounded-full",
+                            }),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "message",
+                                className: "text-purple-300 text-sm",
+                              },
+                              "Quantum processor: 1,247 calculations in 12ms",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "feed4",
+                            className:
+                              "flex items-center space-x-3 p-3 bg-yellow-500/20 rounded-lg animate-pulse",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "timestamp",
+                                className: "text-xs text-gray-400",
+                              },
+                              "12:34:44",
+                            ),
+                            React.createElement("div", {
+                              key: "status",
+                              className: "w-2 h-2 bg-yellow-400 rounded-full",
+                            }),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "message",
+                                className: "text-yellow-300 text-sm",
+                              },
+                              "Market volatility alert: NFL spreads shifting",
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  Card,
+                  { key: "system-status", title: "System Status" },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "status-grid", className: "space-y-4" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "api-status",
+                            className:
+                              "flex justify-between items-center p-3 glass-card rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "API Connections",
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "status",
+                                className: "flex items-center space-x-2",
+                              },
+                              [
+                                React.createElement("div", {
+                                  key: "dot",
+                                  className:
+                                    "w-2 h-2 bg-green-400 rounded-full animate-pulse",
+                                }),
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "text",
+                                    className: "text-green-400 text-sm",
+                                  },
+                                  "47/47 Online",
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "ml-status",
+                            className:
+                              "flex justify-between items-center p-3 glass-card rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "ML Models",
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "status",
+                                className: "flex items-center space-x-2",
+                              },
+                              [
+                                React.createElement("div", {
+                                  key: "dot",
+                                  className:
+                                    "w-2 h-2 bg-green-400 rounded-full animate-pulse",
+                                }),
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "text",
+                                    className: "text-green-400 text-sm",
+                                  },
+                                  "All Active",
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "quantum-status",
+                            className:
+                              "flex justify-between items-center p-3 glass-card rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "Quantum Core",
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "status",
+                                className: "flex items-center space-x-2",
+                              },
+                              [
+                                React.createElement("div", {
+                                  key: "dot",
+                                  className:
+                                    "w-2 h-2 bg-green-400 rounded-full animate-pulse",
+                                }),
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "text",
+                                    className: "text-green-400 text-sm",
+                                  },
+                                  "1024 Qubits",
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "latency-status",
+                            className:
+                              "flex justify-between items-center p-3 glass-card rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "Avg Latency",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "value",
+                                className: "text-electric-400 font-bold",
+                              },
+                              "0.7ms",
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            React.createElement(
+              "div",
+              {
+                key: "realtime-metrics",
+                className: "grid grid-cols-2 md:grid-cols-4 gap-4",
+              },
+              [
+                React.createElement(
+                  "div",
+                  {
+                    key: "metric1",
+                    className: "text-center p-4 glass-card rounded-lg",
+                  },
+                  [
+                    React.createElement(
+                      "div",
+                      {
+                        key: "value",
+                        className:
+                          "text-2xl font-bold text-green-400 animate-pulse",
+                      },
+                      "1,247",
+                    ),
+                    React.createElement(
+                      "div",
+                      { key: "label", className: "text-xs text-gray-400" },
+                      "Events/Min",
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  "div",
+                  {
+                    key: "metric2",
+                    className: "text-center p-4 glass-card rounded-lg",
+                  },
+                  [
+                    React.createElement(
+                      "div",
+                      {
+                        key: "value",
+                        className:
+                          "text-2xl font-bold text-blue-400 animate-pulse",
+                      },
+                      "99.7%",
+                    ),
+                    React.createElement(
+                      "div",
+                      { key: "label", className: "text-xs text-gray-400" },
+                      "Uptime",
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  "div",
+                  {
+                    key: "metric3",
+                    className: "text-center p-4 glass-card rounded-lg",
+                  },
+                  [
+                    React.createElement(
+                      "div",
+                      {
+                        key: "value",
+                        className:
+                          "text-2xl font-bold text-purple-400 animate-pulse",
+                      },
+                      "847",
+                    ),
+                    React.createElement(
+                      "div",
+                      { key: "label", className: "text-xs text-gray-400" },
+                      "Alerts Today",
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  "div",
+                  {
+                    key: "metric4",
+                    className: "text-center p-4 glass-card rounded-lg",
+                  },
+                  [
+                    React.createElement(
+                      "div",
+                      {
+                        key: "value",
+                        className:
+                          "text-2xl font-bold text-electric-400 animate-pulse",
+                      },
+                      "12ms",
+                    ),
+                    React.createElement(
+                      "div",
+                      { key: "label", className: "text-xs text-gray-400" },
+                      "Response Time",
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
       case "settings":
-        return React.createElement(DefaultPage, {
-          title: "Settings",
-          description: "Platform configuration and account management options",
-          icon: "fa-cog",
-        });
+        return React.createElement(
+          "div",
+          { className: "space-y-8 animate-slide-in-up" },
+          [
+            React.createElement(
+              "div",
+              { key: "header", className: "text-center mb-8" },
+              [
+                React.createElement(
+                  "div",
+                  {
+                    key: "icon",
+                    className: "text-6xl mb-6 text-electric-400 float-element",
+                  },
+                  React.createElement("i", { className: "fa-cog" }),
+                ),
+                React.createElement(
+                  "h1",
+                  {
+                    key: "title",
+                    className: "holographic text-4xl font-black mb-4",
+                  },
+                  "Quantum Settings",
+                ),
+                React.createElement(
+                  "p",
+                  {
+                    key: "desc",
+                    className: "text-xl text-gray-400 max-w-2xl mx-auto",
+                  },
+                  "Platform configuration and account management options",
+                ),
+              ],
+            ),
+            React.createElement(
+              "div",
+              {
+                key: "settings-grid",
+                className: "grid grid-cols-1 lg:grid-cols-2 gap-8",
+              },
+              [
+                React.createElement(
+                  Card,
+                  { key: "account", title: "Account Settings" },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "account-settings", className: "space-y-4" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "profile",
+                            className: "p-4 glass-card rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "h4",
+                              {
+                                key: "profile-title",
+                                className:
+                                  "font-semibold text-electric-400 mb-3",
+                              },
+                              "Profile Information",
+                            ),
+                            React.createElement(
+                              "div",
+                              { key: "profile-fields", className: "space-y-3" },
+                              [
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "name-field",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "Name",
+                                    ),
+                                    React.createElement(
+                                      "span",
+                                      { key: "value", className: "text-white" },
+                                      "Alex Chen",
+                                    ),
+                                  ],
+                                ),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "email-field",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "Email",
+                                    ),
+                                    React.createElement(
+                                      "span",
+                                      { key: "value", className: "text-white" },
+                                      "alex@a1betting.com",
+                                    ),
+                                  ],
+                                ),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "tier-field",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "Tier",
+                                    ),
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "value",
+                                        className: "text-purple-400 font-bold",
+                                      },
+                                      "Quantum Pro",
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "security",
+                            className: "p-4 glass-card rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "h4",
+                              {
+                                key: "security-title",
+                                className:
+                                  "font-semibold text-electric-400 mb-3",
+                              },
+                              "Security",
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "security-options",
+                                className: "space-y-3",
+                              },
+                              [
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "2fa",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "Two-Factor Auth",
+                                    ),
+                                    React.createElement(
+                                      "div",
+                                      {
+                                        key: "toggle",
+                                        className:
+                                          "w-12 h-6 bg-green-500 rounded-full flex items-center px-1",
+                                      },
+                                      [
+                                        React.createElement("div", {
+                                          key: "slider",
+                                          className:
+                                            "w-4 h-4 bg-white rounded-full transform translate-x-6",
+                                        }),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "biometric",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "Biometric Login",
+                                    ),
+                                    React.createElement(
+                                      "div",
+                                      {
+                                        key: "toggle",
+                                        className:
+                                          "w-12 h-6 bg-green-500 rounded-full flex items-center px-1",
+                                      },
+                                      [
+                                        React.createElement("div", {
+                                          key: "slider",
+                                          className:
+                                            "w-4 h-4 bg-white rounded-full transform translate-x-6",
+                                        }),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  Card,
+                  { key: "ai-config", title: "AI Configuration" },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "ai-settings", className: "space-y-4" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "models",
+                            className: "p-4 glass-card rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "h4",
+                              {
+                                key: "models-title",
+                                className:
+                                  "font-semibold text-electric-400 mb-3",
+                              },
+                              "Model Settings",
+                            ),
+                            React.createElement(
+                              "div",
+                              { key: "model-options", className: "space-y-3" },
+                              [
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "confidence",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "Min Confidence",
+                                    ),
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "value",
+                                        className:
+                                          "text-electric-400 font-bold",
+                                      },
+                                      "85%",
+                                    ),
+                                  ],
+                                ),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "risk",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "Risk Tolerance",
+                                    ),
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "value",
+                                        className: "text-yellow-400 font-bold",
+                                      },
+                                      "Moderate",
+                                    ),
+                                  ],
+                                ),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "update",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "Auto Updates",
+                                    ),
+                                    React.createElement(
+                                      "div",
+                                      {
+                                        key: "toggle",
+                                        className:
+                                          "w-12 h-6 bg-green-500 rounded-full flex items-center px-1",
+                                      },
+                                      [
+                                        React.createElement("div", {
+                                          key: "slider",
+                                          className:
+                                            "w-4 h-4 bg-white rounded-full transform translate-x-6",
+                                        }),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "notifications",
+                            className: "p-4 glass-card rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "h4",
+                              {
+                                key: "notif-title",
+                                className:
+                                  "font-semibold text-electric-400 mb-3",
+                              },
+                              "Notifications",
+                            ),
+                            React.createElement(
+                              "div",
+                              { key: "notif-options", className: "space-y-3" },
+                              [
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "alerts",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "Price Alerts",
+                                    ),
+                                    React.createElement(
+                                      "div",
+                                      {
+                                        key: "toggle",
+                                        className:
+                                          "w-12 h-6 bg-green-500 rounded-full flex items-center px-1",
+                                      },
+                                      [
+                                        React.createElement("div", {
+                                          key: "slider",
+                                          className:
+                                            "w-4 h-4 bg-white rounded-full transform translate-x-6",
+                                        }),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "predictions",
+                                    className:
+                                      "flex justify-between items-center",
+                                  },
+                                  [
+                                    React.createElement(
+                                      "span",
+                                      {
+                                        key: "label",
+                                        className: "text-gray-300",
+                                      },
+                                      "New Predictions",
+                                    ),
+                                    React.createElement(
+                                      "div",
+                                      {
+                                        key: "toggle",
+                                        className:
+                                          "w-12 h-6 bg-green-500 rounded-full flex items-center px-1",
+                                      },
+                                      [
+                                        React.createElement("div", {
+                                          key: "slider",
+                                          className:
+                                            "w-4 h-4 bg-white rounded-full transform translate-x-6",
+                                        }),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            React.createElement(
+              "div",
+              {
+                key: "system-info",
+                className: "grid grid-cols-1 md:grid-cols-3 gap-6",
+              },
+              [
+                React.createElement(
+                  Card,
+                  {
+                    key: "version-info",
+                    title: "System Information",
+                    glowing: true,
+                  },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "system-details", className: "space-y-3" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "version",
+                            className: "flex justify-between items-center",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "Platform Version",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "value",
+                                className: "text-electric-400 font-bold",
+                              },
+                              "v2.1.0",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "models-version",
+                            className: "flex justify-between items-center",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "AI Models",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "value",
+                                className: "text-green-400 font-bold",
+                              },
+                              "47 Active",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "quantum-version",
+                            className: "flex justify-between items-center",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "Quantum Core",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "value",
+                                className: "text-purple-400 font-bold",
+                              },
+                              "1024 Qubits",
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  Card,
+                  { key: "performance-settings", title: "Performance" },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "perf-options", className: "space-y-3" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "cache",
+                            className: "flex justify-between items-center",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "Cache Size",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "value",
+                                className: "text-blue-400 font-bold",
+                              },
+                              "2.1GB",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "refresh",
+                            className: "flex justify-between items-center",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "Refresh Rate",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "value",
+                                className: "text-electric-400 font-bold",
+                              },
+                              "Real-time",
+                            ),
+                          ],
+                        ),
+                        React.createElement(Button, {
+                          key: "optimize",
+                          label: "Optimize",
+                          variant: "ghost",
+                          className: "w-full mt-4",
+                        }),
+                      ],
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  Card,
+                  { key: "backup-settings", title: "Backup & Recovery" },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "backup-options", className: "space-y-3" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "last-backup",
+                            className: "flex justify-between items-center",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "Last Backup",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "value",
+                                className: "text-green-400 font-bold",
+                              },
+                              "2h ago",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "auto-backup",
+                            className: "flex justify-between items-center",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-300" },
+                              "Auto Backup",
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "toggle",
+                                className:
+                                  "w-12 h-6 bg-green-500 rounded-full flex items-center px-1",
+                              },
+                              [
+                                React.createElement("div", {
+                                  key: "slider",
+                                  className:
+                                    "w-4 h-4 bg-white rounded-full transform translate-x-6",
+                                }),
+                              ],
+                            ),
+                          ],
+                        ),
+                        React.createElement(Button, {
+                          key: "backup-now",
+                          label: "Backup Now",
+                          variant: "secondary",
+                          className: "w-full mt-4",
+                        }),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
       default:
         return React.createElement(Dashboard);
     }
