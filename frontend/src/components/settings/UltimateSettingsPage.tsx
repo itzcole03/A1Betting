@@ -41,9 +41,130 @@ import {
 } from "lucide-react";
 import { useTheme } from "../../providers/SafeThemeProvider";
 import { useUltimateSettings } from "../../hooks/useUltimateSettings";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+// Use direct imports to avoid module resolution issues
+const Card = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <div
+    className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}
+  >
+    {children}
+  </div>
+);
+
+const CardHeader = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <div className={`flex flex-col space-y-1.5 p-6 ${className}`}>{children}</div>
+);
+
+const CardTitle = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <h3
+    className={`text-2xl font-semibold leading-none tracking-tight ${className}`}
+  >
+    {children}
+  </h3>
+);
+
+const CardContent = ({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => <div className={`p-6 pt-0 ${className}`}>{children}</div>;
+
+const Badge = ({
+  children,
+  className = "",
+  variant = "default",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  variant?: "default" | "success" | "destructive" | "outline" | "secondary";
+}) => {
+  const variantClasses = {
+    default: "bg-primary text-primary-foreground",
+    success: "bg-green-500 text-white",
+    destructive: "bg-red-500 text-white",
+    outline: "border border-input",
+    secondary: "bg-secondary text-secondary-foreground",
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${variantClasses[variant]} ${className}`}
+    >
+      {children}
+    </span>
+  );
+};
+
+const Button = ({
+  children,
+  className = "",
+  variant = "default",
+  size = "default",
+  disabled = false,
+  onClick,
+  ...props
+}: {
+  children: React.ReactNode;
+  className?: string;
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
+  size?: "default" | "sm" | "lg" | "icon";
+  disabled?: boolean;
+  onClick?: () => void;
+  [key: string]: any;
+}) => {
+  const variantClasses = {
+    default: "bg-primary text-primary-foreground hover:bg-primary/90",
+    destructive:
+      "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+    outline: "border border-input hover:bg-accent hover:text-accent-foreground",
+    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+    ghost: "hover:bg-accent hover:text-accent-foreground",
+    link: "underline-offset-4 hover:underline text-primary",
+  };
+
+  const sizeClasses = {
+    default: "h-10 px-4 py-2",
+    sm: "h-9 rounded-md px-3",
+    lg: "h-11 rounded-md px-8",
+    icon: "h-10 w-10",
+  };
+
+  return (
+    <button
+      className={`inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      disabled={disabled}
+      onClick={onClick}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
 import { ThemeToggle, CyberThemeToggle } from "../ThemeToggle/ThemeToggle";
 
 interface SettingsSection {
