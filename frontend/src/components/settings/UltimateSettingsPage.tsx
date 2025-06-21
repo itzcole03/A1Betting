@@ -1129,7 +1129,7 @@ export const UltimateSettingsPage: React.FC = () => {
 
               <Button
                 onClick={saveSettings}
-                disabled={!hasChanges || isLoading}
+                disabled={!hasUnsavedChanges || isLoading}
                 className="flex items-center gap-2 bg-gradient-to-r from-cyber-primary to-cyber-secondary text-black font-medium"
               >
                 {isLoading ? (
