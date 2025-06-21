@@ -22,34 +22,20 @@
 // =================================
 // 🎨 MEGA COMPONENTS SYSTEM
 // =================================
+export { default as MegaApp } from "../components/mega/MegaApp";
+export { default as MegaDashboard } from "../components/mega/MegaDashboard";
+export { default as MegaBetting } from "../components/mega/MegaBetting";
+export { default as MegaAnalytics } from "../components/mega/MegaAnalytics";
+export { default as MegaAdminPanel } from "../components/mega/MegaAdminPanel";
+export { default as MegaPrizePicks } from "../components/mega/MegaPrizePicks";
+
+// UI System Components
+export { default as MegaUI } from "../components/mega/MegaUI";
+export { default as MegaLayout } from "../components/mega/MegaLayout";
+export { default as MegaFeatures } from "../components/mega/MegaFeatures";
+
+// Cyber Theme System
 export {
-  // Core App Components
-  MegaApp,
-  MegaDashboard,
-  MegaBetting,
-  MegaAnalytics,
-  MegaAdminPanel,
-  MegaPrizePicks,
-
-  // UI System Components
-  MegaButton,
-  MegaCard,
-  MegaModal,
-  MegaInput,
-  MegaAlert,
-  MegaSkeleton,
-
-  // Layout System Components
-  MegaSidebar,
-  MegaHeader,
-  MegaAppShell,
-
-  // Feature Components
-  MegaArbitrageEngine,
-  MegaPredictionEngine,
-  MegaRevolutionaryInterface,
-
-  // Cyber Theme System
   CYBER_COLORS,
   CYBER_GRADIENTS,
   CYBER_GLASS,
@@ -57,35 +43,21 @@ export {
   CyberContainer,
   CyberText,
   CyberButton,
-} from "../components/mega";
+} from "../components/mega/CyberTheme";
 
 // =================================
 // 🚀 ULTIMATE SERVICES SYSTEM
 // =================================
 export {
-  // Master Services Manager
-  QuantumServices,
+  default as QuantumServices,
   UltimateServicesManager,
-
-  // Individual Services
-  UltimateDataService,
-  QuantumMLService,
-  UltimateBettingService,
-  QuantumAnalyticsService,
-  QuantumAuthService,
-  QuantumNotificationService,
-  QuantumSettingsService,
-  QuantumWebSocketService,
 } from "../services/UltimateServices";
 
 // =================================
 // 🎯 QUANTUM HOOKS SYSTEM
 // =================================
+export { default as useQuantumPlatform } from "../hooks/UltimateHooks";
 export {
-  // Master Hook
-  useQuantumPlatform,
-
-  // Individual Hooks
   useQuantumData,
   useQuantumML,
   useQuantumBetting,
@@ -101,11 +73,8 @@ export {
 // =================================
 // 🔧 ULTIMATE UTILITIES SYSTEM
 // =================================
+export { default as UltimateUtils } from "../utils/UltimateUtils";
 export {
-  // Master Utils
-  UltimateUtils,
-
-  // Individual Utility Categories
   CoreUtils,
   OddsUtils,
   AnalyticsUtils,
@@ -256,7 +225,7 @@ Welcome to the future of sports betting! 🌟
 📊 CONSOLIDATION ACHIEVEMENTS:
 • Components: 500+ → 18 MEGA components (96% reduction)
 • Services: 150+ → 8 Ultimate services (95% reduction)
-• Hooks: 180+ → 12 Quantum hooks (93% reduction) 
+• Hooks: 180+ → 12 Quantum hooks (93% reduction)
 • Utils: 200+ → 8 Ultimate utilities (96% reduction)
 
 ⚡ PERFORMANCE IMPROVEMENTS:
