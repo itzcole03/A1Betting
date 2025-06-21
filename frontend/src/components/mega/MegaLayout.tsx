@@ -576,27 +576,8 @@ export const MegaHeader: React.FC<{
 
       {/* Right Section */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-        {/* Dark Mode Toggle */}
-        {onDarkModeToggle && (
-          <button
-            onClick={onDarkModeToggle}
-            style={{
-              background: "rgba(6, 255, 165, 0.1)",
-              border: "1px solid rgba(6, 255, 165, 0.8)",
-              color: CYBER_COLORS.primary,
-              fontWeight: "500",
-              padding: "6px 12px",
-              fontSize: "12px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {darkMode ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
-        )}
+        {/* Theme Toggle */}
+        <CyberThemeToggle variant="icon" showLabel={false} />
 
         {/* Notifications */}
         {onNotificationsClick && (
