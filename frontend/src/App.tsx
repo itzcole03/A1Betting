@@ -1063,6 +1063,291 @@ const MoneyMaker: React.FC = () => {
           }),
         ],
       ),
+      // Add advanced Money Maker interface with cyber styling
+      React.createElement(
+        "div",
+        {
+          key: "advanced-interface",
+          className: "grid grid-cols-1 lg:grid-cols-2 gap-8",
+        },
+        [
+          React.createElement(
+            Card,
+            { key: "config", title: "Quantum Configuration" },
+            [
+              React.createElement(
+                "div",
+                { key: "config-items", className: "space-y-4" },
+                [
+                  React.createElement(
+                    "div",
+                    {
+                      key: "investment",
+                      className:
+                        "flex justify-between items-center p-3 glass-card rounded-lg",
+                    },
+                    [
+                      React.createElement(
+                        "span",
+                        { key: "label", className: "text-gray-300" },
+                        "Investment Amount",
+                      ),
+                      React.createElement(
+                        "span",
+                        {
+                          key: "value",
+                          className: "text-electric-400 font-bold",
+                        },
+                        "$10,000",
+                      ),
+                    ],
+                  ),
+                  React.createElement(
+                    "div",
+                    {
+                      key: "risk",
+                      className:
+                        "flex justify-between items-center p-3 glass-card rounded-lg",
+                    },
+                    [
+                      React.createElement(
+                        "span",
+                        { key: "label", className: "text-gray-300" },
+                        "Risk Level",
+                      ),
+                      React.createElement(
+                        "span",
+                        {
+                          key: "value",
+                          className: "text-yellow-400 font-bold",
+                        },
+                        "Moderate",
+                      ),
+                    ],
+                  ),
+                  React.createElement(
+                    "div",
+                    {
+                      key: "models",
+                      className:
+                        "flex justify-between items-center p-3 glass-card rounded-lg",
+                    },
+                    [
+                      React.createElement(
+                        "span",
+                        { key: "label", className: "text-gray-300" },
+                        "Active Models",
+                      ),
+                      React.createElement(
+                        "span",
+                        {
+                          key: "value",
+                          className: "text-purple-400 font-bold",
+                        },
+                        "47/47",
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          React.createElement(
+            Card,
+            { key: "predictions", title: "Live Predictions" },
+            [
+              React.createElement(
+                "div",
+                { key: "pred-items", className: "space-y-3" },
+                [
+                  React.createElement(
+                    "div",
+                    {
+                      key: "pred1",
+                      className:
+                        "p-3 bg-green-500/20 rounded-lg border border-green-500/30",
+                    },
+                    [
+                      React.createElement(
+                        "div",
+                        {
+                          key: "match",
+                          className: "font-semibold text-green-300",
+                        },
+                        "Lakers vs Warriors",
+                      ),
+                      React.createElement(
+                        "div",
+                        {
+                          key: "confidence",
+                          className: "text-sm text-gray-400",
+                        },
+                        "Confidence: 94.7% • EV: +$247",
+                      ),
+                    ],
+                  ),
+                  React.createElement(
+                    "div",
+                    {
+                      key: "pred2",
+                      className:
+                        "p-3 bg-blue-500/20 rounded-lg border border-blue-500/30",
+                    },
+                    [
+                      React.createElement(
+                        "div",
+                        {
+                          key: "match",
+                          className: "font-semibold text-blue-300",
+                        },
+                        "Chiefs vs Bills",
+                      ),
+                      React.createElement(
+                        "div",
+                        {
+                          key: "confidence",
+                          className: "text-sm text-gray-400",
+                        },
+                        "Confidence: 91.2% • EV: +$186",
+                      ),
+                    ],
+                  ),
+                  React.createElement(
+                    "div",
+                    {
+                      key: "pred3",
+                      className:
+                        "p-3 bg-purple-500/20 rounded-lg border border-purple-500/30",
+                    },
+                    [
+                      React.createElement(
+                        "div",
+                        {
+                          key: "match",
+                          className: "font-semibold text-purple-300",
+                        },
+                        "Celtics vs Heat",
+                      ),
+                      React.createElement(
+                        "div",
+                        {
+                          key: "confidence",
+                          className: "text-sm text-gray-400",
+                        },
+                        "Confidence: 88.9% • EV: +$134",
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+      // Add real-time performance metrics
+      React.createElement(
+        Card,
+        { key: "performance", title: "Real-Time Performance", glowing: true },
+        [
+          React.createElement(
+            "div",
+            {
+              key: "metrics-grid",
+              className: "grid grid-cols-2 md:grid-cols-4 gap-4",
+            },
+            [
+              React.createElement(
+                "div",
+                {
+                  key: "metric1",
+                  className: "text-center p-4 glass-card rounded-lg",
+                },
+                [
+                  React.createElement(
+                    "div",
+                    {
+                      key: "value",
+                      className: "text-2xl font-bold text-green-400",
+                    },
+                    "+247%",
+                  ),
+                  React.createElement(
+                    "div",
+                    { key: "label", className: "text-xs text-gray-400" },
+                    "30-Day ROI",
+                  ),
+                ],
+              ),
+              React.createElement(
+                "div",
+                {
+                  key: "metric2",
+                  className: "text-center p-4 glass-card rounded-lg",
+                },
+                [
+                  React.createElement(
+                    "div",
+                    {
+                      key: "value",
+                      className: "text-2xl font-bold text-electric-400",
+                    },
+                    "97.3%",
+                  ),
+                  React.createElement(
+                    "div",
+                    { key: "label", className: "text-xs text-gray-400" },
+                    "Accuracy",
+                  ),
+                ],
+              ),
+              React.createElement(
+                "div",
+                {
+                  key: "metric3",
+                  className: "text-center p-4 glass-card rounded-lg",
+                },
+                [
+                  React.createElement(
+                    "div",
+                    {
+                      key: "value",
+                      className: "text-2xl font-bold text-blue-400",
+                    },
+                    "1,247",
+                  ),
+                  React.createElement(
+                    "div",
+                    { key: "label", className: "text-xs text-gray-400" },
+                    "Predictions",
+                  ),
+                ],
+              ),
+              React.createElement(
+                "div",
+                {
+                  key: "metric4",
+                  className: "text-center p-4 glass-card rounded-lg",
+                },
+                [
+                  React.createElement(
+                    "div",
+                    {
+                      key: "value",
+                      className: "text-2xl font-bold text-purple-400",
+                    },
+                    "47",
+                  ),
+                  React.createElement(
+                    "div",
+                    { key: "label", className: "text-xs text-gray-400" },
+                    "AI Models",
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     ],
   );
 };
@@ -1130,19 +1415,374 @@ const App: React.FC = () => {
       case "money-maker":
         return React.createElement(MoneyMaker);
       case "prizepicks":
-        return React.createElement(DefaultPage, {
-          title: "PrizePicks Pro",
-          description:
-            "Professional player prop analysis with real-time AI enhancement and market insights",
-          icon: "fa-trophy",
-        });
+        return React.createElement(
+          "div",
+          { className: "animate-slide-in-up" },
+          [
+            React.createElement(
+              "div",
+              { key: "header", className: "text-center mb-8" },
+              [
+                React.createElement(
+                  "div",
+                  {
+                    key: "icon",
+                    className: "text-6xl mb-6 text-electric-400 float-element",
+                  },
+                  React.createElement("i", { className: "fa-trophy" }),
+                ),
+                React.createElement(
+                  "h1",
+                  {
+                    key: "title",
+                    className: "holographic text-4xl font-black mb-4",
+                  },
+                  "PrizePicks Pro",
+                ),
+                React.createElement(
+                  "p",
+                  {
+                    key: "desc",
+                    className: "text-xl text-gray-400 max-w-2xl mx-auto",
+                  },
+                  "Professional player prop analysis with real-time AI enhancement and market insights",
+                ),
+              ],
+            ),
+            React.createElement(
+              "div",
+              {
+                key: "content",
+                className:
+                  "glass-card rounded-2xl p-6 transition-all duration-300",
+              },
+              React.createElement("div", { className: "text-center py-8" }, [
+                React.createElement(
+                  "div",
+                  { key: "status", className: "text-green-400 mb-4" },
+                  "🚀 Advanced PrizePicks Integration",
+                ),
+                React.createElement(
+                  "p",
+                  { key: "desc", className: "text-gray-300 mb-6" },
+                  "Professional prop analysis with real-time market data and AI insights",
+                ),
+                React.createElement(Button, {
+                  key: "btn",
+                  label: "Launch PrizePicks Pro",
+                  variant: "primary",
+                  icon: "fa-rocket",
+                }),
+              ]),
+            ),
+          ],
+        );
       case "ml-center":
-        return React.createElement(DefaultPage, {
-          title: "ML Center",
-          description:
-            "Machine learning command center with 47 neural networks and deep learning models",
-          icon: "fa-brain",
-        });
+        return React.createElement(
+          "div",
+          { className: "space-y-8 animate-slide-in-up" },
+          [
+            React.createElement(
+              "div",
+              { key: "header", className: "text-center mb-8" },
+              [
+                React.createElement(
+                  "div",
+                  {
+                    key: "icon",
+                    className: "text-6xl mb-6 text-electric-400 float-element",
+                  },
+                  React.createElement("i", { className: "fa-brain" }),
+                ),
+                React.createElement(
+                  "h1",
+                  {
+                    key: "title",
+                    className: "holographic text-4xl font-black mb-4",
+                  },
+                  "ML Control Center",
+                ),
+                React.createElement(
+                  "p",
+                  {
+                    key: "desc",
+                    className: "text-xl text-gray-400 max-w-2xl mx-auto",
+                  },
+                  "Machine learning command center with 47 neural networks and deep learning models",
+                ),
+              ],
+            ),
+            React.createElement(
+              "div",
+              {
+                key: "ml-grid",
+                className:
+                  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+              },
+              [
+                React.createElement(
+                  Card,
+                  { key: "models", title: "Active Models", glowing: true },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "model-list", className: "space-y-3" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "m1",
+                            className:
+                              "flex justify-between items-center p-3 bg-green-500/20 rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              {
+                                key: "name",
+                                className: "font-semibold text-green-300",
+                              },
+                              "XGBoost Ensemble",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "status",
+                                className:
+                                  "text-xs bg-green-400 text-black px-2 py-1 rounded",
+                              },
+                              "ACTIVE",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "m2",
+                            className:
+                              "flex justify-between items-center p-3 bg-blue-500/20 rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              {
+                                key: "name",
+                                className: "font-semibold text-blue-300",
+                              },
+                              "Neural Network",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "status",
+                                className:
+                                  "text-xs bg-blue-400 text-black px-2 py-1 rounded",
+                              },
+                              "TRAINING",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "m3",
+                            className:
+                              "flex justify-between items-center p-3 bg-purple-500/20 rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "span",
+                              {
+                                key: "name",
+                                className: "font-semibold text-purple-300",
+                              },
+                              "Transformer",
+                            ),
+                            React.createElement(
+                              "span",
+                              {
+                                key: "status",
+                                className:
+                                  "text-xs bg-purple-400 text-black px-2 py-1 rounded",
+                              },
+                              "READY",
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  Card,
+                  { key: "performance", title: "Model Performance" },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "perf-metrics", className: "space-y-4" },
+                      [
+                        React.createElement(
+                          "div",
+                          { key: "accuracy", className: "text-center" },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "value",
+                                className:
+                                  "text-3xl font-bold text-electric-400",
+                              },
+                              "97.3%",
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "label",
+                                className: "text-sm text-gray-400",
+                              },
+                              "Ensemble Accuracy",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          { key: "precision", className: "text-center mt-4" },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "value",
+                                className: "text-2xl font-bold text-green-400",
+                              },
+                              "94.8%",
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "label",
+                                className: "text-sm text-gray-400",
+                              },
+                              "Precision",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          { key: "recall", className: "text-center mt-4" },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "value",
+                                className: "text-2xl font-bold text-blue-400",
+                              },
+                              "92.1%",
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "label",
+                                className: "text-sm text-gray-400",
+                              },
+                              "Recall",
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  Card,
+                  { key: "training", title: "Training Pipeline" },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "pipeline", className: "space-y-3" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "stage1",
+                            className: "flex items-center space-x-3",
+                          },
+                          [
+                            React.createElement("div", {
+                              key: "indicator",
+                              className:
+                                "w-3 h-3 bg-green-400 rounded-full animate-pulse",
+                            }),
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-green-300" },
+                              "Data Processing",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "stage2",
+                            className: "flex items-center space-x-3",
+                          },
+                          [
+                            React.createElement("div", {
+                              key: "indicator",
+                              className:
+                                "w-3 h-3 bg-blue-400 rounded-full animate-pulse",
+                            }),
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-blue-300" },
+                              "Feature Engineering",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "stage3",
+                            className: "flex items-center space-x-3",
+                          },
+                          [
+                            React.createElement("div", {
+                              key: "indicator",
+                              className:
+                                "w-3 h-3 bg-purple-400 rounded-full animate-pulse",
+                            }),
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-purple-300" },
+                              "Model Training",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "stage4",
+                            className: "flex items-center space-x-3",
+                          },
+                          [
+                            React.createElement("div", {
+                              key: "indicator",
+                              className: "w-3 h-3 bg-yellow-400 rounded-full",
+                            }),
+                            React.createElement(
+                              "span",
+                              { key: "label", className: "text-gray-400" },
+                              "Validation",
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
       case "quantum":
         return React.createElement(DefaultPage, {
           title: "Quantum Predictions",
@@ -1151,12 +1791,344 @@ const App: React.FC = () => {
           icon: "fa-atom",
         });
       case "analytics":
-        return React.createElement(DefaultPage, {
-          title: "Advanced Analytics",
-          description:
-            "Comprehensive data analysis with real-time insights and performance metrics",
-          icon: "fa-chart-line",
-        });
+        return React.createElement(
+          "div",
+          { className: "space-y-8 animate-slide-in-up" },
+          [
+            React.createElement(
+              "div",
+              { key: "header", className: "text-center mb-8" },
+              [
+                React.createElement(
+                  "div",
+                  {
+                    key: "icon",
+                    className: "text-6xl mb-6 text-electric-400 float-element",
+                  },
+                  React.createElement("i", { className: "fa-chart-line" }),
+                ),
+                React.createElement(
+                  "h1",
+                  {
+                    key: "title",
+                    className: "holographic text-4xl font-black mb-4",
+                  },
+                  "Quantum Analytics",
+                ),
+                React.createElement(
+                  "p",
+                  {
+                    key: "desc",
+                    className: "text-xl text-gray-400 max-w-2xl mx-auto",
+                  },
+                  "Comprehensive data analysis with real-time insights and performance metrics",
+                ),
+              ],
+            ),
+            React.createElement(
+              "div",
+              {
+                key: "analytics-dashboard",
+                className: "grid grid-cols-1 lg:grid-cols-2 gap-8",
+              },
+              [
+                React.createElement(
+                  Card,
+                  { key: "trends", title: "Market Trends", glowing: true },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "trend-viz", className: "space-y-4" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "chart-placeholder",
+                            className:
+                              "h-48 bg-gradient-to-br from-electric-400/20 to-purple-500/20 rounded-lg flex items-center justify-center",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              { key: "chart-text", className: "text-center" },
+                              [
+                                React.createElement("i", {
+                                  key: "chart-icon",
+                                  className:
+                                    "fas fa-chart-area text-4xl text-electric-400 mb-3",
+                                }),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "chart-label",
+                                    className: "text-gray-300",
+                                  },
+                                  "Real-time Market Analysis",
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "indicators",
+                            className: "grid grid-cols-3 gap-4",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "ind1",
+                                className:
+                                  "text-center p-3 glass-card rounded-lg",
+                              },
+                              [
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "value",
+                                    className:
+                                      "text-lg font-bold text-green-400",
+                                  },
+                                  "+12.4%",
+                                ),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "label",
+                                    className: "text-xs text-gray-400",
+                                  },
+                                  "Profit Trend",
+                                ),
+                              ],
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "ind2",
+                                className:
+                                  "text-center p-3 glass-card rounded-lg",
+                              },
+                              [
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "value",
+                                    className:
+                                      "text-lg font-bold text-blue-400",
+                                  },
+                                  "847",
+                                ),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "label",
+                                    className: "text-xs text-gray-400",
+                                  },
+                                  "Opportunities",
+                                ),
+                              ],
+                            ),
+                            React.createElement(
+                              "div",
+                              {
+                                key: "ind3",
+                                className:
+                                  "text-center p-3 glass-card rounded-lg",
+                              },
+                              [
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "value",
+                                    className:
+                                      "text-lg font-bold text-purple-400",
+                                  },
+                                  "2.1s",
+                                ),
+                                React.createElement(
+                                  "div",
+                                  {
+                                    key: "label",
+                                    className: "text-xs text-gray-400",
+                                  },
+                                  "Avg Response",
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                React.createElement(
+                  Card,
+                  { key: "insights", title: "AI Insights" },
+                  [
+                    React.createElement(
+                      "div",
+                      { key: "insights-list", className: "space-y-4" },
+                      [
+                        React.createElement(
+                          "div",
+                          {
+                            key: "insight1",
+                            className:
+                              "p-4 bg-green-500/10 border border-green-500/30 rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "insight-header",
+                                className: "flex items-center space-x-2 mb-2",
+                              },
+                              [
+                                React.createElement("i", {
+                                  key: "icon",
+                                  className: "fas fa-lightbulb text-green-400",
+                                }),
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "label",
+                                    className: "font-semibold text-green-300",
+                                  },
+                                  "Market Opportunity",
+                                ),
+                              ],
+                            ),
+                            React.createElement(
+                              "p",
+                              {
+                                key: "text",
+                                className: "text-sm text-gray-300",
+                              },
+                              "High-value arbitrage detected in NBA spreads with 94.2% confidence",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "insight2",
+                            className:
+                              "p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "insight-header",
+                                className: "flex items-center space-x-2 mb-2",
+                              },
+                              [
+                                React.createElement("i", {
+                                  key: "icon",
+                                  className: "fas fa-trending-up text-blue-400",
+                                }),
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "label",
+                                    className: "font-semibold text-blue-300",
+                                  },
+                                  "Performance Alert",
+                                ),
+                              ],
+                            ),
+                            React.createElement(
+                              "p",
+                              {
+                                key: "text",
+                                className: "text-sm text-gray-300",
+                              },
+                              "Model accuracy improved 3.1% after latest training cycle",
+                            ),
+                          ],
+                        ),
+                        React.createElement(
+                          "div",
+                          {
+                            key: "insight3",
+                            className:
+                              "p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg",
+                          },
+                          [
+                            React.createElement(
+                              "div",
+                              {
+                                key: "insight-header",
+                                className: "flex items-center space-x-2 mb-2",
+                              },
+                              [
+                                React.createElement("i", {
+                                  key: "icon",
+                                  className: "fas fa-brain text-purple-400",
+                                }),
+                                React.createElement(
+                                  "span",
+                                  {
+                                    key: "label",
+                                    className: "font-semibold text-purple-300",
+                                  },
+                                  "AI Recommendation",
+                                ),
+                              ],
+                            ),
+                            React.createElement(
+                              "p",
+                              {
+                                key: "text",
+                                className: "text-sm text-gray-300",
+                              },
+                              "Increase allocation to NFL props based on recent performance data",
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            React.createElement(
+              "div",
+              {
+                key: "advanced-analytics",
+                className: "grid grid-cols-1 md:grid-cols-3 gap-6",
+              },
+              [
+                React.createElement(MetricCard, {
+                  key: "roi",
+                  label: "30-Day ROI",
+                  value: "+247.3%",
+                  icon: "fa-chart-line",
+                  change: "+12.4%",
+                  trend: "up",
+                }),
+                React.createElement(MetricCard, {
+                  key: "volume",
+                  label: "Analysis Volume",
+                  value: "1.2M",
+                  icon: "fa-database",
+                  change: "+847",
+                  trend: "up",
+                }),
+                React.createElement(MetricCard, {
+                  key: "speed",
+                  label: "Processing Speed",
+                  value: "0.7ms",
+                  icon: "fa-bolt",
+                  change: "-0.3ms",
+                  trend: "up",
+                }),
+              ],
+            ),
+          ],
+        );
       case "realtime":
         return React.createElement(DefaultPage, {
           title: "Real-time Monitor",
