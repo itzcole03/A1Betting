@@ -267,16 +267,6 @@ export const UniversalDashboard: React.FC<UniversalDashboardProps> = ({
 
   return (
     <div className="min-h-screen relative">
-      {/* Mobile Menu Button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
-        <MegaButton
-          variant="ghost"
-          size="sm"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          icon={sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-        />
-      </div>
-
       {/* Sidebar */}
       <AnimatePresence>
         {(sidebarOpen || window.innerWidth >= 1024) && (
