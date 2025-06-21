@@ -144,12 +144,33 @@ export class UnifiedAnalyticsService extends BaseService {
         timestamp: Date.now(),
       };
     } catch (error) {
-      this.errorService.handleError(error, {
-        code: "ANALYTICS_ERROR",
-        source: "UnifiedAnalyticsService",
-        details: { method: "getPerformanceMetrics", timeRange },
-      });
-      throw error;
+      // Log error but provide fallback data instead of throwing
+      if (this.errorService?.handleError) {
+        this.errorService.handleError(error, {
+          code: "ANALYTICS_ERROR",
+          source: "UnifiedAnalyticsService",
+          details: { method: "getPerformanceMetrics", timeRange },
+        });
+      } else {
+        console.error("Analytics service error:", error);
+      }
+
+      // Return fallback/mock data instead of throwing
+      return {
+        totalBets: 0,
+        activeBets: 0,
+        winRate: 0,
+        profitLoss: 0,
+        roi: 0,
+        bestStreak: 0,
+        currentStreak: 0,
+        averageOdds: 0,
+        averageStake: 0,
+        totalPredictions: 0,
+        predictionAccuracy: 0,
+        opportunities: 0,
+        timestamp: Date.now(),
+      };
     }
   }
   async getRecentActivity(limit = 10) {
