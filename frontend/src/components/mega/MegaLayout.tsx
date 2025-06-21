@@ -80,6 +80,7 @@ export const MegaSidebar: React.FC<{
   variant = "default",
   className = "",
 }) => {
+  const { theme } = useTheme();
   const [expandedSubmenus, setExpandedSubmenus] = useState<Set<string>>(
     new Set(),
   );
