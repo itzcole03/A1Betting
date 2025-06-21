@@ -680,7 +680,7 @@ export const MegaHeader: React.FC<{
           style={{
             background: safeTheme.colors.surface,
             border: `1px solid ${safeTheme.colors.border}`,
-            color: safeTheme.colors.text.primary,
+            color: safeTheme.colors?.text?.primary || "#0f172a",
             fontWeight: "500",
             padding: "8px",
             fontSize: "12px",
