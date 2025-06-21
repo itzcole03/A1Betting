@@ -599,7 +599,170 @@ export const MegaSidebar: React.FC<{
       {/* Navigation */}
       <nav style={{ flex: 1, padding: "0 16px", overflowY: "auto" }}>
         <div style={{ marginBottom: "8px" }}>
-          {/* Temporarily disabled all navigation items to isolate Profile/Settings */}
+          {navigationItems
+            .filter(
+              (item) =>
+                !["settings", "profile", "Settings", "Profile"].includes(
+                  item.id,
+                ) &&
+                !item.label?.toLowerCase().includes("settings") &&
+                !item.label?.toLowerCase().includes("profile"),
+            )
+            .map((item, index) => {
+              const Icon = item.icon;
+              const isActive = currentPage === item.id;
+              const hasSubmenu = item.submenu && item.submenu.length > 0;
+              const isExpanded = expandedSubmenus.has(item.id);
+
+              return (
+                <div key={item.id} style={{ marginBottom: "6px" }}>
+                  <button
+                    onClick={() => {
+                      if (hasSubmenu && !isCompact) {
+                        toggleSubmenu(item.id);
+                      } else {
+                        onNavigate(item.id);
+                      }
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                      borderRadius: "14px",
+                      padding: isCompact ? "14px 12px" : "14px 18px",
+                      fontSize: "14px",
+                      fontWeight: isActive ? "600" : "500",
+                      cursor: "pointer",
+                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                      justifyContent: isCompact ? "center" : "flex-start",
+                      border: isActive
+                        ? "1px solid rgba(6, 255, 165, 0.3)"
+                        : "1px solid transparent",
+                      background: isActive
+                        ? "linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(0, 255, 136, 0.9))"
+                        : "rgba(255, 255, 255, 0.03)",
+                      color: isActive ? "#000" : "#e2e8f0",
+                      backdropFilter: "blur(20px) saturate(1.8)",
+                      position: "relative",
+                      overflow: "hidden",
+                      boxShadow: isActive
+                        ? "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)"
+                        : "0 2px 8px rgba(0, 0, 0, 0.05)",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.background =
+                          "rgba(255, 255, 255, 0.08)";
+                        e.currentTarget.style.transform = "translateY(-1px)";
+                        e.currentTarget.style.boxShadow =
+                          "0 4px 16px rgba(0, 0, 0, 0.1)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.background =
+                          "rgba(255, 255, 255, 0.03)";
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow =
+                          "0 2px 8px rgba(0, 0, 0, 0.05)";
+                      }
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "18px",
+                        color: isActive ? "#000" : "#ffffff",
+                        display: "flex",
+                        alignItems: "center",
+                        minWidth: "18px",
+                      }}
+                    >
+                      {item.icon}
+                    </span>
+                    {!isCompact && (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          flex: 1,
+                          marginLeft: "14px",
+                        }}
+                      >
+                        <span
+                          style={{
+                            flex: 1,
+                            textAlign: "left",
+                            letterSpacing: "-0.01em",
+                          }}
+                        >
+                          {item.label}
+                        </span>
+                        {item.badge && (
+                          <span
+                            style={{
+                              background: isActive
+                                ? "rgba(0, 0, 0, 0.15)"
+                                : "#06ffa5",
+                              color: isActive ? "#000" : "#000",
+                              borderRadius: "12px",
+                              padding: "4px 8px",
+                              fontSize: "11px",
+                              fontWeight: "700",
+                              marginLeft: "8px",
+                            }}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                        {hasSubmenu && (
+                          <ChevronRight
+                            size={16}
+                            style={{
+                              marginLeft: "8px",
+                              transform: isExpanded
+                                ? "rotate(90deg)"
+                                : "rotate(0deg)",
+                              transition: "transform 0.3s ease",
+                              color: isActive ? "#000" : "#94a3b8",
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </button>
+
+                  {/* Submenu */}
+                  {hasSubmenu && isExpanded && !isCompact && (
+                    <div style={{ marginLeft: "16px", marginTop: "4px" }}>
+                      {item.submenu!.map((subItem) => {
+                        const SubIcon = subItem.icon;
+                        return (
+                          <MegaButton
+                            key={subItem.id}
+                            variant="secondary"
+                            onClick={() => onNavigate(subItem.id)}
+                            icon={
+                              SubIcon ? (
+                                <span style={{ fontSize: "14px" }}>
+                                  {SubIcon}
+                                </span>
+                              ) : undefined
+                            }
+                            style={{
+                              marginBottom: "2px",
+                              fontSize: "12px",
+                              padding: "8px 12px",
+                            }}
+                          >
+                            {subItem.label}
+                          </MegaButton>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
         </div>
       </nav>
 
@@ -672,7 +835,7 @@ export const MegaSidebar: React.FC<{
                 minWidth: "18px",
               }}
             >
-              👤
+              ��
             </span>
             <span
               style={{
