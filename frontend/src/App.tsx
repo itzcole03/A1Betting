@@ -619,10 +619,12 @@ const Sidebar: React.FC = () => {
                         marginBottom: "4px",
                         ...(currentPage === item.key
                           ? {
-                              background: "rgba(0,255,136,0.2)",
-                              borderLeft: "4px solid #00ff88",
-                              paddingLeft: "16px",
-                              boxShadow: "0 4px 12px rgba(0,255,136,0.3)",
+                              background:
+                                "linear-gradient(135deg, rgba(6,255,165,0.8), rgba(0,255,136,0.6))",
+                              border: "1px solid rgba(6,255,165,0.3)",
+                              boxShadow:
+                                "0 4px 20px rgba(6,255,165,0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
+                              backdropFilter: "blur(10px)",
                             }
                           : {}),
                       },
