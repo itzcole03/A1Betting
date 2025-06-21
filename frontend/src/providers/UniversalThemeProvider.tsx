@@ -346,6 +346,17 @@ export const useTheme = (): ThemeContextType => {
   if (context === undefined) {
     throw new Error("useTheme must be used within a UniversalThemeProvider");
   }
+
+  // Additional safety: ensure theme object is complete
+  if (!context.theme || !context.theme.colors) {
+    console.warn("Theme context is incomplete, using fallback theme");
+    const fallbackTheme = createThemeConfig("cyber-light");
+    return {
+      ...context,
+      theme: fallbackTheme,
+    };
+  }
+
   return context;
 };
 
