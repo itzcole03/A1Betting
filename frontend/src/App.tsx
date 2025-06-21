@@ -144,7 +144,7 @@ const AppContent: React.FC = () => {
   }, [state.connectedSources]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white cyber-bg">
       {/* Mobile sidebar overlay */}
       {state.sidebarOpen && (
         <div
@@ -159,11 +159,10 @@ const AppContent: React.FC = () => {
         onPageChange={handleSectionChange}
         isOpen={state.sidebarOpen}
         onClose={toggleSidebar}
-        className="lg:!static lg:!w-80"
       />
 
       {/* Main content area */}
-      <div className="lg:ml-80 min-h-screen">
+      <div className="flex-1 flex flex-col">
         {/* Header */}
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
           <div className="flex items-center justify-between p-4">
