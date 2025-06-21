@@ -779,7 +779,7 @@ export const MegaHeader: React.FC<{
         <div
           style={{
             fontSize: "12px",
-            color: safeTheme.colors.text.muted,
+            color: safeTheme.colors?.text?.muted || "#64748b",
             lineHeight: "1.2",
           }}
         >
