@@ -305,13 +305,33 @@ input[type="text"],
 input[type="email"],
 textarea {
   font-size: 16px !important;
-  background: var(--cyber-surface);
+  background: var(--cyber-surface) !important;
   backdrop-filter: blur(10px);
-  border: 1px solid var(--cyber-border);
-  color: var(--cyber-text-primary);
+  border: 1px solid var(--cyber-border) !important;
+  color: var(--cyber-text-primary) !important;
   border-radius: 12px;
   padding: 12px 16px;
   transition: all 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Special dropdown arrow styling */
+select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306ffa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 16px !important;
+  padding-right: 40px !important;
+}
+
+.cyber-light select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+}
+
+.cyber-dark select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306ffa5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e") !important;
 }
 
 input[type="number"]:focus,
@@ -319,9 +339,9 @@ select:focus,
 input[type="text"]:focus,
 input[type="email"]:focus,
 textarea:focus {
-  outline: none;
-  border-color: var(--cyber-primary);
-  box-shadow: 0 0 20px rgba(6, 255, 165, 0.3);
+  outline: none !important;
+  border-color: var(--cyber-primary) !important;
+  box-shadow: 0 0 20px rgba(6, 255, 165, 0.3) !important;
 }
 
 /* Card Hover Effects */
