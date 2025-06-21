@@ -113,15 +113,16 @@ const UserAvatarDropdown: React.FC<{
             top: "60px",
             right: "24px",
             minWidth: "220px",
-            background: "rgba(30, 41, 59, 0.95)",
+            background: "rgba(15, 23, 42, 0.98)",
             backdropFilter: "blur(40px) saturate(2)",
-            border: "1px solid rgba(6, 255, 165, 0.3)",
+            border: "1px solid rgba(6, 255, 165, 0.4)",
             borderRadius: "16px",
             boxShadow:
-              "0 20px 64px rgba(0, 0, 0, 0.4), 0 8px 32px rgba(6, 255, 165, 0.1)",
-            zIndex: 9999,
+              "0 25px 80px rgba(0, 0, 0, 0.6), 0 10px 40px rgba(6, 255, 165, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+            zIndex: 999999,
             padding: "12px",
-            animation: "slideInFade 0.2s ease-out forwards",
+            transform: "translateY(0)",
+            opacity: 1,
           }}
         >
           {/* User Info Header */}
