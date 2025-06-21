@@ -1254,30 +1254,23 @@ export const UltimateSettingsPage: React.FC = () => {
                 Export
               </Button>
 
-              <div className="relative overflow-hidden">
+              <label className="relative cursor-pointer">
                 <input
                   type="file"
                   accept=".json"
                   onChange={handleImportSettings}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-                  style={{
-                    zIndex: 20,
-                    pointerEvents: "all",
-                  }}
+                  className="sr-only"
                 />
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-2 pointer-events-none relative z-10"
-                  style={{
-                    zIndex: 10,
-                    pointerEvents: "none",
-                  }}
+                  className="flex items-center gap-2"
+                  type="button"
                 >
                   <Upload className="w-4 h-4" />
                   Import
                 </Button>
-              </div>
+              </label>
 
               <Button
                 onClick={saveSettings}
