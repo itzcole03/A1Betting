@@ -123,47 +123,80 @@ const MegaApp: React.FC = () => {
 
   const renderCurrentPage = () => {
     const currentItem = navigationItems.find((item) => item.id === currentPage);
-    if (!currentItem?.component) {
-      return (
-        <div style={{ padding: "24px" }}>
-          <MegaCard
-            variant="glass"
-            padding="lg"
-            style={{ textAlign: "center" }}
-          >
-            <div style={{ marginBottom: "16px" }}>
-              {currentItem?.id === "real-time" && (
-                <Activity size={48} color={CYBER_COLORS.primary} />
-              )}
-              {currentItem?.id === "arbitrage" && (
-                <Shield size={48} color={CYBER_COLORS.secondary} />
-              )}
-              {currentItem?.id === "predictions" && (
-                <Brain size={48} color={CYBER_COLORS.accent} />
-              )}
-            </div>
-            <CyberText
-              variant="title"
-              style={{ marginBottom: "8px", fontSize: "24px" }}
-            >
-              {currentItem?.label}
-            </CyberText>
-            <CyberText variant="body" color="muted">
-              {currentItem?.description} - Coming Soon
-            </CyberText>
-          </MegaCard>
-        </div>
-      );
-    }
 
-    const Component = currentItem.component;
-    return (
-      <Component
-        connectedSources={connectedSources}
-        dataQuality={dataQuality}
-        userBalance={user.balance}
-      />
-    );
+    // Use actual MegaFeatures for enhanced functionality
+    switch (currentPage) {
+      case "dashboard":
+        return (
+          <MegaDashboard
+            connectedSources={connectedSources}
+            dataQuality={dataQuality}
+            userStats={user}
+          />
+        );
+      case "money-maker":
+        return <MegaBetting userBalance={user.balance} autoMode={true} />;
+      case "analytics":
+        return <MegaAnalytics autoRefresh={true} showAdvanced={true} />;
+      case "arbitrage":
+        return (
+          <div style={{ padding: "24px" }}>
+            <MegaArbitrageEngine
+              isScanning={true}
+              onToggleScanning={(scanning) =>
+                console.log("Arbitrage scanning:", scanning)
+              }
+            />
+          </div>
+        );
+      case "predictions":
+        return (
+          <div style={{ padding: "24px" }}>
+            <MegaPredictionEngine isRealTime={true} />
+          </div>
+        );
+      case "real-time":
+        return (
+          <div style={{ padding: "24px" }}>
+            <MegaRevolutionaryInterface />
+          </div>
+        );
+      default:
+        // Fallback for any remaining placeholder pages
+        if (currentItem && !currentItem.component) {
+          return (
+            <div style={{ padding: "24px" }}>
+              <MegaCard
+                variant="glass"
+                padding="lg"
+                style={{ textAlign: "center" }}
+              >
+                <div style={{ marginBottom: "16px" }}>
+                  <Activity size={48} color={CYBER_COLORS.primary} />
+                </div>
+                <CyberText
+                  variant="title"
+                  style={{ marginBottom: "8px", fontSize: "24px" }}
+                >
+                  {currentItem.label}
+                </CyberText>
+                <CyberText variant="body" color="muted">
+                  {currentItem.description} - Coming Soon
+                </CyberText>
+              </MegaCard>
+            </div>
+          );
+        }
+
+        // Default to dashboard
+        return (
+          <MegaDashboard
+            connectedSources={connectedSources}
+            dataQuality={dataQuality}
+            userStats={user}
+          />
+        );
+    }
   };
 
   return (
