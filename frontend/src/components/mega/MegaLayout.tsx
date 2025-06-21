@@ -43,10 +43,7 @@ const UserAvatarDropdown: React.FC<{
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownRef, setDropdownRef] = useState<HTMLDivElement | null>(null);
   const [buttonRef, setButtonRef] = useState<HTMLButtonElement | null>(null);
-  const [dropdownPosition, setDropdownPosition] = useState({
-    top: 0,
-    right: 0,
-  });
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
 
   // Calculate dropdown position based on button position
   useEffect(() => {
@@ -62,20 +59,16 @@ const UserAvatarDropdown: React.FC<{
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef &&
-        !dropdownRef.contains(event.target as Node) &&
-        buttonRef &&
-        !buttonRef.contains(event.target as Node)
-      ) {
+      if (dropdownRef && !dropdownRef.contains(event.target as Node) &&
+          buttonRef && !buttonRef.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
       return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
       };
     }
   }, [dropdownRef, buttonRef, isOpen]);
@@ -83,25 +76,25 @@ const UserAvatarDropdown: React.FC<{
   const handleAccountProfile = () => {
     // Navigate to profile page using app navigation
     if (onNavigate) {
-      onNavigate("profile");
+      onNavigate('profile');
     }
     setIsOpen(false);
   };
 
   const handleSignOut = () => {
     // Handle sign out
-    if (confirm("Are you sure you want to sign out?")) {
+    if (confirm('Are you sure you want to sign out?')) {
       // Clear any stored auth data
-      localStorage.removeItem("authToken");
+      localStorage.removeItem('authToken');
       sessionStorage.clear();
       // Redirect to login or home page
-      window.location.href = "/login";
+      window.location.href = '/login';
     }
     setIsOpen(false);
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: 'relative' }}>
       <button
         ref={setButtonRef}
         onClick={() => setIsOpen(!isOpen)}
@@ -131,124 +124,116 @@ const UserAvatarDropdown: React.FC<{
       </button>
 
       {/* Dropdown Menu using Portal */}
-      {isOpen &&
-        createPortal(
+      {isOpen && createPortal(
+        <div
+          ref={setDropdownRef}
+          style={{
+            position: "fixed",
+            top: `${dropdownPosition.top}px`,
+            right: `${dropdownPosition.right}px`,
+            minWidth: "220px",
+            background: "rgba(15, 23, 42, 0.98)",
+            backdropFilter: "blur(40px) saturate(2)",
+            border: "1px solid rgba(6, 255, 165, 0.4)",
+            borderRadius: "16px",
+            boxShadow: "0 25px 80px rgba(0, 0, 0, 0.6), 0 10px 40px rgba(6, 255, 165, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+            zIndex: 2147483647,
+            padding: "12px",
+            transform: "translateY(0)",
+            opacity: 1,
+          }}
+        >
+          {/* User Info Header */}
           <div
-            ref={setDropdownRef}
             style={{
-              position: "fixed",
-              top: `${dropdownPosition.top}px`,
-              right: `${dropdownPosition.right}px`,
-              minWidth: "220px",
-              background: "rgba(15, 23, 42, 0.98)",
-              backdropFilter: "blur(40px) saturate(2)",
-              border: "1px solid rgba(6, 255, 165, 0.4)",
-              borderRadius: "16px",
-              boxShadow:
-                "0 25px 80px rgba(0, 0, 0, 0.6), 0 10px 40px rgba(6, 255, 165, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-              zIndex: 2147483647,
-              padding: "12px",
-              transform: "translateY(0)",
-              opacity: 1,
+              padding: "12px 16px",
+              borderBottom: "1px solid rgba(6, 255, 165, 0.2)",
+              marginBottom: "8px",
             }}
           >
-            {/* User Info Header */}
             <div
               style={{
-                padding: "12px 16px",
-                borderBottom: "1px solid rgba(6, 255, 165, 0.2)",
-                marginBottom: "8px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  color: "#ffffff",
-                  marginBottom: "2px",
-                }}
-              >
-                {user.name}
-              </div>
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: "#94a3b8",
-                }}
-              >
-                Pro User
-              </div>
-            </div>
-
-            {/* Menu Items */}
-            <button
-              onClick={handleAccountProfile}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                padding: "12px 16px",
-                background: "transparent",
-                border: "none",
-                borderRadius: "12px",
-                cursor: "pointer",
                 fontSize: "14px",
+                fontWeight: "600",
                 color: "#ffffff",
-                transition: "all 0.2s ease",
-                textAlign: "left",
-                fontWeight: "500",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(6, 255, 165, 0.15)";
-                e.currentTarget.style.transform = "translateX(4px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.transform = "translateX(0)";
+                marginBottom: "2px",
               }}
             >
-              <UserCircle
-                size={16}
-                style={{ marginRight: "12px", color: "#06ffa5" }}
-              />
-              Account & Profile
-            </button>
-
-            <button
-              onClick={handleSignOut}
+              {user.name}
+            </div>
+            <div
               style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                padding: "12px 16px",
-                background: "transparent",
-                border: "none",
-                borderRadius: "12px",
-                cursor: "pointer",
-                fontSize: "14px",
-                color: "#ff6b6b",
-                transition: "all 0.2s ease",
-                textAlign: "left",
-                fontWeight: "500",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(255, 107, 107, 0.15)";
-                e.currentTarget.style.transform = "translateX(4px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.transform = "translateX(0)";
+                fontSize: "12px",
+                color: "#94a3b8",
               }}
             >
-              <LogOut
-                size={16}
-                style={{ marginRight: "12px", color: "#ff6b6b" }}
-              />
-              Sign Out
-            </button>
-          </div>,
-          document.body,
-        )}
+              Pro User
+            </div>
+          </div>
+
+          {/* Menu Items */}
+          <button
+            onClick={handleAccountProfile}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              padding: "12px 16px",
+              background: "transparent",
+              border: "none",
+              borderRadius: "12px",
+              cursor: "pointer",
+              fontSize: "14px",
+              color: "#ffffff",
+              transition: "all 0.2s ease",
+              textAlign: "left",
+              fontWeight: "500",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(6, 255, 165, 0.15)";
+              e.currentTarget.style.transform = "translateX(4px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.transform = "translateX(0)";
+            }}
+          >
+            <UserCircle size={16} style={{ marginRight: "12px", color: "#06ffa5" }} />
+            Account & Profile
+          </button>
+
+          <button
+            onClick={handleSignOut}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              padding: "12px 16px",
+              background: "transparent",
+              border: "none",
+              borderRadius: "12px",
+              cursor: "pointer",
+              fontSize: "14px",
+              color: "#ff6b6b",
+              transition: "all 0.2s ease",
+              textAlign: "left",
+              fontWeight: "500",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(255, 107, 107, 0.15)";
+              e.currentTarget.style.transform = "translateX(4px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.transform = "translateX(0)";
+            }}
+          >
+            <LogOut size={16} style={{ marginRight: "12px", color: "#ff6b6b" }} />
+            Sign Out
+          </button>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };
@@ -363,7 +348,7 @@ export const MegaSidebar: React.FC<{
         >
           <div style={{ display: "flex", alignItems: "center" }}>
             <button
-              onClick={() => onNavigate("dashboard")}
+              onClick={() => onNavigate('dashboard')}
               style={{
                 width: "44px",
                 height: "44px",
@@ -380,15 +365,12 @@ export const MegaSidebar: React.FC<{
                 boxShadow: "0 4px 16px rgba(6, 255, 165, 0.2)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform =
-                  "scale(1.08) translateY(-1px)";
-                e.currentTarget.style.boxShadow =
-                  "0 8px 32px rgba(6, 255, 165, 0.4)";
+                e.currentTarget.style.transform = "scale(1.08) translateY(-1px)";
+                e.currentTarget.style.boxShadow = "0 8px 32px rgba(6, 255, 165, 0.4)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "scale(1) translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 4px 16px rgba(6, 255, 165, 0.2)";
+                e.currentTarget.style.boxShadow = "0 4px 16px rgba(6, 255, 165, 0.2)";
               }}
               title="Return to Dashboard"
             >
@@ -597,96 +579,120 @@ export const MegaSidebar: React.FC<{
       </div>
 
       {/* Navigation */}
-      <nav style={{ flex: 1, padding: "0 12px", overflowY: "auto" }}>
-        {navigationItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = currentPage === item.id;
-          const hasSubmenu = item.submenu && item.submenu.length > 0;
-          const isExpanded = expandedSubmenus.has(item.id);
+      <nav style={{ flex: 1, padding: "0 16px", overflowY: "auto" }}>
+        <div style={{ marginBottom: "8px" }}>
+          {navigationItems.map((item, index) => {
+            const Icon = item.icon;
+            const isActive = currentPage === item.id;
+            const hasSubmenu = item.submenu && item.submenu.length > 0;
+            const isExpanded = expandedSubmenus.has(item.id);
 
-          return (
-            <div key={item.id} style={{ marginBottom: "4px" }}>
-              <button
-                onClick={() => {
-                  if (hasSubmenu && !isCompact) {
-                    toggleSubmenu(item.id);
-                  } else {
-                    onNavigate(item.id);
-                  }
-                }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  width: "100%",
-                  borderRadius: "12px",
-                  padding: isCompact ? "12px" : "12px 16px",
-                  fontSize: "14px",
-                  fontWeight: "400",
-                  marginBottom: "4px",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  justifyContent: isCompact ? "center" : "space-between",
-                  border: "none",
-                  background: isActive
-                    ? "linear-gradient(135deg, rgba(6, 255, 165, 0.9), rgba(0, 255, 136, 0.8))"
-                    : "rgba(255, 255, 255, 0.05)",
-                  color: isActive ? "#000" : "#e2e8f0",
-                  backdropFilter: "blur(20px) saturate(1.8)",
-                  ...(isActive
-                    ? {
-                        border: "1px solid rgba(6, 255, 165, 0.5)",
-                        boxShadow:
-                          "0 4px 20px rgba(6, 255, 165, 0.4), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
-                      }
-                    : {
-                        border: "1px solid rgba(255, 255, 255, 0.1)",
-                        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-                      }),
-                }}
-              >
-                <span
+            return (
+              <div key={item.id} style={{ marginBottom: "6px" }}>
+                <button
+                  onClick={() => {
+                    if (hasSubmenu && !isCompact) {
+                      toggleSubmenu(item.id);
+                    } else {
+                      onNavigate(item.id);
+                    }
+                  }}
                   style={{
-                    fontSize: "16px",
-                    color: isActive ? "#000" : "#ffffff",
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                    borderRadius: "14px",
+                    padding: isCompact ? "14px 12px" : "14px 18px",
+                    fontSize: "14px",
+                    fontWeight: isActive ? "600" : "500",
+                    cursor: "pointer",
+                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                    justifyContent: isCompact ? "center" : "flex-start",
+                    border: isActive ? "1px solid rgba(6, 255, 165, 0.3)" : "1px solid transparent",
+                    background: isActive
+                      ? "linear-gradient(135deg, rgba(6, 255, 165, 0.95), rgba(0, 255, 136, 0.9))"
+                      : "rgba(255, 255, 255, 0.03)",
+                    color: isActive ? "#000" : "#e2e8f0",
+                    backdropFilter: "blur(20px) saturate(1.8)",
+                    position: "relative",
+                    overflow: "hidden",
+                    boxShadow: isActive
+                      ? "0 8px 32px rgba(6, 255, 165, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1)"
+                      : "0 2px 8px rgba(0, 0, 0, 0.05)",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                      e.currentTarget.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.1)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)";
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.05)";
+                    }
                   }}
                 >
-                  {item.icon}
-                </span>
-                {!isCompact && (
-                  <div
-                    style={{ display: "flex", alignItems: "center", flex: 1 }}
+                  <span
+                    style={{
+                      fontSize: "18px",
+                      color: isActive ? "#000" : "#ffffff",
+                      display: "flex",
+                      alignItems: "center",
+                      minWidth: "18px",
+                    }}
                   >
-                    <span style={{ marginLeft: "8px" }}>{item.label}</span>
-                    {item.badge && (
-                      <span
-                        style={{
-                          marginLeft: "auto",
-                          background: "#06ffa5",
-                          color: "#000",
-                          borderRadius: "10px",
-                          padding: "2px 6px",
-                          fontSize: "10px",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {item.badge}
+                    {item.icon}
+                  </span>
+                  {!isCompact && (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        flex: 1,
+                        marginLeft: "14px",
+                      }}
+                    >
+                      <span style={{
+                        flex: 1,
+                        textAlign: "left",
+                        letterSpacing: "-0.01em",
+                      }}>
+                        {item.label}
                       </span>
-                    )}
-                    {hasSubmenu && (
-                      <ChevronRight
-                        size={14}
-                        style={{
-                          marginLeft: "4px",
-                          transform: isExpanded
-                            ? "rotate(90deg)"
-                            : "rotate(0deg)",
-                          transition: "transform 0.2s ease",
-                        }}
-                      />
-                    )}
-                  </div>
-                )}
-              </button>
+                      {item.badge && (
+                        <span
+                          style={{
+                            background: isActive ? "rgba(0, 0, 0, 0.15)" : "#06ffa5",
+                            color: isActive ? "#000" : "#000",
+                            borderRadius: "12px",
+                            padding: "4px 8px",
+                            fontSize: "11px",
+                            fontWeight: "700",
+                            marginLeft: "8px",
+                          }}
+                        >
+                          {item.badge}
+                        </span>
+                      )}
+                      {hasSubmenu && (
+                        <ChevronRight
+                          size={16}
+                          style={{
+                            marginLeft: "8px",
+                            transform: isExpanded
+                              ? "rotate(90deg)"
+                              : "rotate(0deg)",
+                            transition: "transform 0.3s ease",
+                            color: isActive ? "#000" : "#94a3b8",
+                          }}
+                        />
+                      )}
+                    </div>
+                  )}
+                </button>
 
               {/* Submenu */}
               {hasSubmenu && isExpanded && !isCompact && (
@@ -724,7 +730,7 @@ export const MegaSidebar: React.FC<{
       {!isCompact && (
         <>
           <button
-            onClick={() => onNavigate("profile")}
+            onClick={() => onNavigate('profile')}
             style={{
               display: "flex",
               alignItems: "center",
@@ -745,19 +751,17 @@ export const MegaSidebar: React.FC<{
             }}
           >
             <span style={{ fontSize: "16px", color: "#ffffff" }}>👤</span>
-            <div
-              style={{
-                flex: 1,
-                marginLeft: "8px",
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
-              }}
-            >
+            <div style={{
+              flex: 1,
+              marginLeft: "8px",
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)"
+            }}>
               Profile
             </div>
           </button>
 
           <button
-            onClick={() => onNavigate("settings")}
+            onClick={() => onNavigate('settings')}
             style={{
               display: "flex",
               alignItems: "center",
@@ -778,13 +782,11 @@ export const MegaSidebar: React.FC<{
             }}
           >
             <span style={{ fontSize: "16px", color: "#ffffff" }}>⚙️</span>
-            <div
-              style={{
-                flex: 1,
-                marginLeft: "8px",
-                textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
-              }}
-            >
+            <div style={{
+              flex: 1,
+              marginLeft: "8px",
+              textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)"
+            }}>
               Settings
             </div>
           </button>
@@ -1028,11 +1030,7 @@ export const MegaHeader: React.FC<{
 
         {/* User Avatar with Dropdown */}
         {user && (
-          <UserAvatarDropdown
-            user={user}
-            isDark={isDark}
-            onNavigate={onNavigate}
-          />
+          <UserAvatarDropdown user={user} isDark={isDark} onNavigate={onNavigate} />
         )}
 
         {/* Custom Right Actions */}
