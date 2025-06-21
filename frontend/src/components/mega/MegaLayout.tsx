@@ -229,15 +229,25 @@ export const MegaSidebar: React.FC<{
                 <User size={16} color="#000" />
               </div>
               <div>
-                <CyberText
-                  variant="body"
-                  style={{ fontWeight: "600", marginBottom: "2px" }}
+                <div
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    color: "#ffffff",
+                    lineHeight: "1.2",
+                  }}
                 >
                   {user.name}
-                </CyberText>
-                <CyberText variant="caption" color="muted">
+                </div>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: "#94a3b8",
+                    lineHeight: "1.2",
+                  }}
+                >
                   {user.tier || "Pro User"}
-                </CyberText>
+                </div>
               </div>
             </div>
             {user.balance && (
