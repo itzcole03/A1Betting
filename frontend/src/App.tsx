@@ -144,19 +144,40 @@ const AppContent: React.FC = () => {
     />
   );
 
-  // Header component
+  // Header component - simplified for debugging
   const header = (
-    <MegaHeader
-      title={currentNavItem?.label || "Dashboard"}
-      subtitle="AI-Powered Sports Intelligence Platform"
-      showSearch={true}
-      onSearch={(query) => console.log("Search:", query)}
-      notifications={3}
-      onNotificationsClick={() => console.log("Notifications clicked")}
-      user={mockUser}
-      darkMode={isDark}
-      onDarkModeToggle={toggleDarkMode}
-    />
+    <div
+      style={{
+        padding: "16px",
+        background: "rgba(255,255,255,0.1)",
+        borderBottom: "1px solid rgba(255,255,255,0.1)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h1 style={{ color: theme.colors.text.primary, margin: 0 }}>
+          {currentNavItem?.label || "Dashboard"}
+        </h1>
+        <button
+          onClick={toggleDarkMode}
+          style={{
+            background: "rgba(6, 255, 165, 0.1)",
+            border: "1px solid rgba(6, 255, 165, 0.8)",
+            color: "#06ffa5",
+            padding: "8px 16px",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          {isDark ? "☀️ Light" : "🌙 Dark"}
+        </button>
+      </div>
+    </div>
   );
 
   return (
