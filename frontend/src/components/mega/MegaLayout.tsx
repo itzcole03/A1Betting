@@ -717,18 +717,41 @@ export const MegaAppShell: React.FC<{
   sidebarOpen = true,
   className = "",
 }) => {
-  const { theme } = useTheme();
+  // Use try-catch to handle any theme access errors
+  let safeTheme;
+  try {
+    const { theme } = useTheme();
+    safeTheme = theme;
+  } catch (error) {
+    console.warn("Theme context error, using fallback:", error);
+    safeTheme = null;
+  }
 
-  // Fallback theme in case theme context is not available
-  const safeTheme = theme || {
+  // Comprehensive fallback theme with all required properties
+  const defaultTheme = {
     colors: {
       background:
         "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%, #f8fafc 100%)",
       text: {
         primary: "#0f172a",
+        secondary: "#334155",
+        muted: "#64748b",
       },
+      primary: "#06ffa5",
+      secondary: "#00ff88",
+      surface: "rgba(255, 255, 255, 0.8)",
+      border: "rgba(15, 23, 42, 0.1)",
+    },
+    gradients: {
+      primary: "linear-gradient(135deg, #06ffa5, #00ff88)",
+    },
+    effects: {
+      shadow: "0 8px 32px rgba(15, 23, 42, 0.1)",
     },
   };
+
+  // Ensure we always have a complete theme object
+  const finalTheme = safeTheme?.colors ? safeTheme : defaultTheme;
 
   return (
     <div
@@ -736,8 +759,10 @@ export const MegaAppShell: React.FC<{
       style={{
         display: "flex",
         minHeight: "100vh",
-        background: safeTheme.colors.background,
-        color: safeTheme.colors.text.primary,
+        background:
+          finalTheme.colors?.background || defaultTheme.colors.background,
+        color:
+          finalTheme.colors?.text?.primary || defaultTheme.colors.text.primary,
       }}
     >
       {/* Sidebar */}
