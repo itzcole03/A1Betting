@@ -1,30 +1,44 @@
-// Definitions for lineup builder types used throughout the app
-
-export interface LineupBuilderStrategy {
-  name: string;
-  description: string;
-  // Add more fields as needed based on future usage
+export interface PredictionData {
+  id: string;
+  gameId: string;
+  playerId?: string;
+  playerName?: string;
+  market: string;
+  prediction: string;
+  odds: number;
+  confidence: number;
+  expectedValue: number;
+  timestamp: number;
+  status: "active" | "completed" | "cancelled";
+  sport: string;
+  league: string;
 }
 
-export interface LineupBuilderOutput {
+export interface PredictionMetrics {
+  accuracy: number;
+  totalPredictions: number;
+  correctPredictions: number;
+  averageOdds: number;
+  roi: number;
+  winRate: number;
+}
+
+export interface PredictionModel {
   id: string;
-  strategy: LineupBuilderStrategy;
-  legs: Array<{
-    eventId: string;
-    market: string;
-    selection: string;
-    odds: number;
-    prediction: {
-      probability: number;
-      confidence: number;
-      edge: number;
-    };
+  name: string;
+  version: string;
+  accuracy: number;
+  lastTrained: Date;
+  status: "active" | "inactive" | "training";
+  features: string[];
+}
+
+export interface PredictionResult {
+  prediction: PredictionData;
+  confidence: number;
+  reasoning: string[];
+  alternativeOutcomes: Array<{
+    outcome: string;
+    probability: number;
   }>;
-  metrics: {
-    confidence: number;
-    expectedValue: number;
-    risk: number;
-    correlation: number;
-  };
-  createdAt: string;
 }
