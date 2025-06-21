@@ -1,11 +1,17 @@
 import React, { Suspense, useState, useEffect, lazy } from "react";
+import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AdvancedSidebar } from "./components/layout/AdvancedSidebar";
-import { EliteSportsHeader } from "./components/layout/EliteSportsHeader";
+import { ThemeProvider } from "./theme/ThemeProvider";
+import CyberSidebar from "./components/layout/CyberSidebar";
+import CyberHeader from "./components/layout/CyberHeader";
 import UnifiedDashboard from "./components/dashboard/UnifiedDashboard";
 import { usePrizePicksLiveData } from "./hooks/usePrizePicksLiveData";
 import { useAppStore } from "./store/useAppStore";
 import Toaster from "./components/base/Toaster";
+import GlassCard from "./components/ui/GlassCard";
+import MetricCard from "./components/ui/MetricCard";
+import CyberButton from "./components/ui/CyberButton";
+import HolographicText from "./components/ui/HolographicText";
 
 // ============================================================================
 // QUERY CLIENT
@@ -21,7 +27,7 @@ const queryClient = new QueryClient({
 });
 
 // ============================================================================
-// SIMPLE LOADING AND ERROR COMPONENTS
+// LOADING AND ERROR COMPONENTS
 // ============================================================================
 
 const LoadingScreen: React.FC = () => (
@@ -47,19 +53,28 @@ const ErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
 
 interface AppState {
   darkMode: boolean;
+  sidebarOpen: boolean;
+  currentSection: string;
+  connectedSources: number;
+  dataQuality: number;
+  loading: boolean;
 }
 
-const AppContent: React.FC = () => {
-  const [currentSection, setCurrentSection] = useState("dashboard");
-  const [state, setState] = useState<AppState>({ darkMode: false });
+// Import our polished homepage
+import HomePage from "./pages/index";
 
-  // Real-time data hooks - using existing frontend hooks
-  const [connectedSources] = useState(12);
-  const [dataQuality] = useState(0.87);
-  const [loading, setLoading] = useState(false);
+const AppContent: React.FC = () => {
+  const [state, setState] = useState<AppState>({
+    darkMode: false,
+    sidebarOpen: true,
+    currentSection: "dashboard",
+    connectedSources: 12,
+    dataQuality: 0.87,
+    loading: false,
+  });
 
   // Use existing app store for toasts and notifications
-  const { addToast } = useAppStore();
+  const { addToast, user } = useAppStore();
 
   // PrizePicks live data
   const prizePicksData = usePrizePicksLiveData();
@@ -68,22 +83,35 @@ const AppContent: React.FC = () => {
     setState((prev) => ({ ...prev, darkMode: !prev.darkMode }));
   };
 
+  const toggleSidebar = () => {
+    setState((prev) => ({ ...prev, sidebarOpen: !prev.sidebarOpen }));
+  };
+
+  const handleSectionChange = (section: string) => {
+    setState((prev) => ({ ...prev, currentSection: section }));
+  };
+
   const refreshData = async () => {
-    setLoading(true);
+    setState((prev) => ({ ...prev, loading: true }));
     try {
       // Simulate data refresh
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      setState((prev) => ({
+        ...prev,
+        connectedSources: Math.min(15, prev.connectedSources + 1),
+        dataQuality: Math.min(1, prev.dataQuality + 0.05),
+        loading: false,
+      }));
       addToast({
         message: "🔴 Real Data Platform refreshed successfully!",
         type: "success",
       });
     } catch (error) {
+      setState((prev) => ({ ...prev, loading: false }));
       addToast({
-        message: "Failed to refresh data sources",
+        message: "Failed to refresh data. Please try again.",
         type: "error",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -96,69 +124,154 @@ const AppContent: React.FC = () => {
     }
   }, [state.darkMode]);
 
-  // Welcome toast with real data status on mount
+  // Auto-refresh data periodically
   useEffect(() => {
-    if (connectedSources > 0) {
-      addToast({
-        message: `🔴 Real Data Platform Active! Connected to ${connectedSources} live sources`,
-        type: "success",
-      });
-    } else {
-      addToast({
-        message:
-          "⚠️ No real data sources available. Check API keys and network connection.",
-        type: "warning",
-      });
-    }
-  }, [addToast, connectedSources]);
+    const interval = setInterval(() => {
+      if (state.connectedSources > 0) {
+        // Simulate live data updates
+        setState((prev) => ({
+          ...prev,
+          dataQuality: Math.max(
+            0.5,
+            Math.min(1, prev.dataQuality + (Math.random() - 0.5) * 0.1),
+          ),
+        }));
+      }
+    }, 5000);
 
-  const renderCurrentSection = () => {
-    switch (currentSection) {
-      case "dashboard":
-        return <UnifiedDashboard />;
-      case "prizepicks":
-        return (
-          <div className="p-8 text-center text-gray-600">
-            PrizePicks Engine Coming Soon...
-          </div>
-        );
-      case "analytics":
-        return (
-          <div className="p-8 text-center text-gray-600">
-            Analytics Dashboard Coming Soon...
-          </div>
-        );
-      default:
-        return <UnifiedDashboard />;
-    }
-  };
+    return () => clearInterval(interval);
+  }, [state.connectedSources]);
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100">
-      <AdvancedSidebar
-        currentSection={currentSection}
-        onSectionChange={setCurrentSection}
-        connectedSources={connectedSources}
-        dataQuality={dataQuality}
-        state={state}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100">
+      {/* Mobile sidebar overlay */}
+      {state.sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
+      {/* Beautiful Cyber Sidebar */}
+      <CyberSidebar
+        currentPage={state.currentSection}
+        onPageChange={handleSectionChange}
+        isOpen={state.sidebarOpen}
+        onClose={toggleSidebar}
+        className="lg:!static lg:!w-80"
       />
 
-      <div className="flex-1 overflow-auto">
-        <EliteSportsHeader
-          connectedSources={connectedSources}
-          dataQuality={dataQuality}
-          state={state}
-          toggleDarkMode={toggleDarkMode}
-          refreshData={refreshData}
-          loading={loading}
-        />
-        <div className="p-6" style={{ marginTop: "-2px" }}>
-          <ErrorBoundary>
-            <Suspense fallback={<LoadingScreen />}>
-              {renderCurrentSection()}
-            </Suspense>
-          </ErrorBoundary>
+      {/* Main content area */}
+      <div className="lg:ml-80 min-h-screen">
+        {/* Header */}
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+          <div className="flex items-center justify-between p-4">
+            {/* Mobile menu button */}
+            <button
+              onClick={toggleSidebar}
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+
+            {/* Page title */}
+            <div className="flex-1 lg:flex-none">
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-white capitalize">
+                {state.currentSection.replace(/([A-Z])/g, " $1").trim()}
+              </h1>
+            </div>
+
+            {/* Header actions */}
+            <div className="flex items-center space-x-4">
+              {/* Refresh button */}
+              <button
+                onClick={refreshData}
+                disabled={state.loading}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+              >
+                <svg
+                  className={`w-5 h-5 ${state.loading ? "animate-spin" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+              </button>
+
+              {/* Dark mode toggle */}
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                title="Toggle Dark Mode"
+              >
+                {state.darkMode ? "☀️" : "🌙"}
+              </button>
+
+              {/* User menu */}
+              {user && (
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                  <span className="text-white text-sm font-medium">
+                    {user.name?.charAt(0) || "U"}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
+
+        {/* Main content */}
+        <main className="p-6">
+          <ErrorBoundary>
+            {state.currentSection === "dashboard" && <HomePage />}
+            {state.currentSection === "realdata" && (
+              <UnifiedDashboard
+                currentSection={state.currentSection}
+                connectedSources={state.connectedSources}
+                dataQuality={state.dataQuality}
+                onRefreshData={refreshData}
+                loading={state.loading}
+              />
+            )}
+            {state.currentSection === "prizepicks" && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">PrizePicks Engine</h2>
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                  <p className="text-gray-600 dark:text-gray-400">
+                    PrizePicks integration coming soon...
+                  </p>
+                </div>
+              </div>
+            )}
+            {state.currentSection === "analytics" && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Analytics Hub</h2>
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Advanced analytics dashboard coming soon...
+                  </p>
+                </div>
+              </div>
+            )}
+          </ErrorBoundary>
+        </main>
       </div>
 
       {/* Toast notifications */}
@@ -523,33 +636,35 @@ const App: React.FC = () => {
   // Main render
   return (
     <QueryClientProvider client={queryClient}>
-      <ErrorBoundary>
-        <div className="min-h-screen">
-          {isDebugMode ? (
-            selectedDebugComponent ? (
-              renderDebugComponent()
-            ) : (
-              renderDebugMenu()
-            )
-          ) : (
-            <>
-              {/* Main Application - Prototype Style */}
-              <AppContent />
+      <BrowserRouter>
+        <ThemeProvider defaultTheme="light">
+          <ErrorBoundary>
+            <div className="min-h-screen">
+              {isDebugMode ? (
+                selectedDebugComponent ? (
+                  renderDebugComponent()
+                ) : (
+                  renderDebugMenu()
+                )
+              ) : (
+                <>
+                  {/* Main Application - Combined Features */}
+                  <AppContent />
 
-              {/* Debug Mode Toggle (bottom-right corner) */}
-              <button
-                onClick={() => setIsDebugMode(true)}
-                className="fixed bottom-4 right-4 p-3 bg-gray-800 dark:bg-gray-600 text-white rounded-full shadow-lg hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors z-50"
-                title="Open Debug Menu"
-              >
-                🛠️
-              </button>
-            </>
-          )}
-
-          {/* Global Components can be added here later */}
-        </div>
-      </ErrorBoundary>
+                  {/* Debug Mode Toggle (bottom-left corner) */}
+                  <button
+                    onClick={() => setIsDebugMode(true)}
+                    className="fixed bottom-4 left-4 p-3 bg-gray-800/80 dark:bg-gray-600/80 backdrop-blur-sm text-white rounded-full shadow-lg hover:bg-gray-700/80 dark:hover:bg-gray-500/80 transition-all duration-200 z-50"
+                    title="Open Debug Menu"
+                  >
+                    🛠️
+                  </button>
+                </>
+              )}
+            </div>
+          </ErrorBoundary>
+        </ThemeProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };
