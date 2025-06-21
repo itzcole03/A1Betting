@@ -683,14 +683,16 @@ export const MegaAppShell: React.FC<{
   sidebarOpen = true,
   className = "",
 }) => {
+  const { theme } = useTheme();
+
   return (
     <div
       className={`mega-app-shell ${className}`}
       style={{
         display: "flex",
         minHeight: "100vh",
-        background: CYBER_GRADIENTS.background,
-        color: CYBER_COLORS.text.primary,
+        background: theme.colors.background,
+        color: theme.colors.text.primary,
       }}
     >
       {/* Sidebar */}
