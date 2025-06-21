@@ -115,7 +115,7 @@ const mockSystemStatus = {
 
 // Inner component that has access to theme context
 const AppContent: React.FC = () => {
-  const { isDark, toggleDarkMode } = useTheme();
+  const { isDark, toggleDarkMode, theme } = useTheme();
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
