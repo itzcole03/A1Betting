@@ -1114,7 +1114,7 @@ export const UltimateSettingsPage: React.FC = () => {
                 <input
                   type="file"
                   accept=".json"
-                  onChange={importSettings}
+                  onChange={handleImportSettings}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
                 <Button
