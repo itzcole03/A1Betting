@@ -600,14 +600,17 @@ export const MegaSidebar: React.FC<{
       <nav style={{ flex: 1, padding: "0 16px", overflowY: "auto" }}>
         <div style={{ marginBottom: "8px" }}>
           {navigationItems
-            .filter(
-              (item) =>
+            .filter((item) => {
+              // Debug: log what items we're filtering
+              console.log("Navigation item:", item.id, item.label);
+              return (
                 !["settings", "profile", "Settings", "Profile"].includes(
                   item.id,
                 ) &&
                 !item.label?.toLowerCase().includes("settings") &&
-                !item.label?.toLowerCase().includes("profile"),
-            )
+                !item.label?.toLowerCase().includes("profile")
+              );
+            })
             .map((item, index) => {
               const Icon = item.icon;
               const isActive = currentPage === item.id;
