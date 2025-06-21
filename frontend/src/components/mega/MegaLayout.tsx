@@ -238,6 +238,7 @@ const UserAvatarDropdown: React.FC<{
               Sign Out
             </button>
           </div>,
+          document.body,
         )}
     </div>
   );
