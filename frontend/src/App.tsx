@@ -247,6 +247,38 @@ const AppContent: React.FC = () => {
 
 // Main App component that provides theme context
 function App() {
+  // Add global error handling for onClick and other DOM events
+  useEffect(() => {
+    const handleGlobalError = (event: ErrorEvent) => {
+      if (event.error?.message?.includes("onClick is not a function")) {
+        console.warn("onClick error caught and handled:", event.error);
+        event.preventDefault(); // Prevent the error from propagating
+        return false;
+      }
+    };
+
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      if (event.reason?.message?.includes("Network Error")) {
+        console.warn("Network error caught and handled:", event.reason);
+        event.preventDefault(); // Prevent the unhandled rejection
+        return false;
+      }
+    };
+
+    // Add global error listeners
+    window.addEventListener("error", handleGlobalError);
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
+
+    // Cleanup on unmount
+    return () => {
+      window.removeEventListener("error", handleGlobalError);
+      window.removeEventListener(
+        "unhandledrejection",
+        handleUnhandledRejection,
+      );
+    };
+  }, []);
+
   return (
     <ErrorBoundary>
       <SafeThemeProvider defaultVariant="cyber-light" enablePersistence={true}>
