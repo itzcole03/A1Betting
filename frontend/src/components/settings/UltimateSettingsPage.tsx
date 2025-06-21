@@ -40,8 +40,7 @@ import {
   SortDesc,
 } from "lucide-react";
 import { useTheme } from "../../providers/SafeThemeProvider";
-import { useBettingSettings } from "../../hooks/useBettingSettings";
-import { useSettings } from "../../hooks/useSettings";
+import { useUltimateSettings } from "../../hooks/useUltimateSettings";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
