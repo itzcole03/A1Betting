@@ -1,17 +1,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useEffect } from 'react';
-import { useAppStore } from '../../store/useAppStore';
-import EntryTracking from './EntryTracking';
-import PropCards from './PropCards';
-import MoneyMaker from './MoneyMaker';
-import ESPNHeadlinesTicker from './ESPNHeadlinesTicker';
-import PerformanceChart from '../charts/PerformanceChart';
-import UserStats from '../analytics/UserStats';
-import MLInsights from '../insights/MLInsights';
+import React, { useEffect } from "react";
+import { useAppStore } from "../../store/useAppStore";
+import EntryTracking from "./EntryTracking";
+import PropCards from "./PropCards";
+import MLInsights from "../insights/MLInsights";
 const Dashboard = () => {
     const { fetchProps, fetchEntries, fetchHeadlines,
     // fetchSentiments, // Removed as it was example, can be added if specific dashboard sentiment is needed
-     } = useAppStore(state => ({
+     } = useAppStore((state) => ({
         // Ensure to select from state for a smaller subscription scope
         fetchProps: state.fetchProps,
         fetchEntries: state.fetchEntries,

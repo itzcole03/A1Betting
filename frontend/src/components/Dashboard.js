@@ -4,7 +4,6 @@ import ArbitrageOpportunities from "./ArbitrageOpportunities";
 import LiveOddsTicker from "./LiveOddsTicker"; // Changed to default import
 import MLFactorViz from "./MLFactorViz";
 import ModelPerformance from "./ModelPerformance";
-import MoneyMaker from "./modern/MoneyMaker";
 import Navbar from "./navigation/Navbar";
 import { PerformanceMetrics } from "./PerformanceMetrics";
 import { RiskProfileType } from "../types/betting"; // Import enum and PredictionData
