@@ -182,6 +182,24 @@ const AppContent: React.FC = () => {
       notifications={3}
       onNotificationsClick={() => console.log("Notifications clicked")}
       user={mockUser}
+      leftActions={
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          style={{
+            background: "rgba(6, 255, 165, 0.1)",
+            border: "1px solid rgba(6, 255, 165, 0.3)",
+            color: "#06ffa5",
+            padding: "8px",
+            borderRadius: "8px",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {sidebarOpen ? "←" : "→"}
+        </button>
+      }
     />
   );
 
