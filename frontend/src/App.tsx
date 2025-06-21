@@ -1,7 +1,7 @@
 import React, { Suspense, useState, useEffect, lazy } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "./theme/ThemeProvider";
+import { ThemeProvider } from "./providers/ThemeProvider";
 import CyberSidebar from "./components/layout/CyberSidebar";
 import CyberHeader from "./components/layout/CyberHeader";
 import CyberFooter from "./components/layout/CyberFooter";
