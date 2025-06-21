@@ -22,9 +22,13 @@ const CyberDashboard: React.FC<CyberDashboardProps> = ({
 
   const renderDashboard = () => (
     <div className="space-y-8 animate-slide-in-up">
-      {/* Welcome Section */}
+      {/* Welcome Section - Exact Prototype Match */}
       <div className="text-center mb-8">
-        <HolographicText size="4xl" className="text-4xl font-black mb-4">
+        <HolographicText
+          size="4xl"
+          className="text-4xl font-black mb-4"
+          animated
+        >
           Welcome Back, Alex
         </HolographicText>
         <p className="text-xl text-gray-400">
@@ -32,7 +36,7 @@ const CyberDashboard: React.FC<CyberDashboardProps> = ({
         </p>
       </div>
 
-      {/* Key Metrics */}
+      {/* Key Metrics - Exact Prototype Style */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard
           label="Total Profit"
