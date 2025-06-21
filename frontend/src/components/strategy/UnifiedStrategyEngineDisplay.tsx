@@ -132,7 +132,7 @@ const getRiskColor = (riskLevel: string) => {
     case "high":
       return "text-red-600 bg-red-100 border-red-200";
     default:
-      return "text-gray-600 bg-gray-100 border-gray-200";
+      return "text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700";
   }
 };
 
