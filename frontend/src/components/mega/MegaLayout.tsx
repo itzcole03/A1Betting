@@ -969,15 +969,16 @@ export const MegaHeader: React.FC<{
         {leftActions}
 
         {(title || subtitle) && (
-          <div style={{ marginLeft: leftActions ? "16px" : "0" }}>
+          <div style={{ marginLeft: leftActions ? "20px" : "0" }}>
             {title && (
               <div
                 style={{
-                  fontSize: "18px",
-                  marginBottom: "2px",
-                  color: safeTheme.colors?.text?.primary || "#0f172a",
-                  fontWeight: "600",
+                  fontSize: "24px",
+                  marginBottom: "4px",
+                  color: "#ffffff",
+                  fontWeight: "700",
                   lineHeight: "1.2",
+                  letterSpacing: "-0.02em",
                 }}
               >
                 {title}
@@ -986,9 +987,11 @@ export const MegaHeader: React.FC<{
             {subtitle && (
               <div
                 style={{
-                  fontSize: "12px",
-                  color: safeTheme.colors?.text?.muted || "#64748b",
-                  lineHeight: "1.2",
+                  fontSize: "14px",
+                  color: "#94a3b8",
+                  lineHeight: "1.3",
+                  fontWeight: "500",
+                  letterSpacing: "-0.01em",
                 }}
               >
                 {subtitle}
