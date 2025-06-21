@@ -214,7 +214,7 @@ export const BetBuilder: React.FC = () => {
       <div className="p-4 border-t flex justify-end">
         <button
           className="modern-button bg-primary-500 text-white px-8 py-3 rounded-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={loading || selectedProps.length < 2}
+          disabled={loading || selectedPropObjects.length < 2}
           onClick={handleSubmit}
         >
           {loading ? (
