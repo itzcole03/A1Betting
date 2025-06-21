@@ -265,7 +265,7 @@ const StrategyCard: React.FC<{
           {/* Risk Level */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-gray-500" />
+              <AlertTriangle className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Risk Level:
               </span>
