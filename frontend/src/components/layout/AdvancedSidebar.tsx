@@ -233,18 +233,25 @@ export const AdvancedSidebar: React.FC<AdvancedSidebarProps> = ({
               <Shield className="w-3 h-3 text-yellow-400" />
             )}
             {item.submenu && (
+            <div className="relative float-element">
+              <div className="absolute inset-0 bg-gradient-to-r from-electric-400 to-neon-blue rounded-xl blur-lg opacity-75"></div>
               <motion.div
-                animate={{ rotate: isExpanded ? 90 : 0 }}
-                transition={{ duration: 0.2 }}
+                className="relative w-12 h-12 bg-gradient-to-br from-electric-400 to-neon-blue rounded-xl flex items-center justify-center shadow-xl"
+                whileHover={{ scale: 1.05 }}
               >
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <Brain className="w-7 h-7 text-black font-bold" />
               </motion.div>
+            </div>
+            {!isCollapsed && (
+              <div>
+                <HolographicText size="xl" className="text-xl font-black tracking-tight">
+                  A1BETTING
+                </HolographicText>
+                <p className="text-xs text-gray-400 uppercase tracking-widest">
+                  Quantum Intelligence
+                </p>
+              </div>
+            )}
             )}
           </div>
         </motion.button>
