@@ -25,6 +25,8 @@ import {
   Zap,
   Sun,
   Moon,
+  ChevronDown,
+  UserCircle,
 } from "lucide-react";
 
 // MEGA LAYOUT SYSTEM - Consolidates 23 layout components
