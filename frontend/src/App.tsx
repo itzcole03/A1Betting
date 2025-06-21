@@ -1,10 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-// Import existing components to integrate
-import PrizePicksPage from "./pages/PrizePicksPage";
-import { UnifiedMoneyMaker } from "./components/money-maker/UnifiedMoneyMaker";
 
 // Query Client
 const queryClient = new QueryClient({
@@ -502,55 +498,48 @@ const Header: React.FC = () => {
 
 // Clean Sidebar Navigation - Exact Prototype Match
 const Sidebar: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { currentPage, setCurrentPage } = useContext(AppContext);
 
   const navigation = [
-    { name: "Dashboard", key: "dashboard", icon: "fa-home", category: "main", path: "/" },
+    { name: "Dashboard", key: "dashboard", icon: "fa-home", category: "main" },
     {
       name: "Premium Dashboard",
       key: "premium-dashboard",
       icon: "fa-crown",
       category: "premium",
-      path: "/premium-dashboard",
     },
     {
       name: "Money Maker",
       key: "money-maker",
       icon: "fa-dollar-sign",
       category: "main",
-      path: "/money-maker",
     },
     {
       name: "PrizePicks Pro",
       key: "prizepicks",
       icon: "fa-trophy",
       category: "main",
-      path: "/prizepicks",
     },
-    { name: "ML Center", key: "ml-center", icon: "fa-brain", category: "ai", path: "/ml-center" },
+    { name: "ML Center", key: "ml-center", icon: "fa-brain", category: "ai" },
     {
       name: "Quantum Predictions",
       key: "quantum",
       icon: "fa-atom",
       category: "ai",
-      path: "/quantum",
     },
     {
       name: "Analytics",
       key: "analytics",
       icon: "fa-chart-line",
       category: "insights",
-      path: "/analytics",
     },
     {
       name: "Real-time Monitor",
       key: "realtime",
       icon: "fa-eye",
       category: "insights",
-      path: "/realtime",
     },
-    { name: "Settings", key: "settings", icon: "fa-cog", category: "account", path: "/settings" },
+    { name: "Settings", key: "settings", icon: "fa-cog", category: "account" },
   ];
 
   const categories: any = {
@@ -617,17 +606,18 @@ const Sidebar: React.FC = () => {
                   "li",
                   { key: item.key },
                   React.createElement(
-                    <button
-                      onClick={() => navigate(item.path)}
-                      className={`nav-item w-full flex items-center px-4 py-3 text-left text-sm font-medium transition-all duration-300 ${
-                        location.pathname === item.path
+                    "button",
+                    {
+                      onClick: () => setCurrentPage(item.key),
+                      className: `nav-item w-full flex items-center px-4 py-3 text-left text-sm font-medium transition-all duration-300 ${
+                        currentPage === item.key
                           ? "active text-electric-400"
                           : "text-gray-300 hover:text-white"
-                      }`}
-                      style={{
+                      }`,
+                      style: {
                         borderRadius: "12px",
                         marginBottom: "4px",
-                        ...(location.pathname === item.path
+                        ...(currentPage === item.key
                           ? {
                               background: "rgba(0,255,136,0.2)",
                               borderLeft: "4px solid #00ff88",
@@ -641,8 +631,9 @@ const Sidebar: React.FC = () => {
                               border: "1px solid rgba(255, 255, 255, 0.1)",
                               boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
                               color: "#d1d5db",
-                            })
+                            }),
                       },
+                    },
                     [
                       React.createElement("i", {
                         key: "icon",
@@ -650,7 +641,7 @@ const Sidebar: React.FC = () => {
                         style: {
                           width: "16px",
                           color:
-                            location.pathname === item.path ? "#06ffa5" : "#9ca3af",
+                            currentPage === item.key ? "#06ffa5" : "#9ca3af",
                         },
                       }),
                       React.createElement("span", { key: "text" }, item.name),
@@ -1124,7 +1115,7 @@ const DefaultPage: React.FC<any> = ({ title, description, icon }) => {
 
 // Main App - Exact Prototype Match
 const App: React.FC = () => {
-  const { currentPage, setCurrentPage } = useContext(AppContext);
+  const { currentPage } = useContext(AppContext);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
