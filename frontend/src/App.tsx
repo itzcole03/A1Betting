@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import CyberSidebar from "./components/layout/CyberSidebar";
 import CyberHeader from "./components/layout/CyberHeader";
+import CyberDashboard from "./components/dashboard/CyberDashboard";
 import UnifiedDashboard from "./components/dashboard/UnifiedDashboard";
 import { usePrizePicksLiveData } from "./hooks/usePrizePicksLiveData";
 import { useAppStore } from "./store/useAppStore";
@@ -241,35 +242,6 @@ const AppContent: React.FC = () => {
         <main className="p-8">
           <ErrorBoundary>
             <CyberDashboard currentPage={state.currentSection} />
-            {state.currentSection === "realdata" && (
-              <UnifiedDashboard
-                currentSection={state.currentSection}
-                connectedSources={state.connectedSources}
-                dataQuality={state.dataQuality}
-                onRefreshData={refreshData}
-                loading={state.loading}
-              />
-            )}
-            {state.currentSection === "prizepicks" && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold">PrizePicks Engine</h2>
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    PrizePicks integration coming soon...
-                  </p>
-                </div>
-              </div>
-            )}
-            {state.currentSection === "analytics" && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold">Analytics Hub</h2>
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Advanced analytics dashboard coming soon...
-                  </p>
-                </div>
-              </div>
-            )}
           </ErrorBoundary>
         </main>
       </div>
