@@ -1122,47 +1122,67 @@ const DefaultPage: React.FC<any> = ({ title, description, icon }) => {
   );
 };
 
-// Enhanced PrizePicks Component
-const EnhancedPrizePicks: React.FC = () => {
-  return React.createElement("div", { className: "animate-slide-in-up" }, [
-    React.createElement("div", { key: "header", className: "text-center mb-8" }, [
-      React.createElement("div", { key: "icon", className: "text-6xl mb-6 text-electric-400 float-element" },
-        React.createElement("i", { className: "fa-trophy" })
-      ),
-      React.createElement("h1", { key: "title", className: "holographic text-4xl font-black mb-4" }, "PrizePicks Pro"),
-      React.createElement("p", { key: "desc", className: "text-xl text-gray-400 max-w-2xl mx-auto" },
-        "Professional player prop analysis with real-time AI enhancement and market insights"
-      ),
-    ]),
-    React.createElement("div", { key: "content", className: "glass-card rounded-2xl p-6 transition-all duration-300" },
-      React.createElement(PrizePicksPage)
-    ),
-  ]);
-};
+// Main App - Exact Prototype Match
+const App: React.FC = () => {
+  const { currentPage, setCurrentPage } = useContext(AppContext);
 
-// Enhanced Money Maker Component
-const EnhancedMoneyMaker: React.FC = () => {
-  return React.createElement("div", { className: "animate-slide-in-up" }, [
-    React.createElement("div", { key: "header", className: "text-center mb-8" }, [
-      React.createElement("div", { key: "icon", className: "text-6xl mb-6 text-electric-400 float-element" },
-        React.createElement("i", { className: "fa-dollar-sign" })
-      ),
-      React.createElement("h1", { key: "title", className: "holographic text-4xl font-black mb-4" }, "Ultimate Money Maker"),
-      React.createElement("p", { key: "desc", className: "text-xl text-gray-400 max-w-2xl mx-auto" },
-        "AI-powered profit generation with 47 neural networks"
-      ),
-    ]),
-    React.createElement("div", { key: "content", className: "glass-card rounded-2xl p-6 transition-all duration-300" },
-      React.createElement(UnifiedMoneyMaker)
-    ),
-  ]);
-};
-
-// Main App with Routing - Exact Prototype Match
-const AppContent: React.FC = () => {
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case "dashboard":
+        return React.createElement(Dashboard);
+      case "premium-dashboard":
+        return React.createElement(PremiumDashboard);
+      case "money-maker":
+        return React.createElement(MoneyMaker);
+      case "prizepicks":
+        return React.createElement(DefaultPage, {
+          title: "PrizePicks Pro",
+          description:
+            "Professional player prop analysis with real-time AI enhancement and market insights",
+          icon: "fa-trophy",
+        });
+      case "ml-center":
+        return React.createElement(DefaultPage, {
+          title: "ML Center",
+          description:
+            "Machine learning command center with 47 neural networks and deep learning models",
+          icon: "fa-brain",
+        });
+      case "quantum":
+        return React.createElement(DefaultPage, {
+          title: "Quantum Predictions",
+          description:
+            "Quantum-enhanced prediction engine with 1024 qubits and superposition algorithms",
+          icon: "fa-atom",
+        });
+      case "analytics":
+        return React.createElement(DefaultPage, {
+          title: "Advanced Analytics",
+          description:
+            "Comprehensive data analysis with real-time insights and performance metrics",
+          icon: "fa-chart-line",
+        });
+      case "realtime":
+        return React.createElement(DefaultPage, {
+          title: "Real-time Monitor",
+          description:
+            "Live data monitoring with instant processing and intelligent alerts",
+          icon: "fa-eye",
+        });
+      case "settings":
+        return React.createElement(DefaultPage, {
+          title: "Settings",
+          description: "Platform configuration and account management options",
+          icon: "fa-cog",
+        });
+      default:
+        return React.createElement(Dashboard);
+    }
+  };
 
   return React.createElement(
     "div",
@@ -1184,37 +1204,7 @@ const AppContent: React.FC = () => {
                 minHeight: "calc(100vh - 120px)",
               },
             },
-            React.createElement(Routes, {}, [
-              React.createElement(Route, { key: "dashboard", path: "/", element: React.createElement(Dashboard) }),
-              React.createElement(Route, { key: "premium", path: "/premium-dashboard", element: React.createElement(PremiumDashboard) }),
-              React.createElement(Route, { key: "money", path: "/money-maker", element: React.createElement(EnhancedMoneyMaker) }),
-              React.createElement(Route, { key: "prizepicks", path: "/prizepicks", element: React.createElement(EnhancedPrizePicks) }),
-              React.createElement(Route, { key: "ml", path: "/ml-center", element: React.createElement(DefaultPage, {
-                title: "ML Center",
-                description: "Machine learning command center with 47 neural networks and deep learning models",
-                icon: "fa-brain",
-              }) }),
-              React.createElement(Route, { key: "quantum", path: "/quantum", element: React.createElement(DefaultPage, {
-                title: "Quantum Predictions",
-                description: "Quantum-enhanced prediction engine with 1024 qubits and superposition algorithms",
-                icon: "fa-atom",
-              }) }),
-              React.createElement(Route, { key: "analytics", path: "/analytics", element: React.createElement(DefaultPage, {
-                title: "Advanced Analytics",
-                description: "Comprehensive data analysis with real-time insights and performance metrics",
-                icon: "fa-chart-line",
-              }) }),
-              React.createElement(Route, { key: "realtime", path: "/realtime", element: React.createElement(DefaultPage, {
-                title: "Real-time Monitor",
-                description: "Live data monitoring with instant processing and intelligent alerts",
-                icon: "fa-eye",
-              }) }),
-              React.createElement(Route, { key: "settings", path: "/settings", element: React.createElement(DefaultPage, {
-                title: "Settings",
-                description: "Platform configuration and account management options",
-                icon: "fa-cog",
-              }) }),
-            ])
+            renderPage(),
           ),
           React.createElement(
             "footer",
