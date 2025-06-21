@@ -13,8 +13,8 @@ import {
   UniversalMoneyMaker,
   UniversalAnalytics,
   UniversalPredictions,
-  UltimateSettingsPage,
 } from "./components";
+import UltimateSettingsPage from "./components/settings/UltimateSettingsPage";
 import ThemeDemo from "./components/ThemeDemo";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { initializeMUIClickPatch } from "./utils/muiClickPatch";
