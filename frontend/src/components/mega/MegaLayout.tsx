@@ -279,16 +279,26 @@ export const MegaSidebar: React.FC<{
             >
               <div style={{ display: "flex", alignItems: "center" }}>
                 <StatusIcon size={16} color={status.color} />
-                <CyberText
-                  variant="caption"
-                  style={{ marginLeft: "8px", color: status.color }}
+                <div
+                  style={{
+                    fontSize: "12px",
+                    marginLeft: "8px",
+                    color: status.color,
+                    lineHeight: "1.2",
+                  }}
                 >
                   {status.text}
-                </CyberText>
+                </div>
               </div>
-              <CyberText variant="caption" color="muted">
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#94a3b8",
+                  lineHeight: "1.2",
+                }}
+              >
                 {systemStatus.dataQuality}%
-              </CyberText>
+              </div>
             </div>
           </CyberContainer>
         )}
