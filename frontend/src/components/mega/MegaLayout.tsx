@@ -588,16 +588,17 @@ export const MegaHeader: React.FC<{
     <header
       className={`mega-header ${className}`}
       style={{
-        background: safeTheme.colors.surface,
+        background: safeTheme.colors?.surface || "rgba(255, 255, 255, 0.8)",
         backdropFilter: "blur(20px) saturate(180%)",
-        border: `1px solid ${safeTheme.colors.border}`,
-        borderBottom: `1px solid ${safeTheme.colors.border}`,
+        border: `1px solid ${safeTheme.colors?.border || "rgba(15, 23, 42, 0.1)"}`,
+        borderBottom: `1px solid ${safeTheme.colors?.border || "rgba(15, 23, 42, 0.1)"}`,
         padding: "16px 24px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         minHeight: "64px",
-        boxShadow: safeTheme.effects.shadow,
+        boxShadow:
+          safeTheme.effects?.shadow || "0 8px 32px rgba(15, 23, 42, 0.1)",
       }}
     >
       {/* Left Section */}
