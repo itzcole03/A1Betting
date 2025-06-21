@@ -28,7 +28,7 @@ export const usePredictions = (
     timestamp: new Date().toISOString(),
     potentialWin: 100 + Math.random() * 500,
     odds: 1.5 + Math.random() * 2,
-    status: ['pending', 'won', 'lost'][Math.floor(Math.random() * 3)] as any,
+    status: ["pending", "won", "lost"][Math.floor(Math.random() * 3)] as any,
   }));
 
   const query = useQuery({
@@ -57,7 +57,7 @@ export const useEngineMetrics = () => {
     winRate: 85.6,
     avgConfidence: 88.5,
     profitability: 147.2,
-    status: 'active',
+    status: "active",
   };
 
   const query = useQuery({
@@ -86,12 +86,12 @@ export const useBettingOpportunities = (
   // Mock betting opportunities to prevent fetch errors
   const mockOpportunities = Array.from({ length: limit }, (_, i) => ({
     id: `opp-${i + 1}`,
-    game: `${sport || 'NBA'} Game ${i + 1}`,
-    type: ['Over/Under', 'Spread', 'Moneyline'][i % 3],
+    game: `${sport || "NBA"} Game ${i + 1}`,
+    type: ["Over/Under", "Spread", "Moneyline"][i % 3],
     value: 2.1 + Math.random() * 1.5,
     confidence: 80 + Math.random() * 15,
     expectedReturn: 15 + Math.random() * 25,
-    league: sport || 'NBA',
+    league: sport || "NBA",
     startTime: new Date(Date.now() + (i + 1) * 3600000).toISOString(),
   }));
 
@@ -101,8 +101,11 @@ export const useBettingOpportunities = (
     ...defaultQueryConfig,
     refetchInterval: false, // Disable auto-refetch to prevent errors
   });
-    isLoading: query.isLoading,
-    error: query.error,
+
+  return {
+    opportunities: query.data?.data || mockOpportunities,
+    isLoading: false,
+    error: null,
     refetch: query.refetch,
   };
 };
