@@ -578,10 +578,7 @@ export const MegaHeader: React.FC<{
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
         {/* Theme Toggle */}
         <button
-          onClick={() => {
-            const currentTheme = useTheme();
-            currentTheme.toggleDarkMode();
-          }}
+          onClick={toggleDarkMode}
           style={{
             background: theme.colors.surface,
             border: `1px solid ${theme.colors.border}`,
