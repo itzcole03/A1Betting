@@ -251,12 +251,14 @@ const AppContent: React.FC = () => {
 // Main App component that provides theme context
 function App() {
   return (
-    <UniversalThemeProvider
-      defaultVariant="cyber-light"
-      enablePersistence={true}
-    >
-      <AppContent />
-    </UniversalThemeProvider>
+    <ErrorBoundary>
+      <UniversalThemeProvider
+        defaultVariant="cyber-light"
+        enablePersistence={true}
+      >
+        <AppContent />
+      </UniversalThemeProvider>
+    </ErrorBoundary>
   );
 }
 
