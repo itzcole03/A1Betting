@@ -797,19 +797,5 @@ export const useQuantumPlatform = (options?: {
   };
 };
 
-// Export all hooks for individual use
-export {
-  useQuantumData,
-  useQuantumML,
-  useQuantumBetting,
-  useQuantumAnalytics,
-  useQuantumAuth,
-  useQuantumNotifications,
-  useQuantumSettings,
-  useQuantumWebSocket,
-  useQuantumForm,
-  useQuantumUI,
-};
-
 // Default export - the master hook
 export default useQuantumPlatform;
