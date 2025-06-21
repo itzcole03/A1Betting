@@ -497,20 +497,37 @@ export const MegaHeader: React.FC<{
   const [searchQuery, setSearchQuery] = useState("");
   const { theme, isDark, toggleDarkMode } = useTheme();
 
+  // Fallback theme in case theme context is not available
+  const safeTheme = theme || {
+    colors: {
+      surface: "rgba(255, 255, 255, 0.8)",
+      border: "rgba(15, 23, 42, 0.1)",
+      text: {
+        primary: "#0f172a",
+        secondary: "#334155",
+        muted: "#64748b",
+      },
+      primary: "#06ffa5",
+    },
+    effects: {
+      shadow: "0 8px 32px rgba(15, 23, 42, 0.1)",
+    },
+  };
+
   return (
     <header
       className={`mega-header ${className}`}
       style={{
-        background: theme.colors.surface,
+        background: safeTheme.colors.surface,
         backdropFilter: "blur(20px) saturate(180%)",
-        border: `1px solid ${theme.colors.border}`,
-        borderBottom: `1px solid ${theme.colors.border}`,
+        border: `1px solid ${safeTheme.colors.border}`,
+        borderBottom: `1px solid ${safeTheme.colors.border}`,
         padding: "16px 24px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         minHeight: "64px",
-        boxShadow: theme.effects.shadow,
+        boxShadow: safeTheme.effects.shadow,
       }}
     >
       {/* Left Section */}
