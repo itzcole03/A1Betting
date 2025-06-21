@@ -1,6 +1,7 @@
 import React from "react";
 import GlassCard from "../ui/GlassCard";
 import MetricCard from "../ui/MetricCard";
+import EnhancedMetricCard from "../ui/EnhancedMetricCard";
 import CyberButton from "../ui/CyberButton";
 import HolographicText from "../ui/HolographicText";
 import StatusIndicator from "../ui/StatusIndicator";
@@ -38,7 +39,7 @@ const CyberDashboard: React.FC<CyberDashboardProps> = ({
 
       {/* Key Metrics - Exact Prototype Style */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard
+        <EnhancedMetricCard
           label="Total Profit"
           value={`$${user.totalProfit.toLocaleString()}`}
           icon="fas fa-dollar-sign"
@@ -46,21 +47,21 @@ const CyberDashboard: React.FC<CyberDashboardProps> = ({
           trend="up"
           glowing
         />
-        <MetricCard
+        <EnhancedMetricCard
           label="AI Accuracy"
           value={`${user.accuracy}%`}
           icon="fas fa-brain"
           change="+2.1%"
           trend="up"
         />
-        <MetricCard
+        <EnhancedMetricCard
           label="Win Rate"
           value={`${user.winRate}%`}
           icon="fas fa-trophy"
           change="+4.7%"
           trend="up"
         />
-        <MetricCard
+        <EnhancedMetricCard
           label="Account Balance"
           value={`$${user.balance.toLocaleString()}`}
           icon="fas fa-wallet"
