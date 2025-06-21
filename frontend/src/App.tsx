@@ -7,7 +7,7 @@ import {
   MegaAppShell,
   MegaSidebar,
   MegaHeader,
-} from "./components/mega/MegaLayout";
+} from "./components/mega/MegaLayout.tsx";
 import {
   UniversalDashboard,
   UniversalMoneyMaker,
@@ -16,7 +16,7 @@ import {
 } from "./components";
 
 // Import the Mega system for theme consistency
-import { CYBER_COLORS } from "./components/mega/CyberTheme";
+import { CYBER_COLORS } from "./components/mega/CyberTheme.tsx";
 
 // Import styling
 import "./App.css";
