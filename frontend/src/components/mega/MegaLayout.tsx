@@ -116,12 +116,9 @@ export const MegaSidebar: React.FC<{
         backdropFilter: "blur(40px) saturate(2)",
         backgroundColor: "rgba(255, 255, 255, 0.02)",
         border: "1px solid rgba(255, 255, 255, 0.05)",
-        boxShadow:
-          "0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.05) inset",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.05) inset",
         borderRight:
-          variant !== "floating"
-            ? `1px solid rgba(255, 255, 255, 0.1)`
-            : "none",
+          variant !== "floating" ? `1px solid rgba(255, 255, 255, 0.1)` : "none",
         borderRadius: variant === "floating" ? "0 16px 16px 0" : "0",
         display: "flex",
         flexDirection: "column",
@@ -142,8 +139,7 @@ export const MegaSidebar: React.FC<{
               style={{
                 width: "40px",
                 height: "40px",
-                background:
-                  "linear-gradient(135deg, rgba(6, 255, 165, 0.8), rgba(0, 255, 136, 0.6))",
+                background: "linear-gradient(135deg, rgba(6, 255, 165, 0.8), rgba(0, 255, 136, 0.6))",
                 borderRadius: "8px",
                 display: "flex",
                 alignItems: "center",
@@ -160,18 +156,16 @@ export const MegaSidebar: React.FC<{
                     fontSize: "14px",
                     fontWeight: "bold",
                     color: "#ffffff",
-                    lineHeight: "1.2",
+                    lineHeight: "1.2"
                   }}
                 >
                   A1Betting
                 </div>
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#94a3b8",
-                    lineHeight: "1.2",
-                  }}
-                >
+                <div style={{
+                  fontSize: "12px",
+                  color: "#94a3b8",
+                  lineHeight: "1.2"
+                }}>
                   Quantum Platform
                 </div>
               </div>
@@ -202,9 +196,16 @@ export const MegaSidebar: React.FC<{
 
         {/* User Info */}
         {user && !isCompact && (
-          <CyberContainer
-            variant="card"
-            style={{ padding: "16px", marginBottom: "16px" }}
+          <div
+            style={{
+              padding: "16px",
+              marginBottom: "16px",
+              borderRadius: "12px",
+              background: "rgba(255, 255, 255, 0.05)",
+              backdropFilter: "blur(20px) saturate(180%)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+            }}
           >
             <div
               style={{
@@ -217,8 +218,7 @@ export const MegaSidebar: React.FC<{
                 style={{
                   width: "32px",
                   height: "32px",
-                  background:
-                    "linear-gradient(135deg, rgba(6, 255, 165, 0.8), rgba(0, 255, 136, 0.6))",
+                  background: "linear-gradient(135deg, rgba(6, 255, 165, 0.8), rgba(0, 255, 136, 0.6))",
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
@@ -234,30 +234,26 @@ export const MegaSidebar: React.FC<{
                     fontSize: "14px",
                     fontWeight: "500",
                     color: "#ffffff",
-                    lineHeight: "1.2",
+                    lineHeight: "1.2"
                   }}
                 >
                   {user.name}
                 </div>
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#94a3b8",
-                    lineHeight: "1.2",
-                  }}
-                >
+                <div style={{
+                  fontSize: "12px",
+                  color: "#94a3b8",
+                  lineHeight: "1.2"
+                }}>
                   {user.tier || "Pro User"}
                 </div>
               </div>
             </div>
             {user.balance && (
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: "#06ffa5",
-                  lineHeight: "1.2",
-                }}
-              >
+              <div style={{
+                fontSize: "12px",
+                color: "#06ffa5",
+                lineHeight: "1.2"
+              }}>
                 Balance: ${user.balance.toLocaleString()}
               </div>
             )}
@@ -284,19 +280,17 @@ export const MegaSidebar: React.FC<{
                     fontSize: "12px",
                     marginLeft: "8px",
                     color: status.color,
-                    lineHeight: "1.2",
+                    lineHeight: "1.2"
                   }}
                 >
                   {status.text}
                 </div>
               </div>
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: "#94a3b8",
-                  lineHeight: "1.2",
-                }}
-              >
+              <div style={{
+                fontSize: "12px",
+                color: "#94a3b8",
+                lineHeight: "1.2"
+              }}>
                 {systemStatus.dataQuality}%
               </div>
             </div>
@@ -555,16 +549,16 @@ export const MegaHeader: React.FC<{
       text: {
         primary: "#0f172a",
         secondary: "#334155",
-        muted: "#64748b",
+        muted: "#64748b"
       },
-      primary: "#06ffa5",
+      primary: "#06ffa5"
     },
     effects: {
-      shadow: "0 8px 32px rgba(15, 23, 42, 0.1)",
+      shadow: "0 8px 32px rgba(15, 23, 42, 0.1)"
     },
     gradients: {
-      primary: "linear-gradient(135deg, #06ffa5, #00ff88)",
-    },
+      primary: "linear-gradient(135deg, #06ffa5, #00ff88)"
+    }
   };
 
   // Ensure we always have a complete theme object
@@ -599,20 +593,18 @@ export const MegaHeader: React.FC<{
                   marginBottom: "2px",
                   color: safeTheme.colors.text.primary,
                   fontWeight: "600",
-                  lineHeight: "1.2",
+                  lineHeight: "1.2"
                 }}
               >
                 {title}
               </div>
             )}
             {subtitle && (
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: safeTheme.colors.text.muted,
-                  lineHeight: "1.2",
-                }}
-              >
+              <div style={{
+                fontSize: "12px",
+                color: safeTheme.colors.text.muted,
+                lineHeight: "1.2"
+              }}>
                 {subtitle}
               </div>
             )}
@@ -678,7 +670,7 @@ export const MegaHeader: React.FC<{
             width: "40px",
             height: "40px",
           }}
-          title={`Switch to ${isDark ? "Light" : "Dark"} Mode`}
+          title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}
         >
           {isDark ? <Sun size={16} /> : <Moon size={16} />}
         </button>
@@ -734,9 +726,7 @@ export const MegaHeader: React.FC<{
             style={{
               width: "32px",
               height: "32px",
-              background:
-                safeTheme.gradients?.primary ||
-                "linear-gradient(135deg, #06ffa5, #00ff88)",
+              background: safeTheme.gradients?.primary || "linear-gradient(135deg, #06ffa5, #00ff88)",
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
@@ -760,13 +750,11 @@ export const MegaHeader: React.FC<{
         {rightActions}
 
         {/* Current Time */}
-        <div
-          style={{
-            fontSize: "12px",
-            color: safeTheme.colors.text.muted,
-            lineHeight: "1.2",
-          }}
-        >
+        <div style={{
+          fontSize: "12px",
+          color: safeTheme.colors.text.muted,
+          lineHeight: "1.2"
+        }}>
           {new Date().toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
@@ -808,24 +796,23 @@ export const MegaAppShell: React.FC<{
   // Comprehensive fallback theme with all required properties
   const defaultTheme = {
     colors: {
-      background:
-        "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%, #f8fafc 100%)",
+      background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%, #f8fafc 100%)",
       text: {
         primary: "#0f172a",
         secondary: "#334155",
-        muted: "#64748b",
+        muted: "#64748b"
       },
       primary: "#06ffa5",
       secondary: "#00ff88",
       surface: "rgba(255, 255, 255, 0.8)",
-      border: "rgba(15, 23, 42, 0.1)",
+      border: "rgba(15, 23, 42, 0.1)"
     },
     gradients: {
-      primary: "linear-gradient(135deg, #06ffa5, #00ff88)",
+      primary: "linear-gradient(135deg, #06ffa5, #00ff88)"
     },
     effects: {
-      shadow: "0 8px 32px rgba(15, 23, 42, 0.1)",
-    },
+      shadow: "0 8px 32px rgba(15, 23, 42, 0.1)"
+    }
   };
 
   // Ensure we always have a complete theme object
@@ -837,10 +824,8 @@ export const MegaAppShell: React.FC<{
       style={{
         display: "flex",
         minHeight: "100vh",
-        background:
-          finalTheme.colors?.background || defaultTheme.colors.background,
-        color:
-          finalTheme.colors?.text?.primary || defaultTheme.colors.text.primary,
+        background: finalTheme.colors?.background || defaultTheme.colors.background,
+        color: finalTheme.colors?.text?.primary || defaultTheme.colors.text.primary,
       }}
     >
       {/* Sidebar */}
