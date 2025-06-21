@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 
 export const UnifiedSettingsInterface: React.FC = () => {
+  const [isImporting, setIsImporting] = useState(false);
   const [settings, setSettings] = useState({
     notifications: {
       betAlerts: true,
