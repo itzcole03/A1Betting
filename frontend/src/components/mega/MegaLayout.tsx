@@ -37,7 +37,8 @@ import {
 const UserAvatarDropdown: React.FC<{
   user: { name: string; avatar?: string };
   isDark?: boolean;
-}> = ({ user, isDark }) => {
+  onNavigate?: (pageId: string) => void;
+}> = ({ user, isDark, onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownRef, setDropdownRef] = useState<HTMLDivElement | null>(null);
 
@@ -56,8 +57,10 @@ const UserAvatarDropdown: React.FC<{
   }, [dropdownRef]);
 
   const handleAccountProfile = () => {
-    // Navigate to account & profile page
-    window.location.href = "/profile";
+    // Navigate to profile page using app navigation
+    if (onNavigate) {
+      onNavigate("profile");
+    }
     setIsOpen(false);
   };
 
