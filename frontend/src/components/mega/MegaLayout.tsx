@@ -646,7 +646,7 @@ export const MegaHeader: React.FC<{
                 left: "12px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: safeTheme.colors.text.muted,
+                color: safeTheme.colors?.text?.muted || "#64748b",
               }}
             />
             <input
