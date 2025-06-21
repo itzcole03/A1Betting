@@ -495,7 +495,7 @@ export const MegaHeader: React.FC<{
   className = "",
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { theme, isDark } = useTheme();
+  const { theme, isDark, toggleDarkMode } = useTheme();
 
   return (
     <header
