@@ -13,6 +13,7 @@ import {
   UniversalMoneyMaker,
   UniversalAnalytics,
   UniversalPredictions,
+  UltimateSettingsPage,
 } from "./components";
 import ThemeDemo from "./components/ThemeDemo";
 import ErrorBoundary from "./components/ErrorBoundary";
