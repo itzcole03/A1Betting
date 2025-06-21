@@ -949,17 +949,17 @@ export const MegaHeader: React.FC<{
     <header
       className={`mega-header ${className}`}
       style={{
-        background: safeTheme.colors?.surface || "rgba(255, 255, 255, 0.8)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        border: `1px solid ${safeTheme.colors?.border || "rgba(15, 23, 42, 0.1)"}`,
-        borderBottom: `1px solid ${safeTheme.colors?.border || "rgba(15, 23, 42, 0.1)"}`,
-        padding: "16px 24px",
+        background: "rgba(15, 23, 42, 0.95)",
+        backdropFilter: "blur(40px) saturate(180%)",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+        padding: "20px 32px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        minHeight: "64px",
+        minHeight: "72px",
         boxShadow:
-          safeTheme.effects?.shadow || "0 8px 32px rgba(15, 23, 42, 0.1)",
+          "0 8px 32px rgba(0, 0, 0, 0.3), 0 0px 20px rgba(6, 255, 165, 0.2)",
         position: "relative",
         zIndex: 1000,
       }}
