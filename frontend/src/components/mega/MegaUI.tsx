@@ -71,9 +71,10 @@ export const MegaButton: React.FC<{
         color: CYBER_COLORS.text.secondary,
       },
       ghost: {
-        background: "transparent",
-        border: `1px solid ${CYBER_COLORS.primary}60`,
+        background: "rgba(6, 255, 165, 0.1)",
+        border: `1px solid ${CYBER_COLORS.primary}80`,
         color: CYBER_COLORS.primary,
+        fontWeight: "500",
       },
       danger: {
         background:
@@ -82,9 +83,10 @@ export const MegaButton: React.FC<{
         color: "#fff",
       },
       success: {
-        background: `linear-gradient(135deg, ${CYBER_COLORS.primary}80, ${CYBER_COLORS.secondary}60)`,
-        border: `1px solid ${CYBER_COLORS.primary}30`,
+        background: `linear-gradient(135deg, ${CYBER_COLORS.primary}90, ${CYBER_COLORS.secondary}80)`,
+        border: `1px solid ${CYBER_COLORS.primary}50`,
         color: "#000",
+        fontWeight: "600",
       },
     };
     return variants[variant];
