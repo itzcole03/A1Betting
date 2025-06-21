@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Import our consolidated Universal Systems
-import {
-  UniversalThemeProvider,
-  useTheme,
-} from "./providers/UniversalThemeProvider";
+import { UniversalThemeProvider, useTheme } from "./providers/UniversalThemeProvider";
 import {
   MegaAppShell,
   MegaSidebar,
@@ -217,9 +214,17 @@ const AppContent: React.FC = () => {
             </div>
           </MegaAppShell>
         </div>
-      </UniversalThemeProvider>
     </QueryClientProvider>
   );
 };
+
+// Main App component that provides theme context
+function App() {
+  return (
+    <UniversalThemeProvider defaultVariant="cyber" enablePersistence={true}>
+      <AppContent />
+    </UniversalThemeProvider>
+  );
+}
 
 export default App;
