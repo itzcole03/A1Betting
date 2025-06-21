@@ -390,7 +390,11 @@ export const MegaSidebar: React.FC<{
                         key={subItem.id}
                         variant="secondary"
                         onClick={() => onNavigate(subItem.id)}
-                        icon={SubIcon ? <SubIcon size={14} /> : undefined}
+                        icon={
+                          SubIcon ? (
+                            <span style={{ fontSize: "14px" }}>{SubIcon}</span>
+                          ) : undefined
+                        }
                         style={{
                           marginBottom: "2px",
                           fontSize: "12px",
