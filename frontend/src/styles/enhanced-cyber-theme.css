@@ -394,6 +394,50 @@ textarea:focus {
   box-shadow: 0 0 20px rgba(6, 255, 165, 0.3) !important;
 }
 
+/* Additional dropdown fixes for browser compatibility */
+select option,
+select optgroup {
+  font-size: 16px !important;
+  font-family: "Inter", system-ui, sans-serif !important;
+  line-height: 1.5 !important;
+}
+
+/* Force dropdown options to be visible in all browsers */
+html[data-theme="cyber-dark"] select option,
+body.cyber-dark select option,
+body.theme-cyber-dark select option,
+.cyber-dark select option,
+.theme-cyber-dark select option {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+html[data-theme="cyber-light"] select option,
+body.cyber-light select option,
+body.theme-cyber-light select option,
+.cyber-light select option,
+.theme-cyber-light select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: none !important;
+}
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+  .cyber-dark select option,
+  .theme-cyber-dark select option {
+    background: #0f172a !important;
+    color: #ffffff !important;
+  }
+
+  .cyber-light select option,
+  .theme-cyber-light select option {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+}
+
 /* Card Hover Effects */
 .metric-card {
   transition: all 0.3s ease;
