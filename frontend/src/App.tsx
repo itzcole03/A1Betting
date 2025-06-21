@@ -249,12 +249,9 @@ const AppContent: React.FC = () => {
 function App() {
   return (
     <ErrorBoundary>
-      <UniversalThemeProvider
-        defaultVariant="cyber-light"
-        enablePersistence={true}
-      >
+      <SafeThemeProvider defaultVariant="cyber-light" enablePersistence={true}>
         <AppContent />
-      </UniversalThemeProvider>
+      </SafeThemeProvider>
     </ErrorBoundary>
   );
 }
