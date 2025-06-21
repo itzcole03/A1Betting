@@ -1,13 +1,11 @@
 import React from "react";
-import { cn } from "../../lib/utils";
 
 interface GlassCardProps {
   title?: string;
   children: React.ReactNode;
   className?: string;
   glowing?: boolean;
-  animated?: boolean;
-  neonColor?: "green" | "blue" | "pink" | "purple";
+  style?: React.CSSProperties;
 }
 
 const GlassCard: React.FC<GlassCardProps> = ({
@@ -15,30 +13,25 @@ const GlassCard: React.FC<GlassCardProps> = ({
   children,
   className = "",
   glowing = false,
-  animated = false,
-  neonColor = "green",
+  style = {},
 }) => {
-  const neonShadows = {
-    green: "shadow-neon",
-    blue: "shadow-neon-blue",
-    pink: "shadow-neon-pink",
-    purple: "shadow-neon",
+  const cardStyle: React.CSSProperties = {
+    background: "rgba(255, 255, 255, 0.05)",
+    backdropFilter: "blur(20px) saturate(180%)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    boxShadow: glowing
+      ? "0 0 20px rgba(0,255,136,0.6), 0 0 40px rgba(0,255,136,0.4)"
+      : "0 8px 32px rgba(0, 0, 0, 0.1)",
+    ...style,
   };
-
-  const glowClass = glowing ? neonShadows[neonColor] : "";
-  const animatedClass = animated ? "animate-slide-in-up" : "";
 
   return (
     <div
-      className={cn(
-        "glass-card rounded-2xl p-6 transition-all duration-300 hover:transform hover:scale-[1.02]",
-        glowClass,
-        animatedClass,
-        className,
-      )}
+      className={`glass-card rounded-2xl p-6 transition-all duration-300 ${className}`}
+      style={cardStyle}
     >
       {title && (
-        <h3 className="text-lg font-semibold mb-4 text-electric-400 cyber-title">
+        <h3 className="text-lg font-semibold mb-4 text-electric-400">
           {title}
         </h3>
       )}

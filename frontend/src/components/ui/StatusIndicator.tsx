@@ -1,48 +1,23 @@
 import React from "react";
-import { cn } from "../../lib/utils";
 
 interface StatusIndicatorProps {
-  status: "active" | "warning" | "error" | "offline";
+  status: "active" | "warning" | "error";
   label: string;
-  size?: "sm" | "md" | "lg";
-  className?: string;
 }
 
-const StatusIndicator: React.FC<StatusIndicatorProps> = ({
-  status,
-  label,
-  size = "md",
-  className = "",
-}) => {
-  const statusStyles = {
-    active: "status-active",
-    warning: "status-warning",
-    error: "status-error",
-    offline: "bg-gray-500",
-  };
-
-  const sizes = {
-    sm: "w-1.5 h-1.5",
-    md: "w-2 h-2",
-    lg: "w-3 h-3",
-  };
-
-  const textSizes = {
-    sm: "text-xs",
-    md: "text-sm",
-    lg: "text-base",
+const StatusIndicator: React.FC<StatusIndicatorProps> = ({ status, label }) => {
+  const statusColors = {
+    active: "bg-green-400",
+    warning: "bg-yellow-400",
+    error: "bg-red-400",
   };
 
   return (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div className="flex items-center space-x-2">
       <div
-        className={cn(
-          "status-dot rounded-full",
-          sizes[size],
-          statusStyles[status],
-        )}
+        className={`w-2 h-2 ${statusColors[status]} rounded-full animate-pulse`}
       />
-      <span className={cn("text-gray-300", textSizes[size])}>{label}</span>
+      <span className="text-sm text-gray-300">{label}</span>
     </div>
   );
 };
