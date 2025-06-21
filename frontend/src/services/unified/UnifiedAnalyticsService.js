@@ -2,10 +2,20 @@ import { BaseService } from "./BaseService";
 export class UnifiedAnalyticsService extends BaseService {
   constructor(registry) {
     super("analytics", registry);
-    this.stateService = registry.getService("state");
-    this.bettingService = registry.getService("betting");
-    this.predictionService = registry.getService("prediction");
-    this.errorService = registry.getService("error");
+    this.stateService = registry?.getService("state");
+    this.bettingService = registry?.getService("betting");
+    this.predictionService = registry?.getService("prediction");
+    this.errorService = registry?.getService("error");
+
+    // Log initialization state for debugging
+    if (typeof console !== "undefined") {
+      console.debug("UnifiedAnalyticsService initialized:", {
+        stateService: !!this.stateService,
+        bettingService: !!this.bettingService,
+        predictionService: !!this.predictionService,
+        errorService: !!this.errorService,
+      });
+    }
   }
   // Renamed to avoid duplicate member error
   async getPerformanceMetricsApi(eventId, marketId, selectionId) {
