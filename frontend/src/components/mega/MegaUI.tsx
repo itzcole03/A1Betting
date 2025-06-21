@@ -481,29 +481,35 @@ export const MegaInput: React.FC<{
             width: "100%",
             padding: icon
               ? iconPosition === "left"
-                ? "12px 16px 12px 40px"
-                : "12px 40px 12px 16px"
-              : "12px 16px",
-            borderRadius: "8px",
+                ? "14px 18px 14px 44px"
+                : "14px 44px 14px 18px"
+              : "14px 18px",
+            borderRadius: "12px",
             border: error
-              ? "1px solid #ff4757"
-              : "1px solid rgba(255, 255, 255, 0.1)",
-            backgroundColor: "rgba(255, 255, 255, 0.05)",
-            backdropFilter: "blur(10px)",
-            color: CYBER_COLORS.text.primary,
-            fontSize: "14px",
-            transition: "all 0.3s ease",
+              ? "1px solid #ff6b6b"
+              : "1px solid rgba(255, 255, 255, 0.08)",
+            backgroundColor: "rgba(255, 255, 255, 0.04)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            color: "#ffffff",
+            fontSize: "15px",
+            fontWeight: "500",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             outline: "none",
+            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.05)",
           }}
           onFocus={(e) => {
-            e.target.style.border = `1px solid ${CYBER_COLORS.primary}60`;
-            e.target.style.boxShadow = `0 0 0 3px ${CYBER_COLORS.primary}20`;
+            e.target.style.border = `1px solid rgba(6, 255, 165, 0.4)`;
+            e.target.style.backgroundColor = "rgba(255, 255, 255, 0.06)";
+            e.target.style.boxShadow = `0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(6, 255, 165, 0.2)`;
+            e.target.style.transform = "translateY(-1px)";
           }}
           onBlur={(e) => {
             e.target.style.border = error
-              ? "1px solid #ff4757"
-              : "1px solid rgba(255, 255, 255, 0.1)";
-            e.target.style.boxShadow = "none";
+              ? "1px solid #ff6b6b"
+              : "1px solid rgba(255, 255, 255, 0.08)";
+            e.target.style.backgroundColor = "rgba(255, 255, 255, 0.04)";
+            e.target.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.05)";
+            e.target.style.transform = "translateY(0)";
           }}
         />
 
