@@ -352,40 +352,43 @@ export const MegaSidebar: React.FC<{
       }}
     >
       {/* Header */}
-      <div style={{ padding: isCompact ? "16px 12px" : "20px" }}>
+      <div style={{ padding: isCompact ? "16px 12px" : "24px 20px" }}>
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: isCompact ? "center" : "space-between",
-            marginBottom: isCompact ? "0" : "20px",
+            marginBottom: isCompact ? "0" : "24px",
           }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
             <button
               onClick={() => onNavigate("dashboard")}
               style={{
-                width: "40px",
-                height: "40px",
+                width: "44px",
+                height: "44px",
                 background:
-                  "linear-gradient(135deg, rgba(6, 255, 165, 0.8), rgba(0, 255, 136, 0.6))",
-                borderRadius: "8px",
+                  "linear-gradient(135deg, rgba(6, 255, 165, 0.9), rgba(0, 255, 136, 0.8))",
+                borderRadius: "12px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                marginRight: isCompact ? "0" : "12px",
+                marginRight: isCompact ? "0" : "14px",
                 border: "none",
                 cursor: "pointer",
-                transition: "all 0.2s ease",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                boxShadow: "0 4px 16px rgba(6, 255, 165, 0.2)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.transform =
+                  "scale(1.08) translateY(-1px)";
                 e.currentTarget.style.boxShadow =
-                  "0 4px 20px rgba(6, 255, 165, 0.4)";
+                  "0 8px 32px rgba(6, 255, 165, 0.4)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.transform = "scale(1) translateY(0)";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 16px rgba(6, 255, 165, 0.2)";
               }}
               title="Return to Dashboard"
             >
@@ -395,10 +398,11 @@ export const MegaSidebar: React.FC<{
               <div>
                 <div
                   style={{
-                    fontSize: "14px",
-                    fontWeight: "bold",
+                    fontSize: "16px",
+                    fontWeight: "700",
                     color: "#ffffff",
                     lineHeight: "1.2",
+                    letterSpacing: "-0.01em",
                   }}
                 >
                   A1Betting
@@ -408,6 +412,7 @@ export const MegaSidebar: React.FC<{
                     fontSize: "12px",
                     color: "#94a3b8",
                     lineHeight: "1.2",
+                    fontWeight: "500",
                   }}
                 >
                   Quantum Platform
@@ -420,17 +425,28 @@ export const MegaSidebar: React.FC<{
             <button
               onClick={onToggle}
               style={{
-                background: "rgba(6, 255, 165, 0.1)",
-                border: "1px solid rgba(6, 255, 165, 0.8)",
+                background: "rgba(6, 255, 165, 0.08)",
+                border: "1px solid rgba(6, 255, 165, 0.2)",
                 color: "#06ffa5",
                 fontWeight: "500",
-                padding: "6px 12px",
+                padding: "8px",
                 fontSize: "12px",
-                borderRadius: "8px",
+                borderRadius: "10px",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                transition: "all 0.2s ease",
+                width: "36px",
+                height: "36px",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(6, 255, 165, 0.15)";
+                e.currentTarget.style.borderColor = "rgba(6, 255, 165, 0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(6, 255, 165, 0.08)";
+                e.currentTarget.style.borderColor = "rgba(6, 255, 165, 0.2)";
               }}
             >
               <X size={16} />
