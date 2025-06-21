@@ -628,7 +628,6 @@ const Sidebar: React.FC = () => {
                         borderRadius: "12px",
                         marginBottom: "4px",
                         ...(location.pathname === item.path
-                        ...(currentPage === item.key
                           ? {
                               background: "rgba(0,255,136,0.2)",
                               borderLeft: "4px solid #00ff88",
