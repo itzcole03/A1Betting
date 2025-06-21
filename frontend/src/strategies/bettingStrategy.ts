@@ -1,5 +1,5 @@
 import { APIError, AppError } from "../core/UnifiedError";
-import { post } from "../services/api/ApiService";
+import { post } from "../services/api";
 import { unifiedMonitor } from "../core/UnifiedMonitor";
 import {
   BettingStrategyRequest, // { propositions: FrontendProposition[], bankroll: number, riskLevel: string }
