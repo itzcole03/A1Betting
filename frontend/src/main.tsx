@@ -4,6 +4,7 @@ import App from "./App.tsx";
 
 // Import styles exactly like the prototype
 import "./index.css";
+import "./styles/global-cyber-theme.css";
 import "./styles/prototype-override.css";
 import "./styles/force-prototype.css";
 import "./styles/enhanced-animations.css";
