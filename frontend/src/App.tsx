@@ -222,17 +222,7 @@ const AppContent: React.FC = () => {
                 border: "1px solid rgba(6, 255, 165, 0.3)",
                 backdropFilter: "blur(10px)",
               }}
-            >
-              <div className="flex items-center gap-2 text-sm">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span style={{ color: CYBER_COLORS.primary }}>
-                  Universal Systems Active
-                </span>
-                <span style={{ color: CYBER_COLORS.text.muted }}>
-                  • 98.5% Consolidated
-                </span>
-              </div>
-            </div>
+            />
           </div>
 
           {/* Performance Indicator */}
