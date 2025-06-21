@@ -51,7 +51,14 @@ const Card = ({
   className?: string;
 }) => (
   <div
-    className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}
+    className={`rounded-2xl bg-card text-card-foreground transition-all duration-300 hover:shadow-2xl ${className}`}
+    style={{
+      background: "rgba(255, 255, 255, 0.04)",
+      border: "1px solid rgba(255, 255, 255, 0.1)",
+      backdropFilter: "blur(40px) saturate(200%)",
+      boxShadow:
+        "0 8px 32px rgba(0, 0, 0, 0.15), 0 1px 0 rgba(255, 255, 255, 0.05) inset",
+    }}
   >
     {children}
   </div>
