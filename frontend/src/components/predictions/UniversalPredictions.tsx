@@ -581,6 +581,7 @@ export const UniversalPredictions: React.FC = () => {
           </div>
 
           <div>
+            ThemedText
             <CyberText variant="caption" className="mb-2">
               Market
             </CyberText>
