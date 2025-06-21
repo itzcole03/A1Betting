@@ -1,6 +1,5 @@
 import React, { useState, useEffect, ReactNode } from "react";
 import {
-  CYBER_COLORS,
   CYBER_GRADIENTS,
   CYBER_GLASS,
   CyberContainer,
