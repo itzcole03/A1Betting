@@ -610,7 +610,7 @@ export const UltimateSettingsPage: React.FC = () => {
           <div>
             <label className="block text-sm font-medium mb-3">Theme</label>
             <div className="flex items-center gap-4">
-              <CyberThemeToggle variant="button" showLabel={true} />
+              <SimpleThemeToggle />
               <div className="text-sm text-muted-foreground">
                 Current: {themeVariant} ({isDark ? "Dark" : "Light"})
               </div>
