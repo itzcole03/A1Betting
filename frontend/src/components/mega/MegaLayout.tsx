@@ -758,6 +758,8 @@ export const MegaHeader: React.FC<{
         minHeight: "64px",
         boxShadow:
           safeTheme.effects?.shadow || "0 8px 32px rgba(15, 23, 42, 0.1)",
+        position: "relative",
+        zIndex: 1000,
       }}
     >
       {/* Left Section */}
