@@ -159,261 +159,41 @@ const MegaApp: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        background: CYBER_GRADIENTS.background,
-        color: CYBER_COLORS.text.primary,
-      }}
-    >
-      {/* Sidebar */}
-      <div
-        style={{
-          width: sidebarOpen ? "280px" : "64px",
-          transition: "width 0.3s ease",
-          ...CYBER_GLASS.panel,
-          borderRight: `1px solid ${CYBER_COLORS.border}`,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {/* Header */}
-        <div style={{ padding: "20px" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "20px",
-            }}
-          >
-            <div
-              style={{
-                width: "40px",
-                height: "40px",
-                background: CYBER_GRADIENTS.button,
-                borderRadius: "8px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginRight: sidebarOpen ? "12px" : "0",
-              }}
-            >
-              <Brain size={24} color="#000" />
-            </div>
-            {sidebarOpen && (
-              <div>
-                <CyberText
-                  variant="title"
-                  style={{ fontSize: "20px", marginBottom: "2px" }}
-                >
-                  A1Betting
-                </CyberText>
-                <CyberText variant="caption" color="muted">
-                  Quantum Platform
-                </CyberText>
-              </div>
-            )}
-          </div>
-
-          {/* User Info */}
-          {sidebarOpen && (
-            <CyberContainer
-              variant="card"
-              style={{ padding: "16px", marginBottom: "20px" }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "12px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "32px",
-                    height: "32px",
-                    background: CYBER_GRADIENTS.button,
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: "8px",
-                  }}
-                >
-                  <User size={16} color="#000" />
-                </div>
-                <div>
-                  <CyberText
-                    variant="body"
-                    style={{ fontWeight: "600", marginBottom: "2px" }}
-                  >
-                    {user.name}
-                  </CyberText>
-                  <CyberText variant="caption" color="muted">
-                    {user.tier}
-                  </CyberText>
-                </div>
-              </div>
-              <CyberText variant="caption" color="accent">
-                Balance: ${user.balance.toLocaleString()}
-              </CyberText>
-            </CyberContainer>
-          )}
-
-          {/* System Status */}
-          {sidebarOpen && (
-            <CyberContainer
-              variant="card"
-              style={{ padding: "12px", marginBottom: "20px" }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <StatusIcon size={16} color={status.color} />
-                  <CyberText
-                    variant="caption"
-                    style={{ marginLeft: "8px", color: status.color }}
-                  >
-                    {status.text}
-                  </CyberText>
-                </div>
-                <CyberText variant="caption" color="muted">
-                  {dataQuality}%
-                </CyberText>
-              </div>
-            </CyberContainer>
-          )}
-        </div>
-
-        {/* Navigation */}
-        <nav style={{ flex: 1, padding: "0 20px" }}>
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentPage === item.id;
-
-            return (
-              <CyberButton
-                key={item.id}
-                variant={isActive ? "primary" : "secondary"}
-                active={isActive}
-                onClick={() => setCurrentPage(item.id)}
-                icon={<Icon size={16} />}
-                style={{
-                  marginBottom: "8px",
-                  justifyContent: sidebarOpen ? "flex-start" : "center",
-                  padding: sidebarOpen ? "12px 16px" : "12px",
-                }}
-              >
-                {sidebarOpen && item.label}
-              </CyberButton>
-            );
-          })}
-        </nav>
-
-        {/* Footer */}
-        <div style={{ padding: "20px" }}>
-          <CyberButton
-            variant="secondary"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            icon={sidebarOpen ? <X size={16} /> : <Menu size={16} />}
-            style={{
-              marginBottom: "8px",
-              justifyContent: "center",
-              padding: "12px",
-            }}
-          >
-            {sidebarOpen && "Collapse"}
-          </CyberButton>
-
-          {sidebarOpen && (
-            <>
-              <CyberButton
-                variant="secondary"
-                onClick={() => setDarkMode(!darkMode)}
-                icon={darkMode ? <Sun size={16} /> : <Moon size={16} />}
-                style={{ marginBottom: "8px" }}
-              >
-                {darkMode ? "Light Mode" : "Dark Mode"}
-              </CyberButton>
-              <CyberButton
-                variant="secondary"
-                icon={<Settings size={16} />}
-                style={{ marginBottom: 0 }}
-              >
-                Settings
-              </CyberButton>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div style={{ flex: 1, overflow: "auto" }}>
-        {/* Top Bar */}
-        <div
-          style={{
-            ...CYBER_GLASS.panel,
-            borderBottom: `1px solid ${CYBER_COLORS.border}`,
-            padding: "16px 24px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+    <MegaAppShell
+      sidebar={
+        <MegaSidebar
+          isOpen={sidebarOpen}
+          onToggle={() => setSidebarOpen(!sidebarOpen)}
+          navigationItems={navigationItems}
+          currentPage={currentPage}
+          onNavigate={setCurrentPage}
+          user={user}
+          systemStatus={{
+            connectedSources,
+            dataQuality,
+            isOnline: true,
           }}
-        >
-          <div>
-            <CyberText
-              variant="title"
-              style={{ fontSize: "18px", marginBottom: "2px" }}
-            >
-              {navigationItems.find((item) => item.id === currentPage)?.label ||
-                "Dashboard"}
-            </CyberText>
-            <CyberText variant="caption" color="muted">
-              {
-                navigationItems.find((item) => item.id === currentPage)
-                  ?.description
-              }
-            </CyberText>
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Bell size={16} color={CYBER_COLORS.text.muted} />
-              {notifications > 0 && (
-                <span
-                  style={{
-                    background: CYBER_COLORS.primary,
-                    color: "#000",
-                    borderRadius: "50%",
-                    width: "18px",
-                    height: "18px",
-                    fontSize: "10px",
-                    fontWeight: "600",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {notifications}
-                </span>
-              )}
-            </div>
-            <CyberText variant="caption" color="muted">
-              {new Date().toLocaleTimeString()}
-            </CyberText>
-          </div>
-        </div>
-
-        {/* Page Content */}
-        <div>{renderCurrentPage()}</div>
-      </div>
-    </div>
+        />
+      }
+      header={
+        <MegaHeader
+          title={
+            navigationItems.find((item) => item.id === currentPage)?.label ||
+            "Dashboard"
+          }
+          subtitle={
+            navigationItems.find((item) => item.id === currentPage)?.description
+          }
+          notifications={notifications}
+          onNotificationsClick={() => console.log("Notifications clicked")}
+          user={user}
+          darkMode={darkMode}
+          onDarkModeToggle={() => setDarkMode(!darkMode)}
+        />
+      }
+    >
+      {renderCurrentPage()}
+    </MegaAppShell>
   );
 };
 
