@@ -11,6 +11,11 @@ import MegaAnalytics from "./MegaAnalytics";
 import { MegaSidebar, MegaHeader, MegaAppShell } from "./MegaLayout";
 import { MegaCard, MegaButton } from "./MegaUI";
 import {
+  MegaArbitrageEngine,
+  MegaPredictionEngine,
+  MegaRevolutionaryInterface,
+} from "./MegaFeatures";
+import {
   Brain,
   Target,
   BarChart3,
