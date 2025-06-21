@@ -705,14 +705,25 @@ export const MegaAppShell: React.FC<{
 }) => {
   const { theme } = useTheme();
 
+  // Fallback theme in case theme context is not available
+  const safeTheme = theme || {
+    colors: {
+      background:
+        "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%, #f8fafc 100%)",
+      text: {
+        primary: "#0f172a",
+      },
+    },
+  };
+
   return (
     <div
       className={`mega-app-shell ${className}`}
       style={{
         display: "flex",
         minHeight: "100vh",
-        background: theme.colors.background,
-        color: theme.colors.text.primary,
+        background: safeTheme.colors.background,
+        color: safeTheme.colors.text.primary,
       }}
     >
       {/* Sidebar */}
