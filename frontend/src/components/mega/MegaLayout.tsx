@@ -251,9 +251,15 @@ export const MegaSidebar: React.FC<{
               </div>
             </div>
             {user.balance && (
-              <CyberText variant="caption" color="accent">
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "#06ffa5",
+                  lineHeight: "1.2",
+                }}
+              >
                 Balance: ${user.balance.toLocaleString()}
-              </CyberText>
+              </div>
             )}
           </CyberContainer>
         )}
