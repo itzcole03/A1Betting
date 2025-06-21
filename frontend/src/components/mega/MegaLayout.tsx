@@ -207,7 +207,8 @@ export const MegaSidebar: React.FC<{
                 style={{
                   width: "32px",
                   height: "32px",
-                  background: CYBER_GRADIENTS.button,
+                  background:
+                    "linear-gradient(135deg, rgba(6, 255, 165, 0.8), rgba(0, 255, 136, 0.6))",
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
