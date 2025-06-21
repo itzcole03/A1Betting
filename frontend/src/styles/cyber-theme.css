@@ -70,7 +70,7 @@
   }
 }
 
-/* Beautiful Glass Morphism */
+/* Beautiful Glass Morphism - Exact Prototype Match */
 .glass-card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(180%);
@@ -81,6 +81,15 @@
 .dark .glass-card {
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Ensure glass cards work in all contexts */
+.glass-card,
+.glass-card.dark {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 /* Holographic Text Effect */
@@ -205,8 +214,9 @@ textarea:focus {
   box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
 }
 
-/* Background Effects */
+/* Background Effects - Exact Prototype Match */
 .cyber-bg {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
   background-image:
     radial-gradient(
       circle at 20% 50%,
@@ -223,6 +233,8 @@ textarea:focus {
       rgba(0, 212, 255, 0.03) 0%,
       transparent 50%
     );
+  font-family: "Inter", system-ui, sans-serif;
+  color: white;
 }
 
 /* Neon Shadows */
@@ -265,15 +277,21 @@ textarea:focus {
   animation: cyber-pulse 3s ease-in-out infinite;
 }
 
-/* Card Hover Effects */
+/* Card Hover Effects - Exact Prototype Match */
 .metric-card {
   transition: all 0.3s ease;
   cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .metric-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 40px rgba(0, 255, 136, 0.3);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 0 20px rgba(0, 255, 136, 0.6),
+    0 0 40px rgba(0, 255, 136, 0.4);
+  border-color: rgba(0, 255, 136, 0.3);
 }
 
 /* Status Indicators */
