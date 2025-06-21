@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { Platform } from "./quantum";
+import React from "react";
 import MegaApp from "./components/mega/MegaApp";
 import "./App.css";
 
@@ -10,11 +9,6 @@ import "./App.css";
  * your beautiful cyber theme and all functionality
  */
 function App() {
-  useEffect(() => {
-    // Initialize the Quantum Platform with all consolidated systems
-    Platform.initialize().catch(console.error);
-  }, []);
-
   return (
     <div className="quantum-app">
       <MegaApp />
