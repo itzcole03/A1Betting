@@ -62,7 +62,7 @@ const navigationItems = [
   {
     id: "moneymaker",
     label: "Money Maker",
-    icon: "💰",
+    icon: "���",
     component: UniversalMoneyMaker,
     isPremium: true,
   },
@@ -118,7 +118,26 @@ const mockSystemStatus = {
 
 // Inner component that has access to theme context
 const AppContent: React.FC = () => {
-  const { isDark, toggleDarkMode, theme } = useTheme();
+  // Add error handling for theme access
+  let themeContext;
+  try {
+    themeContext = useTheme();
+  } catch (error) {
+    console.error("Failed to access theme context:", error);
+    // Provide fallback values
+    themeContext = {
+      isDark: false,
+      toggleDarkMode: () => {},
+      theme: {
+        colors: {
+          background:
+            "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%, #f8fafc 100%)",
+        },
+      },
+    };
+  }
+
+  const { isDark, toggleDarkMode, theme } = themeContext;
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
