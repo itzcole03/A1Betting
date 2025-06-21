@@ -561,10 +561,11 @@ const Sidebar: React.FC = () => {
     {
       className: "w-80 h-screen border-r",
       style: {
-        background: "rgba(255, 255, 255, 0.05)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        borderRight: "1px solid rgba(255, 255, 255, 0.1)",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+        background: "rgba(255, 255, 255, 0.02)",
+        backdropFilter: "blur(40px) saturate(200%)",
+        borderRight: "1px solid rgba(255, 255, 255, 0.05)",
+        boxShadow:
+          "0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05)",
       },
     },
     React.createElement("div", { className: "p-6" }, [
@@ -622,8 +623,15 @@ const Sidebar: React.FC = () => {
                               borderLeft: "4px solid #00ff88",
                               paddingLeft: "16px",
                               boxShadow: "0 4px 12px rgba(0,255,136,0.3)",
+                              color: "#06ffa5",
                             }
-                          : {}),
+                          : {
+                              background: "rgba(255, 255, 255, 0.05)",
+                              backdropFilter: "blur(20px) saturate(180%)",
+                              border: "1px solid rgba(255, 255, 255, 0.1)",
+                              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+                              color: "#d1d5db",
+                            }),
                       },
                     },
                     [
