@@ -562,9 +562,9 @@ export const UniversalPredictions: React.FC = () => {
         {/* Filter Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
           <div>
-            <CyberText variant="caption" className="mb-2">
+            <ThemedText variant="caption" className="mb-2">
               Sport
-            </CyberText>
+            </ThemedText>
             <select
               value={filters.sport}
               onChange={(e) =>
