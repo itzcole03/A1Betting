@@ -724,7 +724,7 @@ export const MegaHeader: React.FC<{
                   position: "absolute",
                   top: "4px",
                   right: "4px",
-                  background: safeTheme.colors.primary,
+                  background: safeTheme.colors?.primary || "#06ffa5",
                   color: "#000",
                   borderRadius: "50%",
                   width: "16px",
