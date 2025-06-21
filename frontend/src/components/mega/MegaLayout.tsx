@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ReactNode } from "react";
 // Removed unused CyberTheme imports
-import { useTheme } from "../../providers/UniversalThemeProvider";
+import { useTheme } from "../../providers/SafeThemeProvider";
 import { MegaButton } from "./MegaUI";
 // Removed problematic import
 import {
