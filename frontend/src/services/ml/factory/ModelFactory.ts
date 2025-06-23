@@ -6,10 +6,10 @@ import { TemporalPatternModel } from '../models/TemporalPatternModel';
 import { AlternativeDataModel } from '../models/AlternativeDataModel';
 import { RealityExploitationEngine } from '../models/RealityExploitationEngine';
 import { QuantumProbabilityModel } from '../models/QuantumProbabilityModel';
-import { ModelConfig, AdvancedEnsembleConfig } from '../types';
+import { ModelConfig, AdvancedEnsembleConfig } from '@/types';
 import { validateModelConfig } from '../config/modelConfig';
 import { UnifiedErrorHandler } from '../../core/UnifiedErrorHandler';
-import { UnifiedLogger } from '../../core/UnifiedLogger';
+import { UnifiedLogger } from '@/core/UnifiedLogger';
 import { UnifiedMonitor } from '../../core/UnifiedMonitor';
 import {
   ModelError,

@@ -1,5 +1,5 @@
-import useStore from '../../store/useStore';
-import { BettingOpportunity, MarketUpdate, Alert } from '../../types/core';
+import useStore from '@/store/useStore';
+import { BettingOpportunity, MarketUpdate, Alert } from '@/types/core';
 import { EventBus } from '../../core/EventBus';
 import { UnifiedStateManager } from '../../core/UnifiedState';
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';

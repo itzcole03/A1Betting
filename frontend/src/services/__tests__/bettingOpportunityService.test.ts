@@ -10,7 +10,7 @@ import {
   LineShoppingResult,
   Sportsbook,
 } from '../../types/betting';
-import { MarketContext, BettingContext } from '../../types/core';
+import { MarketContext, BettingContext } from '@/types/core';
 
 jest.mock('../ArbitrageService');
 jest.mock('../lineShoppingService');

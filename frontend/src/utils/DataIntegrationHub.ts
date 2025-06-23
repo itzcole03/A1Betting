@@ -1,7 +1,7 @@
 import { DailyFantasyAdapter, DailyFantasyData } from '../adapters/DailyFantasyAdapter';
 import { DataSource } from './DataSource';
 import { ESPNAdapter } from '../adapters/ESPNAdapter';
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { PrizePicksAdapter, PrizePicksData } from '../betaTest4/src/adapters/PrizePicksAdapter';
 import { SocialSentimentAdapter, SocialSentimentData } from '../adapters/SocialSentimentAdapter';

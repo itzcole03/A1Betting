@@ -1,7 +1,7 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Box, Typography, CircularProgress, Alert } from '@mui/material';
-import { ShapValue } from '../../types/explainability';
+import React from "react";
+import SafeChart from "../ui/SafeChart";
+import { Box, Typography, CircularProgress, Alert } from "@mui/material";
+import { ShapValue } from "../../types/explainability";
 
 interface SHAPVisualizationProps {
   shapValues: Record<string, number>;
@@ -20,7 +20,12 @@ const SHAPVisualization: React.FC<SHAPVisualizationProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <Box alignItems="center" display="flex" height="400px" justifyContent="center">
+      <Box
+        alignItems="center"
+        display="flex"
+        height="400px"
+        justifyContent="center"
+      >
         <CircularProgress />
       </Box>
     );
@@ -51,13 +56,13 @@ const SHAPVisualization: React.FC<SHAPVisualizationProps> = ({
     labels: sortedFeatures.map(([feature]) => feature),
     datasets: [
       {
-        label: 'SHAP Value',
+        label: "SHAP Value",
         data: sortedFeatures.map(([, value]) => value),
         backgroundColor: sortedFeatures.map(([, value]) =>
-          value > 0 ? 'rgba(93, 92, 222, 0.8)' : 'rgba(255, 107, 53, 0.8)'
+          value > 0 ? "rgba(93, 92, 222, 0.8)" : "rgba(255, 107, 53, 0.8)",
         ),
         borderColor: sortedFeatures.map(([, value]) =>
-          value > 0 ? 'rgb(93, 92, 222)' : 'rgb(255, 107, 53)'
+          value > 0 ? "rgb(93, 92, 222)" : "rgb(255, 107, 53)",
         ),
         borderWidth: 1,
       },
@@ -65,7 +70,7 @@ const SHAPVisualization: React.FC<SHAPVisualizationProps> = ({
   };
 
   const options = {
-    indexAxis: 'y' as const,
+    indexAxis: "y" as const,
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -88,7 +93,7 @@ const SHAPVisualization: React.FC<SHAPVisualizationProps> = ({
         },
         title: {
           display: true,
-          text: 'SHAP Value',
+          text: "SHAP Value",
         },
       },
       y: {
@@ -102,13 +107,18 @@ const SHAPVisualization: React.FC<SHAPVisualizationProps> = ({
   return (
     <Box>
       <Box className="h-96">
-        <Bar data={chartData} options={options} />
+        <SafeChart
+          type="bar"
+          data={chartData}
+          options={options}
+          loadingMessage="Loading SHAP visualization..."
+        />
       </Box>
       <Box mt={2}>
         <Typography color="text.secondary" variant="body2">
-          SHAP (SHapley Additive exPlanations) values show how each feature contributes to the
-          prediction. Positive values (blue) increase the prediction, while negative values (orange)
-          decrease it.
+          SHAP (SHapley Additive exPlanations) values show how each feature
+          contributes to the prediction. Positive values (blue) increase the
+          prediction, while negative values (orange) decrease it.
         </Typography>
         {baseValue !== undefined && (
           <Typography color="text.secondary" mt={1} variant="body2">

@@ -1,23 +1,29 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
-import { BrowserRouter } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import App from "./App";
-import { AppInitializer } from "./components/AppInitializer";
+import App from "./App.tsx";
+import ViteErrorBoundary from "./components/ViteErrorBoundary.tsx";
 
-// Import styles
+// Import styles exactly like the prototype
 import "./index.css";
-import "./styles/globals.css";
+import "./styles/global-cyber-theme.css";
+import "./styles/prototype-override.css";
+import "./styles/force-prototype.css";
+import "./styles/enhanced-animations.css";
 
-// WebSocket debugging complete - ApiService was the source
-console.log(
-  "🔧 WebSocket debugging complete. Source identified: ApiService with ws://localhost:8080",
-);
+console.log("🚀 A1Betting Platform Loading - Prototype Match Mode");
 
-const queryClient = new QueryClient();
-const theme = createTheme();
+// Handle Vite error overlay issues
+window.addEventListener("error", (event) => {
+  if (
+    event.error?.message?.includes(
+      "Cannot read properties of undefined (reading 'frame')",
+    )
+  ) {
+    console.warn("Vite error overlay issue suppressed:", event.error);
+    event.preventDefault();
+    return;
+  }
+});
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Failed to find the root element");
@@ -25,21 +31,8 @@ const root = ReactDOM.createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <BrowserRouter
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true,
-          }}
-        >
-          <AppInitializer>
-            <App />
-          </AppInitializer>
-          <Toaster position="top-right" />
-        </BrowserRouter>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ViteErrorBoundary>
+      <App />
+    </ViteErrorBoundary>
   </React.StrictMode>,
 );

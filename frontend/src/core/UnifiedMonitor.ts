@@ -8,11 +8,11 @@ import {
 } from "@sentry/types";
 
 import type { User } from "../types/core.ts"; // Assuming User type might be used for context
-// import { PerformanceTrackingService } from '../services/performanceTracking.ts'; // Uncomment if used
+// import { PerformanceTrackingService } from '../services/performanceTracking'; // Uncomment if used
 
 // src/core/UnifiedMonitor.ts
 
-// import { EventBus } from './EventBus'; // To be created
+// import { EventBus } from '@/core/EventBus'; // To be created
 
 /**
  * UnifiedMonitor

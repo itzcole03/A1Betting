@@ -1,4 +1,4 @@
-import { ModelConfig, AdvancedEnsembleConfig } from '../types';
+import { ModelConfig, AdvancedEnsembleConfig } from '@/types';
 
 export function validateModelConfig(config: ModelConfig | AdvancedEnsembleConfig): void {
   if (!config.name) {

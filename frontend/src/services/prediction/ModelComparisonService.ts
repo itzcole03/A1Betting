@@ -4,7 +4,7 @@
 
 import type { ModelPrediction } from '../ml/models/BaseModel';
 import type { ModelEvaluation } from './ModelEvaluationService';
-import type { ModelComparisonResult } from './types';
+import type { ModelComparisonResult } from '@/types';
 
 export interface ModelPredictionInput {
   name: string;

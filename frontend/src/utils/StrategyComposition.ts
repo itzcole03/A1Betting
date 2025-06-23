@@ -1,5 +1,5 @@
-// import { EventBus } from './EventBus.ts'; // FIX: File not found, please verify existence or correct path.
-import { measurePerformance } from './PerformanceMonitor.ts';
+// import { EventBus } from './EventBus'; // FIX: File not found, please verify existence or correct path.
+import { measurePerformance } from './PerformanceMonitor';
 
 export interface StrategyContext {
   timestamp: number;

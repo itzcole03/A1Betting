@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { FaSort, FaSortUp, FaSortDown, FaFilter } from 'react-icons/fa';
-import { Lineup, LineupType } from '../types';
+import { Lineup, LineupType } from '@/types';
 import { fadeIn } from '../hooks/useAnimation';
 import { formatCurrency } from '../utils/odds';
 import { motion, Variants } from 'framer-motion';

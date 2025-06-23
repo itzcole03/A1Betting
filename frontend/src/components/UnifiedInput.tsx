@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 import { FaExclamationCircle, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
-import { cn } from '../../utils/classNames';
+import { cn } from '@/utils/classNames';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type InputAttributes = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>;

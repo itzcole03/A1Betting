@@ -1,16 +1,16 @@
+import {
+  ArrowLeftOnRectangleIcon,
+  ChartBarIcon,
+  Cog6ToothIcon,
+  MoonIcon,
+  SunIcon,
+  UserCircleIcon
+} from '@heroicons/react/24/outline';
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../../providers/useAuth';
-import { useTheme } from '../../providers/ThemeProvider';
-import {
-  SunIcon,
-  MoonIcon,
-  ChartBarIcon,
-  UserCircleIcon,
-  ArrowLeftOnRectangleIcon,
-  Cog6ToothIcon
-} from '@heroicons/react/24/outline';
+import { useTheme } from '../../../providers/ThemeProvider';
+import { useAuth } from '../../../providers/useAuth';
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
@@ -105,4 +105,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

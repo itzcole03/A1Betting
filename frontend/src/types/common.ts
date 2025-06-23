@@ -24,7 +24,7 @@ export type AlertSeverity = 'low' | 'medium' | 'high' | 'critical';
 
 export type EntryStatus = 'pending' | 'active' | 'completed' | 'cancelled';
 
-export type LineupType = 'single' | 'parlay';
+export type LineupType = 'single' | 'parlay' | 'teaser';
 
 export type MarketState = 'active' | 'suspended' | 'closed';
 

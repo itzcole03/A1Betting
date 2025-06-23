@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import SkeletonLoader from '../base/SkeletonLoader'; // Import SkeletonLoader
 import webSocketService from '../../services/webSocketService';
 import { ListChecks, AlertTriangle } from 'lucide-react';
-import { PrizePicksEntry } from '../../types'; // Assuming this type is used for entries
+import { PrizePicksEntry } from '@/types'; // Assuming this type is used for entries
 import { motion } from 'framer-motion';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 
 
 // --- Begin inlined from shared/webSocket.ts ---

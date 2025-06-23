@@ -1,6 +1,6 @@
 import { BettingOpportunity, BetRecord } from '../types/core';
 import { EventBus } from '../core/EventBus';
-import { UnifiedConfigManager } from '../core/UnifiedConfigManager.ts';
+import { UnifiedConfigManager } from '../core/UnifiedConfigManager';
 
 
 

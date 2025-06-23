@@ -1,10 +1,10 @@
-import useStore from '../store/useStore.ts';
-import type { PlayerProp, Opportunity, OddsUpdate } from '../types/core.ts';
-import type { Sport, PropType } from '../types/common.ts';
-import { oddsjamService } from '../services/oddsjam.ts';
-import { dailyFantasyService } from '../services/dailyFantasy.ts';
+import useStore from '../store/useStore';
+import type { PlayerProp, Opportunity, OddsUpdate } from '../types/core';
+import type { Sport, PropType } from '../types/common';
+import { oddsjamService } from '../services/oddsjam';
+import { dailyFantasyService } from '../services/dailyFantasy';
 import { useState, useEffect, useCallback } from 'react';
-import { webSocketManager } from '../services/unified/WebSocketManager.ts';
+import { webSocketManager } from '../services/unified/WebSocketManager';
 
 
 

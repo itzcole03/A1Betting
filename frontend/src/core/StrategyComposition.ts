@@ -1,5 +1,5 @@
 import { AnalysisResult } from './AnalysisFramework';
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { IntegratedData } from './DataIntegrationHub';
 import { PerformanceMonitor } from './PerformanceMonitor';
 

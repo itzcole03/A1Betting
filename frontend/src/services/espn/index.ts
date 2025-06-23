@@ -1,7 +1,7 @@
 import { adapterManager } from '../adapters';
 import { ESPNAdapter } from '../adapters';
 import { measurePerformance, handleApiError, transformData } from '../utils';
-import { Headline, GameSummary, PlayerNews } from '../../types';
+import { Headline, GameSummary, PlayerNews } from '@/types';
 
 class ESPNService {
   private adapter: ESPNAdapter;

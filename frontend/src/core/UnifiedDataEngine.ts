@@ -5,8 +5,8 @@ import { prizePicksService } from '../services/prizePicksService';
 import { sentimentService } from '../services/sentimentService';
 import { unifiedMonitor } from './UnifiedMonitor';
 import type { PrizePicksProps } from '../types/prizePicks';
-import type { OddsData } from '../types/betting';
-// import type { DailyFantasyProjection, SocialSentimentData, ESPNHeadline } from '../types'; // Not found or not used
+import type { OddsData } from '@/types/betting';
+// import type { DailyFantasyProjection, SocialSentimentData, ESPNHeadline } from '@/types'; // Not found or not used
 // import { unifiedConfig, getUnifiedConfig } from './UnifiedConfig'; // If engine needs config
 
 /**

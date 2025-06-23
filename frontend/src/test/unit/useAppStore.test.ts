@@ -1,5 +1,5 @@
 // betaTest4/src/test/unit/useAppStore.test.ts
-import { useAppStore, getInitialState } from '../../store/useAppStore';
+import { useAppStore, getInitialState } from '@/store/useAppStore';
 import { act } from '@testing-library/react'; // For store actions
 
 // Mock services that the store might call indirectly via actions

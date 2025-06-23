@@ -1,17 +1,17 @@
-import { Router } from 'express';
-import { ModelPerformanceTracker } from './../core/analytics/ModelPerformanceTracker.ts';
-import { UnifiedLogger } from './../core/logging/types.ts';
-import { UnifiedMetrics } from './../core/metrics/types.ts';
+import express from 'express';
+import { ModelPerformanceMetrics, ModelPerformanceTracker } from '../../core/analytics/ModelPerformanceTracker';
+import { UnifiedLogger } from '../../core/UnifiedLogger';
+import { UnifiedMetrics } from '../../core/UnifiedMetrics';
 
-const router = Router();
+const router = express.Router();
 
 // Initialize the performance tracker
-const logger = new UnifiedLogger();
-const metrics = new UnifiedMetrics();
+const logger = new UnifiedLogger('ModelPerformance');
+const metrics = UnifiedMetrics.getInstance();
 const performanceTracker = new ModelPerformanceTracker(logger, metrics);
 
 // Get performance for a specific model
-router.get('/:modelName', async (req, res) => {
+router.get('/:modelName', async (req: any, res: any) => {
   try {
     const { modelName } = req.params;
     const { timeframe = 'all' } = req.query;
@@ -31,7 +31,7 @@ router.get('/:modelName', async (req, res) => {
       history,
     });
   } catch (error) {
-    logger.error('Error fetching model performance', { error });
+    logger.error('Error fetching model performance', error as Error);
     res.status(500).json({ error: 'Failed to fetch model performance data' });
   }
 });
@@ -43,19 +43,19 @@ router.get('/top/:metric', async (req, res) => {
     const { limit = '5' } = req.query;
 
     const topModels = performanceTracker.getTopPerformingModels(
-      metric as keyof ModelPerformanceMetrics,
+      metric as keyof ModelPerformanceMetrics | undefined,
       parseInt(limit as string, 10)
     );
 
     res.json(topModels);
   } catch (error) {
-    logger.error('Error fetching top performing models', { error });
+    logger.error('Error fetching top performing models', error as Error);
     res.status(500).json({ error: 'Failed to fetch top performing models' });
   }
 });
 
 // Record a prediction outcome
-router.post('/:modelName/outcome', async (req, res) => {
+router.post('/:modelName/outcome', async (req: any, res: any) => {
   try {
     const { modelName } = req.params;
     const { stake, payout, odds } = req.body;
@@ -67,7 +67,7 @@ router.post('/:modelName/outcome', async (req, res) => {
     performanceTracker.recordOutcome(modelName, stake, payout, odds);
     res.status(200).json({ message: 'Outcome recorded successfully' });
   } catch (error) {
-    logger.error('Error recording outcome', { error });
+    logger.error('Error recording outcome', error as Error);
     res.status(500).json({ error: 'Failed to record outcome' });
   }
 });

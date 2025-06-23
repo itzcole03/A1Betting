@@ -1,74 +1,78 @@
-// Consolidated hooks exports
-export * from './useAnalytics';
-export * from './useAnimatedValue';
-export * from './useAnimation';
-export * from './useAnomalyDetection';
-export * from './useApi';
-export * from './useApiRequest';
-export * from './useAuth';
-export * from './useBettingAnalytics';
-export * from './useBettingCore';
-export * from './useBettingData';
-export * from './useBettingSettings';
-export * from './useBettingStateMachine';
-export * from './useBookmakerAnalysis';
-export * from './useClickOutside';
-export * from './useClipboard';
-export * from './useDarkMode';
-export * from './useDataFetching';
-export * from './useDataSync';
-export * from './useDebounce';
-export * from './useDeviceMotion';
-export * from './useDeviceOrientation';
-export * from './useDriftDetection';
-export * from './useErrorBoundary';
-export * from './useErrorHandler';
-export * from './useEvolutionaryAnalytics';
-export * from './useFeatureImportance';
-export * from './useFilteredPredictions';
-export * from './useForm';
-export * from './useGeolocation';
-export * from './useHealthCheck';
-export * from './useHyperMLAnalytics';
-export * from './useInfiniteScroll';
-export * from './useInitializeApp';
-export * from './useKeyboardShortcut';
-export * from './useLineupAPI';
-export * from './useLiveOdds';
-export * from './useLocalStorage';
-export * from './useLogger';
-export * from './useMediaQuery';
-export * from './useMetrics';
-export * from './useMLAnalytics';
-export * from './useMLSimulation';
-export * from './useModelCalibration';
-export * from './useNetworkStatus';
-export * from './usePerformance';
-export * from './usePrediction';
-export * from './usePredictions';
-export * from './usePredictionService';
-export * from './useProps';
-export * from './useQueryBuilder';
-export * from './useRealtimeData';
-export * from './useRealtimePredictions';
-export * from './useRiskProfile';
-export * from './useScrollPosition';
-export * from './useSettings';
-export * from './useShapData';
-export * from './useSmartAlerts';
-export * from './useSportsFilter';
-export * from './useStateMachine';
-export * from './useStorage';
-export * from './useStore';
-export * from './useTheme';
-export * from './useThemeStore';
-export * from './useTimeSeries';
-export * from './useUltraMLAnalytics';
-export * from './useUnifiedAnalytics';
-export * from './useUnifiedBetting';
-export * from './useVirtualList';
-export * from './useWebSocket';
-export * from './useWindowResize';
-export * from './useWindowSize';
-export * from './useFilteredPredictions';
-export * from './useModelPerformance';
+// ============================================================================
+// UNIVERSAL HOOKS SYSTEM EXPORTS
+// ============================================================================
+
+export {
+  // Data hooks
+  usePredictions,
+  useEngineMetrics,
+  useBettingOpportunities,
+  useUserProfile,
+
+  // UI hooks
+  useUniversalTheme,
+  useUniversalForm,
+  useModal,
+  useToast,
+
+  // Utility hooks
+  useDebounce,
+  useLocalStorage,
+  useWindowSize,
+  useMediaQuery,
+  useClickOutside,
+  useWebSocket,
+
+  // Performance hooks
+  useAnimation,
+  usePerformanceMonitor,
+} from "./UniversalHooks";
+
+// Default export
+export { default } from "./UniversalHooks";
+
+// ============================================================================
+// LEGACY COMPATIBILITY EXPORTS (Deprecated - Use Universal equivalents)
+// ============================================================================
+
+// Theme hooks
+export { useUniversalTheme as useTheme } from "./UniversalHooks";
+export { useUniversalTheme as useDarkMode } from "./UniversalHooks";
+
+// Form hooks
+export { useUniversalForm as useForm } from "./UniversalHooks";
+
+// Analytics hooks (redirect to consolidated system)
+export { usePredictions as useAnalytics } from "./UniversalHooks";
+export { useBettingOpportunities as useBettingCore } from "./UniversalHooks";
+
+// Prediction hooks
+export { usePredictions as usePredictionService } from "./UniversalHooks";
+export { usePredictions as useRealtimePredictions } from "./UniversalHooks";
+
+// Ultimate Settings Hook
+export { default as useUltimateSettings } from "./useUltimateSettings";
+
+// ============================================================================
+// DEPRECATED HOOK NOTICES
+// ============================================================================
+
+/**
+ * @deprecated Use useUniversalTheme from UniversalHooks instead
+ */
+export const useThemeStore = () => {
+  console.warn(
+    "useThemeStore is deprecated. Use useUniversalTheme from UniversalHooks instead.",
+  );
+  return {};
+};
+
+/**
+ * @deprecated Use consolidated hooks from UniversalHooks instead
+ */
+export const useMLAnalytics = () => {
+  console.warn(
+    "useMLAnalytics is deprecated. Use usePredictions or useEngineMetrics from UniversalHooks instead.",
+  );
+  return {};
+};

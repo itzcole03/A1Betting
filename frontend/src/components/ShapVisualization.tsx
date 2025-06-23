@@ -16,7 +16,7 @@ import {
   TrendingUp as TrendingUpIcon,
   TrendingDown as TrendingDownIcon,
 } from '@mui/icons-material';
-import { formatPercentage } from '../utils/formatters';
+import { formatPercentage } from '@/utils/formatters';
 import type { Feature } from '../types/prediction';
 
 interface ShapFeature {

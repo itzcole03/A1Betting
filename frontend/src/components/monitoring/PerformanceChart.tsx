@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,10 +9,18 @@ import {
   Tooltip,
   Legend,
   ChartOptions,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from "chart.js";
+import SafeChart from "../ui/SafeChart";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 interface PerformanceMetric {
   name: string;
@@ -35,20 +43,20 @@ interface PerformanceChartProps {
 const PerformanceChart: React.FC<PerformanceChartProps> = ({
   metrics,
   title,
-  yAxisLabel = 'Value',
+  yAxisLabel = "Value",
   showLegend = true,
   height = 300,
   width = 600,
-  color = 'rgb(75, 192, 192)',
+  color = "rgb(75, 192, 192)",
   tension = 0.1,
   fill = false,
 }) => {
   const data = {
-    labels: metrics.map(m => new Date(m.timestamp).toLocaleTimeString()),
+    labels: metrics.map((m) => new Date(m.timestamp).toLocaleTimeString()),
     datasets: [
       {
         label: title,
-        data: metrics.map(m => m.value),
+        data: metrics.map((m) => m.value),
         borderColor: color,
         backgroundColor: fill ? `${color}33` : undefined,
         tension,
@@ -57,13 +65,13 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
     ],
   };
 
-  const options: ChartOptions<'line'> = {
+  const options: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
         display: showLegend,
-        position: 'top' as const,
+        position: "top" as const,
       },
       title: {
         display: true,
@@ -71,7 +79,7 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
       },
       tooltip: {
         callbacks: {
-          label: context => {
+          label: (context) => {
             const value = context.parsed.y;
             return `${yAxisLabel}: ${value.toFixed(2)}`;
           },
@@ -89,12 +97,12 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
       x: {
         title: {
           display: true,
-          text: 'Time',
+          text: "Time",
         },
       },
     },
     interaction: {
-      mode: 'index',
+      mode: "index",
       intersect: false,
     },
     elements: {
@@ -108,7 +116,12 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({
 
   return (
     <div style={{ height, width }}>
-      <Line data={data} options={options} />
+      <SafeChart
+        type="line"
+        data={data}
+        options={options}
+        loadingMessage="Loading performance metrics..."
+      />
     </div>
   );
 };

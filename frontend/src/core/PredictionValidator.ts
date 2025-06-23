@@ -1,4 +1,4 @@
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { unifiedMonitor } from './UnifiedMonitor';
 import { SystemError, ErrorCategory, ErrorSeverity, ErrorContext } from './UnifiedError';
 import { EventMap } from '../types/core';

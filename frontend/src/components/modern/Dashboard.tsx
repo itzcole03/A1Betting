@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react';
-import { useAppStore } from '../../store/useAppStore';
-import EntryTracking from './EntryTracking';
-import PropCards from './PropCards';
-import MoneyMaker from './MoneyMaker';
-import ESPNHeadlinesTicker from './ESPNHeadlinesTicker';
-import PerformanceChart from '../charts/PerformanceChart';
-import UserStats from '../analytics/UserStats';
-import MLInsights from '../insights/MLInsights';
+import React, { useEffect } from "react";
+import { useAppStore } from "../../store/useAppStore";
+import EntryTracking from "./EntryTracking";
+import PropCards from "./PropCards";
+import { UniversalMoneyMaker, UniversalAnalytics } from "../index";
+import MLInsights from "../insights/MLInsights";
 
 const Dashboard: React.FC = () => {
   const {
@@ -14,7 +11,7 @@ const Dashboard: React.FC = () => {
     fetchEntries,
     fetchHeadlines,
     // fetchSentiments, // Removed as it was example, can be added if specific dashboard sentiment is needed
-  } = useAppStore(state => ({
+  } = useAppStore((state) => ({
     // Ensure to select from state for a smaller subscription scope
     fetchProps: state.fetchProps,
     fetchEntries: state.fetchEntries,
@@ -44,19 +41,27 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="flex flex-row flex-wrap gap-6 items-center justify-end">
           <div className="flex flex-col items-center">
-            <span className="text-2xl md:text-3xl font-extrabold text-white">68.9%</span>
+            <span className="text-2xl md:text-3xl font-extrabold text-white">
+              68.9%
+            </span>
             <span className="text-xs text-primary-200/80">AI Accuracy</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-2xl md:text-3xl font-extrabold text-green-300">+$1.8K</span>
+            <span className="text-2xl md:text-3xl font-extrabold text-green-300">
+              +$1.8K
+            </span>
             <span className="text-xs text-primary-200/80">Monthly P&L</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-2xl md:text-3xl font-extrabold text-yellow-300">7</span>
+            <span className="text-2xl md:text-3xl font-extrabold text-yellow-300">
+              7
+            </span>
             <span className="text-xs text-primary-200/80">Active Arbs</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-2xl md:text-3xl font-extrabold text-blue-200">41.3%</span>
+            <span className="text-2xl md:text-3xl font-extrabold text-blue-200">
+              41.3%
+            </span>
             <span className="text-xs text-primary-200/80">Monthly ROI</span>
           </div>
         </div>
@@ -77,7 +82,9 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <div className="p-6 glass-card rounded-xl shadow-lg animate-fade-in animate-scale-in">
-            <h3 className="text-xl font-semibold text-text mb-3">Key Performance Indicators</h3>
+            <h3 className="text-xl font-semibold text-text mb-3">
+              Key Performance Indicators
+            </h3>
             <UserStats />
           </div>
         </div>
@@ -90,7 +97,9 @@ const Dashboard: React.FC = () => {
           <PropCards />
         </div>
         <div className="p-6 glass-card rounded-xl shadow-lg animate-fade-in animate-scale-in">
-          <h3 className="text-xl font-semibold text-text mb-3">Performance Analytics</h3>
+          <h3 className="text-xl font-semibold text-text mb-3">
+            Performance Analytics
+          </h3>
           <PerformanceChart />
         </div>
       </div>
@@ -99,7 +108,9 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ESPNHeadlinesTicker />
         <div className="p-6 glass-card rounded-xl shadow-lg animate-fade-in animate-scale-in">
-          <h3 className="text-xl font-semibold text-text mb-3">AI/ML Insights</h3>
+          <h3 className="text-xl font-semibold text-text mb-3">
+            AI/ML Insights
+          </h3>
           <MLInsights />
         </div>
       </div>

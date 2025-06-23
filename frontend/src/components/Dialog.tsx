@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
-import { cn } from '../../utils/classNames';
+import { cn } from '@/utils/classNames';
 import { motion } from 'framer-motion';
 
 export interface DialogProps {

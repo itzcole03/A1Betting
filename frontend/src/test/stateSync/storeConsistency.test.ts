@@ -45,7 +45,7 @@ jest.mock('../../core/UnifiedConfig', () => {
   };
 });
 
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 import { act } from '@testing-library/react'; // if testing hooks or effects that update store
 import * as predictionService from '../../services/predictionService';
 import { PrizePicksEntry } from '../../../../shared/prizePicks';

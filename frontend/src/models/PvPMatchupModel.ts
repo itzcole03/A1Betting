@@ -1,9 +1,9 @@
 // PvPMatchupModel: Strict ALPHA1-compliant modular model
-import type { GameContext, ShapVector } from '../types/models.js';
-import { calculateShap } from '../utils/shap.js';
-import { UnifiedConfig } from '../unified/UnifiedConfig.js';
-import { BaseModel, ModelConfig, ModelPrediction, ModelMetrics } from '../services/ml/models/BaseModel.js';
-import { EventBus } from '../core/EventBus.js';
+import { EventBus } from '../core/EventBus';
+import { BaseModel, ModelConfig, ModelMetrics, ModelPrediction } from '../services/ml/models/BaseModel';
+import type { GameContext, ShapVector } from '../types/models';
+import { UnifiedConfig } from '../unified/UnifiedConfig';
+import { calculateShap } from '../utils/shap';
 
 export interface PvPMatchupResult {
   sport: 'nba' | 'wnba' | 'mlb' | 'soccer' | 'nhl';
@@ -26,13 +26,13 @@ export class PvPMatchupModel extends BaseModel {
   async predict(input: any): Promise<ModelPrediction> {
     const { playerId1, playerId2, sport, context } = input;
     const config = UnifiedConfig.getInstance();
-    
+
     if (!config.get('enablePvPModel')) {
       throw new Error('PvPMatchupModel is disabled by config.');
     }
 
     let result: PvPMatchupResult;
-    
+
     try {
       switch (sport) {
         case 'mlb':
@@ -53,7 +53,7 @@ export class PvPMatchupModel extends BaseModel {
       }
 
       // Emit SHAP insights
-      this.eventBus.emit('shap:insight', { 
+      this.eventBus.emit('shap:insight', {
         model: 'PvPMatchup',
         shap: result.shapInsights[0] || {},
         timestamp: Date.now()
@@ -85,13 +85,13 @@ export class PvPMatchupModel extends BaseModel {
   async train(data: any): Promise<void> {
     this.logger.info('PvPMatchupModel training initiated');
     this.isTraining = true;
-    
+
     try {
       // Implement training logic for PvP matchup patterns
       await this.simulateTraining(data);
       this.isTrained = true;
       this.updateLastUpdate();
-      
+
       this.emit('training:complete', {
         modelId: this.modelId,
         timestamp: new Date().toISOString()
@@ -112,7 +112,7 @@ export class PvPMatchupModel extends BaseModel {
       const precision = 0.80 + (Math.random() * 0.10); // 0.80-0.90
       const recall = 0.78 + (Math.random() * 0.12); // 0.78-0.90
       const f1Score = (2 * precision * recall) / (precision + recall);
-      
+
       return {
         accuracy,
         precision,
@@ -282,7 +282,7 @@ export class PvPMatchupModel extends BaseModel {
     // Simulate API call to fetch player statistics
     // In a real implementation, this would call actual sports data APIs
     await new Promise(resolve => setTimeout(resolve, 10)); // Simulate network delay
-    
+
     // Return realistic mock data based on stat type
     const mockData: Record<string, number> = {
       'k_rate': 0.15 + Math.random() * 0.20, // 15-35% strikeout rate
@@ -302,7 +302,7 @@ export class PvPMatchupModel extends BaseModel {
       'save_percentage': 0.88 + Math.random() * 0.10, // 88-98% save percentage
       'shot_attempts': 2 + Math.random() * 8 // 2-10 shot attempts
     };
-    
+
     return mockData[stat] || Math.random();
   }
 

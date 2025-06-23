@@ -34,9 +34,9 @@ export interface LineShoppingResult {
 }
 
 /**
- * Represents an arbitrage opportunity across multiple sportsbooks.
+ * Backend arbitrage opportunity structure
  */
-export interface ArbitrageOpportunity {
+export interface BackendArbitrageOpportunity {
   id: string;
   legs: Array<{
     bookId: string;
@@ -57,8 +57,59 @@ export interface ArbitrageOpportunity {
   status: 'pending' | 'active' | 'expired' | 'filled';
   timestamp: number;
 }
+
+/**
+ * UI-friendly arbitrage opportunity type for component usage
+ */
+export interface ArbitrageOpportunity {
+  id: string;
+  sport: string;
+  player: {
+    id: string;
+    name: string;
+    team: {
+      id: string;
+      name: string;
+      abbreviation: string;
+      sport: string;
+      colors: {
+        primary: string;
+        secondary: string;
+      };
+    };
+    position: string;
+    imageUrl: string;
+    stats: Record<string, unknown>;
+    form: number;
+  };
+  propType: string;
+  books: Array<{
+    name: string;
+    odds: number;
+    line: number;
+  }>;
+  potentialProfit: number;
+  expiresAt: string;
+  // Additional properties that components expect
+  event_id?: string;
+  profit_percentage?: number;
+  total_probability?: number;
+  stakes?: Array<{ amount: number; book: string }>;
+  bookmakers?: string[];
+  market?: string;
+  bookmaker1?: string;
+  odds1?: number;
+  bookmaker2?: string;
+  odds2?: number;
+  roi?: number;
+  riskLevel?: 'low' | 'medium' | 'high';
+}
+
+// Legacy alias for backward compatibility
+export type ArbitrageOpportunityItem = ArbitrageOpportunity;
+
 // Re-export market analytics types for dashboard usage
-export type { MarketMetrics, MarketEfficiencyMetrics, MarketAnomaly } from './market';
+export type { MarketAnomaly, MarketEfficiencyMetrics, MarketMetrics } from './market';
 // Core betting types
 export enum BetType {
   STRAIGHT = 'straight',
@@ -181,6 +232,19 @@ export interface BettingOdds {
   id: string;
   confidence: number;
   metadata?: Record<string, unknown>; // Replaced any with type-safe Record
+
+  // Additional properties commonly used across services
+  odds: number;
+  value: number;
+  eventId: string;
+  market: string;
+  selection?: string;
+  timestamp: number;
+  bookmaker?: string;
+  lastUpdated?: string;
+  format?: 'decimal' | 'american' | 'fractional';
+  maxStake?: number;
+  volume?: number;
 }
 
 export interface ShapFeature {
@@ -363,6 +427,18 @@ export interface OddsData {
   timestamp: string;
 }
 
+export interface LineMovement {
+  id: string;
+  marketId: string;
+  oldLine: number;
+  newLine: number;
+  oldOdds: number;
+  newOdds: number;
+  timestamp: number;
+  direction: 'up' | 'down';
+  bookmaker?: string;
+  volume?: number;
+}
 
 export interface WebSocketOptions<T = unknown> {
   onMessage?: (data: T) => void;
@@ -372,7 +448,6 @@ export interface WebSocketOptions<T = unknown> {
   reconnectAttempts?: number;
   reconnectInterval?: number;
 }
-
 
 export interface WebSocketHook<T = unknown> {
   isConnected: boolean;

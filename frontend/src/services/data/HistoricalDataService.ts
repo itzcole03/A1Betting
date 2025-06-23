@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { DataSource } from '../UnifiedDataService';
-import { UnifiedLogger } from '../../core/UnifiedLogger';
+import { UnifiedLogger } from '@/core/UnifiedLogger';
 import { UnifiedErrorHandler } from '../../core/UnifiedErrorHandler';
 
 // Core data schemas

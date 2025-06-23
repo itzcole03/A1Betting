@@ -1,4 +1,33 @@
 // Poe App Creator types
+export interface PoeTeamForm {
+  wins: number;
+  losses: number;
+  streak: string;
+  recentGames: Array<{
+    opponent: string;
+    result: 'W' | 'L';
+    score: string;
+    date: string;
+  }>;
+  homeRecord?: string;
+  awayRecord?: string;
+}
+
+export interface PoeMatchupHistory {
+  totalGames: number;
+  playerRecord: {
+    wins: number;
+    losses: number;
+    avgPerformance: number;
+  };
+  recentMeetings: Array<{
+    date: string;
+    playerStats: Record<string, number>;
+    gameResult: string;
+  }>;
+  trends: string[];
+}
+
 export interface PoePropOption {
   line: number;
   type: 'goblin' | 'demon' | 'normal';

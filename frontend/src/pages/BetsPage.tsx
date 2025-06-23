@@ -22,7 +22,7 @@ import RiskHeatMap from '../components/ui/RiskHeatMap.tsx';
 import SourceHealthBar from '../components/ui/SourceHealthBar.tsx';
 import WhatIfSimulator from '../components/advanced/WhatIfSimulator.tsx';
 // Personalization overlay
-import { userPersonalizationService } from '../services/analytics/userPersonalizationService.ts';
+import { userPersonalizationService } from '../services/analytics/userPersonalizationService';
 // TODO: Add tests for new widgets
 
 const BetsPage: React.FC = () => {

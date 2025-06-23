@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { Close as CloseIcon } from '@mui/icons-material';
 import {
+  Alert,
+  AlertTitle,
   Box,
   Card,
   CardContent,
-  Typography,
-  Alert,
-  AlertTitle,
-  IconButton,
   Chip,
-  Stack,
-  Select,
-  MenuItem,
   FormControl,
+  IconButton,
   InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
 } from '@mui/material';
-import { Close as CloseIcon } from '@mui/icons-material';
+import React, { useEffect, useState } from 'react';
 import { PerformanceMonitor } from '../../core/analytics/PerformanceMonitor';
+import { UnifiedMetrics } from '../../core/UnifiedMetrics';
 import { useLogger } from '../../hooks/useLogger';
-import { useMetrics } from '../../hooks/useMetrics';
 
 interface PerformanceAlertsProps {
   modelName?: string;
@@ -32,7 +32,7 @@ export const PerformanceAlerts: React.FC<PerformanceAlertsProps> = ({
   const [severity, setSeverity] = useState<'warning' | 'critical' | 'all'>('all');
   const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month' | 'all'>('day');
   const logger = useLogger();
-  const metrics = useMetrics();
+  const metrics = UnifiedMetrics.getInstance();
 
   useEffect(() => {
     const fetchAlerts = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { calculateUserStats } from '../../utils/analyticsHelpers'; 
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 
 
 const UserStats: React.FC = () => {

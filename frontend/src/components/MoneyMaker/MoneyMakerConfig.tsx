@@ -12,7 +12,7 @@ import {
   Grid,
   SelectChangeEvent,
 } from '@mui/material';
-import { MoneyMakerConfig as ConfigType } from './types';
+import { MoneyMakerConfig as ConfigType } from '@/types';
 
 interface Props {
   onConfigChange: (config: ConfigType) => void;

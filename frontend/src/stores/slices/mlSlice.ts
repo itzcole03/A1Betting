@@ -1,5 +1,5 @@
 import { StateCreator } from 'zustand';
-import { MLState, RootState, ModelMetrics, Prediction, DriftAlert } from '../../types';
+import { MLState, RootState, ModelMetrics, Prediction, DriftAlert } from '@/types';
 
 export const createMLSlice: StateCreator<RootState, [], [], MLState> = (set, get) => ({
   predictions: [],

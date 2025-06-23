@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Sport, PropType } from '../types';
+import type { Sport, PropType } from '@/types';
 import { motion, Variants } from 'framer-motion';
 import {
   FaFilter,

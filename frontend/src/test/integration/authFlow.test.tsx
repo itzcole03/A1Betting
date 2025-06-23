@@ -1,8 +1,9 @@
 // betaTest4/src/test/integration/authFlow.test.tsx
+import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom'; // Correct import for jest-dom matchers
 import App from '../../App'; // Assuming App.tsx is the main app component with routes
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 
 jest.mock('../../services/authService', () => ({
   authService: {

@@ -10,7 +10,7 @@ import {
   TableRow,
   Paper,
 } from '@mui/material';
-import { OptimalLineup } from './types';
+import { OptimalLineup } from '@/types';
 
 interface MoneyMakerResultsProps {
   lineup: OptimalLineup;

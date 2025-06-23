@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { predictionService } from '../../services/predictionService';
-import useStore from '../../store/useStore';
+import useStore from '@/store/useStore';
 import { UnifiedStrategyConfig } from '../strategy/UnifiedStrategyConfig';
 import EnhancedPropCard from '../ui/EnhancedPropCard';
 import GlassCard from '../ui/GlassCard';

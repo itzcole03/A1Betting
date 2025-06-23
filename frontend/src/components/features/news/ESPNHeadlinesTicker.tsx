@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Newspaper, Loader, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 
 
 const ESPNHeadlinesTicker: React.FC = () => {

@@ -1,5 +1,5 @@
 import { StateCreator } from 'zustand';
-import { Toast } from '../../types';
+import { Toast } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ToastSlice {

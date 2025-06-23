@@ -1,17 +1,26 @@
 # feature_flags.py
-"""
-Feature Flags and Experiment Management for UltimateSportsBettingApp
+"""Feature Flags and Experiment Management for UltimateSportsBettingApp
 Migrated and adapted from Newfolder/src/core/FeatureFlags.ts
 """
-from typing import Dict, List, Optional, Any
-from threading import Lock
 import hashlib
-import time
+from threading import Lock
+from typing import Any, Dict, List, Optional
 
 # --- Interfaces ---
 
+
 class Feature:
-    def __init__(self, id: str, name: str, description: str, enabled: bool, rollout_percentage: float, dependencies: List[str], tags: List[str], metadata: Dict[str, Any]):
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        description: str,
+        enabled: bool,
+        rollout_percentage: float,
+        dependencies: List[str],
+        tags: List[str],
+        metadata: Dict[str, Any],
+    ):
         self.id = id
         self.name = name
         self.description = description
@@ -21,14 +30,27 @@ class Feature:
         self.tags = tags
         self.metadata = metadata
 
+
 class ExperimentVariant:
     def __init__(self, id: str, name: str, weight: float):
         self.id = id
         self.name = name
         self.weight = weight
 
+
 class Experiment:
-    def __init__(self, id: str, name: str, description: str, status: str, variants: List[ExperimentVariant], audience: Dict[str, Any], start_date: float, end_date: Optional[float], metadata: Dict[str, Any]):
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        description: str,
+        status: str,
+        variants: List[ExperimentVariant],
+        audience: Dict[str, Any],
+        start_date: float,
+        end_date: Optional[float],
+        metadata: Dict[str, Any],
+    ):
         self.id = id
         self.name = name
         self.description = description
@@ -39,13 +61,18 @@ class Experiment:
         self.end_date = end_date
         self.metadata = metadata
 
+
 class UserContext:
-    def __init__(self, user_id: str, user_groups: List[str], attributes: Dict[str, Any]):
+    def __init__(
+        self, user_id: str, user_groups: List[str], attributes: Dict[str, Any]
+    ):
         self.user_id = user_id
         self.user_groups = user_groups
         self.attributes = attributes
 
+
 # --- Singleton FeatureFlags ---
+
 
 class FeatureFlags:
     _instance = None
@@ -65,13 +92,20 @@ class FeatureFlags:
 
     def initialize(self, config: Dict[str, Any]):
         # config: { 'features': [...], 'experiments': [...] }
-        for f in config.get('features', []):
-            self.features[f['id']] = Feature(**f)
-        for e in config.get('experiments', []):
-            variants = [ExperimentVariant(**v) for v in e['variants']]
-            self.experiments[e['id']] = Experiment(
-                id=e['id'], name=e['name'], description=e['description'], status=e['status'],
-                variants=variants, audience=e['audience'], start_date=e['startDate'], end_date=e.get('endDate'), metadata=e['metadata']
+        for f in config.get("features", []):
+            self.features[f["id"]] = Feature(**f)
+        for e in config.get("experiments", []):
+            variants = [ExperimentVariant(**v) for v in e["variants"]]
+            self.experiments[e["id"]] = Experiment(
+                id=e["id"],
+                name=e["name"],
+                description=e["description"],
+                status=e["status"],
+                variants=variants,
+                audience=e["audience"],
+                start_date=e["startDate"],
+                end_date=e.get("endDate"),
+                metadata=e["metadata"],
             )
 
     def is_feature_enabled(self, feature_id: str, context: UserContext) -> bool:
@@ -84,9 +118,11 @@ class FeatureFlags:
             return False
         return True
 
-    def get_experiment_variant(self, experiment_id: str, context: UserContext) -> Optional[str]:
+    def get_experiment_variant(
+        self, experiment_id: str, context: UserContext
+    ) -> Optional[str]:
         experiment = self.experiments.get(experiment_id)
-        if not experiment or experiment.status != 'active':
+        if not experiment or experiment.status != "active":
             return None
         if not self._is_user_in_audience(context, experiment.audience):
             return None
@@ -95,30 +131,45 @@ class FeatureFlags:
             return user_assignments[experiment_id]
         variant = self._assign_variant(experiment, context)
         if variant:
-            self.user_assignments.setdefault(context.user_id, {})[experiment_id] = variant.id
+            self.user_assignments.setdefault(context.user_id, {})[
+                experiment_id
+            ] = variant.id
             return variant.id
         return None
 
-    def _are_dependencies_satisfied(self, feature: Feature, context: UserContext) -> bool:
-        return all(self.is_feature_enabled(dep_id, context) for dep_id in feature.dependencies)
+    def _are_dependencies_satisfied(
+        self, feature: Feature, context: UserContext
+    ) -> bool:
+        return all(
+            self.is_feature_enabled(dep_id, context) for dep_id in feature.dependencies
+        )
 
     def _is_user_in_rollout(self, user_id: str, percentage: float) -> bool:
         h = int(hashlib.sha256(user_id.encode()).hexdigest(), 16)
         normalized = (h % (10**8)) / (10**8)
         return normalized <= percentage / 100.0
 
-    def _is_user_in_audience(self, context: UserContext, audience: Dict[str, Any]) -> bool:
-        if not self._is_user_in_rollout(context.user_id, audience.get('percentage', 100)):
+    def _is_user_in_audience(
+        self, context: UserContext, audience: Dict[str, Any]
+    ) -> bool:
+        if not self._is_user_in_rollout(
+            context.user_id, audience.get("percentage", 100)
+        ):
             return False
-        filters = audience.get('filters', {})
+        filters = audience.get("filters", {})
         for k, v in filters.items():
             if context.attributes.get(k) != v:
                 return False
         return True
 
-    def _assign_variant(self, experiment: Experiment, context: UserContext) -> Optional[ExperimentVariant]:
+    def _assign_variant(
+        self, experiment: Experiment, context: UserContext
+    ) -> Optional[ExperimentVariant]:
         total_weight = sum(v.weight for v in experiment.variants)
-        h = int(hashlib.sha256(f"{context.user_id}:{experiment.id}".encode()).hexdigest(), 16)
+        h = int(
+            hashlib.sha256(f"{context.user_id}:{experiment.id}".encode()).hexdigest(),
+            16,
+        )
         normalized = (h % (10**8)) / (10**8) * total_weight
         cumulative = 0
         for variant in experiment.variants:

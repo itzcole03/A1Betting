@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
+import React, { useEffect, useState } from "react";
+import SafeChart from "./ui/SafeChart";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,11 +9,19 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { webSocketBatching } from '../services/WebSocketBatching';
-import { EventBus } from '../unified/EventBus';
+} from "chart.js";
+import { webSocketBatching } from "../services/WebSocketBatching";
+import { EventBus } from "../unified/EventBus";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 interface BatchMetrics {
   totalBatches: number;
@@ -47,33 +55,40 @@ export const WebSocketBatchingAnalytics: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const handleBatchSent = (event: { batchSize: number; compressionRatio: number; timestamp: number }) => {
-      setBatchSizes(prev => [...prev.slice(-20), event.batchSize]);
-      setCompressionRatios(prev => [...prev.slice(-20), event.compressionRatio]);
-      setTimestamps(prev => [...prev.slice(-20), event.timestamp]);
+    const handleBatchSent = (event: {
+      batchSize: number;
+      compressionRatio: number;
+      timestamp: number;
+    }) => {
+      setBatchSizes((prev) => [...prev.slice(-20), event.batchSize]);
+      setCompressionRatios((prev) => [
+        ...prev.slice(-20),
+        event.compressionRatio,
+      ]);
+      setTimestamps((prev) => [...prev.slice(-20), event.timestamp]);
     };
 
     const eventBus = EventBus.getInstance();
-    eventBus.subscribe('websocket:batch:sent', handleBatchSent);
+    eventBus.subscribe("websocket:batch:sent", handleBatchSent);
 
     return () => {
-      eventBus.unsubscribe('websocket:batch:sent', handleBatchSent);
+      eventBus.unsubscribe("websocket:batch:sent", handleBatchSent);
     };
   }, []);
 
   const chartData = {
-    labels: timestamps.map(t => new Date(t).toLocaleTimeString()),
+    labels: timestamps.map((t) => new Date(t).toLocaleTimeString()),
     datasets: [
       {
-        label: 'Batch Size',
+        label: "Batch Size",
         data: batchSizes,
-        borderColor: 'rgb(75, 192, 192)',
+        borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
-        label: 'Compression Ratio',
+        label: "Compression Ratio",
         data: compressionRatios,
-        borderColor: 'rgb(255, 99, 132)',
+        borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
     ],
@@ -83,11 +98,11 @@ export const WebSocketBatchingAnalytics: React.FC = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
       title: {
         display: true,
-        text: 'WebSocket Batching Metrics',
+        text: "WebSocket Batching Metrics",
       },
     },
     scales: {
@@ -115,13 +130,21 @@ export const WebSocketBatchingAnalytics: React.FC = () => {
           <h3 className="text-lg font-semibold mb-2">Performance Metrics</h3>
           <div className="space-y-2">
             <p>Compression Ratio: {metrics.compressionRatio.toFixed(2)}x</p>
-            <p>Last Batch Time: {new Date(metrics.lastBatchTime).toLocaleTimeString()}</p>
+            <p>
+              Last Batch Time:{" "}
+              {new Date(metrics.lastBatchTime).toLocaleTimeString()}
+            </p>
           </div>
         </div>
       </div>
 
       <div className="h-64">
-        <Line data={chartData} options={chartOptions} />
+        <SafeChart
+          type="line"
+          data={chartData}
+          options={chartOptions}
+          loadingMessage="Loading batching metrics..."
+        />
       </div>
     </div>
   );

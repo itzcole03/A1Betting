@@ -1,7 +1,7 @@
 import PropCard from '../components/modern/PropCard';
 import React, { useEffect, useState, useMemo } from 'react';
 import { Modal } from '../components/modern/Modals';
-import { PrizePicksProps, SocialSentimentData, ParlayLeg } from '../types';
+import { PrizePicksProps, SocialSentimentData, ParlayLeg } from '@/types';
 import { Search, Filter, AlertTriangle, Info, TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
 import { useAppStore, AppStore } from '../store/useAppStore';
 

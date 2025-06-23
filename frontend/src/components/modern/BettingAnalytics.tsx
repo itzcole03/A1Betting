@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { useBettingAnalytics } from '../../hooks/useBettingAnalytics';
 import { BettingStrategy } from '../../services/unified/UnifiedBettingAnalytics';

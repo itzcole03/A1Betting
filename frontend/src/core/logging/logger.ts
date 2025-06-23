@@ -1,4 +1,4 @@
-import { UnifiedLogger } from './types';
+import { UnifiedLogger } from '@/types';
 
 // Centralized logger: swap out console.* for Sentry, Datadog, etc. here for production
 class Logger implements UnifiedLogger {

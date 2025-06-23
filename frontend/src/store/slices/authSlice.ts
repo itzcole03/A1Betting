@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import type { User } from '../../types'; // Removed, does not exist
+// import type { User } from '@/types'; // Removed, does not exist
 import { UnifiedMonitor } from '../../core/UnifiedMonitor';
 import type { StateCreator } from 'zustand';
 import { AppStore } from '../../stores/useAppStore'; // Import AppStore for full store type

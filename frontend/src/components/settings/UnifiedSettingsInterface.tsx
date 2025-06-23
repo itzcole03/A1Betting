@@ -1,401 +1,431 @@
-import React, { useState, useEffect } from 'react';
-import { UnifiedServiceRegistry } from '../../services/unified/UnifiedServiceRegistry';
-import { UnifiedSettingsService } from '../../services/unified/UnifiedSettingsService';
-import { UnifiedStateService } from '../../services/unified/UnifiedStateService';
-import { UnifiedNotificationService } from '../../services/unified/UnifiedNotificationService';
-import { UnifiedErrorService } from '../../services/unified/UnifiedErrorService';
-import { Card, Button, Spinner, Input, Select, Toast, Modal } from '../ui/UnifiedUI';
-
-interface SettingsSection {
-  title: string;
-  description: string;
-  settings: {
-    key: string;
-    label: string;
-    type: 'text' | 'number' | 'select' | 'boolean' | 'color';
-    options?: string[];
-    min?: number;
-    max?: number;
-    step?: number;
-  }[];
-}
-
-const SETTINGS_SECTIONS: SettingsSection[] = [
-  {
-    title: 'Appearance',
-    description: 'Customize the look and feel of the application',
-    settings: [
-      {
-        key: 'theme',
-        label: 'Theme',
-        type: 'select',
-        options: ['light', 'dark', 'system'],
-      },
-      {
-        key: 'primaryColor',
-        label: 'Primary Color',
-        type: 'color',
-      },
-      {
-        key: 'fontSize',
-        label: 'Font Size',
-        type: 'select',
-        options: ['small', 'medium', 'large'],
-      },
-      {
-        key: 'animations',
-        label: 'Enable Animations',
-        type: 'boolean',
-      },
-    ],
-  },
-  {
-    title: 'Notifications',
-    description: 'Configure how and when you receive notifications',
-    settings: [
-      {
-        key: 'notifications.enabled',
-        label: 'Enable Notifications',
-        type: 'boolean',
-      },
-      {
-        key: 'notifications.sound',
-        label: 'Notification Sound',
-        type: 'boolean',
-      },
-      {
-        key: 'notifications.quietHours',
-        label: 'Quiet Hours',
-        type: 'select',
-        options: ['off', 'custom', '10pm-7am', '11pm-8am'],
-      },
-    ],
-  },
-  {
-    key: 'performance',
-    title: 'Performance',
-    description: 'Optimize application performance',
-    settings: [
-      {
-        key: 'performance.cacheSize',
-        label: 'Cache Size (MB)',
-        type: 'number',
-        min: 50,
-        max: 1000,
-        step: 50,
-      },
-      {
-        key: 'performance.autoRefresh',
-        label: 'Auto Refresh Interval (seconds)',
-        type: 'number',
-        min: 30,
-        max: 300,
-        step: 30,
-      },
-      {
-        key: 'performance.lowBandwidth',
-        label: 'Low Bandwidth Mode',
-        type: 'boolean',
-      },
-    ],
-  },
-  {
-    title: 'Betting',
-    description: 'Configure betting preferences and limits',
-    settings: [
-      {
-        key: 'betting.defaultStake',
-        label: 'Default Stake',
-        type: 'number',
-        min: 1,
-        max: 1000,
-        step: 1,
-      },
-      {
-        key: 'betting.maxStake',
-        label: 'Maximum Stake',
-        type: 'number',
-        min: 1,
-        max: 10000,
-        step: 100,
-      },
-      {
-        key: 'betting.autoConfirm',
-        label: 'Auto Confirm Bets',
-        type: 'boolean',
-      },
-      {
-        key: 'betting.kellyFraction',
-        label: 'Kelly Fraction',
-        type: 'number',
-        min: 0,
-        max: 1,
-        step: 0.1,
-      },
-    ],
-  },
-];
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Settings, Bell, Shield, Palette, Database, Key } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
 
 export const UnifiedSettingsInterface: React.FC = () => {
-  // Initialize services
-  const serviceRegistry = UnifiedServiceRegistry.getInstance();
-  const settingsService = serviceRegistry.getService<UnifiedSettingsService>('settings');
-  const stateService = serviceRegistry.getService<UnifiedStateService>('state');
-  const notificationService =
-    serviceRegistry.getService<UnifiedNotificationService>('notification');
-  const errorService = serviceRegistry.getService<UnifiedErrorService>('error');
+  const [isImporting, setIsImporting] = useState(false);
+  const [settings, setSettings] = useState({
+    notifications: {
+      betAlerts: true,
+      priceChanges: true,
+      dailyReports: false,
+      promotions: true,
+    },
+    privacy: {
+      shareStats: false,
+      publicProfile: false,
+      dataCollection: true,
+    },
+    trading: {
+      riskLevel: "medium",
+      maxBetAmount: 500,
+      autoHedging: false,
+      followMLRecommendations: true,
+    },
+    display: {
+      theme: "dark",
+      currency: "USD",
+      timezone: "America/New_York",
+      decimalOdds: true,
+    },
+  });
 
-  // State
-  const [settings, setSettings] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [toast, setToast] = useState<{
-    message: string;
-    type: 'success' | 'error' | 'warning' | 'info';
-  } | null>(null);
-  const [showResetModal, setShowResetModal] = useState(false);
-  const [showImportModal, setShowImportModal] = useState(false);
-  const [importData, setImportData] = useState('');
-
-  // Load settings
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
-    try {
-      setLoading(true);
-      const currentSettings = await settingsService.getSettings();
-      setSettings(currentSettings);
-    } catch (error) {
-      handleError('Failed to load settings', error);
-    } finally {
-      setLoading(false);
-    }
+  const handleToggle = (section: keyof typeof settings, key: string) => {
+    setSettings((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [key]: !prev[section][key],
+      },
+    }));
   };
 
-  const handleError = (message: string, error: any) => {
-    setError(message);
-    setToast({ message, type: 'error' });
-    errorService.handleError(error, {
-      code: 'SETTINGS_ERROR',
-      source: 'UnifiedSettingsInterface',
-      details: { message },
-    });
+  const handleSelect = (
+    section: keyof typeof settings,
+    key: string,
+    value: any,
+  ) => {
+    setSettings((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [key]: value,
+      },
+    }));
   };
-
-  const handleSettingChange = async (key: string, value: any) => {
-    try {
-      const newSettings = { ...settings };
-      const keys = key.split('.');
-      let current = newSettings;
-
-      for (let i = 0; i < keys.length - 1; i++) {
-        if (!current[keys[i]]) {
-          current[keys[i]] = {};
-        }
-        current = current[keys[i]];
-      }
-
-      current[keys[keys.length - 1]] = value;
-
-      await settingsService.updateSettings(newSettings);
-      setSettings(newSettings);
-      setToast({
-        message: 'Settings updated successfully',
-        type: 'success',
-      });
-    } catch (error) {
-      handleError('Failed to update settings', error);
-    }
-  };
-
-  const handleReset = async () => {
-    try {
-      await settingsService.resetSettings();
-      await loadSettings();
-      setToast({
-        message: 'Settings reset to defaults',
-        type: 'success',
-      });
-      setShowResetModal(false);
-    } catch (error) {
-      handleError('Failed to reset settings', error);
-    }
-  };
-
-  const handleExport = async () => {
-    try {
-      const exportData = await settingsService.exportSettings();
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'betting-app-settings.json';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      handleError('Failed to export settings', error);
-    }
-  };
-
-  const handleImport = async () => {
-    try {
-      const importSettings = JSON.parse(importData);
-      await settingsService.importSettings(importSettings);
-      await loadSettings();
-      setToast({
-        message: 'Settings imported successfully',
-        type: 'success',
-      });
-      setShowImportModal(false);
-      setImportData('');
-    } catch (error) {
-      handleError('Failed to import settings', error);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner size="large" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Card className="max-w-md">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-red-500 mb-4">Error</h2>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <Button variant="primary" onClick={loadSettings}>
-              Retry
-            </Button>
-          </div>
-        </Card>
-      </div>
-    );
-  }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-4">Settings</h1>
-        <div className="flex space-x-4">
-          <Button variant="primary" onClick={() => setShowResetModal(true)}>
-            Reset to Defaults
-          </Button>
-          <Button variant="secondary" onClick={handleExport}>
-            Export Settings
-          </Button>
-          <Button variant="secondary" onClick={() => setShowImportModal(true)}>
-            Import Settings
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-8"
+      >
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          ⚙️ Settings & Preferences
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
+          Customize your betting experience and account preferences
+        </p>
+      </motion.div>
 
-      <div className="space-y-8">
-        {SETTINGS_SECTIONS.map(section => (
-          <Card key={section.title} title={section.title}>
-            <p className="text-gray-600 mb-6">{section.description}</p>
-            <div className="space-y-6">
-              {section.settings.map(setting => (
-                <div key={setting.key} className="flex items-center justify-between">
-                  <label className="text-gray-700">{setting.label}</label>
-                  <div className="w-64">
-                    {setting.type === 'select' && (
-                      <Select
-                        options={setting.options || []}
-                        value={settings[setting.key] || ''}
-                        onChange={value => handleSettingChange(setting.key, value)}
-                      />
-                    )}
-                    {setting.type === 'number' && (
-                      <Input
-                        max={setting.max}
-                        min={setting.min}
-                        step={setting.step}
-                        type="number"
-                        value={settings[setting.key] || ''}
-                        onChange={e => handleSettingChange(setting.key, parseFloat(e.target.value))}
-                      />
-                    )}
-                    {setting.type === 'boolean' && (
-                      <input
-                        checked={settings[setting.key] || false}
-                        className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                        type="checkbox"
-                        onChange={e => handleSettingChange(setting.key, e.target.checked)}
-                      />
-                    )}
-                    {setting.type === 'color' && (
-                      <Input
-                        type="color"
-                        value={settings[setting.key] || '#000000'}
-                        onChange={e => handleSettingChange(setting.key, e.target.value)}
-                      />
-                    )}
-                  </div>
-                </div>
-              ))}
+      {/* Notifications */}
+      <Card className="glass-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Bell className="w-5 h-5 text-blue-500" />
+            Notifications
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Bet Alerts</div>
+              <div className="text-sm text-gray-500">
+                Get notified when your bets are settled
+              </div>
             </div>
-          </Card>
-        ))}
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.notifications.betAlerts}
+                onChange={() => handleToggle("notifications", "betAlerts")}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Price Changes</div>
+              <div className="text-sm text-gray-500">
+                Alert when odds move significantly
+              </div>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.notifications.priceChanges}
+                onChange={() => handleToggle("notifications", "priceChanges")}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Daily Reports</div>
+              <div className="text-sm text-gray-500">
+                Receive daily performance summaries
+              </div>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.notifications.dailyReports}
+                onChange={() => handleToggle("notifications", "dailyReports")}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Privacy & Security */}
+      <Card className="glass-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Shield className="w-5 h-5 text-green-500" />
+            Privacy & Security
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Share Statistics</div>
+              <div className="text-sm text-gray-500">
+                Allow others to see your betting stats
+              </div>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.privacy.shareStats}
+                onChange={() => handleToggle("privacy", "shareStats")}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Public Profile</div>
+              <div className="text-sm text-gray-500">
+                Make your profile visible to other users
+              </div>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.privacy.publicProfile}
+                onChange={() => handleToggle("privacy", "publicProfile")}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+
+          <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <div className="flex items-center gap-2 mb-2">
+              <Key className="w-4 h-4 text-blue-600" />
+              <span className="font-medium text-blue-800 dark:text-blue-200">
+                Two-Factor Authentication
+              </span>
+              <Badge variant="success">Enabled</Badge>
+            </div>
+            <p className="text-sm text-blue-600 dark:text-blue-400">
+              Your account is protected with 2FA. You can manage this in your
+              account security settings.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Trading Preferences */}
+      <Card className="glass-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Database className="w-5 h-5 text-purple-500" />
+            Trading Preferences
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Risk Level</div>
+              <div className="text-sm text-gray-500">
+                Default risk tolerance for recommendations
+              </div>
+            </div>
+            <select
+              value={settings.trading.riskLevel}
+              onChange={(e) =>
+                handleSelect("trading", "riskLevel", e.target.value)
+              }
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Max Bet Amount</div>
+              <div className="text-sm text-gray-500">
+                Maximum amount for a single bet
+              </div>
+            </div>
+            <input
+              type="number"
+              value={settings.trading.maxBetAmount}
+              onChange={(e) =>
+                handleSelect("trading", "maxBetAmount", Number(e.target.value))
+              }
+              className="w-24 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Follow ML Recommendations</div>
+              <div className="text-sm text-gray-500">
+                Auto-execute high-confidence ML predictions
+              </div>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.trading.followMLRecommendations}
+                onChange={() =>
+                  handleToggle("trading", "followMLRecommendations")
+                }
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Display Preferences */}
+      <Card className="glass-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Palette className="w-5 h-5 text-orange-500" />
+            Display Preferences
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Theme</div>
+              <div className="text-sm text-gray-500">
+                Choose your preferred color scheme
+              </div>
+            </div>
+            <select
+              value={settings.display.theme}
+              onChange={(e) => handleSelect("display", "theme", e.target.value)}
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+            >
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Currency</div>
+              <div className="text-sm text-gray-500">
+                Default currency for display
+              </div>
+            </div>
+            <select
+              value={settings.display.currency}
+              onChange={(e) =>
+                handleSelect("display", "currency", e.target.value)
+              }
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+            >
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+              <option value="CAD">CAD (C$)</option>
+            </select>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium">Decimal Odds</div>
+              <div className="text-sm text-gray-500">
+                Display odds in decimal format
+              </div>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.display.decimalOdds}
+                onChange={() => handleToggle("display", "decimalOdds")}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Import/Export Section */}
+      <Card className="glass-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Database className="w-5 h-5 text-indigo-500" />
+            Data Management
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={() => {
+                const data = JSON.stringify(settings, null, 2);
+                const blob = new Blob([data], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "betting-settings.json";
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg"
+            >
+              Export Settings
+            </button>
+            <div className="flex-1 relative">
+              <input
+                type="file"
+                accept=".json"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setIsImporting(true);
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                      try {
+                        const importedSettings = JSON.parse(
+                          event.target?.result as string,
+                        );
+                        setSettings(importedSettings);
+                        setTimeout(() => {
+                          setIsImporting(false);
+                          alert("Settings imported successfully!");
+                        }, 500);
+                      } catch (error) {
+                        setIsImporting(false);
+                        alert(
+                          "Error importing settings. Please check the file format.",
+                        );
+                      }
+                    };
+                    reader.readAsText(file);
+                  }
+                  // Reset the input value to allow selecting the same file again
+                  e.target.value = "";
+                }}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                style={{
+                  zIndex: 10,
+                }}
+              />
+              <div
+                className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg text-center pointer-events-none"
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  opacity: isImporting ? 0.7 : 1,
+                }}
+              >
+                {isImporting ? "Importing..." : "Import Settings"}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Save Button */}
+      <div
+        className="flex justify-center pt-6"
+        style={{ position: "relative", zIndex: 1 }}
+      >
+        <button
+          onClick={() => {
+            // Save settings logic here
+            alert("Settings saved successfully!");
+          }}
+          className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-lg"
+          style={{ position: "relative", zIndex: 2 }}
+        >
+          Save Settings
+        </button>
       </div>
-
-      {/* Reset Confirmation Modal */}
-      <Modal
-        isOpen={showResetModal}
-        title="Reset Settings"
-        onClose={() => setShowResetModal(false)}
-      >
-        <div className="text-center">
-          <p className="text-gray-600 mb-6">
-            Are you sure you want to reset all settings to their default values? This action cannot
-            be undone.
-          </p>
-          <div className="flex justify-center space-x-4">
-            <Button variant="secondary" onClick={() => setShowResetModal(false)}>
-              Cancel
-            </Button>
-            <Button variant="danger" onClick={handleReset}>
-              Reset Settings
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Import Settings Modal */}
-      <Modal
-        isOpen={showImportModal}
-        title="Import Settings"
-        onClose={() => setShowImportModal(false)}
-      >
-        <div className="space-y-4">
-          <p className="text-gray-600">Paste your settings JSON below:</p>
-          <textarea
-            className="w-full h-48 p-2 border rounded"
-            placeholder="Paste settings JSON here..."
-            value={importData}
-            onChange={e => setImportData(e.target.value)}
-          />
-          <div className="flex justify-end space-x-4">
-            <Button variant="secondary" onClick={() => setShowImportModal(false)}>
-              Cancel
-            </Button>
-            <Button variant="primary" onClick={handleImport}>
-              Import
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      {/* Toast Notifications */}
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { performanceService } from '../services/performanceService';
-import { errorLogger } from '../utils/errorLogger';
+import { performanceService } from '../../../services/performanceService';
+import { errorLogger } from '../../../utils/errorLogger';
 
 interface PerformanceMonitorProps {
   children: React.ReactNode;

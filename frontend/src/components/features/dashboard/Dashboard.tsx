@@ -1,12 +1,12 @@
-import ESPNHeadlinesTicker from './ESPNHeadlinesTicker'; 
-import EntryTracking from './EntryTracking'; 
-import MLInsights from '../insights/MLInsights';
-import MoneyMaker from './MoneyMaker';
-import PerformanceChart from '../charts/PerformanceChart'; 
-import PropCards from './PropCards'; 
+import { useAppStore } from '@/store/useAppStore';
 import React, { useEffect } from 'react';
+import MoneyMaker from '../../modern/MoneyMaker';
+import MLInsights from '../analytics/MLInsights';
+import PerformanceChart from '../analytics/PerformanceChart';
 import UserStats from '../analytics/UserStats';
-import { useAppStore } from '../../store/useAppStore';
+import PropCards from '../betting/PropCards';
+import ESPNHeadlinesTicker from '../news/ESPNHeadlinesTicker';
+import EntryTracking from '../tracking/EntryTracking';
 
 
 const Dashboard: React.FC = () => {
@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     // Initial data fetching for the dashboard
-    fetchProps(); 
+    fetchProps();
     fetchEntries();
     fetchHeadlines();
     // fetchSentiments('general_market'); // Example for dashboard-specific sentiment if needed
@@ -79,7 +79,7 @@ const Dashboard: React.FC = () => {
       {/* Prop Cards & Performance Graph */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-            <PropCards />
+          <PropCards />
         </div>
         <div className="p-6 glass rounded-xl shadow-lg">
           <h3 className="text-xl font-semibold text-text mb-3">Performance Analytics</h3>
@@ -99,4 +99,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

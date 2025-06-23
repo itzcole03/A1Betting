@@ -1,8 +1,8 @@
-import { DataSource } from '../core/DataSource.ts';
-import { EventBus } from '../core/EventBus.ts';
-import { PerformanceMonitor } from '../core/PerformanceMonitor.ts';
-import { newsService } from '../services/newsService.ts';
-import type { ESPNHeadline } from '../types.ts';
+import { DataSource } from '../core/DataSource';
+import { EventBus } from '../core/EventBus';
+import { PerformanceMonitor } from '../core/PerformanceMonitor';
+import { newsService } from '../services/newsService';
+import type { ESPNHeadline } from '../types';
 
 
 

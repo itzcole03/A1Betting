@@ -1,7 +1,7 @@
-import { DataSource } from '../unified/DataSource.ts';
-import { EventBus } from '../unified/EventBus.ts';
-import { PerformanceMonitor } from '../unified/PerformanceMonitor.ts';
 import { newsService } from '../services/newsService.js';
+import { DataSource } from '../unified/DataSource';
+import { EventBus } from '../unified/EventBus';
+import { PerformanceMonitor } from '../unified/PerformanceMonitor';
 
 export interface SocialSentimentData {
   player: string;
@@ -61,7 +61,10 @@ export class SocialSentimentAdapter implements DataSource<SocialSentimentData[]>
 
       this.eventBus.publish({
         type: 'social-sentiment-updated',
-        payload: { data: sentimentData },
+        payload: {
+          data: sentimentData as unknown as Record<string, unknown>,
+          timestamp: Date.now()
+        },
       });
 
       this.performanceMonitor.endTrace(traceId);

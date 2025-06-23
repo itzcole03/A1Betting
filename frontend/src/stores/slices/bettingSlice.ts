@@ -1,5 +1,5 @@
 import { StateCreator } from 'zustand';
-import { BettingState, RootState } from '../../types';
+import { BettingState, RootState } from '@/types';
 
 export const createBettingSlice: StateCreator<RootState, [], [], BettingState> = (set, get) => ({
   bets: [],

@@ -1,5 +1,5 @@
 import React from 'react';
-import { RealtimeData } from '../types/betting';
+import { RealtimeData } from '@/types/betting';
 import { motion } from 'framer-motion';
 
 export interface ArbitrageDetectorProps {

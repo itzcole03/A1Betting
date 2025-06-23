@@ -1,4 +1,4 @@
-import { UnifiedLogger } from './UnifiedLogger';
+import { UnifiedLogger } from '@/core/UnifiedLogger';
 import { SystemError } from './UnifiedError';
 
 export class UnifiedErrorHandler {

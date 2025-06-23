@@ -1,5 +1,5 @@
 import { UnifiedPredictionEngine, PredictionContext } from '../../core/UnifiedPredictionEngine';
-import { BettingOpportunity, MarketUpdate, EventMap } from '../../types/core';
+import { BettingOpportunity, MarketUpdate, EventMap } from '@/types/core';
 import { EventBus } from '../../core/EventBus';
 
 describe('UnifiedPredictionEngine', () => {

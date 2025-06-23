@@ -99,7 +99,7 @@ export interface StatusUpdate {
 export type LiveOddUpdatePayload = OddsUpdate;
 // Replaced 'unknown' with PrizePicksEntry and related types for type safety
 import type { PrizePicksEntry } from './prizePicks';
-import type { MarketUpdate, Prediction } from './core';
+import type { MarketUpdate, Prediction } from '@/types/core';
 export type EntryUpdatePayload = PrizePicksEntry;
 export type MarketUpdatePayload = MarketUpdate;
 export type PredictionStreamPayload = Prediction;

@@ -1,7 +1,7 @@
-import { EventBus } from './EventBus.ts';
-import { PerformanceMonitor } from './PerformanceMonitor.ts';
-import { TimestampedData, AnalysisResult } from '../core/types/core.ts';
-import { UnifiedMonitor } from './UnifiedMonitor.ts';
+import { EventBus } from './EventBus';
+import { PerformanceMonitor } from './PerformanceMonitor';
+import { TimestampedData, AnalysisResult } from '../core/types/core';
+import { UnifiedMonitor } from './UnifiedMonitor';
 
 
 

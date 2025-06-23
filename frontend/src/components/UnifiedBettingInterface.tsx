@@ -3,13 +3,13 @@ import { motion } from 'framer-motion';
 import { useWebSocket } from '../hooks/useWebSocket';
 import { useShapData } from '../hooks/useShapData';
 import { useAuth } from '../hooks/useAuth';
-import { formatCurrency } from '../utils/formatters';
+import { formatCurrency } from '@/utils/formatters';
 import {
   BetRecommendation,
   RiskProfileType,
   UserConstraints,
   ShapFeature,
-} from '../types/betting';
+} from '@/types/betting';
 import { RiskProfileSelector } from './RiskProfileSelector';
 import ShapVisualization from './ShapVisualization';
 import { BettingOpportunities } from './BettingOpportunities';

@@ -1,7 +1,7 @@
 import { adapterManager } from '../adapters';
 import { SportsRadarAdapter } from '../adapters';
 import { measurePerformance, handleApiError, transformData } from '../utils';
-import { LiveScore, GameDetails, PlayerStats } from '../../types';
+import { LiveScore, GameDetails, PlayerStats } from '@/types';
 
 class SportsRadarService {
   private adapter: SportsRadarAdapter;

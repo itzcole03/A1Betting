@@ -24,7 +24,7 @@ import {
   Cpu,
   Server,
 } from "lucide-react";
-import { Line, Bar, Doughnut, Radar } from "react-chartjs-2";
+import SafeChart from "../ui/SafeChart";
 import {
   Chart as ChartJS,
   CategoryScale,

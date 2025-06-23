@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { rateLimit } from 'express-rate-limit';
-import { User } from '../types';
+import { User } from '@/types';
 
 // Rate limiting configuration
 export const loginLimiter = rateLimit({

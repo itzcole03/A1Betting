@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { PredictionData } from '../types/betting';
+import { PredictionData } from '@/types/betting';
 import { StrategyRecommendation } from '../types/core';
 import { motion, AnimatePresence } from 'framer-motion';
 

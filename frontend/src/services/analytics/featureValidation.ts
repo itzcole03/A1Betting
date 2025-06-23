@@ -1,4 +1,4 @@
-import { FeatureConfig, EngineeredFeatures, FeatureValidationResult } from './types';
+import { FeatureConfig, EngineeredFeatures, FeatureValidationResult } from '@/types';
 import { FeatureLogger } from './featureLogging';
 import { Matrix } from 'ml-matrix';
 

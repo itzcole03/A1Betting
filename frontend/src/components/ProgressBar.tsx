@@ -1,5 +1,5 @@
 import React from 'react';
-import { EntryStatus } from '../types';
+import { EntryStatus } from '@/types';
 import { calculateProgressPercentage } from '../utils/odds';
 import { motion, Variants } from 'framer-motion';
 

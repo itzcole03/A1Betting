@@ -1,5 +1,5 @@
 import useStore from '../store/useStore';
-import { OddsUpdate, PlayerProp, Sport, PropType } from '../types';
+import { OddsUpdate, PlayerProp, Sport, PropType } from '@/types';
 import { useState, useEffect, useCallback } from 'react';
 import { useWebSocket } from './useWebSocket';
 

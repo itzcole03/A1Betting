@@ -1,4 +1,4 @@
-import { FeatureConfig, EngineeredFeatures, FeatureCacheConfig } from './types';
+import { FeatureConfig, EngineeredFeatures, FeatureCacheConfig } from '@/types';
 import { FeatureLogger } from './featureLogging';
 
 interface CacheEntry {

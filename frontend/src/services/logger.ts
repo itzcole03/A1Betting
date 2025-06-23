@@ -1,4 +1,4 @@
-import { Logger } from '../types';
+import { Logger } from '@/types';
 
 class LoggerService implements Logger {
   private static instance: LoggerService;

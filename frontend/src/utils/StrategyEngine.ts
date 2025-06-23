@@ -1,9 +1,9 @@
 import { AdvancedAnalysisEngine, AnalysisResult as AdvancedAnalysisResult } from './AdvancedAnalysisEngine.js';
 import { DataIntegrationHub, IntegratedData } from './DataIntegrationHub.js';
-import { EventBus } from '../core/EventBus.ts';
-import { PerformanceMetrics, StrategyRecommendation, RiskTolerance } from '../types/core.ts';
+import { EventBus } from '../core/EventBus';
+import { PerformanceMetrics, StrategyRecommendation, RiskTolerance } from '../types/core';
 import { PerformanceMonitor } from './PerformanceMonitor.js';
-import FeatureFlags from './FeatureFlags.ts';
+import FeatureFlags from './FeatureFlags';
 import { PredictionEngine } from './PredictionEngine.js';
 
 

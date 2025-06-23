@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { DataIntegrationHub } from '../../core/DataIntegrationHub';
 import { useAppState } from './StateProvider';
-import { useThemeStore } from '@stores/themeStore';
+import { useThemeStore } from '@/stores/themeStore';
 
 const Settings: React.FC = () => {
   const { props, entries } = useAppState();

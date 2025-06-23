@@ -1,4 +1,4 @@
-import { ModelMetadata, ModelVersion, ModelEvaluation } from './types';
+import { ModelMetadata, ModelVersion, ModelEvaluation } from '@/types';
 import { ModelRegistry } from './ModelRegistry';
 import { ModelEvaluator } from './ModelEvaluator';
 import { FeatureLogger } from '../../services/analytics/featureLogging';

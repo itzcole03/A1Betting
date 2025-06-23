@@ -1,6 +1,6 @@
-import { BettingOpportunity, MarketUpdate, EventMap } from '../../types/core.js';
-import { EventBus } from '../../core/EventBus.js';
-import { UnifiedPredictionEngine, PredictionContext } from '../../core/UnifiedPredictionEngine.js';
+import { BettingOpportunity, MarketUpdate, EventMap } from '@/types/core';
+import { EventBus } from '@/core/EventBus';
+import { UnifiedPredictionEngine, PredictionContext } from '@/core/UnifiedPredictionEngine';
 
 
 

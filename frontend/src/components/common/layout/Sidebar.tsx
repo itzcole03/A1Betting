@@ -1,8 +1,8 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import { BarChart2, DollarSign, History, Home, Layers, LineChart, Menu, Moon, PieChart, Settings, Sun, TrendingUp, Zap } from 'lucide-react';
 import React, { useState } from 'react';
-import { Home, Settings, DollarSign, Menu, Moon, Sun, BarChart2, PieChart, TrendingUp, Zap, Layers, History, LineChart, User } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../providers/ThemeProvider'; // Assuming ThemeProvider is in src/providers
+import { useTheme } from '../../../providers/ThemeProvider';
 
 
 const navItems = [
@@ -19,14 +19,14 @@ const navItems = [
 ];
 
 const Sidebar: React.FC = () => {
-  const { theme, setTheme } = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    toggleTheme();
   };
 
   const SidebarContent = () => (
@@ -61,12 +61,12 @@ const Sidebar: React.FC = () => {
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
           <span>Live Connected</span>
         </div>
-        <button 
+        <button
           onClick={toggleTheme}
           className="w-full flex items-center justify-center p-3 rounded-lg bg-primary-700/20 hover:bg-primary-700/40 transition-colors space-x-2 text-primary-200 font-semibold shadow-md"
         >
-          {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          <span>{theme === 'dark' ? 'Light' : 'Dark'} Mode</span>
+          {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          <span>{isDark ? 'Light' : 'Dark'} Mode</span>
         </button>
         <div className="flex items-center justify-center text-xs text-primary-300/80 mt-2">ML Analytics</div>
       </div>
@@ -108,4 +108,4 @@ const Sidebar: React.FC = () => {
   );
 };
 
-export default Sidebar; 
+export default Sidebar;

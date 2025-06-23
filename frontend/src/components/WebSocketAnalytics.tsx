@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
+import React, { useEffect, useState } from "react";
+import SafeChart from "./ui/SafeChart";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,25 +9,37 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { WebSocketService } from '../services/webSocketService';
-import { WebSocketMetrics } from '../types/websocket';
-import { WebSocketConnection } from '../types/websocket';
+} from "chart.js";
+import { WebSocketService } from "../services/webSocketService";
+import { WebSocketMetrics } from "../types/websocket";
+import { WebSocketConnection } from "../types/websocket";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 interface WebSocketAnalyticsProps {
   webSocketService: WebSocketService;
 }
 
-export const WebSocketAnalytics: React.FC<WebSocketAnalyticsProps> = ({ webSocketService }) => {
+export const WebSocketAnalytics: React.FC<WebSocketAnalyticsProps> = ({
+  webSocketService,
+}) => {
   const [metrics, setMetrics] = useState<WebSocketMetrics[]>([]);
-  const [selectedMetric, setSelectedMetric] = useState<string>('latency');
+  const [selectedMetric, setSelectedMetric] = useState<string>("latency");
 
   useEffect(() => {
     const updateMetrics = () => {
       const connections = webSocketService.getConnections();
-      const currentMetrics = connections.map((conn: WebSocketConnection) => conn.metrics);
+      const currentMetrics = connections.map(
+        (conn: WebSocketConnection) => conn.metrics,
+      );
       setMetrics(currentMetrics);
     };
 
@@ -39,21 +51,21 @@ export const WebSocketAnalytics: React.FC<WebSocketAnalyticsProps> = ({ webSocke
     labels: metrics.map((_, index) => `Time ${index}`),
     datasets: [
       {
-        label: 'Latency (ms)',
-        data: metrics.map(m => m.latency),
-        borderColor: 'rgb(75, 192, 192)',
+        label: "Latency (ms)",
+        data: metrics.map((m) => m.latency),
+        borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
       {
-        label: 'Message Size (bytes)',
-        data: metrics.map(m => m.messageSize),
-        borderColor: 'rgb(255, 99, 132)',
+        label: "Message Size (bytes)",
+        data: metrics.map((m) => m.messageSize),
+        borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
       {
-        label: 'Compression Ratio',
-        data: metrics.map(m => m.compressionRatio),
-        borderColor: 'rgb(54, 162, 235)',
+        label: "Compression Ratio",
+        data: metrics.map((m) => m.compressionRatio),
+        borderColor: "rgb(54, 162, 235)",
         tension: 0.1,
       },
     ],
@@ -63,11 +75,11 @@ export const WebSocketAnalytics: React.FC<WebSocketAnalyticsProps> = ({ webSocke
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
       title: {
         display: true,
-        text: 'WebSocket Performance Metrics',
+        text: "WebSocket Performance Metrics",
       },
     },
     scales: {
@@ -90,8 +102,11 @@ export const WebSocketAnalytics: React.FC<WebSocketAnalyticsProps> = ({ webSocke
           <h3 className="font-semibold">Average Latency</h3>
           <p className="text-2xl">
             {metrics.length > 0
-              ? Math.round(metrics.reduce((acc, m) => acc + m.latency, 0) / metrics.length)
-              : 0}{' '}
+              ? Math.round(
+                  metrics.reduce((acc, m) => acc + m.latency, 0) /
+                    metrics.length,
+                )
+              : 0}{" "}
             ms
           </p>
         </div>
@@ -99,15 +114,23 @@ export const WebSocketAnalytics: React.FC<WebSocketAnalyticsProps> = ({ webSocke
           <h3 className="font-semibold">Message Rate</h3>
           <p className="text-2xl">
             {metrics.length > 0
-              ? Math.round(metrics.reduce((acc, m) => acc + m.messageCount, 0) / metrics.length)
-              : 0}{' '}
+              ? Math.round(
+                  metrics.reduce((acc, m) => acc + m.messageCount, 0) /
+                    metrics.length,
+                )
+              : 0}{" "}
             /s
           </p>
         </div>
       </div>
 
       <div className="bg-white p-4 rounded shadow">
-        <Line data={chartData} options={chartOptions} />
+        <SafeChart
+          type="line"
+          data={chartData}
+          options={chartOptions}
+          loadingMessage="Loading WebSocket metrics..."
+        />
       </div>
 
       <div className="mt-4">
@@ -116,10 +139,10 @@ export const WebSocketAnalytics: React.FC<WebSocketAnalyticsProps> = ({ webSocke
           {metrics.map((metric, index) => (
             <div key={index} className="bg-white p-4 rounded shadow">
               <h4 className="font-semibold">Connection {index + 1}</h4>
-              <p>Status: {metric.isConnected ? 'Connected' : 'Disconnected'}</p>
+              <p>Status: {metric.isConnected ? "Connected" : "Disconnected"}</p>
               <p>Messages: {metric.messageCount}</p>
               <p>Errors: {metric.errorCount}</p>
-              <p>Last Error: {metric.lastError || 'None'}</p>
+              <p>Last Error: {metric.lastError || "None"}</p>
             </div>
           ))}
         </div>

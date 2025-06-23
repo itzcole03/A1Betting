@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import React from 'react';
+import { useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -7,10 +8,17 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+} from "chart.js";
+import SafeChart from "../ui/SafeChart";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 interface SHAPValue {
   feature: string;
@@ -22,23 +30,25 @@ interface SHAPChartProps {
   className?: string;
 }
 
-export function SHAPChart({ shapValues, className = '' }: SHAPChartProps) {
+export function SHAPChart({ shapValues, className = "" }: SHAPChartProps) {
   const sortedValues = useMemo(() => {
-    return [...shapValues].sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
+    return [...shapValues].sort(
+      (a, b) => Math.abs(b.value) - Math.abs(a.value),
+    );
   }, [shapValues]);
 
   const chartData = useMemo(() => {
     return {
-      labels: sortedValues.map(v => v.feature),
+      labels: sortedValues.map((v) => v.feature),
       datasets: [
         {
-          label: 'Feature Impact',
-          data: sortedValues.map(v => v.value),
-          backgroundColor: sortedValues.map(v =>
-            v.value >= 0 ? 'rgba(34, 197, 94, 0.6)' : 'rgba(239, 68, 68, 0.6)'
+          label: "Feature Impact",
+          data: sortedValues.map((v) => v.value),
+          backgroundColor: sortedValues.map((v) =>
+            v.value >= 0 ? "rgba(34, 197, 94, 0.6)" : "rgba(239, 68, 68, 0.6)",
           ),
-          borderColor: sortedValues.map(v =>
-            v.value >= 0 ? 'rgb(34, 197, 94)' : 'rgb(239, 68, 68)'
+          borderColor: sortedValues.map((v) =>
+            v.value >= 0 ? "rgb(34, 197, 94)" : "rgb(239, 68, 68)",
           ),
           borderWidth: 1,
         },
@@ -47,7 +57,7 @@ export function SHAPChart({ shapValues, className = '' }: SHAPChartProps) {
   }, [sortedValues]);
 
   const options = {
-    indexAxis: 'y' as const,
+    indexAxis: "y" as const,
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -56,18 +66,18 @@ export function SHAPChart({ shapValues, className = '' }: SHAPChartProps) {
       },
       title: {
         display: true,
-        text: 'Feature Impact on Prediction',
-        color: 'rgb(107, 114, 128)',
+        text: "Feature Impact on Prediction",
+        color: "rgb(107, 114, 128)",
         font: {
           size: 16,
-          weight: '500' as const,
+          weight: "500" as const,
         },
       },
       tooltip: {
         callbacks: {
           label: (context: any) => {
             const value = context.raw;
-            return `Impact: ${value > 0 ? '+' : ''}${value.toFixed(3)}`;
+            return `Impact: ${value > 0 ? "+" : ""}${value.toFixed(3)}`;
           },
         },
       },
@@ -75,10 +85,10 @@ export function SHAPChart({ shapValues, className = '' }: SHAPChartProps) {
     scales: {
       x: {
         grid: {
-          color: 'rgba(107, 114, 128, 0.1)',
+          color: "rgba(107, 114, 128, 0.1)",
         },
         ticks: {
-          color: 'rgb(107, 114, 128)',
+          color: "rgb(107, 114, 128)",
         },
       },
       y: {
@@ -86,10 +96,10 @@ export function SHAPChart({ shapValues, className = '' }: SHAPChartProps) {
           display: false,
         },
         ticks: {
-          color: 'rgb(107, 114, 128)',
+          color: "rgb(107, 114, 128)",
           callback: (value: any) => {
             const label = chartData.labels[value];
-            return label.length > 20 ? label.substring(0, 17) + '...' : label;
+            return label.length > 20 ? label.substring(0, 17) + "..." : label;
           },
         },
       },
@@ -98,7 +108,12 @@ export function SHAPChart({ shapValues, className = '' }: SHAPChartProps) {
 
   return (
     <div className={`h-[400px] w-full ${className}`}>
-      <Bar data={chartData} options={options} />
+      <SafeChart
+        type="bar"
+        data={chartData}
+        options={options}
+        loadingMessage="Loading SHAP analysis..."
+      />
     </div>
   );
 }

@@ -1,35 +1,35 @@
-import React, { useState } from 'react';
+import { FileDownload as FileDownloadIcon } from '@mui/icons-material';
 import {
+  Alert,
   Box,
+  Button,
   Card,
   CardContent,
-  Grid,
-  Typography,
   CircularProgress,
-  Select,
-  MenuItem,
   FormControl,
   InputLabel,
-  Alert,
-  Button,
-  Tabs,
+  MenuItem,
+  Select,
   Tab,
+  Tabs,
+  // Grid, // Removed due to v7 compatibility issues
+  Typography,
 } from '@mui/material';
+import React, { useState } from 'react';
 import {
-  LineChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from 'recharts';
 import { useModelPerformance } from '../../hooks/useModelPerformance';
+import { ModelComparison } from './ModelComparison';
 import { PerformanceAlerts } from './PerformanceAlerts';
 import { PerformanceExport } from './PerformanceExport';
-import { ModelComparison } from './ModelComparison';
-import { FileDownload as FileDownloadIcon } from '@mui/icons-material';
 
 interface ModelPerformanceDashboardProps {
   modelName: string;
@@ -145,9 +145,9 @@ export const ModelPerformanceDashboard: React.FC<ModelPerformanceDashboardProps>
 
       {activeTab === 0 ? (
         <>
-          <Grid container mb={4} spacing={3}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
             {metrics.map(metric => (
-              <Grid key={metric.label} item md={3} sm={6} xs={12}>
+              <div key={metric.label}>
                 <Card>
                   <CardContent>
                     <Typography gutterBottom color="textSecondary">
@@ -162,12 +162,12 @@ export const ModelPerformanceDashboard: React.FC<ModelPerformanceDashboardProps>
                     </Typography>
                   </CardContent>
                 </Card>
-              </Grid>
+              </div>
             ))}
-          </Grid>
+          </div>
 
-          <Grid container spacing={3}>
-            <Grid item md={8} xs={12}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+            <div className="lg:col-span-2">
               <Card>
                 <CardContent>
                   <Typography gutterBottom variant="h6">
@@ -221,11 +221,11 @@ export const ModelPerformanceDashboard: React.FC<ModelPerformanceDashboardProps>
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
-            <Grid item md={4} xs={12}>
+            </div>
+            <div>
               <PerformanceAlerts modelName={modelName} />
-            </Grid>
-          </Grid>
+            </div>
+          </div>
         </>
       ) : (
         <ModelComparison modelNames={[modelName, ...availableModels]} />

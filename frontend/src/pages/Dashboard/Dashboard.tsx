@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Typography, Grid, Paper, useTheme } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { getActiveBets, getTotalWinnings, getWinRate } from '@services/bettingService';

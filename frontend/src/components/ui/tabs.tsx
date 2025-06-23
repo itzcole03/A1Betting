@@ -1,39 +1,74 @@
-import * as React from "react";
+import React from "react";
+import { cn } from "../../lib/utils";
 
-export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
-    children: React.ReactNode;
+// Try to import Radix UI, fallback to simple implementation if it fails
+let TabsPrimitive: any;
+try {
+  TabsPrimitive = require("@radix-ui/react-tabs");
+} catch (error) {
+  console.warn(
+    "@radix-ui/react-tabs not available, using fallback implementation",
+  );
+  // Import our simple fallback
+  const {
+    Tabs: SimpleTabs,
+    TabsList: SimpleTabsList,
+    TabsTrigger: SimpleTabsTrigger,
+    TabsContent: SimpleTabsContent,
+  } = require("./tabs-simple");
+  TabsPrimitive = {
+    Root: SimpleTabs,
+    List: SimpleTabsList,
+    Trigger: SimpleTabsTrigger,
+    Content: SimpleTabsContent,
+  };
 }
 
-export const Tabs: React.FC<TabsProps> = ({ children, ...props }) => (
-    <div {...props}>{children}</div>
-);
+const Tabs = TabsPrimitive.Root;
 
-export interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
-    children: React.ReactNode;
-}
+const TabsList = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.List>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.List
+    ref={ref}
+    className={cn(
+      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+      className,
+    )}
+    {...props}
+  />
+));
+TabsList.displayName = TabsPrimitive.List.displayName;
 
-export const TabsList: React.FC<TabsListProps> = ({ children, ...props }) => (
-    <div className="flex border-b mb-2" {...props}>{children}</div>
-);
+const TabsTrigger = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+      className,
+    )}
+    {...props}
+  />
+));
+TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
-export interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    active?: boolean;
-    children: React.ReactNode;
-}
+const TabsContent = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.Content
+    ref={ref}
+    className={cn(
+      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      className,
+    )}
+    {...props}
+  />
+));
+TabsContent.displayName = TabsPrimitive.Content.displayName;
 
-export const TabsTrigger: React.FC<TabsTriggerProps> = ({ active, children, ...props }) => (
-    <button
-        className={`px-4 py-2 focus:outline-none border-b-2 transition-colors ${active ? 'border-blue-500 text-blue-700 font-semibold' : 'border-transparent text-gray-600'}`}
-        {...props}
-    >
-        {children}
-    </button>
-);
-
-export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
-    children: React.ReactNode;
-}
-
-export const TabsContent: React.FC<TabsContentProps> = ({ children, ...props }) => (
-    <div className="py-2" {...props}>{children}</div>
-);
+export { Tabs, TabsList, TabsTrigger, TabsContent };

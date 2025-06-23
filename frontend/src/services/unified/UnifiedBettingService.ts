@@ -3,7 +3,7 @@ import { UnifiedPredictionService } from './UnifiedPredictionService';
 import { UnifiedConfig } from '../unified/UnifiedConfig';
 import { UnifiedLogger } from '../unified/UnifiedLogger';
 import { UnifiedCache } from '../unified/UnifiedCache';
-import { BettingContext, MarketContext, PredictionResult } from '../types';
+import { BettingContext, MarketContext, PredictionResult } from '@/types';
 import { BaseService } from './BaseService';
 import { UnifiedServiceRegistry } from './UnifiedServiceRegistry';
 import { UnifiedErrorService } from './UnifiedErrorService';

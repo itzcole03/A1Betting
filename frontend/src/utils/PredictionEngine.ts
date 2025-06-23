@@ -1,13 +1,13 @@
 import { AdvancedAnalysisEngine, AnalysisResult as AdvancedAnalysisResult } from './AdvancedAnalysisEngine';
 import { AnalysisPlugin, AnalysisRegistry } from './AnalysisFramework';
-// import { EventBus } from './EventBus.ts'; // FIX: File not found, please verify existence or correct path.
+// import { EventBus } from './EventBus'; // FIX: File not found, please verify existence or correct path.
 import { UnifiedConfigManager } from '../core/UnifiedConfigManager';
 import { PipelineStage, StreamingDataPipeline } from './DataPipeline';
 import { FeatureComponent, FeatureRegistry } from './FeatureComposition';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { StrategyComponent, StrategyRegistry, StrategyResult } from './StrategyComposition';
 import { StrategyEngine } from './StrategyEngine';
-// import { UnifiedDataEngine } from './UnifiedDataEngine.ts'; // FIX: File not found, please verify existence or correct path.
+// import { UnifiedDataEngine } from './UnifiedDataEngine'; // FIX: File not found, please verify existence or correct path.
 
 // Enhanced interfaces for PredictionEngine
 export interface PredictionData {

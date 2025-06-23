@@ -1,8 +1,8 @@
 import type { AlertSeverity } from '../types/common';
 import { AlertType } from '../types/common';
-import { EventBus } from './EventBus.ts';
-import { UnifiedConfigManager } from './UnifiedConfigManager.ts';
-import { UnifiedMonitor } from './UnifiedMonitor.ts';
+import { EventBus } from './EventBus';
+import { UnifiedConfigManager } from './UnifiedConfigManager';
+import { UnifiedMonitor } from './UnifiedMonitor';
 
 
 

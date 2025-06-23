@@ -1,7 +1,7 @@
-import { UnifiedLogger } from './UnifiedLogger';
-import { UnifiedServiceRegistry } from '../unified/UnifiedServiceRegistry';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { UnifiedLogger } from '../../core/UnifiedLogger';
+import { UnifiedServiceRegistry } from '../unified/UnifiedServiceRegistry';
 
 export class UnifiedSettingsService {
   private static instance: UnifiedSettingsService;

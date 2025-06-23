@@ -1,6 +1,6 @@
 import { UnifiedBettingCore } from '../../services/unified/UnifiedBettingCore';
-import { BettingContext, BettingDecision, PredictionResult } from '../../types';
-import { BetRecord } from '../../types/core';
+import { BettingContext, BettingDecision, PredictionResult } from '@/types';
+import { BetRecord } from '@/types/core';
 
 describe('UnifiedBettingCore', () => {
   let bettingCore: UnifiedBettingCore;

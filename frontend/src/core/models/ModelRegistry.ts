@@ -1,4 +1,4 @@
-import { ModelMetadata, ModelVersion, ModelRegistryConfig } from './types';
+import { ModelMetadata, ModelVersion, ModelRegistryConfig } from '@/types';
 import { FeatureLogger } from '../../services/analytics/featureLogging';
 import * as fs from 'fs/promises';
 import * as path from 'path';

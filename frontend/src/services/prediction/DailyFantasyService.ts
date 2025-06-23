@@ -2,7 +2,7 @@
  * Service for generating daily fantasy sports recommendations.
  */
 
-import type { DailyFantasyRecommendation } from './types';
+import type { DailyFantasyRecommendation } from '@/types';
 import type { ModelPrediction } from '../ml/models/BaseModel';
 
 export interface FantasyRequest {

@@ -1,5 +1,5 @@
-import { Analyzer } from '../unified/Analyzer';
 import { DailyFantasyData } from '../adapters/DailyFantasyAdapter';
+import { Analyzer } from '../core/Analyzer';
 import { EventBus } from '../unified/EventBus';
 import { PerformanceMonitor } from '../unified/PerformanceMonitor';
 
@@ -122,13 +122,16 @@ export class ProjectionAnalyzer implements Analyzer<DailyFantasyData, Projection
     this.eventBus.publish({
       type: 'projection:analyzed',
       payload: {
-        player: projection.name,
-        confidence: baseConfidence,
-        predictions: Object.entries(analysis.predictions).map(([stat, metrics]) => ({
-          stat,
-          predicted: metrics.predicted,
-          confidence: metrics.confidence,
-        })),
+        data: {
+          player: projection.name,
+          confidence: baseConfidence,
+          predictions: Object.entries(analysis.predictions).map(([stat, metrics]) => ({
+            stat,
+            predicted: metrics.predicted,
+            confidence: metrics.confidence
+          }))
+        } as Record<string, unknown>,
+        timestamp: Date.now()
       },
     });
 

@@ -1,4 +1,4 @@
-import { MLServiceConfig, PredictionResult, ModelMetrics } from '../types';
+import { MLServiceConfig, PredictionResult, ModelMetrics } from '@/types';
 import { logger } from '../logger';
 import { cache } from '../cache';
 

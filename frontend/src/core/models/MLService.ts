@@ -1,4 +1,4 @@
-import { ModelMetadata, ModelVersion, ModelEvaluation, ModelTrainingConfig } from './types';
+import { ModelMetadata, ModelVersion, ModelEvaluation, ModelTrainingConfig } from '@/types';
 
 export interface MLService {
   // Model Management

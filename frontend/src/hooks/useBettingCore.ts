@@ -1,6 +1,6 @@
 import useStore from '../store/useStore';
 import { BetRecord, Opportunity } from '../types/core';
-import { BettingContext, BettingDecision, PerformanceMetrics } from '../types';
+import { BettingContext, BettingDecision, PerformanceMetrics } from '@/types';
 import { UnifiedBettingCore } from '../services/unified/UnifiedBettingCore';
 import { useDataSync } from './useDataSync';
 import { useState, useEffect, useCallback } from 'react';

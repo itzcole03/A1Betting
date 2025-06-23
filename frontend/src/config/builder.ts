@@ -1,10 +1,13 @@
-import { builder } from '@builder.io/react';
+// Builder.io completely removed to fix frame access errors
+// This file has been disabled to prevent initialization issues
 
-// Initialize Builder with your API key - using the newest key
-const BUILDER_API_KEY = 'ae2109aa857549f9980d4843e58092ef';
-
-// Simple initialization without any complex options
-builder.init(BUILDER_API_KEY);
-
-// Export for use in components
-export { builder };
+export const builder = {
+  init: () => {
+    console.log(
+      "Builder.io disabled - using native Elite Sports Intelligence Platform",
+    );
+  },
+  // Mock all builder methods to prevent errors
+  get: () => Promise.resolve(null),
+  register: () => {},
+};

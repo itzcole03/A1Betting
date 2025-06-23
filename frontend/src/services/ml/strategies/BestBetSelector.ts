@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
-import { UnifiedLogger } from '../../core/UnifiedLogger';
+import { UnifiedLogger } from '../../../core/UnifiedLogger';
 import { KellyCriterion } from './KellyCriterion';
 
 interface BetMetrics {

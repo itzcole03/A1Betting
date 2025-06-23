@@ -1,4 +1,4 @@
-import { ModelVersion, ModelEvaluation, ModelEvaluatorConfig } from './types';
+import { ModelVersion, ModelEvaluation, ModelEvaluatorConfig } from '@/types';
 import { FeatureLogger } from '../../services/analytics/featureLogging';
 
 export class ModelEvaluator {

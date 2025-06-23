@@ -1,5 +1,5 @@
-import { Router, Request, Response } from 'express';
-import { PredictionIntegrationService } from './services/prediction/PredictionIntegrationService.ts';
+import { Request, Response, Router } from 'express';
+import { PredictionIntegrationService } from '../services/prediction/PredictionIntegrationService';
 
 const router = Router();
 const predictionService = new PredictionIntegrationService();
@@ -7,7 +7,8 @@ const predictionService = new PredictionIntegrationService();
 // Generate predictions
 router.post('/generate', async (req: Request, res: Response) => {
   try {
-    const predictions = await predictionService.generatePredictions(req.body);
+    const { modelName, date } = req.body;
+    const predictions = await predictionService.generatePredictions(modelName, date);
     res.json(predictions);
   } catch (error) {
     console.error('Error generating predictions:', error);
@@ -20,7 +21,7 @@ router.post('/generate', async (req: Request, res: Response) => {
 // Update models with new data
 router.post('/update', async (req: Request, res: Response) => {
   try {
-    await predictionService.updateModels(req.body);
+    await predictionService.updateModelData(req.body);
     res.json({ status: 'success' });
   } catch (error) {
     console.error('Error updating models:', error);

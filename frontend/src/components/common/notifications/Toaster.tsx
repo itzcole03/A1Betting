@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ToastNotification } from '../../types';
+import { ToastNotification } from '@/types';
 import { X, CheckCircle, AlertTriangle, Info, AlertCircle as AlertCircleIcon } from 'lucide-react';
-import { useAppStore, AppStore } from '../../store/useAppStore';
+import { useAppStore, AppStore } from '@/store/useAppStore';
 
 
 // Define the keys for toast types to ensure type safety for icons and borders

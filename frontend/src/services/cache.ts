@@ -1,4 +1,4 @@
-import { CacheService } from '../types';
+import { CacheService } from '@/types';
 import { logger } from './logger';
 
 class CacheServiceImpl implements CacheService {

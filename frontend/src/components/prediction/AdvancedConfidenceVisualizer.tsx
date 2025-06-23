@@ -17,7 +17,7 @@ import {
   Eye,
   Settings,
 } from "lucide-react";
-import { Line, Bar, Scatter, Radar } from "react-chartjs-2";
+import SafeChart from "../ui/SafeChart";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -461,7 +461,8 @@ export const AdvancedConfidenceVisualizer: React.FC = () => {
             <CardContent>
               {confidenceTrendData && (
                 <div className="h-80">
-                  <Line
+                  <SafeChart
+                    type="line"
                     data={confidenceTrendData}
                     options={{
                       responsive: true,

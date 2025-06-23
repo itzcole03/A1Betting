@@ -1,10 +1,10 @@
+from datetime import datetime, timedelta
+from typing import Any, Dict, Optional
 
-from fastapi import APIRouter, HTTPException, Depends
+import jwt
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
-from datetime import datetime, timedelta
-import jwt
 
 SECRET_KEY = "your-secret-key"  # TODO: Use env var in production
 ALGORITHM = "HS256"
@@ -18,25 +18,29 @@ FAKE_USERS_DB = {
         "id": "1",
         "username": "admin",
         "email": "admin@example.com",
-        "password": "password"  # In production, store hashed passwords!
+        "password": "password",  # In production, store hashed passwords!
     }
 }
+
 
 class User(BaseModel):
     id: str
     username: str
     email: str
 
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
     user: User
+
 
 def verify_user(username: str, password: str) -> Optional[Dict[str, Any]]:
     user = FAKE_USERS_DB.get(username)
     if user and user["password"] == password:
         return user
     return None
+
 
 @auth_router.post("/login", response_model=TokenResponse)
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -52,6 +56,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
         "user": {
             "id": user["id"],
             "username": user["username"],
-            "email": user["email"]
-        }
+            "email": user["email"],
+        },
     }

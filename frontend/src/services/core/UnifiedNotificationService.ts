@@ -1,6 +1,6 @@
-import { UnifiedLogger } from './UnifiedLogger';
-import { UnifiedServiceRegistry } from '../unified/UnifiedServiceRegistry';
 import { WebSocket } from 'ws';
+import { UnifiedLogger } from '../../core/UnifiedLogger';
+import { UnifiedServiceRegistry } from '../unified/UnifiedServiceRegistry';
 
 export interface Notification {
   type: 'info' | 'warning' | 'error' | 'success';

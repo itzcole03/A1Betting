@@ -1,20 +1,17 @@
-import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Typography,
-  Box,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  Tooltip,
-} from '@mui/material';
 import { Info } from '@mui/icons-material';
-import { ShapValue } from '../types/explainability';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Tooltip,
+  Typography
+} from '@mui/material';
+import React from 'react';
+import { ShapValue } from '../../../types/explainability';
 
 interface ShapBreakdownModalProps {
   isOpen: boolean;

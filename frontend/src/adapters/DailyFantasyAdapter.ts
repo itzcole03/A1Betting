@@ -42,7 +42,7 @@ export class DailyFantasyAdapter implements DataSource<DailyFantasyData> {
       if (!response.ok) throw new Error('Failed to fetch projections');
       const data = await response.json();
       return { projections: data.projections };
-    } catch (error) {
+    } catch (_error) {
       // Optionally log error or send to PerformanceMonitor
       return { projections: [] };
     }
@@ -113,8 +113,8 @@ export class DailyFantasyAdapter implements DataSource<DailyFantasyData> {
       await this.eventBus.publish({
         type: 'daily-fantasy:data-updated',
         payload: {
+          data: { projectionCount: data.projections.length } as Record<string, unknown>,
           timestamp: Date.now(),
-          projectionCount: data.projections.length,
         },
       });
 
@@ -140,8 +140,8 @@ export class DailyFantasyAdapter implements DataSource<DailyFantasyData> {
     };
   }
 
-  public async connect(): Promise<void> {}
-  public async disconnect(): Promise<void> {}
+  public async connect(): Promise<void> { }
+  public async disconnect(): Promise<void> { }
   public async getData(): Promise<DailyFantasyData> {
     return this.cache.data as DailyFantasyData;
   }

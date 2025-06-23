@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { ArbitrageOpportunity } from '../types/index';
-import { FaCalculator, FaExchangeAlt, FaClock, FaChartLine } from 'react-icons/fa';
-import { UnifiedInput } from './base/UnifiedInput';
-import { calculateArbitrage, formatCurrency, formatPercentage } from '../utils/odds';
 import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { FaCalculator, FaChartLine, FaClock, FaExchangeAlt } from 'react-icons/fa';
+import { useBettingOpportunities } from '../hooks/UniversalHooks';
+import { ArbitrageOpportunity } from '../types/index';
+import { calculateArbitrage, formatCurrency, formatPercentage } from '../utils/odds';
+import { UnifiedInput } from './base/UnifiedInput';
 
 const Arbitrage: React.FC = () => {
   const [opportunities, setOpportunities] = useState<ArbitrageOpportunity[]>([]);
@@ -13,43 +14,50 @@ const Arbitrage: React.FC = () => {
     book2: +100,
   });
 
-  useEffect(() => {
-    // Simulate fetching arbitrage opportunities
-    const mockOpportunities: ArbitrageOpportunity[] = [
-      {
-        id: '1',
-        sport: 'NBA',
-        player: {
-          id: '1',
-          name: 'LeBron James',
-          team: {
-            id: '1',
-            name: 'Los Angeles Lakers',
-            abbreviation: 'LAL',
-            sport: 'NBA',
-            colors: {
-              primary: '#552583',
-              secondary: '#FDB927',
-            },
-          },
-          position: 'SF',
-          imageUrl: 'https://example.com/lebron.jpg',
-          stats: {},
-          form: 85,
-        },
-        propType: 'points',
-        books: [
-          { name: 'DraftKings', odds: -110, line: 26.5 },
-          { name: 'FanDuel', odds: +120, line: 26.5 },
-        ],
-        potentialProfit: 45.23,
-        expiresAt: new Date(Date.now() + 30 * 60000).toISOString(), // 30 minutes from now
-      },
-      // Add more mock opportunities
-    ];
+  // Fetch real arbitrage opportunities from backend
+  const { data: bettingData, isLoading: _isLoading, error: _error } = useBettingOpportunities();
 
-    setOpportunities(mockOpportunities);
-  }, []);
+  useEffect(() => {
+    // Use real data from backend if available, otherwise fall back to empty array
+    if (bettingData?.arbitrage_opportunities) {
+      const mappedOpportunities = bettingData.arbitrage_opportunities.map((opp: unknown, index: number) => {
+        const opportunity = opp as Record<string, unknown>;
+        return {
+          id: (opportunity.id as string) || index.toString(),
+          sport: (opportunity.sport as string) || 'NBA',
+          player: opportunity.player || {
+            id: '1',
+            name: (opportunity.playerName as string) || 'Unknown Player',
+            team: {
+              id: '1',
+              name: (opportunity.team as string) || 'Unknown Team',
+              abbreviation: (opportunity.teamAbbr as string) || 'UNK',
+              sport: (opportunity.sport as string) || 'NBA',
+              colors: {
+                primary: '#552583',
+                secondary: '#FDB927',
+              },
+            },
+            position: (opportunity.position as string) || 'Unknown',
+            imageUrl: (opportunity.imageUrl as string) || 'https://example.com/player.jpg',
+            stats: (opportunity.stats as Record<string, unknown>) || {},
+            form: (opportunity.form as number) || 85,
+          },
+          propType: (opportunity.propType as string) || 'points',
+          books: (opportunity.books as Array<{ name: string; odds: number; line: number }>) || [
+            { name: 'DraftKings', odds: -110, line: 26.5 },
+            { name: 'FanDuel', odds: +120, line: 26.5 },
+          ],
+          potentialProfit: (opportunity.potentialProfit as number) || 0,
+          expiresAt: (opportunity.expiresAt as string) || new Date(Date.now() + 30 * 60000).toISOString(),
+        };
+      });
+      setOpportunities(mappedOpportunities);
+    } else {
+      // Set empty array if no data
+      setOpportunities([]);
+    }
+  }, [bettingData]);
 
   const handleCalculatorChange = (book: 'book1' | 'book2', value: string) => {
     setCalculatorOdds(prev => ({
@@ -176,7 +184,7 @@ const Arbitrage: React.FC = () => {
                     </span>
                   </div>
                   <div className="mt-2 grid grid-cols-2 gap-4">
-                    {opp.books.map(book => (
+                    {opp.books.map((book: { name: string; odds: number; line: number }) => (
                       <div key={book.name} className="text-sm">
                         <span className="text-gray-600 dark:text-gray-400">{book.name}:</span>
                         <span className="ml-1 font-medium">

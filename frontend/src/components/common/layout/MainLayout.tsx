@@ -1,7 +1,7 @@
-import BetSlipSidebar from '../components/modern/BetSlipSidebar'; // To be created
 import React from 'react';
-import Sidebar from '../components/modern/Sidebar'; // To be created
 import { Outlet } from 'react-router-dom';
+import BetSlipSidebar from '../../modern/BetSlipSidebar';
+import Sidebar from '../../modern/Sidebar';
 
 // import Navbar from '../components/navigation/Navbar'; // Optional: if you want a top navbar as well
 
@@ -19,4 +19,4 @@ const MainLayout: React.FC = () => {
   );
 };
 
-export default MainLayout; 
+export default MainLayout;

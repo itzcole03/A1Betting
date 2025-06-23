@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import { BetRecord, ClvAnalysis, Opportunity } from '../types/core.js';
+import { BetRecord, ClvAnalysis } from '../types/core.js';
 import { BettingContext, BettingDecision, PerformanceMetrics, PredictionResult } from '../types/index.js';
 
 
@@ -52,7 +52,7 @@ export class UnifiedBettingCore extends EventEmitter {
   public async analyzeBettingOpportunity(context: BettingContext): Promise<BettingDecision> {
     try {
       // Check cache first
-      const cacheKey = `${context.playerId}:${context.metric}`;
+      const cacheKey = `${context.playerId}:${JSON.stringify(context.metrics)}`;
       let prediction = this.predictionCache.get(cacheKey);
 
       if (!prediction || Date.now() - prediction.timestamp > 300000) {
@@ -73,21 +73,35 @@ export class UnifiedBettingCore extends EventEmitter {
   private async generatePrediction(context: BettingContext): Promise<PredictionResult> {
     // Implement sophisticated prediction logic here
     return {
+      id: `pred_${Date.now()}`,
+      timestamp: Date.now(),
+      data: { predictedValue: 0 },
       confidence: 0,
-      predictedValue: 0,
-      factors: [],
-      timestamp: Date.now()
+      analysis: [],
+      strategy: {
+        strategy: 'default',
+        parameters: {},
+        expectedValue: 0,
+        riskScore: 0,
+        recommendations: []
+      },
+      metadata: {
+        duration: 0,
+        features: [],
+        dataSources: [],
+        analysisPlugins: [],
+        strategy: 'default'
+      }
     };
   }
 
   private generateDecision(prediction: PredictionResult, context: BettingContext): BettingDecision {
     const decision: BettingDecision = {
+      recommendation: 'pass',
       confidence: prediction.confidence,
-      recommendedStake: this.calculateStake(prediction),
-      prediction: prediction.predictedValue,
-      factors: prediction.factors,
-      timestamp: Date.now(),
-      context
+      stake: this.calculateStake(prediction),
+      expectedValue: (prediction.data.predictedValue as number) || 0,
+      reasoning: ['Default reasoning']
     };
 
     return decision;
@@ -138,7 +152,7 @@ export class UnifiedBettingCore extends EventEmitter {
 
   private calculateROI(bets: BetRecord[]): number {
     const totalStake = bets.reduce((sum, bet) => sum + bet.stake, 0);
-    const totalProfit = bets.reduce((sum, bet) => sum + bet.profitLoss, 0);
+    const totalProfit = bets.reduce((sum, bet) => sum + (bet.profitLoss ?? 0), 0);
     return totalStake ? (totalProfit / totalStake) * 100 : 0;
   }
 
@@ -149,4 +163,4 @@ export class UnifiedBettingCore extends EventEmitter {
   public updateConfig(config: Partial<typeof this.strategyConfig>): void {
     Object.assign(this.strategyConfig, config);
   }
-} 
+}

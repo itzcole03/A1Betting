@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
+import { ShapValue } from '../../../types/explainability';
 import { ShapBreakdownModal } from './ShapBreakdownModal';
-import { ShapValue } from '../types/explainability';
 
 interface ShapValueDisplayProps {
   feature: ShapValue;

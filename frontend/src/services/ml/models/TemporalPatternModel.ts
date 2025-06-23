@@ -3,7 +3,7 @@
  */
 
 import { BaseModel } from './BaseModel';
-import { ModelConfig, ModelMetrics, ModelPrediction } from '../types';
+import { ModelConfig, ModelMetrics, ModelPrediction } from '@/types';
 
 interface TemporalPatternConfig extends ModelConfig {
   features: string[];

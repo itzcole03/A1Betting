@@ -8,13 +8,13 @@ import '@testing-library/jest-dom';
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import useStore from '../../store/useStore';
+import useStore from '@/store/useStore';
 import { UnifiedStateManager } from '../../core/UnifiedState';
 import { UnifiedPredictionEngine } from '../../core/UnifiedPredictionEngine';
 import { UnifiedStrategyEngine } from '../../core/UnifiedStrategyEngine';
 import { UnifiedDataEngine } from '../../core/UnifiedDataEngine';
 import { EventBus } from '../../core/EventBus';
-import { MarketUpdate, Alert } from '../../types/core';
+import { MarketUpdate, Alert } from '@/types/core';
 import { AlertType } from '../../types/common';
 
 // Mock react-query

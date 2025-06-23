@@ -1,11 +1,11 @@
 import {
-  Sport,
-  PropType,
-  AlertType,
   AlertSeverity,
+  AlertType,
   EntryStatus,
   LineupType,
-} from './common.js';
+  PropType,
+  Sport,
+} from './common';
 
 /**
  * SHAP (SHapley Additive exPlanations) value vector for model explainability
@@ -353,6 +353,16 @@ export interface AnalysisResult {
   timestamp: number;
   confidence: number;
   risk_factors: string[];
+  insights?: string[];
+  risk_score?: number;
+  factors?: Record<string, number>;
+  shap_values?: ShapVector[];
+  meta_analysis?: {
+    expected_value?: number;
+    market_efficiency?: number;
+    prediction_stability?: number;
+    data_quality?: number;
+  };
   data: {
     historicalTrends: Array<{ trend: string; strength: number }>;
     marketSignals: Array<{ signal: string; strength: number }>;
@@ -672,264 +682,30 @@ export interface EventMap {
     config?: unknown;
     values?: Record<string, unknown>;
   };
-  'monitor:alert': {
-    id: string;
-    severity: AlertSeverity;
-    message: string;
-    timestamp: number;
-    component: string;
-    context: Record<string, unknown>;
-    acknowledged: boolean;
-  };
-  'betting:result': {
-    betId: string;
-    result: BetResult;
-    timestamp: number;
-    metadata?: Record<string, unknown>;
-  };
-  'strategy:update': {
-    strategyId: string;
-    status: string;
-    timestamp: number;
-    metadata?: Record<string, unknown>;
-  };
-  'config:initialized': { timestamp: number; status: string };
-  'config:loaded': { timestamp: number; status: string };
-  'feature:update': FeatureFlag;
-  'feature:updated': { featureId: string; timestamp: number };
-  'experiment:update': ExperimentConfig;
-  'experiment:updated': { experimentId: string; timestamp: number };
-  'market:update': MarketUpdate;
-  'prediction:update': Prediction;
-  'prediction:error': Error;
-  'risk:update': { profileId: string };
-  'risk:assessment': {
-    predictionId: string;
-    confidence: number;
-    riskLevel: 'low' | 'medium' | 'high';
-    maxStake: number;
+
+  // Additional events for adapters and analyzers
+  'sports-radar-updated': {
+    data: Record<string, unknown>;
     timestamp: number;
   };
-  'risk:profile:updated': { profileId: string };
-  'risk:profile:activated': { profileId: string };
-  'model:update': string;
-  'error:occurred': Error;
-  'performance:metric': {
-    name: string;
-    value: number;
+  'odds-updated': {
+    data: Record<string, unknown>;
     timestamp: number;
   };
-  'data:updated': { sourceId: string; data: { timestamp: number } };
-  'dataSource:registered': { sourceId: string; name: string; timestamp: number };
-  'dataSource:error': { sourceId: string; error: Error; timestamp: number };
-  'monitor:alert:acknowledged': { alertId: string; timestamp: number };
-  'risk:profile:created': { profileId: string };
-  'risk:profile:deleted': { profileId: string };
-  'risk:violation': {
-    type: AlertType;
-    severity: AlertSeverity;
-    title: string;
-    message: string;
-    metadata: Record<string, unknown>;
-  };
-  'risk:rule:added': { profileId: string; ruleId: string };
-  'risk:rule:updated': { profileId: string; ruleId: string };
-  'risk:rule:deleted': { profileId: string; ruleId: string };
-  'risk:rule:executed': { profileId: string; ruleId: string; context: Record<string, unknown> };
-  'analytics:flushed': { count: number; timestamp: number };
-  'analytics:config:updated': { config: Record<string, unknown>; timestamp: number };
-  'analytics:cleanup': { timestamp: number };
-  'cache:set': { key: string; timestamp: number; size: number; ttl: number };
-  'cache:hit': { key: string; timestamp: number; hits: number };
-  'cache:delete': { key: string; timestamp: number };
-  'cache:clear': { source?: string; timestamp?: number };
-  'cache:evict': { key: string; timestamp: number; reason: string };
-  'cache:cleanup': { expiredCount: number; timestamp: number };
-  'cache:config:updated': { config: Record<string, unknown>; timestamp: number };
-  'cache:shutdown': { timestamp: number };
-  'strategy:recommendation': BettingOpportunity;
-  'strategy:opportunities': DataPoint[];
-  'data-integration-completed': { timestamp: number; metrics: Record<string, unknown> };
-  'data-source-metric-updated': {
-    sourceId: string;
-    latency: number;
-    errorRate: number;
-    lastUpdate: number;
-    dataQuality: number;
-  };
-  'data:integrated': { integratedData: Record<string, unknown>; timestamp: number };
-  'cache:cleared': { source: string };
-  'config:update': ConfigUpdate;
-  'bet:placed': { data: { amount: number } };
-  'bet:settled': { data: { amount: number; outcome: 'win' | 'loss' } };
-  'analytics:report': AnalyticsReport;
-  'model:version:updated': {
-    modelId: string;
-    version: {
-      id: string;
-      version: string;
-      timestamp: number;
-      metrics: {
-        accuracy: number;
-        precision: number;
-        recall: number;
-        f1Score: number;
-      };
-      features: string[];
-      metadata: {
-        trainingDataSize: number;
-        trainingDuration: number;
-        framework: string;
-        hyperparameters: Record<string, unknown>;
-      };
-    };
-    totalVersions: number;
-  };
-  'model:version:check': {
-    modelId: string;
-    currentVersion: {
-      id: string;
-      version: string;
-      timestamp: number;
-      metrics: {
-        accuracy: number;
-        precision: number;
-        recall: number;
-        f1Score: number;
-      };
-      features: string[];
-      metadata: {
-        trainingDataSize: number;
-        trainingDuration: number;
-        framework: string;
-        hyperparameters: Record<string, unknown>;
-      };
-    };
-  };
-  'prediction:validated': {
-    predictionId: string;
-    isValid: boolean;
-    errors: string[];
-    warnings: string[];
-    metrics: {
-      confidence: number;
-      dataFreshness: number;
-      signalQuality: number;
-    };
-    context?: Record<string, unknown>;
-  };
-  'websocket:connected': { url: string };
-  'websocket:disconnected': { url: string };
-  'websocket:error': { url: string; error: unknown };
-  'websocket:reconnectFailed': { url: string };
-  'error:reported': {
-    error: Error;
-    context?: Record<string, unknown>;
-  };
-  'error:handled': {
-    error: Error;
-    metrics: ErrorMetrics;
-    emergency: boolean;
-  };
-  'error:emergency': {
-    error: Error;
+  'projection:analyzed': {
+    data: Record<string, unknown>;
     timestamp: number;
   };
-  'cache:miss': { key: string; timestamp: number; hits: number };
-  'model:version:rolled_back': {
-    modelId: string;
-    targetVersion: string;
-    remainingVersions: number;
+  'enhanced-analysis-completed': {
+    data: Record<string, unknown>;
     timestamp: number;
   };
-  'model:version:compared': {
-    modelId: string;
-    version1: string;
-    version2: string;
-    timestamp: number;
-  };
-  'websocket:recovery:succeeded': {
-    strategy: string;
-    duration: number;
-    metrics: {
-      totalRecoveryAttempts: number;
-      successfulRecoveries: number;
-      failedRecoveries: number;
-      averageRecoveryTime: number;
-      lastRecoveryTime: number;
-      recoveryHistory: Array<{
-        timestamp: number;
-        strategy: string;
-        success: boolean;
-        duration: number;
-      }>;
-    };
-  };
-  'websocket:recovery:failed': {
-    connectionId: string;
-    strategy: string;
-    error: Error;
-  };
-  'websocket:batch:sent': {
-    batchSize: number;
-    totalSize: number;
-    compressionRatio: number;
-    timestamp: number;
-  };
-  'websocket:server:health': {
-    server: string;
-    metrics: {
-      connections: number;
-      latency: number;
-      errorRate: number;
-      lastUpdate: number;
-    };
-    timestamp: number;
-  };
-  'websocket:server:error': {
-    server: string;
-    error: unknown;
-    timestamp: number;
-  };
-  'websocket:connection:created': {
-    server: string;
-    connectionId: string;
-    timestamp: number;
-  };
-  'websocket:server:recovered': {
-    server: string;
-    timestamp: number;
-    recoveryTime?: number;
-  };
-  'websocket:key:rotated': {
-    timestamp: number;
-    oldKey: string;
-    newKey: string;
-  };
-  'websocket:metrics:updated': Record<string, unknown>;
-  'websocket:security:alert': {
-    id: string;
-    timestamp: number;
-    type: 'encryption' | 'connection' | 'rate_limit' | 'key_rotation' | 'error';
-    severity: 'low' | 'medium' | 'high' | 'critical';
-    message: string;
-    details?: Record<string, unknown>;
-    acknowledged: boolean;
-    acknowledgedBy?: string;
-    acknowledgedAt?: number;
-  };
-  /**
-   * Emitted when daily fantasy projections are updated.
-   */
   'daily-fantasy:data-updated': {
-    projections: import('../adapters/DailyFantasyAdapter').DailyFantasyData['projections'];
+    data: Record<string, unknown>;
     timestamp: number;
   };
-  /**
-   * Emitted when social sentiment data is updated.
-   */
   'social-sentiment-updated': {
-    data: import('../adapters/SocialSentimentAdapter').SocialSentimentData[];
+    data: Record<string, unknown>;
     timestamp: number;
   };
 }

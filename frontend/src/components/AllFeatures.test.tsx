@@ -1,20 +1,23 @@
-import '@testing-library/jest-dom';
-import App from '../../App';
-import React from 'react';
-import useStore from '../../store/useStore';
-import { AlertType } from '../../types/common';
-import { BrowserRouter } from 'react-router-dom';
-import { EventBus } from '../../core/EventBus';
-import { MarketUpdate, Alert } from '../../types/core';
+import useStore from '@/store/useStore';
+import { Alert, MarketUpdate } from '@/types/core';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { UnifiedDataEngine } from '../../core/UnifiedDataEngine';
-import { UnifiedPredictionEngine } from '../../core/UnifiedPredictionEngine';
-import { UnifiedStateManager } from '../../core/UnifiedState';
-import { UnifiedStrategyEngine } from '../../core/UnifiedStrategyEngine';
-import { describe, it, expect, beforeEach, jest } from '@jest/globals';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { server, rest } from 'msw';
+import '@testing-library/jest-dom';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { setupServer } from 'msw/node';
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import App from '../App';
+import { EventBus } from '../core/EventBus';
+import { UnifiedDataEngine } from '../core/UnifiedDataEngine';
+import { UnifiedPredictionEngine } from '../core/UnifiedPredictionEngine';
+import { UnifiedStateManager } from '../core/UnifiedState';
+import { UnifiedStrategyEngine } from '../core/UnifiedStrategyEngine';
+import { AlertType } from '../types/common';
 
+
+// Set up MSW server
+const server = setupServer();
 
 // Master integration test suite (auto-generated)
 
@@ -284,4 +287,4 @@ describe('Full App Integration', () => {
 
   test('should check all components/pages', () => { expect(true).toBe(true); });
   test('should test state sync, responsiveness, performance, etc.', () => { expect(true).toBe(true); });
-}); 
+});

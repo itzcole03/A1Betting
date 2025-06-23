@@ -1,6 +1,10 @@
-import { BettingOpportunity, MarketUpdate, OddsUpdate } from '../types/core';
 import { EventBus } from '../core/EventBus';
-import { UnifiedConfigManager } from '../core/UnifiedConfigManager.ts';
+import { UnifiedConfigManager } from '../core/UnifiedConfigManager';
+import { UnifiedLogger } from '../core/UnifiedLogger';
+import { ArbitrageOpportunity } from '../types';
+import { OddsUpdate } from '../types/core';
+
+const logger = UnifiedLogger.getInstance('ArbitrageService');
 
 
 
@@ -169,7 +173,7 @@ export class ArbitrageService {
     for (const opportunity of opportunities) {
       if (this.isValidOpportunity(opportunity)) {
         this.opportunities.set(opportunity.id, opportunity);
-        
+
         // Emit opportunity found event
         this.eventBus.emit('data:updated', {
           sourceId: 'arbitrage',
@@ -285,7 +289,7 @@ export class ArbitrageService {
       Date.now() - odds1.timestamp,
       Date.now() - odds2.timestamp
     );
-    
+
     const timeWeight = Math.max(0, 1 - timeSinceUpdate / this.config.maxBetDelay);
     return timeWeight; // Simplified confidence calculation
   }
@@ -305,7 +309,7 @@ export class ArbitrageService {
       opportunity.totalStake <= this.config.maxExposure &&
       opportunity.risk.confidence >= 0.5 &&
       Date.now() - opportunity.timestamp <= this.config.maxBetDelay &&
-      opportunity.legs.every(leg => 
+      opportunity.legs.every(leg =>
         leg.odds >= this.config.minOdds &&
         leg.odds <= this.config.maxOdds &&
         leg.stake <= leg.maxStake
@@ -347,4 +351,4 @@ export class ArbitrageService {
   public clearMarketData(): void {
     this.marketData.clear();
   }
-} 
+}

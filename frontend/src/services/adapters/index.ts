@@ -1,7 +1,7 @@
 import { apiClient } from '../api/client';
 import { unifiedMonitor } from '../../core/UnifiedMonitor';
 import { APIError, AppError } from '../../core/UnifiedError';
-import { PrizePicksAdapter } from '../../types';
+import { PrizePicksAdapter } from '@/types';
 import { prizePicksAdapter } from './prizepicks';
 
 // Base adapter interface

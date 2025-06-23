@@ -1,5 +1,5 @@
-import type { EntryStatus, LineupType, PropType } from './common';
-import type { PlayerProp, Entry } from './core';
+import type { LineupType } from '../types/common';
+import type { Entry, PlayerProp } from '../types/core';
 
 
 
@@ -39,7 +39,7 @@ export const calculateWinProbability = (percentages: number[]): number => {
 export const generateRandomOddsChange = (currentOdds: string): string => {
   const change = Math.random() > 0.5 ? 5 : -5;
   const numOdds = parseInt(currentOdds);
-  
+
   if (numOdds > 0) {
     return Math.max(100, numOdds + change).toString();
   } else {
@@ -91,12 +91,12 @@ export const calculateKellyBet = (
   const decimalOdds = oddsToDecimal(odds);
   const impliedProb = 1 / decimalOdds;
   const edge = (probability / 100) - impliedProb;
-  
+
   if (edge <= 0) return 0;
-  
+
   const fraction = (edge * decimalOdds) / (decimalOdds - 1);
   const kellyBet = bankroll * Math.min(fraction, 0.1); // Cap at 10% of bankroll
-  
+
   return Math.round(kellyBet * 100) / 100;
 };
 
@@ -135,22 +135,22 @@ export const calculateWinProbabilityFactors = (
   factors: WinFactors
 ): number => {
   const baseProb = prop.confidence / 100;
-  
+
   // Apply weights to different factors
   let adjustedProb = baseProb;
-  
+
   if (factors.form) {
     adjustedProb *= (1 + (factors.form - 0.5) * 0.2);
   }
-  
+
   if (factors.weather) {
     adjustedProb *= (1 + factors.weather * 0.1);
   }
-  
+
   if (factors.rest) {
     adjustedProb *= (1 + factors.rest * 0.15);
   }
-  
+
   // Ensure probability is between 0 and 1
   return Math.min(Math.max(adjustedProb, 0), 1);
 };
@@ -164,9 +164,9 @@ export const calculateKellyCriterion = (
 ): number => {
   const q = 1 - probability;
   const b = decimalOdds - 1;
-  
+
   const kelly = (b * probability - q) / b;
-  
+
   // Apply fractional Kelly (default: full Kelly)
   return Math.max(0, kelly * fraction * bankroll);
 };
@@ -204,11 +204,11 @@ export const formatPercentage = (value: number): string => {
 // Calculate risk level multiplier
 export const getRiskMultiplier = (type: LineupType): number => {
   switch (type) {
-    case LineupType.SINGLE:
+    case 'single':
       return 0.5;
-    case LineupType.PARLAY:
+    case 'parlay':
       return 2;
-    case LineupType.TEASER:
+    case 'teaser':
     default:
       return 1;
   }
@@ -216,8 +216,8 @@ export const getRiskMultiplier = (type: LineupType): number => {
 
 // Calculate entry progress
 export const calculateEntryProgress = (entry: Entry): number => {
-  if (entry.status !== EntryStatus.PENDING) {
-    return entry.status === EntryStatus.WON ? 100 : 0;
+  if (entry.status !== 'pending') {
+    return entry.status === 'completed' ? 100 : 0;
   }
 
   const totalProgress = entry.props.reduce((acc, prop) => {
@@ -235,7 +235,7 @@ export const formatOdds = (odds: number, format: 'american' | 'decimal' = 'ameri
   if (format === 'decimal') {
     return odds.toFixed(2);
   }
-  
+
   const oddsString = odds > 0 ? `+${odds}` : odds.toString();
   return oddsString;
 };
@@ -248,27 +248,27 @@ export const calculateArbitrage = (
 ): { profit: number; split: [number, number] } | null => {
   const decimal1 = americanToDecimal(odds1);
   const decimal2 = americanToDecimal(odds2);
-  
+
   const prob1 = 1 / decimal1;
   const prob2 = 1 / decimal2;
-  
+
   const totalProb = prob1 + prob2;
-  
+
   if (totalProb < 1) {
     const stake1 = (stake * prob1) / totalProb;
     const stake2 = (stake * prob2) / totalProb;
-    
+
     const payout1 = stake1 * decimal1;
     const payout2 = stake2 * decimal2;
-    
+
     const profit = Math.min(payout1, payout2) - stake;
-    
+
     return {
       profit,
       split: [stake1, stake2],
     };
   }
-  
+
   return null;
 };
 
@@ -280,4 +280,4 @@ export const calculateValueRating = (
   const edge = modelProbability - impliedProbability;
   // Convert edge to 0-100 scale with diminishing returns
   return Math.min(100, Math.round(edge * 200));
-}; 
+};

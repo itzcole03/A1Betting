@@ -1,6 +1,7 @@
 # Copied and adapted from Newfolder (example structure)
-from typing import Dict, Any
 import time
+from typing import Any, Dict
+
 
 class FeatureCache:
     def __init__(self, ttl: int = 3600):

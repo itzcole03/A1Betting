@@ -9,7 +9,7 @@ import {
   FaHistory,
   FaTimes,
 } from 'react-icons/fa';
-import { Sport, PropType } from '../types';
+import { Sport, PropType } from '@/types';
 import { useFilterStore } from '../stores/filterStore';
 
 const filterVariants: Variants = {

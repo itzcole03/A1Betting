@@ -1,6 +1,6 @@
 import React from 'react';
-import { useStore } from '../../stores/useStore';
-import { Toast, ToastType } from '../../types';
+import { useStore } from '@/stores/useStore';
+import { Toast, ToastType } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   CheckCircleIcon,

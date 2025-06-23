@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { Bet, BetSlip, Odds, Sport, Event } from '../types/betting';
+import { Bet, BetSlip, Odds, Sport, Event } from '@/types/betting';
 
 interface BettingState {
   // Active bets

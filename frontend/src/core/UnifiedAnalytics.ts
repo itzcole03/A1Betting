@@ -1,4 +1,4 @@
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { UnifiedConfigManager } from './UnifiedConfig';
 import { UnifiedMonitor } from './UnifiedMonitor';
 

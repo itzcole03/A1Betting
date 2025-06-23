@@ -1,27 +1,27 @@
-import React from 'react';
+import { useThemeStore } from '@/stores/themeStore';
 import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Box,
-  Avatar,
-  Menu,
-  MenuItem,
-  Tooltip,
-  useTheme,
-  useMediaQuery,
-} from '@mui/material';
-import {
+  Brightness4 as DarkModeIcon,
+  Brightness7 as LightModeIcon,
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
   Settings as SettingsIcon,
-  Brightness4 as DarkModeIcon,
-  Brightness7 as LightModeIcon,
 } from '@mui/icons-material';
+import {
+  AppBar,
+  Avatar,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../providers/useAuth';
-import { useThemeStore } from '@/stores/themeStore';
+import { useAuth } from '../../../providers/useAuth';
 
 interface NavbarProps {
   onMenuClick?: () => void;
@@ -31,7 +31,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onMenuClick, showMenuButton = true }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const { isDarkMode, toggleTheme } = useThemeStore();
+  const { mode, toggleTheme } = useThemeStore();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -95,14 +95,23 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick, showMenuButton = true }) =
           }}
           variant="h6"
         >
-          <img alt="Sports Betting AI" src="/logo.svg" style={{ height: 32, width: 'auto' }} />
+
+
+          <img
+            alt="Sports Betting AI"
+            src="/logo.svg"
+            sx={{
+              height: 32,
+              width: 'auto'
+            }}
+          />
           {!isMobile && 'Sports Betting AI'}
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Tooltip title="Toggle theme">
             <IconButton color="inherit" onClick={toggleTheme}>
-              {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+              {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
           </Tooltip>
 

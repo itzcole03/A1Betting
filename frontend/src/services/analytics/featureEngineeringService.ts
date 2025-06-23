@@ -2,7 +2,7 @@ import { dataIntegrationService } from '../data/dataIntegrationService';
 import * as tf from '@tensorflow/tfjs';
 import { Matrix } from 'ml-matrix';
 import dayjs from 'dayjs';
-import { FeatureConfig, EngineeredFeatures, RawPlayerData } from '../types';
+import { FeatureConfig, EngineeredFeatures, RawPlayerData } from '@/types';
 import { FeatureSelector } from './featureSelection';
 import { FeatureTransformer } from './featureTransformation';
 import { FeatureValidator } from './featureValidation';

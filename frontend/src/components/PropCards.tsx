@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Card, CardContent, Typography, Button, Box, Chip, Skeleton } from '@mui/material';
 import { TrendingUp as TrendingUpIcon } from '@mui/icons-material';
-import { useAppStore } from '../../stores/useAppStore';
+import { useAppStore } from '@/stores/useAppStore';
 
 interface Prop {
   id: string;

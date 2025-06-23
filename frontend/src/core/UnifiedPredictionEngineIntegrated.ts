@@ -5,7 +5,7 @@
  * and connects properly to the backend services for Items 1 & 2 of the integration checklist.
  */
 
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { UnifiedConfigManager } from './UnifiedConfigManager';
 import { unifiedMonitor } from './UnifiedMonitor';

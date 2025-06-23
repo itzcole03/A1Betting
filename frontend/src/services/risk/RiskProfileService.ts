@@ -2,7 +2,7 @@ import { EventBus } from '../../unified/EventBus';
 import { ErrorHandler } from '../../core/ErrorHandler';
 import { PerformanceMonitor } from '../../unified/PerformanceMonitor';
 import { UnifiedConfig } from '../../unified/UnifiedConfig';
-import { RiskProfile, Prediction, EventMap } from '../../types/core';
+import { RiskProfile, Prediction, EventMap } from '@/types/core';
 
 export class RiskProfileService {
   private static instance: RiskProfileService;

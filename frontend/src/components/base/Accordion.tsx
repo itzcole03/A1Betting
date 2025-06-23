@@ -1,6 +1,6 @@
 import React from 'react';
 import { Disclosure, Transition } from '@headlessui/react';
-import { cn } from '../../utils/classNames';
+import { cn } from '@/utils/classNames';
 import { motion } from 'framer-motion';
 
 export interface AccordionItem {

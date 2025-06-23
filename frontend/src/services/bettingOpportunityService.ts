@@ -10,7 +10,7 @@ import {
   ArbitrageOpportunity,
   LineShoppingResult,
   Sportsbook,
-} from '../types/betting';
+} from '@/types/betting';
 import { NotificationPreferences } from './notification/notificationManager';
 import { MarketContext, BettingContext } from '../types/core';
 

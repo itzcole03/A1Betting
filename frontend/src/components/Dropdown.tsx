@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { cn } from '../../utils/classNames';
+import { cn } from '@/utils/classNames';
 
 export interface DropdownItem {
   key: string;

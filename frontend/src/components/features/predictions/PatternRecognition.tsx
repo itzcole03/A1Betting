@@ -15,7 +15,7 @@ import {
   Info as InfoIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import { formatPercentage, formatTimeAgo } from '../utils/formatters';
+import { formatPercentage, formatTimeAgo } from '@/utils/formatters';
 
 interface Pattern {
   name: string;

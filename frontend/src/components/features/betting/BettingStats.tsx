@@ -8,8 +8,8 @@ import {
   Tooltip,
   IconButton,
 } from '@mui/material';
-import { formatCurrency, formatPercentage, formatTimeAgo } from '../utils/formatters';
-import type { BettingStats as BettingStatsType, ModelPerformance } from '../types/betting';
+import { formatCurrency, formatPercentage, formatTimeAgo } from '@/utils/formatters';
+import type { BettingStats as BettingStatsType, ModelPerformance } from '@/types/betting';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import InfoIcon from '@mui/icons-material/Info';

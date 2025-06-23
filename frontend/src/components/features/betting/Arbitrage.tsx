@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { ArbitrageOpportunity } from '../types/index';
-import { FaCalculator, FaExchangeAlt, FaClock, FaChartLine } from 'react-icons/fa';
-import { UnifiedInput } from './base/UnifiedInput';
-import { calculateArbitrage, formatCurrency, formatPercentage } from '../utils/odds';
 import { motion } from 'framer-motion';
-import { useStore } from '../stores/useStore';
+import React, { useEffect, useState } from 'react';
+import { FaCalculator, FaChartLine, FaClock, FaExchangeAlt } from 'react-icons/fa';
+import { ArbitrageOpportunity } from '../../../types';
+import { calculateArbitrage, formatCurrency, formatPercentage } from '../../../utils/odds';
+import { UnifiedInput } from '../../base/UnifiedInput';
 
 const Arbitrage: React.FC = () => {
   const [opportunities, setOpportunities] = useState<ArbitrageOpportunity[]>([]);

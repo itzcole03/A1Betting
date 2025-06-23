@@ -1,4 +1,4 @@
-import { FeatureConfig, FeatureTransformationResult } from './types';
+import { FeatureConfig, FeatureTransformationResult } from '@/types';
 import { FeatureLogger } from './featureLogging';
 import { Matrix } from 'ml-matrix';
 

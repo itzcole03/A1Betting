@@ -61,6 +61,10 @@ export class TheOddsAdapter implements DataSource<TheOddsData> {
     }
   }
 
+  public async fetchData(): Promise<TheOddsData> {
+    return this.fetch();
+  }
+
   public async fetch(): Promise<TheOddsData> {
     const traceId = this.performanceMonitor.startTrace('the-odds-fetch');
 
@@ -78,7 +82,10 @@ export class TheOddsAdapter implements DataSource<TheOddsData> {
 
       this.eventBus.publish({
         type: 'odds-updated',
-        payload: { data },
+        payload: {
+          data: data as unknown as Record<string, unknown>,
+          timestamp: Date.now()
+        },
       });
 
       this.performanceMonitor.endTrace(traceId);
@@ -112,8 +119,8 @@ export class TheOddsAdapter implements DataSource<TheOddsData> {
     };
   }
 
-  public async connect(): Promise<void> {}
-  public async disconnect(): Promise<void> {}
+  public async connect(): Promise<void> { }
+  public async disconnect(): Promise<void> { }
   public async getData(): Promise<TheOddsData> {
     return this.cache.data as TheOddsData;
   }

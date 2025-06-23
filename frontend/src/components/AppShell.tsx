@@ -1,7 +1,7 @@
 import Header from './Header';
 import React from 'react';
 import Sidebar from './Sidebar';
-import useStore from '../../store/useStore';
+import useStore from '@/store/useStore';
 import { Outlet, useLocation } from 'react-router-dom';
 
 const AppShell: React.FC = () => {

@@ -16,7 +16,7 @@ import {
   ModelExplanation,
   PredictionWithExplanation,
   ModelType,
-} from './types';
+} from '@/types';
 
 export class FinalPredictionEngineImpl implements FinalPredictionEngine {
   private config: FinalPredictionEngineConfig;

@@ -1,5 +1,5 @@
 import { APIError, AppError } from '../core/UnifiedError';
-import { SocialSentimentData } from '../types';
+import { SocialSentimentData } from '@/types';
 import { get } from './api';
 import { unifiedMonitor } from '../core/UnifiedMonitor';
 

@@ -22,7 +22,7 @@ import {
   Error as ErrorIcon,
   Refresh as RefreshIcon,
 } from '@mui/icons-material';
-import { formatPercentage, formatCurrency } from '../utils/formatters';
+import { formatPercentage, formatCurrency } from '@/utils/formatters';
 import { debounce } from 'lodash';
 import type { ModelPrediction } from '../types/prediction';
 

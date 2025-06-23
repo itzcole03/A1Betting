@@ -1,58 +1,44 @@
-// Core Components
-export { default as Layout } from './Layout';
-export { default as ErrorBoundary } from './ErrorBoundary';
-export { default as LoadingScreen } from './LoadingScreen';
-export { default as LoadingSpinner } from './LoadingSpinner';
-export { default as Skeleton } from './Skeleton';
-export { default as Toast } from './Toast';
+// ============================================================================
+// MAIN COMPONENT EXPORTS
+// ============================================================================
 
-// Navigation Components
-export { default as Navbar } from './Navbar';
-export { default as Sidebar } from './Sidebar';
-export { default as ThemeToggle } from './ThemeToggle';
+// Dashboard Components
+export { default as ConsolidatedUniversalDashboard } from "./dashboard/ConsolidatedUniversalDashboard";
 
-// Betting Components
-export { default as BetBuilder } from './BetBuilder';
-export { default as BettingDashboard } from './BettingDashboard';
-export { default as PropCards } from './PropCards';
-export { default as PropList } from './PropList';
-export { default as LiveOddsTicker } from './LiveOddsTicker';
+// MoneyMaker Components
+export { default as ConsolidatedUniversalMoneyMaker } from "./moneymaker/ConsolidatedUniversalMoneyMaker";
 
 // Analytics Components
-export { default as Analytics } from './Analytics';
-export { default as PerformanceMetrics } from './PerformanceMetrics';
-export { default as PerformanceMonitor } from './PerformanceMonitor';
-export { default as MLFactorViz } from './MLFactorViz';
-export { default as ShapVisualization } from './ShapVisualization';
-
-// Risk Management Components
-export { default as RiskProfileManager } from './RiskProfileManager';
-export { default as RiskProfileSelector } from './RiskProfileSelector';
-export { default as UserConstraintsForm } from './UserConstraintsForm';
+export { default as ConsolidatedUniversalAnalytics } from "./analytics/ConsolidatedUniversalAnalytics";
 
 // Prediction Components
-export { default as PredictionDisplay } from './PredictionDisplay';
-export { default as RealtimePredictionDisplay } from './RealtimePredictionDisplay';
-export { default as PredictionEnhancement } from './PredictionEnhancement';
-export { default as PatternRecognition } from './PatternRecognition';
+export { default as UniversalPredictions } from "./predictions/UniversalPredictions";
+
+// Settings Components
+export { default as UltimateSettingsPage } from "./settings/UltimateSettingsPage";
+
+// Profile Components
+export { default as ProfilePage } from "./profile/ProfilePage";
 
 // UI Components
-export { default as FilterBar } from './FilterBar';
-export { default as ProgressBar } from './ProgressBar';
-export { default as SmartAlerts } from './SmartAlerts';
-export { default as NoResultsFallback } from './NoResultsFallback';
+export { default as ModernCommandPalette } from "./ui/ModernCommandPalette";
+export { default as ModernNotificationCenter } from "./ui/ModernNotificationCenter";
 
-// WebSocket Components
+// Mega UI Components
+export * from "./mega/MegaUI";
+export { default as MegaTheme } from "./mega/CyberTheme";
 
-// HOCs
-export { default as withErrorBoundary } from './withErrorBoundary';
+// Base Components
+export { default as ErrorBoundary } from "./ErrorBoundary";
 
-// Additional present and used components
-export { default as AppShell } from './AppShell';
-export { default as BankrollManager } from './BankrollManager';
-export { default as Dashboard } from './Dashboard';
-export { default as EntryCard } from './EntryCard';
-export { default as MLPredictions } from './MLPredictions';
-export { default as MarketAnalysisDashboard } from './MarketAnalysisDashboard';
-export { default as PerformanceAnalytics } from './PerformanceAnalytics';
-export { default as UnifiedBettingInterface } from './UnifiedBettingInterface';
+// Core Components
+export * from "./core";
+
+// Layout Components
+export * from "./layout";
+
+// Common Components
+export * from "./common";
+
+// Utility Components
+export * from "./ui";

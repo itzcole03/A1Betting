@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UnifiedInput } from './base/UnifiedInput';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useStore } from '../stores/useStore';
+import { useStore } from '@/stores/useStore';
 import {
   FaMoon,
   FaSun,

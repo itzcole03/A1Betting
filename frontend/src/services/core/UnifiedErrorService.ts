@@ -1,4 +1,4 @@
-import { UnifiedLogger } from './UnifiedLogger';
+import { UnifiedLogger } from '../../core/UnifiedLogger';
 import { UnifiedServiceRegistry } from '../unified/UnifiedServiceRegistry';
 import { UnifiedNotificationService } from './UnifiedNotificationService';
 

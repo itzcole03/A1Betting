@@ -3,8 +3,8 @@
  */
 
 import { BaseModel } from './BaseModel';
-import { AdvancedEnsembleConfig, ModelMetrics, ModelPrediction } from '../types';
-import { UnifiedLogger } from '../../core/UnifiedLogger';
+import { AdvancedEnsembleConfig, ModelMetrics, ModelPrediction } from '@/types';
+import { UnifiedLogger } from '@/core/UnifiedLogger';
 import { UnifiedErrorHandler } from '../../core/UnifiedErrorHandler';
 import { MarketIntelligenceModel } from './MarketIntelligenceModel';
 

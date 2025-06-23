@@ -101,7 +101,7 @@ export interface AdvancedPrediction {
 }
 
 // Re-export core types that are commonly used
-export type { ModelPerformance, RiskProfile, ShapExplanation } from './core';
+// TODO: Fix core type exports
 
 // Common utility types
 export type Nullable<T> = T | null;

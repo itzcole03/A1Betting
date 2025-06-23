@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '../../utils/classNames';
+import { cn } from '@/utils/classNames';
 
 export interface Column<T> {
   key: keyof T | string;

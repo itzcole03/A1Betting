@@ -6,7 +6,7 @@ import {
   ModelType,
   RiskLevel,
   FinalPrediction,
-} from '../types';
+} from '@/types';
 
 describe('FinalPredictionEngine', () => {
   const mockLogger = {

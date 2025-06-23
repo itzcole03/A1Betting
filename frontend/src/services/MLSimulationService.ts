@@ -8,7 +8,7 @@ import type {
   PlayerStats,
   PlayerForm,
   InjuryStatus,
-} from '../types/betting';
+} from '@/types/betting';
 import type { BetSimulationInput, BetSimulationResult } from '../types/simulation';
 import type { PredictionWithConfidence, ConfidenceBand, WinProbability, HistoricalPerformance, PerformanceHistory } from '../types/confidence';
 

@@ -1,4 +1,4 @@
-import { BettingOdds, LineShoppingResult, Sportsbook } from '../types/betting';
+import { BettingOdds, LineShoppingResult, Sportsbook } from '@/types/betting';
 import { EventEmitter } from 'events';
 
 export class LineShoppingService extends EventEmitter {

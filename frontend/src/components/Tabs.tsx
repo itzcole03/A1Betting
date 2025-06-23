@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tab } from '@headlessui/react';
-import { cn } from '../../utils/classNames';
+import { cn } from '@/utils/classNames';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export interface TabItem {

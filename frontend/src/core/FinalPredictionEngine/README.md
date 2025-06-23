@@ -46,7 +46,7 @@ The FinalPredictionEngine is the core intelligence layer of the platform, design
 
 ```typescript
 import { FinalPredictionEngineImpl } from './FinalPredictionEngine';
-import { FinalPredictionEngineConfig } from './types';
+import { FinalPredictionEngineConfig } from '@/types';
 
 // Initialize the engine
 const engine = new FinalPredictionEngineImpl(

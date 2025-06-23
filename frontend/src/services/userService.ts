@@ -2,7 +2,7 @@
 import { API_CONFIG } from '../config/apiConfig.js';
 import { wrapWithRateLimit } from './rateLimit/wrapWithRateLimit.js';
 import { User, UserPreferences } from '../types/api.js';
-import type { PrizePicksEntry } from '../types';
+import type { PrizePicksEntry } from '@/types';
 import { unifiedMonitor } from '../core/UnifiedMonitor';
 
 // src/services/userService.ts

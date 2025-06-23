@@ -27,7 +27,7 @@ const updateFramerMotionImports = (content: string): string => {
 const createSmartSidebar = (): void => {
   const sidebarContent = `import React from 'react';
 import { motion } from 'framer-motion/dist/framer-motion';
-import { useStore } from '../stores/useStore';
+import { useStore } from '@/stores/useStore';
 import { Button, Card } from './ui/UnifiedUI';
 
 interface SmartSidebarProps {

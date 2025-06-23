@@ -1,8 +1,8 @@
-import useStore from '../../store/useStore';
+import useStore from '@/store/useStore';
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import { UnifiedStateManager } from '../../core/UnifiedState';
 import { EventBus } from '../../core/EventBus';
-import { BettingOpportunity, MarketUpdate, Alert } from '../../types/core';
+import { BettingOpportunity, MarketUpdate, Alert } from '@/types/core';
 
 test('should test state sync, context integration, etc.', () => {
   expect(true).toBe(true);

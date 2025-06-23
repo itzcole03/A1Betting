@@ -1,14 +1,34 @@
-import { EventEmitter } from 'events';
+// Browser-compatible EventEmitter replacement
+class EventEmitter {
+  private events: { [key: string]: Function[] } = {};
+
+  on(event: string, listener: Function) {
+    if (!this.events[event]) {
+      this.events[event] = [];
+    }
+    this.events[event].push(listener);
+  }
+
+  off(event: string, listener: Function) {
+    if (!this.events[event]) return;
+    this.events[event] = this.events[event].filter((l) => l !== listener);
+  }
+
+  emit(event: string, ...args: any[]) {
+    if (!this.events[event]) return;
+    this.events[event].forEach((listener) => listener(...args));
+  }
+}
 import {
   BettingOdds,
   MarketMetrics,
   MarketEfficiencyMetrics,
   MarketAnomaly,
-} from '../types/betting';
-import { MarketContext } from '../types/core';
-import { AdvancedMLService } from './analytics/advancedMLService';
-import { HyperAdvancedMLService } from './analytics/hyperAdvancedMLService';
-import { UltraMLService } from './analytics/ultraMLService';
+} from "../types/betting";
+import { MarketContext } from "../types/core";
+import { AdvancedMLService } from "./analytics/advancedMLService";
+import { HyperAdvancedMLService } from "./analytics/hyperAdvancedMLService";
+import { UltraMLService } from "./analytics/ultraMLService";
 
 export class MarketAnalysisService extends EventEmitter {
   private static instance: MarketAnalysisService;
@@ -62,30 +82,39 @@ export class MarketAnalysisService extends EventEmitter {
 
     // Calculate market efficiency with advanced metrics
     const efficiencyMetrics = this.calculateMarketEfficiency(eventId, odds);
-    this.emit('marketEfficiency', { eventId, metrics: efficiencyMetrics });
+    this.emit("marketEfficiency", { eventId, metrics: efficiencyMetrics });
 
     // Emit real-time market updates
-    this.emit('marketUpdate', { eventId, metrics: currentMetrics });
+    this.emit("marketUpdate", { eventId, metrics: currentMetrics });
   }
 
-  private updateVolumeMetrics(metrics: MarketMetrics, odds: BettingOdds[]): void {
+  private updateVolumeMetrics(
+    metrics: MarketMetrics,
+    odds: BettingOdds[],
+  ): void {
     const currentTime = Date.now();
     const recentVolume = odds.reduce((sum, odd) => sum + (odd.volume || 0), 0);
 
     // Update volume history with time-based window
     metrics.volume.volumeHistory = metrics.volume.volumeHistory
-      .filter(v => currentTime - v.timestamp <= this.VOLUME_WINDOW)
+      .filter((v) => currentTime - v.timestamp <= this.VOLUME_WINDOW)
       .concat({ timestamp: currentTime, volume: recentVolume });
 
-    metrics.volume.totalVolume = metrics.volume.volumeHistory.reduce((sum, v) => sum + v.volume, 0);
+    metrics.volume.totalVolume = metrics.volume.volumeHistory.reduce(
+      (sum, v) => sum + v.volume,
+      0,
+    );
     metrics.volume.lastUpdate = currentTime;
   }
 
-  private updateLiquidityMetrics(metrics: MarketMetrics, odds: BettingOdds[]): void {
+  private updateLiquidityMetrics(
+    metrics: MarketMetrics,
+    odds: BettingOdds[],
+  ): void {
     if (odds.length < 2) return;
 
-    const bestBack = Math.max(...odds.map(o => o.odds));
-    const bestLay = Math.min(...odds.map(o => o.odds));
+    const bestBack = Math.max(...odds.map((o) => o.odds));
+    const bestLay = Math.min(...odds.map((o) => o.odds));
     const spread = bestBack - bestLay;
     const totalStake = odds.reduce((sum, odd) => sum + (odd.maxStake || 0), 0);
 
@@ -101,11 +130,13 @@ export class MarketAnalysisService extends EventEmitter {
   private updateVolatilityMetrics(metrics: MarketMetrics): void {
     if (metrics.volume.volumeHistory.length < 2) return;
 
-    const volumes = metrics.volume.volumeHistory.map(v => v.volume);
+    const volumes = metrics.volume.volumeHistory.map((v) => v.volume);
     const returns = volumes.slice(1).map((v, i) => Math.log(v / volumes[i]));
 
     const mean = returns.reduce((sum, r) => sum + r, 0) / returns.length;
-    const variance = returns.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) / returns.length;
+    const variance =
+      returns.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) /
+      returns.length;
 
     metrics.volatility = Math.sqrt(variance) * Math.sqrt(252); // Annualized volatility
   }
@@ -113,9 +144,13 @@ export class MarketAnalysisService extends EventEmitter {
   private updateTrendMetrics(metrics: MarketMetrics): void {
     if (metrics.volume.volumeHistory.length < 2) return;
 
-    const recentVolumes = metrics.volume.volumeHistory.slice(-this.TREND_WINDOW);
+    const recentVolumes = metrics.volume.volumeHistory.slice(
+      -this.TREND_WINDOW,
+    );
     const xMean = (recentVolumes.length - 1) / 2;
-    const yMean = recentVolumes.reduce((sum, v) => sum + v.volume, 0) / recentVolumes.length;
+    const yMean =
+      recentVolumes.reduce((sum, v) => sum + v.volume, 0) /
+      recentVolumes.length;
 
     let numerator = 0;
     let denominator = 0;
@@ -133,18 +168,21 @@ export class MarketAnalysisService extends EventEmitter {
   private async detectAnomalies(
     eventId: string,
     metrics: MarketMetrics,
-    odds: BettingOdds[]
+    odds: BettingOdds[],
   ): Promise<void> {
     const anomalies: MarketAnomaly[] = [];
 
     // Volume anomaly detection with ML enhancement
     if (metrics.volume.volumeHistory.length >= 5) {
-      const recentVolumes = metrics.volume.volumeHistory.slice(-5).map(v => v.volume);
-      const mlPrediction = await this.advancedML.predictVolumeAnomaly(recentVolumes);
+      const recentVolumes = metrics.volume.volumeHistory
+        .slice(-5)
+        .map((v) => v.volume);
+      const mlPrediction =
+        await this.advancedML.predictVolumeAnomaly(recentVolumes);
 
       if (mlPrediction.isAnomaly) {
         anomalies.push({
-          type: 'volume',
+          type: "volume",
           severity: this.getAnomalySeverity(mlPrediction.deviation),
           description: `ML-detected volume anomaly: ${mlPrediction.deviation.toFixed(2)} standard deviations from expected`,
           timestamp: Date.now(),
@@ -180,16 +218,19 @@ export class MarketAnalysisService extends EventEmitter {
     // Store and emit anomalies
     if (anomalies.length > 0) {
       this.anomalies.set(eventId, anomalies);
-      this.emit('marketAnomaly', { eventId, anomalies });
+      this.emit("marketAnomaly", { eventId, anomalies });
     }
   }
 
-  private async detectPriceAnomaly(odds: BettingOdds[]): Promise<MarketAnomaly | null> {
-    const pricePrediction = await this.hyperAdvancedML.predictPriceAnomaly(odds);
+  private async detectPriceAnomaly(
+    odds: BettingOdds[],
+  ): Promise<MarketAnomaly | null> {
+    const pricePrediction =
+      await this.hyperAdvancedML.predictPriceAnomaly(odds);
 
     if (pricePrediction.isAnomaly) {
       return {
-        type: 'price',
+        type: "price",
         severity: this.getAnomalySeverity(pricePrediction.deviation),
         description: `ML-detected price anomaly: ${pricePrediction.deviation.toFixed(2)} standard deviations from expected`,
         timestamp: Date.now(),
@@ -203,12 +244,14 @@ export class MarketAnalysisService extends EventEmitter {
     return null;
   }
 
-  private async detectSpreadAnomaly(odds: BettingOdds[]): Promise<MarketAnomaly | null> {
+  private async detectSpreadAnomaly(
+    odds: BettingOdds[],
+  ): Promise<MarketAnomaly | null> {
     const spreadPrediction = await this.ultraML.predictSpreadAnomaly(odds);
 
     if (spreadPrediction.isAnomaly) {
       return {
-        type: 'spread',
+        type: "spread",
         severity: this.getAnomalySeverity(spreadPrediction.deviation),
         description: `ML-detected spread anomaly: ${spreadPrediction.deviation.toFixed(2)} standard deviations from expected`,
         timestamp: Date.now(),
@@ -224,13 +267,16 @@ export class MarketAnalysisService extends EventEmitter {
 
   private async detectLiquidityAnomaly(
     metrics: MarketMetrics,
-    odds: BettingOdds[]
+    odds: BettingOdds[],
   ): Promise<MarketAnomaly | null> {
-    const liquidityPrediction = await this.advancedML.predictLiquidityAnomaly(metrics, odds);
+    const liquidityPrediction = await this.advancedML.predictLiquidityAnomaly(
+      metrics,
+      odds,
+    );
 
     if (liquidityPrediction.isAnomaly) {
       return {
-        type: 'liquidity',
+        type: "liquidity",
         severity: this.getAnomalySeverity(liquidityPrediction.deviation),
         description: `ML-detected liquidity anomaly: ${liquidityPrediction.deviation.toFixed(2)} standard deviations from expected`,
         timestamp: Date.now(),
@@ -244,13 +290,16 @@ export class MarketAnalysisService extends EventEmitter {
     return null;
   }
 
-  private getAnomalySeverity(deviation: number): 'low' | 'medium' | 'high' {
-    if (deviation >= 3.0) return 'high';
-    if (deviation >= 2.0) return 'medium';
-    return 'low';
+  private getAnomalySeverity(deviation: number): "low" | "medium" | "high" {
+    if (deviation >= 3.0) return "high";
+    if (deviation >= 2.0) return "medium";
+    return "low";
   }
 
-  private calculateMarketEfficiency(eventId: string, odds: BettingOdds[]): MarketEfficiencyMetrics {
+  private calculateMarketEfficiency(
+    eventId: string,
+    odds: BettingOdds[],
+  ): MarketEfficiencyMetrics {
     const metrics = this.marketMetrics.get(eventId);
     if (!metrics) {
       return {
@@ -278,8 +327,8 @@ export class MarketAnalysisService extends EventEmitter {
   private calculateSpreadEfficiency(odds: BettingOdds[]): number {
     if (odds.length < 2) return 0;
 
-    const bestBack = Math.max(...odds.map(o => o.odds));
-    const bestLay = Math.min(...odds.map(o => o.odds));
+    const bestBack = Math.max(...odds.map((o) => o.odds));
+    const bestLay = Math.min(...odds.map((o) => o.odds));
     const spread = bestBack - bestLay;
     const midPrice = (bestBack + bestLay) / 2;
 
@@ -287,10 +336,15 @@ export class MarketAnalysisService extends EventEmitter {
     return Math.max(0, 1 - spread / midPrice);
   }
 
-  private calculateVolumeEfficiency(metrics: MarketMetrics, odds: BettingOdds[]): number {
+  private calculateVolumeEfficiency(
+    metrics: MarketMetrics,
+    odds: BettingOdds[],
+  ): number {
     if (odds.length < 2) return 0;
 
-    const spread = Math.max(...odds.map(o => o.odds)) - Math.min(...odds.map(o => o.odds));
+    const spread =
+      Math.max(...odds.map((o) => o.odds)) -
+      Math.min(...odds.map((o) => o.odds));
     const volume = metrics.volume.totalVolume;
 
     // Higher volume relative to spread indicates higher efficiency
@@ -305,16 +359,23 @@ export class MarketAnalysisService extends EventEmitter {
     const volumeChanges = recentVolumes
       .slice(1)
       .map((v, i) => Math.abs(v.volume - recentVolumes[i].volume));
-    const avgChange = volumeChanges.reduce((sum, change) => sum + change, 0) / volumeChanges.length;
+    const avgChange =
+      volumeChanges.reduce((sum, change) => sum + change, 0) /
+      volumeChanges.length;
 
     return avgChange / metrics.volume.totalVolume;
   }
 
-  private calculateMarketDepth(metrics: MarketMetrics, odds: BettingOdds[]): number {
+  private calculateMarketDepth(
+    metrics: MarketMetrics,
+    odds: BettingOdds[],
+  ): number {
     if (odds.length < 2) return 0;
 
     const totalStake = odds.reduce((sum, odd) => sum + (odd.maxStake || 0), 0);
-    const spread = Math.max(...odds.map(o => o.odds)) - Math.min(...odds.map(o => o.odds));
+    const spread =
+      Math.max(...odds.map((o) => o.odds)) -
+      Math.min(...odds.map((o) => o.odds));
 
     // Higher total stake relative to spread indicates deeper market
     return totalStake / (spread * 1000); // Normalize to reasonable range
@@ -328,10 +389,156 @@ export class MarketAnalysisService extends EventEmitter {
     return this.anomalies.get(eventId) || [];
   }
 
-  public getMarketEfficiency(eventId: string): MarketEfficiencyMetrics | undefined {
+  public getMarketEfficiency(
+    eventId: string,
+  ): MarketEfficiencyMetrics | undefined {
     const metrics = this.marketMetrics.get(eventId);
     if (!metrics) return undefined;
 
     return this.calculateMarketEfficiency(eventId, []);
   }
+
+  // Missing methods required by MarketAnalysisDashboard
+  public async getOddsMovements(
+    eventId: string,
+    timeRange: string,
+  ): Promise<any> {
+    const cacheKey = `odds_movements_${eventId}_${timeRange}`;
+    const cached = this.cache?.get(cacheKey);
+    if (cached) return cached;
+
+    // Mock implementation - replace with actual API call
+    const movements = {
+      eventId,
+      timeRange,
+      movements: [
+        { timestamp: Date.now() - 3600000, odds: 1.85, direction: "up" },
+        { timestamp: Date.now() - 1800000, odds: 1.9, direction: "up" },
+        { timestamp: Date.now(), odds: 1.88, direction: "down" },
+      ],
+      totalChange: 0.03,
+      volatility: 0.15,
+    };
+
+    this.cache?.set(cacheKey, movements, 300000); // 5 minutes cache
+    return movements;
+  }
+
+  public async getVolumeAnalysis(
+    eventId: string,
+    timeRange: string,
+  ): Promise<any> {
+    const metrics = this.marketMetrics.get(eventId);
+    if (!metrics) {
+      return {
+        eventId,
+        totalVolume: 0,
+        averageVolume: 0,
+        peakVolume: 0,
+        volumeGrowth: 0,
+      };
+    }
+
+    return {
+      eventId,
+      totalVolume: metrics.volume.totalVolume,
+      averageVolume:
+        metrics.volume.totalVolume / (metrics.volume.volumeHistory.length || 1),
+      peakVolume: Math.max(
+        ...metrics.volume.volumeHistory.map((v) => v.volume),
+      ),
+      volumeGrowth: metrics.trend || 0,
+    };
+  }
+
+  public async getSentimentData(eventId: string): Promise<any> {
+    // Mock sentiment data - replace with actual sentiment analysis
+    return {
+      eventId,
+      sentiment: "positive",
+      score: 0.65,
+      confidence: 0.8,
+      sources: ["twitter", "reddit", "news"],
+      breakdown: {
+        positive: 65,
+        neutral: 25,
+        negative: 10,
+      },
+    };
+  }
+
+  public async getArbitrageOpportunities(eventId: string): Promise<any[]> {
+    // Mock arbitrage opportunities - replace with actual detection
+    return [
+      {
+        id: `arb_${eventId}_1`,
+        eventId,
+        bookmakers: ["bookmaker1", "bookmaker2"],
+        profit: 0.025,
+        stake: 1000,
+        confidence: 0.9,
+      },
+    ];
+  }
+
+  public async getMarketDepth(eventId: string): Promise<any> {
+    const metrics = this.marketMetrics.get(eventId);
+    if (!metrics) {
+      return {
+        eventId,
+        depth: 0,
+        liquidityScore: 0,
+      };
+    }
+
+    return {
+      eventId,
+      depth: metrics.liquidity || 0,
+      liquidityScore: Math.min(metrics.liquidity / 1000, 1), // Normalized score
+    };
+  }
+
+  public async getLiquidityMetrics(eventId: string): Promise<any> {
+    const metrics = this.marketMetrics.get(eventId);
+    if (!metrics) {
+      return {
+        eventId,
+        liquidity: 0,
+        spread: 0,
+        marketDepth: 0,
+      };
+    }
+
+    return {
+      eventId,
+      liquidity: metrics.liquidity,
+      spread: 0.02, // Mock spread
+      marketDepth: metrics.liquidity,
+    };
+  }
+
+  public async getVolatilityData(
+    eventId: string,
+    timeRange: string,
+  ): Promise<any> {
+    const metrics = this.marketMetrics.get(eventId);
+    if (!metrics) {
+      return {
+        eventId,
+        volatility: 0,
+        historicalVolatility: 0,
+        impliedVolatility: 0,
+      };
+    }
+
+    return {
+      eventId,
+      volatility: metrics.volatility,
+      historicalVolatility: metrics.volatility * 0.9,
+      impliedVolatility: metrics.volatility * 1.1,
+    };
+  }
+
+  // Add cache property for the methods above
+  private cache = new Map<string, any>();
 }

@@ -2,12 +2,15 @@
 import logging
 from typing import Any
 
+
 class FeatureLogger:
     def __init__(self, name: str = "FeatureLogger"):
         self.logger = logging.getLogger(name)
         if not self.logger.hasHandlers():
             handler = logging.StreamHandler()
-            formatter = logging.Formatter('[%(asctime)s] %(levelname)s %(name)s: %(message)s')
+            formatter = logging.Formatter(
+                "[%(asctime)s] %(levelname)s %(name)s: %(message)s"
+            )
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
         self.logger.setLevel(logging.INFO)

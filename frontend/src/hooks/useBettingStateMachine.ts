@@ -1,5 +1,5 @@
 import useStore from '../store/useStore';
-import { BettingDecision, PlayerProp } from '../types';
+import { BettingDecision, PlayerProp } from '@/types';
 import { useCallback } from 'react';
 import { useStateMachine } from './useStateMachine';
 

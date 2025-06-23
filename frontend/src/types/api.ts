@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 export interface User {
   id: string;
   username: string;
@@ -115,3 +117,22 @@ export interface FilterParams {
 }
 
 export type ApiRequestParams = PaginationParams & FilterParams;
+
+// Express.js route types for frontend API routes
+export interface ExpressApiRequest extends Request {
+  params: {
+    modelName?: string;
+    [key: string]: string | undefined;
+  };
+  query: {
+    [key: string]: string | string[] | undefined;
+  };
+  body: unknown;
+}
+
+export interface ExpressApiResponse extends Response {
+  json(body: unknown): this;
+  status(code: number): this;
+}
+
+export type ExpressApiHandler = (req: ExpressApiRequest, res: ExpressApiResponse) => Promise<void | ExpressApiResponse>;

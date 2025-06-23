@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useFilterStore } from '../stores/filterStore';
 import { useStrategyInput } from '../contexts/StrategyInputContext';
 import { useBettingAnalytics } from './useBettingAnalytics';
-import { Sport, PropType } from '../types';
+import { Sport, PropType } from '@/types';
 
 export function useFilteredPredictions() {
   const { activeFilters } = useFilterStore();

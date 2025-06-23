@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getLogger } from './../../core/logging/logger.ts'; // Added .ts extension
-import { getMetrics } from './../../core/metrics/metrics.ts'; // Added .ts extension
-// import { predictionService } from './../../services/predictions'; // Flagged as missing file, commented out
+import { getLogger } from './../../core/logging/logger'; // Added .ts extension
+import { getMetrics } from './../../core/metrics/metrics'; // Added .ts extension
+import { PredictionIntegrationService } from './../../services/prediction/PredictionIntegrationService';
 
 const logger = getLogger('PredictionGenerator');
 const metrics = getMetrics();
+const predictionService = new PredictionIntegrationService();
 
 interface GeneratePredictionsRequest {
   modelName: string;

@@ -23,7 +23,7 @@ import {
   Cpu,
   Activity,
 } from "lucide-react";
-import { Line, Radar, Scatter } from "react-chartjs-2";
+import SafeChart from "../ui/SafeChart";
 import {
   Chart as ChartJS,
   CategoryScale,

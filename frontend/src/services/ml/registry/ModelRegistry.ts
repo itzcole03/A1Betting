@@ -1,5 +1,5 @@
 import { BaseModel } from '../models/BaseModel';
-import { ModelConfig, ModelMetrics, ModelType } from '../types';
+import { ModelConfig, ModelMetrics, ModelType } from '@/types';
 import { EventEmitter } from 'events';
 
 export class ModelRegistry extends EventEmitter {

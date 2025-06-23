@@ -7,7 +7,7 @@ import {
   TeaserLeg,
   TeaserStrategy,
   RiskProfileType,
-} from '../types/betting';
+} from '@/types/betting';
 import { Market } from '../types/sports';
 
 export class BettingStrategyService {

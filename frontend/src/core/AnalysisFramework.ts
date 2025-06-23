@@ -1,4 +1,4 @@
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { TimestampedData, AnalysisResult } from '../types/core';
 import { UnifiedMonitor } from './UnifiedMonitor';

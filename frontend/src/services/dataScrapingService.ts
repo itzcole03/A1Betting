@@ -1,5 +1,5 @@
 import { APIError, AppError } from '../core/UnifiedError';
-import { DailyFantasyProjection } from '../types';
+import { DailyFantasyProjection } from '@/types';
 import { get, post } from './api';
 import { unifiedMonitor } from '../core/UnifiedMonitor'; // Added for tracing/error reporting
 

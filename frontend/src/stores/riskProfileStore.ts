@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { RiskProfile, RiskProfileType, DEFAULT_RISK_PROFILES } from '../types/betting';
+import { RiskProfile, RiskProfileType, DEFAULT_RISK_PROFILES } from '@/types/betting';
 
 interface RiskState {
   currentProfile: RiskProfile;

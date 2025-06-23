@@ -1,4 +1,4 @@
-import { UnifiedMetrics } from './types';
+import { UnifiedMetrics } from '@/types';
 
 class Metrics implements UnifiedMetrics {
   private metrics: Map<string, number> = new Map();

@@ -16,7 +16,7 @@ describe('API Endpoints', () => {
 
   test('should test login, register, logout, lineups, profile, etc.', () => { expect(true).toBe(true); });
 }); 
-import { api } from '../utils/api.ts';
+import { api } from '../utils/api';
 const apiService = {
   getProps: async (filters: { sport: string; type: string }) => {
     const res = await api.get('/props', { params: filters });

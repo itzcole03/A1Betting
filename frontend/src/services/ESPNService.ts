@@ -1,4 +1,5 @@
-import axios, { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { EventBus } from '../unified/EventBus.js';
 import { UnifiedConfig } from '../unified/UnifiedConfig.js';
 
@@ -126,7 +127,7 @@ export class ESPNService {
     metric?: string;
     date?: string;
   }): Promise<ESPNFeatures> {
-    const features: ESPNFeatures = { };
+    const features: ESPNFeatures = {};
     // Game-level features
     if (context.gameId) {
       const game = await this.getGame(context.gameId);
@@ -226,7 +227,7 @@ export class ESPNService {
   }
 
   // Legacy config initializer is now unused; config is loaded directly from UnifiedConfig
-// private initializeConfig(): ESPNConfig { ... }
+  // private initializeConfig(): ESPNConfig { ... }
 
   private setupEventListeners(): void {
     // Listen for game status updates

@@ -1,7 +1,7 @@
 import React from 'react';
-import { PrizePicksProps, SocialSentimentData } from '../../types';
+import { PrizePicksProps, SocialSentimentData } from '@/types';
 import { TrendingUp, TrendingDown, AlertCircle, ExternalLink, Info, CheckCircle } from 'lucide-react';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 
 
 interface PropCardProps {

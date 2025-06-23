@@ -5,7 +5,7 @@ import * as tf from '@tensorflow/tfjs';
 import * as shap from 'shap';
 import { KellyCriterion } from '../strategies/KellyCriterion';
 import { BestBetSelector } from '../strategies/BestBetSelector';
-import { UnifiedLogger } from '../../core/UnifiedLogger';
+import { UnifiedLogger } from '@/core/UnifiedLogger';
 import { UnifiedMonitor } from '../../core/UnifiedMonitor';
 
 export class ModelEvaluator {

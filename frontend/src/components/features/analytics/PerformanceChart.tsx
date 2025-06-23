@@ -1,7 +1,7 @@
+import { useAppStore } from '@/store/useAppStore';
 import Chart from 'chart.js/auto';
 import React, { useEffect, useRef } from 'react';
-import { aggregatePerformanceData } from '../../utils/analyticsHelpers'; 
-import { useAppStore } from '../../store/useAppStore';
+import { aggregatePerformanceData } from '../../../utils/analyticsHelpers';
 
 
 const PerformanceChart: React.FC = () => {
@@ -29,12 +29,12 @@ const PerformanceChart: React.FC = () => {
     if (chartInstanceRef.current) {
       chartInstanceRef.current.destroy();
     }
-    
+
     if ((labels?.length ?? 0) === 0 && (profitData?.length ?? 0) === 0 && Array.isArray(entries) && entries.length > 0) {
-        // This case can happen if entries exist but are all pending/active leading to no chartable profit data yet.
-        // Or if aggregatePerformanceData returns empty for other reasons despite entries existing.
-        console.warn("[PerformanceChart] Entries exist but no chartable data was generated.");
-        // Optionally render a message here or let the "No betting history" message handle it if entries array itself becomes empty after filtering.
+      // This case can happen if entries exist but are all pending/active leading to no chartable profit data yet.
+      // Or if aggregatePerformanceData returns empty for other reasons despite entries existing.
+      console.warn("[PerformanceChart] Entries exist but no chartable data was generated.");
+      // Optionally render a message here or let the "No betting history" message handle it if entries array itself becomes empty after filtering.
     }
 
     chartInstanceRef.current = new Chart(chartRef.current, {
@@ -42,14 +42,14 @@ const PerformanceChart: React.FC = () => {
       data: {
         labels: labels,
         datasets: [{
-            label: 'Profit Over Time',
-            data: profitData,
-            fill: true,
-            borderColor: 'rgb(52, 211, 153)', // emerald-400
-            backgroundColor: 'rgba(52, 211, 153, 0.2)',
-            tension: 0.3,
+          label: 'Profit Over Time',
+          data: profitData,
+          fill: true,
+          borderColor: 'rgb(52, 211, 153)', // emerald-400
+          backgroundColor: 'rgba(52, 211, 153, 0.2)',
+          tension: 0.3,
         }]
-      }, 
+      },
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -57,11 +57,11 @@ const PerformanceChart: React.FC = () => {
           y: {
             beginAtZero: true,
             ticks: { color: '#9ca3af' }, // text-gray-400
-            grid: { color: 'rgba(107, 114, 128, 0.2)'}
+            grid: { color: 'rgba(107, 114, 128, 0.2)' }
           },
           x: {
             ticks: { color: '#9ca3af' }, // text-gray-400
-            grid: { color: 'rgba(107, 114, 128, 0.2)'}
+            grid: { color: 'rgba(107, 114, 128, 0.2)' }
           }
         },
         plugins: {
@@ -98,4 +98,4 @@ const PerformanceChart: React.FC = () => {
   );
 };
 
-export default PerformanceChart; 
+export default PerformanceChart;

@@ -8,7 +8,7 @@ import {
   PlayerStats,
   PlayerForm,
   InjuryStatus,
-} from '../types/betting';
+} from '@/types/betting';
 
 export const useMLSimulation = () => {
   const [simulationService] = useState(() => new MLSimulationService());

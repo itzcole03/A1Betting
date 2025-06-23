@@ -1,6 +1,6 @@
+import { useCallback, useState } from 'react';
 import { useDataSync } from './useDataSync';
 import { useRealtimeData } from './useRealtimeData';
-import { useState, useEffect, useCallback } from 'react';
 
 
 
@@ -56,7 +56,7 @@ export function useSmartAlerts({
   onNewAlert
 }: SmartAlertsConfig): SmartAlertsResult {
   const [alerts, setAlerts] = useState<Alert[]>([]);
-  
+
   const { data: realtimeData, isConnected } = useRealtimeData<Alert>({
     url: wsEndpoint,
     onMessage: (message: WebSocketMessage) => {
@@ -113,4 +113,4 @@ export function useSmartAlerts({
     clearAlerts,
     isConnected
   };
-} 
+}

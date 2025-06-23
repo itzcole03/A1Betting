@@ -1,4 +1,4 @@
-import { PerformanceMetrics, PlayerProp } from '../types';
+import { PerformanceMetrics, PlayerProp } from '@/types';
 import {
   AdvancedAnalysisEngine,
   AnalysisResult as AdvancedAnalysisResult,
@@ -6,7 +6,7 @@ import {
 import { AnalysisPlugin, AnalysisRegistry } from './AnalysisFramework';
 import { DataIntegrationHub } from './DataIntegrationHub';
 import { PipelineStage, StreamingDataPipeline } from './DataPipeline';
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { FeatureComponent, FeatureRegistry } from './FeatureComposition';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import {

@@ -1,5 +1,5 @@
 import { UnifiedPredictionService } from '../UnifiedPredictionService';
-import { MarketContext, BettingContext } from '../../types/core';
+import { MarketContext, BettingContext } from '@/types/core';
 import { BettingOdds } from '../../types/betting';
 
 describe('UnifiedPredictionService', () => {

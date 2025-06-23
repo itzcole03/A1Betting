@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
-import { PredictionData } from '../types/betting';
-import { StrategyRecommendation } from '../types/core';
+import { PredictionData } from '@/types/betting';
 import { motion } from 'framer-motion';
+import React, { useMemo } from 'react';
+import { StrategyRecommendation } from '../../../types/core';
 
 export interface MLInsight {
   factor: string;

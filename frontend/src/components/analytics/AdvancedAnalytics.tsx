@@ -1,19 +1,20 @@
-import React from 'react';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import CircularProgress from '@mui/material/CircularProgress';
 import Chip from '@mui/material/Chip';
-import Box from '@mui/material/Box';
-import { Chart, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip as ChartTooltip, Legend } from 'chart.js';
+import CircularProgress from '@mui/material/CircularProgress';
+// import Grid from '@mui/material/Grid'; // Removed due to v7 compatibility issues
+
+import Typography from '@mui/material/Typography';
+import { ArcElement, BarElement, CategoryScale, Chart, Tooltip as ChartTooltip, Legend, LinearScale } from 'chart.js';
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { useUnifiedAnalytics } from '../../hooks/useUnifiedAnalytics.js'; // Add .js extension if required by tsconfig
 import { useTheme } from '../../hooks/useTheme.js';
+import { useUnifiedAnalytics } from '../../hooks/useUnifiedAnalytics.js'; // Add .js extension if required by tsconfig
 // If the following import fails, see the comment below for a dynamic workaround
 // If you see TypeScript errors for icon imports below, ensure your react-icons version is >=5.5.0 and your tsconfig.json includes "esModuleInterop": true and "allowSyntheticDefaultImports": true. If problems persist, use a dynamic import workaround (see comment below).
 // Example dynamic icon usage: const Icon = require('react-icons/fa').FaRobot;
-import { FaRobot, FaBolt, FaArrowUp, FaArrowDown, FaHeartbeat, FaExclamationTriangle } from 'react-icons/fa';
+import { FaArrowDown, FaArrowUp, FaBolt, FaExclamationTriangle, FaHeartbeat, FaRobot } from 'react-icons/fa';
 
 
 
@@ -71,9 +72,9 @@ const AdvancedAnalytics: React.FC = () => {
 
   return (
     <Box className="w-full max-w-6xl mx-auto p-4">
-      <Grid container spacing={2}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Model/AI status */}
-        <Grid item xs={12} md={4}>
+        <div>
           <Card className="bg-gray-900 text-white dark:bg-gray-800">
             <CardContent>
               <Typography variant="h6" gutterBottom><FaRobot className="inline mr-2" />AI Model Status</Typography>
@@ -86,9 +87,9 @@ const AdvancedAnalytics: React.FC = () => {
               {error && <Typography color="error" variant="body2">{error}</Typography>}
             </CardContent>
           </Card>
-        </Grid>
+        </div>
         {/* Sentiment & Consensus */}
-        <Grid item xs={12} md={4}>
+        <div>
           <Card className="bg-gray-900 text-white dark:bg-gray-800">
             <CardContent>
               <Typography variant="h6" gutterBottom><FaHeartbeat className="inline mr-2" />Social Sentiment & Consensus</Typography>
@@ -106,9 +107,9 @@ const AdvancedAnalytics: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
+        </div>
         {/* Pattern Recognition & Injuries */}
-        <Grid item xs={12} md={4}>
+        <div>
           <Card className="bg-gray-900 text-white dark:bg-gray-800">
             <CardContent>
               <Typography variant="h6" gutterBottom><FaArrowUp className="inline mr-2" />Pattern Recognition & Injuries</Typography>
@@ -129,10 +130,13 @@ const AdvancedAnalytics: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {/* Explainability (SHAP/Feature Importances) */}
-        <Grid item xs={12} md={6}>
-          <Card className="bg-gray-900 text-white dark:bg-gray-800 mt-4">
+        <div>
+          <Card className="bg-gray-900 text-white dark:bg-gray-800">
             <CardContent>
               <Typography variant="h6" gutterBottom>Model Explainability</Typography>
               {explainability.featureImportances ? (
@@ -154,10 +158,10 @@ const AdvancedAnalytics: React.FC = () => {
               ) : <Typography variant="body2">No explainability data available.</Typography>}
             </CardContent>
           </Card>
-        </Grid>
+        </div>
         {/* Risk & Confidence */}
-        <Grid item xs={12} md={6}>
-          <Card className="bg-gray-900 text-white dark:bg-gray-800 mt-4">
+        <div>
+          <Card className="bg-gray-900 text-white dark:bg-gray-800">
             <CardContent>
               <Typography variant="h6" gutterBottom>Risk & Confidence</Typography>
               <Box className="flex flex-row flex-wrap gap-2 items-center">
@@ -166,8 +170,8 @@ const AdvancedAnalytics: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import { DataPoint } from './core';
+import { DataPoint } from '@/types/core';
 
 
 

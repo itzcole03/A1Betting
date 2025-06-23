@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import useStore from '../../store/useStore';
-import { BettingDecision, Projection, BetResult } from '../../types/core';
+import useStore from '@/store/useStore';
+import { BettingDecision, Projection, BetResult } from '@/types/core';
 import { PrizePicksAPI } from '../../services/PrizePicksAPI';
 import { UnifiedBettingSystem } from '../../core/UnifiedBettingSystem';
 import SHAPVisualization from '../shared/SHAPVisualization';

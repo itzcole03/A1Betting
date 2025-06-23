@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Grid, Chip } from '@mui/material';
-import { EngineStatus } from './types';
+import { EngineStatus } from '@/types';
 
 interface MoneyMakerStatusProps {
   status: EngineStatus;

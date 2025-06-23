@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import useStore from '../../store/useStore';
+import useStore from '@/store/useStore';
 
 interface NavItem {
   path: string;

@@ -1,6 +1,6 @@
-import { useStore } from '../../stores/useStore';
-import type { Opportunity } from '../../types/core';
-import type { PlayerProp, Sport, PropType } from '../../types/core';
+import { useStore } from '@/stores/useStore';
+import type { Opportunity } from '@/types/core';
+import type { PlayerProp, Sport, PropType } from '@/types/core';
 import { dailyFantasyService } from '../services/dailyFantasy';
 import { oddsjamService } from '../services/oddsjam';
 import { useState, useEffect, useCallback } from 'react';

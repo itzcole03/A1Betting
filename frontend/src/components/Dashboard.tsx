@@ -3,7 +3,7 @@ import ArbitrageOpportunities from "./ArbitrageOpportunities";
 import LiveOddsTicker from "./LiveOddsTicker"; // Changed to default import
 import MLFactorViz from "./MLFactorViz";
 import ModelPerformance from "./ModelPerformance";
-import MoneyMaker from "./modern/MoneyMaker";
+import { UniversalMoneyMaker } from "./index";
 import Navbar from "./navigation/Navbar";
 import { PerformanceMetrics } from "./PerformanceMetrics";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

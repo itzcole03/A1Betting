@@ -1,11 +1,11 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { useMoneyMakerStore } from '@/stores/moneyMakerStore';
+import React, { useEffect, useCallback, useState } from "react";
+import { useMoneyMakerStore } from "@/stores/moneyMakerStore";
 import {
   MoneyMakerConfig,
   MoneyMakerPrediction,
   MoneyMakerPortfolio,
   RiskLevel,
-} from '@/types/money-maker';
+} from "@/types/money-maker";
 import {
   Card,
   Button,
@@ -19,19 +19,30 @@ import {
   Tabs,
   Tab,
   Progress,
-} from '../ui/UnifiedUI';
+} from "../ui/UnifiedUI";
 
 export const UnifiedMoneyMaker: React.FC = () => {
   const store = useMoneyMakerStore();
-  const { config, predictions, portfolios, metrics, isLoading, error, lastUpdate, filters, sort } =
-    store;
+  const {
+    config,
+    predictions,
+    portfolios,
+    metrics,
+    isLoading,
+    error,
+    lastUpdate,
+    filters,
+    sort,
+  } = store;
 
-  const [activeTab, setActiveTab] = useState<'config' | 'predictions' | 'portfolios' | 'metrics'>(
-    'config'
-  );
+  const [activeTab, setActiveTab] = useState<
+    "config" | "predictions" | "portfolios" | "metrics"
+  >("config");
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('info');
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<
+    "success" | "error" | "warning" | "info"
+  >("info");
 
   // Load initial data
   useEffect(() => {
@@ -42,7 +53,7 @@ export const UnifiedMoneyMaker: React.FC = () => {
         // This is where you would integrate with your actual services
         store.setLoading(false);
       } catch (error) {
-        handleError('Failed to load initial data', error);
+        handleError("Failed to load initial data", error);
       }
     };
 
@@ -57,7 +68,7 @@ export const UnifiedMoneyMaker: React.FC = () => {
   const handleError = useCallback((message: string, error: any) => {
     store.setError(message);
     setToastMessage(message);
-    setToastType('error');
+    setToastType("error");
     setShowToast(true);
     console.error(message, error);
   }, []);
@@ -70,22 +81,25 @@ export const UnifiedMoneyMaker: React.FC = () => {
     (key: keyof MoneyMakerConfig, value: string | number) => {
       try {
         store.updateConfig({ [key]: value });
-        setToastMessage('Configuration updated successfully');
-        setToastType('success');
+        setToastMessage("Configuration updated successfully");
+        setToastType("success");
         setShowToast(true);
       } catch (error) {
-        handleError('Failed to update configuration', error);
+        handleError("Failed to update configuration", error);
       }
     },
-    [store.updateConfig]
+    [store.updateConfig],
   );
 
   const handleInputChange = useCallback(
     (key: keyof MoneyMakerConfig) => (value: string) => {
-      const numValue = key === 'timeHorizon' || key === 'investmentAmount' ? Number(value) : value;
+      const numValue =
+        key === "timeHorizon" || key === "investmentAmount"
+          ? Number(value)
+          : value;
       handleConfigChange(key, numValue);
     },
-    [handleConfigChange]
+    [handleConfigChange],
   );
 
   const handleGeneratePortfolio = useCallback(async () => {
@@ -95,20 +109,20 @@ export const UnifiedMoneyMaker: React.FC = () => {
       // This is where you would integrate with your portfolio generation logic
       store.setLoading(false);
     } catch (error) {
-      handleError('Failed to generate portfolio', error);
+      handleError("Failed to generate portfolio", error);
     }
   }, [config, predictions]);
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(amount);
   };
 
   const formatPercentage = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'percent',
+    return new Intl.NumberFormat("en-US", {
+      style: "percent",
       minimumFractionDigits: 1,
       maximumFractionDigits: 1,
     }).format(value / 100);
@@ -116,30 +130,35 @@ export const UnifiedMoneyMaker: React.FC = () => {
 
   const handleShowDetails = useCallback((prediction: MoneyMakerPrediction) => {
     // TODO: Implement details modal
-    console.log('Show details for prediction:', prediction);
+    console.log("Show details for prediction:", prediction);
   }, []);
 
   const handlePlaceBet = useCallback((prediction: MoneyMakerPrediction) => {
     // TODO: Implement bet placement
-    console.log('Place bet for prediction:', prediction);
+    console.log("Place bet for prediction:", prediction);
   }, []);
 
-  const getBadgeVariant = (riskLevel: RiskLevel): 'success' | 'warning' | 'danger' => {
+  const getBadgeVariant = (
+    riskLevel: RiskLevel,
+  ): "success" | "warning" | "danger" => {
     switch (riskLevel) {
-      case 'low':
-        return 'success';
-      case 'medium':
-        return 'warning';
-      case 'high':
-        return 'danger';
+      case "low":
+        return "success";
+      case "medium":
+        return "warning";
+      case "high":
+        return "danger";
       default:
-        return 'warning';
+        return "warning";
     }
   };
 
   // Sorting/filtering handlers
   const handleSortChange = (field: keyof MoneyMakerPrediction) => {
-    store.updateSort({ field, direction: sort.direction === 'asc' ? 'desc' : 'asc' });
+    store.updateSort({
+      field,
+      direction: sort.direction === "asc" ? "desc" : "asc",
+    });
   };
   const handleFilterChange = (key: keyof typeof filters, value: any) => {
     store.updateFilters({ [key]: value });
@@ -170,7 +189,7 @@ export const UnifiedMoneyMaker: React.FC = () => {
         </Tabs>
 
         {/* Configuration Tab */}
-        {activeTab === 'config' && (
+        {activeTab === "config" && (
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-4">Configuration</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -183,7 +202,7 @@ export const UnifiedMoneyMaker: React.FC = () => {
                   min="0"
                   type="number"
                   value={String(config.investmentAmount)}
-                  onChange={handleInputChange('investmentAmount')}
+                  onChange={handleInputChange("investmentAmount")}
                 />
               </div>
               <div>
@@ -195,7 +214,7 @@ export const UnifiedMoneyMaker: React.FC = () => {
                   min="1"
                   type="number"
                   value={String(config.timeHorizon)}
-                  onChange={handleInputChange('timeHorizon')}
+                  onChange={handleInputChange("timeHorizon")}
                 />
               </div>
             </div>
@@ -203,40 +222,46 @@ export const UnifiedMoneyMaker: React.FC = () => {
         )}
 
         {/* Predictions Tab */}
-        {activeTab === 'predictions' && (
+        {activeTab === "predictions" && (
           <Card className="p-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
               <div className="flex flex-wrap gap-2">
                 <Select
                   className="w-32"
                   options={[
-                    { value: '', label: 'All Risks' },
-                    { value: 'low', label: 'Low' },
-                    { value: 'medium', label: 'Medium' },
-                    { value: 'high', label: 'High' },
+                    { value: "", label: "All Risks" },
+                    { value: "low", label: "Low" },
+                    { value: "medium", label: "Medium" },
+                    { value: "high", label: "High" },
                   ]}
-                  value={filters.riskLevel || ''}
-                  onChange={value => handleFilterChange('riskLevel', value || undefined)}
+                  value={filters.riskLevel || ""}
+                  onChange={(value) =>
+                    handleFilterChange("riskLevel", value || undefined)
+                  }
                 />
                 <Select
                   className="w-32"
                   options={[
-                    { value: '', label: 'All Models' },
+                    { value: "", label: "All Models" },
                     // Optionally map over available models
                   ]}
-                  value={filters.modelId || ''}
-                  onChange={value => handleFilterChange('modelId', value || undefined)}
+                  value={filters.modelId || ""}
+                  onChange={(value) =>
+                    handleFilterChange("modelId", value || undefined)
+                  }
                 />
                 <Select
                   className="w-32"
                   options={[
-                    { value: 'confidence', label: 'Confidence' },
-                    { value: 'expectedValue', label: 'Expected Value' },
-                    { value: 'odds', label: 'Odds' },
-                    { value: 'timestamp', label: 'Timestamp' },
+                    { value: "confidence", label: "Confidence" },
+                    { value: "expectedValue", label: "Expected Value" },
+                    { value: "odds", label: "Odds" },
+                    { value: "timestamp", label: "Timestamp" },
                   ]}
                   value={sort.field}
-                  onChange={value => handleSortChange(value as keyof MoneyMakerPrediction)}
+                  onChange={(value) =>
+                    handleSortChange(value as keyof MoneyMakerPrediction)
+                  }
                 />
               </div>
             </div>
@@ -245,7 +270,9 @@ export const UnifiedMoneyMaker: React.FC = () => {
                 <Spinner size="large" />
               </div>
             ) : predictions.length === 0 ? (
-              <div className="text-center text-gray-500 py-8">No predictions available.</div>
+              <div className="text-center text-gray-500 py-8">
+                No predictions available.
+              </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -260,16 +287,20 @@ export const UnifiedMoneyMaker: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {predictions.map(pred => (
+                    {predictions.map((pred) => (
                       <tr key={pred.eventId} className="hover:bg-gray-50">
                         <td className="px-4 py-2 font-medium">
                           {pred.selection} ({pred.marketType})
                         </td>
-                        <td className="px-4 py-2">{(pred.confidence * 100).toFixed(1)}%</td>
-                        <td className="px-4 py-2">{pred.expectedValue.toFixed(3)}</td>
+                        <td className="px-4 py-2">
+                          {(pred.confidence * 100).toFixed(1)}%
+                        </td>
+                        <td className="px-4 py-2">
+                          {pred.expectedValue.toFixed(3)}
+                        </td>
                         <td className="px-4 py-2">
                           {pred.metadata.modelVersion ||
-                            Object.keys(pred.modelContributions).join(', ')}
+                            Object.keys(pred.modelContributions).join(", ")}
                         </td>
                         <td className="px-4 py-2">
                           {new Date(pred.metadata.timestamp).toLocaleString()}
@@ -278,7 +309,9 @@ export const UnifiedMoneyMaker: React.FC = () => {
                           {pred.explanation &&
                           pred.explanation.decisionPath &&
                           pred.explanation.decisionPath.length > 0 ? (
-                            <span>{pred.explanation.decisionPath.join(' → ')}</span>
+                            <span>
+                              {pred.explanation.decisionPath.join(" → ")}
+                            </span>
                           ) : (
                             <span className="text-gray-400">—</span>
                           )}
@@ -293,7 +326,7 @@ export const UnifiedMoneyMaker: React.FC = () => {
         )}
 
         {/* Portfolios Tab */}
-        {activeTab === 'portfolios' && (
+        {activeTab === "portfolios" && (
           <Card className="p-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Active Portfolios</h2>
@@ -302,15 +335,19 @@ export const UnifiedMoneyMaker: React.FC = () => {
               </Button>
             </div>
             <div className="space-y-4">
-              {portfolios.map(portfolio => (
+              {portfolios.map((portfolio) => (
                 <div key={portfolio.id} className="border rounded-lg p-4">
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="font-medium">Portfolio {portfolio.id}</h3>
-                      <p className="text-sm text-gray-500">{portfolio.legs.length} legs</p>
+                      <p className="text-sm text-gray-500">
+                        {portfolio.legs.length} legs
+                      </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">Total Odds: {portfolio.totalOdds.toFixed(2)}</p>
+                      <p className="font-medium">
+                        Total Odds: {portfolio.totalOdds.toFixed(2)}
+                      </p>
                       <p className="text-sm text-gray-500">
                         EV: {formatPercentage(portfolio.expectedValue)}
                       </p>
@@ -324,19 +361,25 @@ export const UnifiedMoneyMaker: React.FC = () => {
         )}
 
         {/* Metrics Tab */}
-        {activeTab === 'metrics' && (
+        {activeTab === "metrics" && (
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-4">Performance Metrics</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-2">Overall Performance</h3>
-                <p className="text-2xl font-bold">{formatCurrency(metrics.totalProfit)}</p>
-                <p className="text-sm text-gray-500">ROI: {formatPercentage(metrics.roi)}</p>
+                <p className="text-2xl font-bold">
+                  {formatCurrency(metrics.totalProfit)}
+                </p>
+                <p className="text-sm text-gray-500">
+                  ROI: {formatPercentage(metrics.roi)}
+                </p>
               </div>
 
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-2">Success Rate</h3>
-                <p className="text-2xl font-bold">{formatPercentage(metrics.successRate)}</p>
+                <p className="text-2xl font-bold">
+                  {formatPercentage(metrics.successRate)}
+                </p>
                 <p className="text-sm text-gray-500">
                   {metrics.winningBets} / {metrics.totalBets} bets
                 </p>
@@ -344,7 +387,9 @@ export const UnifiedMoneyMaker: React.FC = () => {
 
               <div className="border rounded-lg p-4">
                 <h3 className="font-medium mb-2">Risk Metrics</h3>
-                <p className="text-2xl font-bold">{metrics.sharpeRatio.toFixed(2)}</p>
+                <p className="text-2xl font-bold">
+                  {metrics.sharpeRatio.toFixed(2)}
+                </p>
                 <p className="text-sm text-gray-500">
                   Max Drawdown: {formatPercentage(metrics.maxDrawdown)}
                 </p>
@@ -355,9 +400,15 @@ export const UnifiedMoneyMaker: React.FC = () => {
 
         {/* Toast Notifications */}
         {showToast && (
-          <Toast message={toastMessage} type={toastType} onClose={() => setShowToast(false)} />
+          <Toast
+            message={toastMessage}
+            type={toastType}
+            onClose={() => setShowToast(false)}
+          />
         )}
       </div>
     </div>
   );
 };
+
+export default UnifiedMoneyMaker;

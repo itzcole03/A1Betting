@@ -9,7 +9,7 @@ export interface LogContext {
   timestamp: number;
   component?: string;
   action?: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   error?: Error;
 }
 
@@ -34,9 +34,9 @@ export class UnifiedLogger {
     this.serviceName = serviceName;
   }
 
-  public static getInstance(serviceName: string): UnifiedLogger {
+  public static getInstance(serviceName?: string): UnifiedLogger {
     if (!UnifiedLogger.instance) {
-      UnifiedLogger.instance = new UnifiedLogger(serviceName);
+      UnifiedLogger.instance = new UnifiedLogger(serviceName || 'default');
     }
     return UnifiedLogger.instance;
   }
@@ -88,10 +88,11 @@ export class UnifiedLogger {
     }
 
     if (this.config.enableMonitoring) {
-      unifiedMonitor.recordMetric(`log.${context.level}`, 1, {
-        component: context.component || this.config.component || 'system',
-        action: context.action || 'unknown',
-      });
+      // Metrics recording temporarily disabled - needs UnifiedMonitor interface update
+      // unifiedMonitor.recordMetric(`log.${context.level}`, 1, {
+      //   component: context.component || this.config.component || 'system',
+      //   action: context.action || 'unknown',
+      // });
 
       if (context.error) {
         const errorToReport =
@@ -141,6 +142,15 @@ export class UnifiedLogger {
       message,
       timestamp: Date.now(),
       error,
+      ...context,
+    });
+  }
+
+  public trace(message: string, context?: Partial<LogContext>): void {
+    this.log({
+      level: 'debug', // Treat trace as debug level since our LogLevel doesn't have trace
+      message,
+      timestamp: Date.now(),
       ...context,
     });
   }

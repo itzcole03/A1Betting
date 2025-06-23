@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import MoneyMaker from '../../components/MoneyMaker';
 import { useFilteredPredictions } from '../../hooks/useFilteredPredictions';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 
 // Mock the hooks and store
 jest.mock('../../hooks/useFilteredPredictions');

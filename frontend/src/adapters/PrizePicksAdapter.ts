@@ -1,17 +1,17 @@
 import {
   PrizePicksData,
-  PrizePicksProjection,
-  PrizePicksPlayer,
   PrizePicksLeague,
-} from '../types/prizePicks.ts'; // Updated import path (adjust as needed)
-import { unifiedMonitor } from './../core/UnifiedMonitor.ts'; // Updated import path
+  PrizePicksPlayer,
+  PrizePicksProjection,
+} from '../types/prizePicks'; // Updated import path (adjust as needed)
 import {
   PrizePicksAPI,
-  RawPrizePicksProjection,
-  RawPrizePicksIncludedPlayer,
-  RawPrizePicksIncludedLeague,
   PrizePicksAPIResponse,
-} from './../api/PrizePicksAPI.ts'; // Updated import path
+  RawPrizePicksIncludedLeague,
+  RawPrizePicksIncludedPlayer,
+  RawPrizePicksProjection,
+} from './../api/PrizePicksAPI'; // Updated import path
+import { unifiedMonitor } from './../core/UnifiedMonitor'; // Updated import path
 
 interface PrizePicksAdapterConfig {
   apiKey?: string; // VITE_PRIZEPICKS_API_KEY - made optional

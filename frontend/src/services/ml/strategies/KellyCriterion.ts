@@ -1,6 +1,6 @@
 import * as tf from '@tensorflow/tfjs';
-import { UnifiedLogger } from '../../core/UnifiedLogger';
-import { UnifiedCache } from '../../services/core/UnifiedCache';
+import { UnifiedLogger } from '../../../core/UnifiedLogger';
+import { UnifiedCache } from '../../core/UnifiedCache';
 
 interface KellyMetrics {
   fraction: number;

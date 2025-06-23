@@ -1,13 +1,13 @@
-import { PoeDataBlock, PoePropCardContent, PoeApiResponse } from '@/types';
-import { PrizePicksProps } from '../../shared/prizePicks';
 import { unifiedMonitor } from '../core/UnifiedMonitor';
+import { PrizePicksProps } from '../shared/prizePicks';
+import { PoeApiResponse, PoeDataBlock, PoePropCardContent } from '../types/index';
 
 /**
  * Adapts data from a "Poe-like" source (structured as PoeDataBlock)
  * into a more usable format, such as PrizePicksProps for prop card display.
  */
 export class PoeToApiAdapter {
-  constructor() {}
+  constructor() { }
 
   /**
    * Transforms an array of PoeDataBlock objects into an array of PrizePicksProps.
@@ -30,15 +30,15 @@ export class PoeToApiAdapter {
           // Basic mapping, assuming PoePropCardContent fields align or can be mapped
           const prop: PrizePicksProps = {
             playerId: content.playerId || block.id,
-            id: block.id, // Use PoeDataBlock id as the prop id
-            league: content.statType.includes('NBA')
+            playerName: content.playerName || content.player || 'Unknown Player',
+            league: content.statType?.includes('NBA')
               ? 'NBA'
-              : content.statType.includes('NFL')
+              : content.statType?.includes('NFL')
                 ? 'NFL'
                 : 'Unknown', // Crude league detection
-            player_name: content.playerName,
-            stat_type: content.statType,
-            line_score: content.line,
+            player_name: content.playerName || content.player || 'Unknown Player',
+            stat_type: content.statType || content.stat || 'Unknown Stat',
+            line: content.line,
             description: `${content.playerName} - ${content.statType} ${content.line}`,
             image_url: content.playerImage,
             overOdds: content.overOdds,
@@ -66,8 +66,8 @@ export class PoeToApiAdapter {
     console.warn('[PoeToApiAdapter] Fetching and transforming MOCK Poe data.');
     // Simulate API response
     const mockPoeApiResponse: PoeApiResponse = {
-      requestId: `mockReq_${Date.now()}`,
-      timestamp: new Date().toISOString(),
+      success: true,
+      timestamp: Date.now(),
       dataBlocks: [
         {
           id: 'poe_prop_1',
@@ -110,7 +110,7 @@ export class PoeToApiAdapter {
       ],
     };
 
-    return this.transformPoeDataToPrizePicksProps(mockPoeApiResponse.dataBlocks);
+    return this.transformPoeDataToPrizePicksProps(mockPoeApiResponse.dataBlocks || []);
   }
 }
 

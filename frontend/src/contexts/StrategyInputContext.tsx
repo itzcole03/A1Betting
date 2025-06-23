@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { Sport, PropType } from '../types';
+import { Sport, PropType } from '@/types';
 
 interface StrategyInput {
   stake: number;

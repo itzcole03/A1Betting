@@ -1,5 +1,5 @@
 import { EventBus } from '../core/EventBus.js';
-import { unifiedMonitor } from '../core/UnifiedMonitor.ts';
+import { unifiedMonitor } from '../core/UnifiedMonitor';
 
 type AnalyticsData = Record<string, unknown>;
 

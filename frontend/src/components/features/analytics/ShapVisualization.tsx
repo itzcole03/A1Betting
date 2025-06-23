@@ -1,23 +1,10 @@
-import React, { useMemo, useCallback } from 'react';
 import {
   Box,
-  Card,
-  CardContent,
-  Typography,
   LinearProgress,
-  Tooltip,
-  IconButton,
-  Collapse,
-  Fade,
   Skeleton,
+  Typography
 } from '@mui/material';
-import {
-  Info as InfoIcon,
-  TrendingUp as TrendingUpIcon,
-  TrendingDown as TrendingDownIcon,
-} from '@mui/icons-material';
-import { formatPercentage } from '../utils/formatters';
-import type { Feature } from '../types/prediction';
+import React from 'react';
 
 interface ShapFeature {
   name: string;

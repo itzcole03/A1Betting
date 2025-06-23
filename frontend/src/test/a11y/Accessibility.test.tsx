@@ -9,8 +9,8 @@ import PropCards from '../../components/modern/PropCards';
 import MoneyMaker from '../../components/modern/MoneyMaker';
 import EntryTracking from '../../components/modern/EntryTracking';
 import Settings from '../../components/modern/Settings';
-import useStore from '../../store/useStore';
-import { Entry, PlayerProp } from '../../types/core';
+import useStore from '@/store/useStore';
+import { Entry, PlayerProp } from '@/types/core';
 import { ProcessedPrizePicksProp } from '../../types/prizePicks';
 
 describe('Accessibility Tests', () => {

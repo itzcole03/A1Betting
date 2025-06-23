@@ -1,6 +1,6 @@
-import { EventBus } from '@core/EventBus.ts'; // Corrected import path
+import { EventBus } from '../core/EventBus'; // Corrected import path
 
-// import { EventMap } from './../../../src/types/core.ts'; // Temporarily remove as EventMap might not have these keys, FILE NOT FOUND
+// import { EventMap } from './../../../src/types/core'; // Temporarily remove as EventMap might not have these keys, FILE NOT FOUND
 
 const API_BASE_URL = 'https://api.prizepicks.com';
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
+import React, { useEffect, useState } from "react";
+import SafeChart from "../ui/SafeChart";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,12 +9,20 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { performanceService } from '../../services/performanceService';
-import { toast } from 'react-toastify';
+} from "chart.js";
+import { performanceService } from "../../services/performanceService";
+import { toast } from "react-toastify";
 
 // Register ChartJS components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 interface PerformanceMetric {
   name: string;
@@ -27,14 +35,14 @@ interface PerformanceAlert {
   threshold: number;
   current_value: number;
   timestamp: string;
-  severity: 'warning' | 'critical';
+  severity: "warning" | "critical";
 }
 
 const PerformanceDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [alerts, setAlerts] = useState<PerformanceAlert[]>([]);
-  const [selectedMetric, setSelectedMetric] = useState<string>('response_time');
-  const [timeRange, setTimeRange] = useState<string>('1h');
+  const [selectedMetric, setSelectedMetric] = useState<string>("response_time");
+  const [timeRange, setTimeRange] = useState<string>("1h");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,21 +52,21 @@ const PerformanceDashboard: React.FC = () => {
         setMetrics(metricsData);
 
         // Fetch alerts
-        const response = await fetch('/api/monitoring/performance/alerts');
+        const response = await fetch("/api/monitoring/performance/alerts");
         const alertsData = await response.json();
         setAlerts(alertsData);
 
         // Show toast for new critical alerts
         alertsData
-          .filter((alert: PerformanceAlert) => alert.severity === 'critical')
+          .filter((alert: PerformanceAlert) => alert.severity === "critical")
           .forEach((alert: PerformanceAlert) => {
             toast.error(
-              `Critical alert: ${alert.metric_name} exceeded threshold (${alert.current_value} > ${alert.threshold})`
+              `Critical alert: ${alert.metric_name} exceeded threshold (${alert.current_value} > ${alert.threshold})`,
             );
           });
       } catch (error) {
-        console.error('Error fetching performance data:', error);
-        toast.error('Failed to fetch performance data');
+        console.error("Error fetching performance data:", error);
+        toast.error("Failed to fetch performance data");
       }
     };
 
@@ -69,12 +77,12 @@ const PerformanceDashboard: React.FC = () => {
   }, [selectedMetric, timeRange]);
 
   const chartData = {
-    labels: metrics.map(m => new Date(m.timestamp).toLocaleTimeString()),
+    labels: metrics.map((m) => new Date(m.timestamp).toLocaleTimeString()),
     datasets: [
       {
         label: selectedMetric,
-        data: metrics.map(m => m.value),
-        borderColor: 'rgb(75, 192, 192)',
+        data: metrics.map((m) => m.value),
+        borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       },
     ],
@@ -84,7 +92,7 @@ const PerformanceDashboard: React.FC = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
       title: {
         display: true,
@@ -108,7 +116,7 @@ const PerformanceDashboard: React.FC = () => {
           <select
             className="p-2 border rounded"
             value={selectedMetric}
-            onChange={e => setSelectedMetric(e.target.value)}
+            onChange={(e) => setSelectedMetric(e.target.value)}
           >
             <option value="response_time">Response Time</option>
             <option value="error_rate">Error Rate</option>
@@ -119,7 +127,7 @@ const PerformanceDashboard: React.FC = () => {
           <select
             className="p-2 border rounded"
             value={timeRange}
-            onChange={e => setTimeRange(e.target.value)}
+            onChange={(e) => setTimeRange(e.target.value)}
           >
             <option value="1h">Last Hour</option>
             <option value="6h">Last 6 Hours</option>
@@ -130,7 +138,12 @@ const PerformanceDashboard: React.FC = () => {
 
         {/* Chart */}
         <div className="bg-white p-4 rounded-lg shadow mb-6">
-          <Line data={chartData} options={chartOptions} />
+          <SafeChart
+            type="line"
+            data={chartData}
+            options={chartOptions}
+            loadingMessage="Loading performance dashboard..."
+          />
         </div>
 
         {/* Alerts */}
@@ -144,24 +157,24 @@ const PerformanceDashboard: React.FC = () => {
                 <div
                   key={index}
                   className={`p-4 rounded ${
-                    alert.severity === 'critical'
-                      ? 'bg-red-100 border-red-500'
-                      : 'bg-yellow-100 border-yellow-500'
+                    alert.severity === "critical"
+                      ? "bg-red-100 border-red-500"
+                      : "bg-yellow-100 border-yellow-500"
                   } border`}
                 >
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="font-semibold">{alert.metric_name}</h3>
                       <p className="text-sm text-gray-600">
-                        Current: {alert.current_value.toFixed(2)} | Threshold:{' '}
+                        Current: {alert.current_value.toFixed(2)} | Threshold:{" "}
                         {alert.threshold.toFixed(2)}
                       </p>
                     </div>
                     <span
                       className={`px-2 py-1 rounded text-sm ${
-                        alert.severity === 'critical'
-                          ? 'bg-red-500 text-white'
-                          : 'bg-yellow-500 text-white'
+                        alert.severity === "critical"
+                          ? "bg-red-500 text-white"
+                          : "bg-yellow-500 text-white"
                       }`}
                     >
                       {alert.severity}

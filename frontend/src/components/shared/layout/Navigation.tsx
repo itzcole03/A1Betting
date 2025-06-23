@@ -1,8 +1,20 @@
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { authService } from '@/services/auth';
+import { useStore } from '@/store';
+import {
+  AccountBalance as AccountBalanceIcon,
+  Analytics as AnalyticsIcon,
+  Casino as CasinoIcon,
+  Dashboard as DashboardIcon,
+  Logout as LogoutIcon,
+  Menu as MenuIcon,
+  Settings as SettingsIcon,
+  SportsSoccer as SportsSoccerIcon,
+} from '@mui/icons-material';
 import {
   AppBar,
+  Avatar,
   Box,
+  Button,
   Drawer,
   IconButton,
   List,
@@ -10,27 +22,15 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Toolbar,
-  Typography,
-  useTheme,
-  useMediaQuery,
-  Button,
   Menu,
   MenuItem,
-  Avatar,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import {
-  Menu as MenuIcon,
-  Dashboard as DashboardIcon,
-  Analytics as AnalyticsIcon,
-  Casino as CasinoIcon,
-  AccountBalance as AccountBalanceIcon,
-  Settings as SettingsIcon,
-  SportsSoccer as SportsSoccerIcon,
-  Logout as LogoutIcon,
-} from '@mui/icons-material';
-import { useStore } from '@/store';
-import { authService } from '@/services/auth';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -217,4 +217,4 @@ export default function Navigation() {
       </Box>
     </Box>
   );
-} 
+}

@@ -1,5 +1,5 @@
 import { createTheme, Theme } from '@mui/material/styles';
-import { useThemeStore } from '@stores/themeStore';
+import { useThemeStore } from '@/stores/themeStore';
 
 const commonThemeOptions = {
   typography: {

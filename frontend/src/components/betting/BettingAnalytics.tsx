@@ -1,3 +1,4 @@
+import React from 'react';
 import { useUnifiedAnalytics } from '@/hooks/useUnifiedAnalytics';
 
 export const BettingAnalytics: React.FC = () => {

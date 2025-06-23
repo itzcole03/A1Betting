@@ -7,7 +7,7 @@ import {
   PrizePicksLines,
   // Assuming backend response matches structure of services/prizepicks_service.py:PrizePicksAPIResponse
   // which has { data: RawPrizePicksProjection[], included: any[] }
-} from '../types';
+} from '@/types';
 // Corrected import path for raw types from the API definition file
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;

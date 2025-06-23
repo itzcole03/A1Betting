@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { cn } from '../../utils/classNames';
+import { cn } from '@/utils/classNames';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export interface ModalProps {

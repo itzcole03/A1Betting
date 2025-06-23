@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconButton, useTheme } from '@mui/material';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
-import { useThemeStore } from '@stores/themeStore';
+import { useThemeStore } from '@/stores/themeStore';
 
 import { motion } from 'framer-motion';
 

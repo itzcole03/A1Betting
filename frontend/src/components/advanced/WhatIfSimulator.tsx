@@ -1,17 +1,17 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useUnifiedAnalytics } from "../../hooks/useUnifiedAnalytics";
-import { UnifiedPredictionEngine } from "../../core/UnifiedPredictionEngine";
+import { llmService } from "../../services/LLMService";
 
 interface ScenarioInput {
   id: string;
   name: string;
   type:
-    | "odds_change"
-    | "injury"
-    | "weather"
-    | "lineup_change"
-    | "market_shift"
-    | "custom";
+  | "odds_change"
+  | "injury"
+  | "weather"
+  | "lineup_change"
+  | "market_shift"
+  | "custom";
   parameters: Record<string, number | string | boolean>;
   impact: number; // -1 to 1
 }
@@ -166,7 +166,7 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
         impact: adjustedPrediction - baselinePrediction,
         confidence,
         riskLevel,
-        explanation: generateExplanation(
+        explanation: await generateExplanation(
           scenario,
           adjustedPrediction - baselinePrediction,
         ),
@@ -185,26 +185,40 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
     }
   }, []);
 
-  const generateExplanation = (
+  const generateExplanation = async (
     scenario: ScenarioInput,
     impact: number,
-  ): string => {
-    const direction = impact > 0 ? "increases" : "decreases";
-    const magnitude = Math.abs(impact) > 0.1 ? "significantly" : "moderately";
+  ): Promise<string> => {
+    try {
+      const direction = impact > 0 ? "increases" : "decreases";
+      const magnitude = Math.abs(impact) > 0.1 ? "significantly" : "moderately";
 
-    switch (scenario.type) {
-      case "odds_change":
-        return `Odds adjustment ${magnitude} ${direction} prediction confidence due to market perception shifts.`;
-      case "injury":
-        return `Key player injury ${magnitude} ${direction} team performance expectations and prop outcomes.`;
-      case "weather":
-        return `Weather conditions ${magnitude} ${direction} game dynamics and player performance metrics.`;
-      case "lineup_change":
-        return `Lineup modifications ${magnitude} ${direction} team synergy and individual player opportunities.`;
-      case "market_shift":
-        return `Market sentiment changes ${magnitude} ${direction} betting value and prediction accuracy.`;
-      default:
-        return `Custom scenario ${magnitude} ${direction} overall prediction model outputs.`;
+      const prompt = `Analyze this sports betting scenario:
+
+        Scenario: ${scenario.name} (${scenario.type})
+        Parameters: ${JSON.stringify(scenario.parameters)}
+        Impact on prediction: ${magnitude} ${direction} by ${Math.abs(impact * 100).toFixed(1)}%
+
+        Provide a detailed, expert-level explanation of how this scenario affects the betting outcome. Include:
+        1. The specific factors that contribute to this change
+        2. Why this scenario has this particular impact
+        3. Any additional considerations for bettors
+
+        Keep the explanation concise but informative, around 2-3 sentences.`;
+
+      const response = await llmService.generateAnalysis(prompt, {
+        scenario_type: scenario.type,
+        impact_magnitude: Math.abs(impact),
+        impact_direction: direction
+      });
+
+      return response.content || `${scenario.type} scenario ${magnitude} ${direction} prediction confidence due to the specified parameters.`;
+    } catch (error) {
+      console.error("LLM explanation error:", error);
+      // Fallback to simplified explanation
+      const direction = impact > 0 ? "increases" : "decreases";
+      const magnitude = Math.abs(impact) > 0.1 ? "significantly" : "moderately";
+      return `${scenario.type} scenario ${magnitude} ${direction} prediction confidence due to the specified parameters.`;
     }
   };
 
@@ -319,11 +333,10 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
               return (
                 <div
                   key={scenario.id}
-                  className={`p-4 border rounded-lg ${
-                    activeScenario === scenario.id
+                  className={`p-4 border rounded-lg ${activeScenario === scenario.id
                       ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
                       : "border-gray-300 dark:border-gray-600"
-                  }`}
+                    }`}
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
@@ -351,13 +364,12 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
                               %
                             </span>
                             <span
-                              className={`px-2 py-1 rounded text-xs font-medium ${
-                                result.riskLevel === "high"
+                              className={`px-2 py-1 rounded text-xs font-medium ${result.riskLevel === "high"
                                   ? "bg-red-100 text-red-800"
                                   : result.riskLevel === "medium"
                                     ? "bg-yellow-100 text-yellow-800"
                                     : "bg-green-100 text-green-800"
-                              }`}
+                                }`}
                             >
                               {result.riskLevel} risk
                             </span>
@@ -450,13 +462,12 @@ export const WhatIfSimulator: React.FC<WhatIfSimulatorProps> = ({
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`px-2 py-1 rounded text-xs font-medium ${
-                            result.riskLevel === "high"
+                          className={`px-2 py-1 rounded text-xs font-medium ${result.riskLevel === "high"
                               ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
                               : result.riskLevel === "medium"
                                 ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
                                 : "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
-                          }`}
+                            }`}
                         >
                           {result.riskLevel}
                         </span>

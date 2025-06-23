@@ -1,6 +1,6 @@
 import { AdvancedPredictionService } from '../advancedPredictionService';
 import { PredictionService } from '../predictionService';
-import { MarketContext, BettingContext } from '../../types/core';
+import { MarketContext, BettingContext } from '@/types/core';
 import { BettingOdds } from '../../types/betting';
 
 jest.mock('../predictionService');

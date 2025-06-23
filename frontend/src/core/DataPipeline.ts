@@ -1,5 +1,5 @@
 import { DataSource } from './PredictionEngine';
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { PerformanceMonitor } from './PerformanceMonitor';
 
 export interface PipelineMetrics {

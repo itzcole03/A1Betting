@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useStore } from '../store';
 import { api } from '../services/api';
 import { showError, showSuccess } from '../components/Toaster';
-import { Bet, Prop, UserStats, PerformanceData, Headline } from '../types';
+import { Bet, Prop, UserStats, PerformanceData, Headline } from '@/types';
 
 export const useDataFetching = () => {
   const queryClient = useQueryClient();

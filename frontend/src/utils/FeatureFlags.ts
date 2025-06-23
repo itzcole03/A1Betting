@@ -1,6 +1,6 @@
-import { EventBus } from '../core/EventBus.ts';
-import { PerformanceMonitor } from '../core/PerformanceMonitor.ts';
-import { UnifiedConfigManager } from '../core/UnifiedConfigManager.ts';
+import { EventBus } from '../core/EventBus';
+import { PerformanceMonitor } from '../core/PerformanceMonitor';
+import { UnifiedConfigManager } from '../core/UnifiedConfigManager';
 
 export interface Feature {
   id: string;

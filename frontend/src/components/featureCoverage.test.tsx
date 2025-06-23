@@ -1,3 +1,4 @@
+import React from 'react';
 import '@testing-library/jest-dom';
 import App from '../App.js';
 import { measurePerformance } from '../test/performanceMonitor.js';

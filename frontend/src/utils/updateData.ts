@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { dataScrapingService } from '../services/dataScrapingService.ts';
+import { dataScrapingService } from '../services/dataScrapingService';
 
 async function main() {
   try {

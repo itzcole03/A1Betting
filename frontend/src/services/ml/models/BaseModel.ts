@@ -18,7 +18,7 @@ class EventEmitter {
   }
 }
 import * as tf from '@tensorflow/tfjs-node';
-import { ModelConfig, ModelMetrics, ModelPrediction, ModelType } from '../types';
+import { ModelConfig, ModelMetrics, ModelPrediction, ModelType } from '@/types';
 import { UnifiedLogger } from '../../../core/UnifiedLogger';
 import { UnifiedErrorHandler } from '../../../core/UnifiedErrorHandler';
 // Removed named imports from '../../../core/UnifiedError' as they do not exist.

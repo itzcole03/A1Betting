@@ -1,6 +1,6 @@
 import React from 'react';
-import type { Entry } from '../types';
-import { EntryStatus } from '../types';
+import type { Entry } from '@/types';
+import { EntryStatus } from '@/types';
 import { FaChartLine, FaCheckCircle, FaTimesCircle, FaSpinner } from 'react-icons/fa';
 import { motion, Variants } from 'framer-motion';
 

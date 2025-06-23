@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import { PrizePicksProp } from './PrizePicksApiService.ts';
+import { PrizePicksProp } from './PrizePicksApiService';
 
 
 

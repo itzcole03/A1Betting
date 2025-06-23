@@ -1,6 +1,6 @@
-import { DataSource } from "../unified/DataSource.js";
-import { EventBus } from "../unified/EventBus.js";
-import { PerformanceMonitor } from "../unified/PerformanceMonitor.js";
+import { DataSource } from "../unified/DataSource";
+import { EventBus } from "../unified/EventBus";
+import { PerformanceMonitor } from "../unified/PerformanceMonitor";
 
 export interface OddsProvider {
   getOdds(eventId: string): Promise<unknown>;
@@ -43,8 +43,7 @@ export interface SportsRadarData {
 }
 
 export class SportsRadarAdapter
-  implements DataSource<SportsRadarData>, OddsProvider
-{
+  implements DataSource<SportsRadarData>, OddsProvider {
   public readonly id = "sports-radar";
   public readonly type = "sports-data";
 
@@ -109,7 +108,10 @@ export class SportsRadarAdapter
 
       this.eventBus.publish({
         type: "sports-radar-updated",
-        payload: { data },
+        payload: {
+          data: data as unknown as Record<string, unknown>,
+          timestamp: Date.now()
+        },
       });
 
       this.performanceMonitor.endTrace(traceId);
@@ -146,8 +148,8 @@ export class SportsRadarAdapter
     };
   }
 
-  public async connect(): Promise<void> {}
-  public async disconnect(): Promise<void> {}
+  public async connect(): Promise<void> { }
+  public async disconnect(): Promise<void> { }
   public async getData(): Promise<SportsRadarData> {
     return this.cache.data as SportsRadarData;
   }

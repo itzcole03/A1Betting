@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnalyticsMetrics } from '../types/betting';
+import { AnalyticsMetrics } from '@/types/betting';
 import { motion } from 'framer-motion';
 
 export interface ModelPerformanceProps {

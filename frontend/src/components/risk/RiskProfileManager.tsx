@@ -14,7 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Slider from '@mui/material/Slider';
 import TextField from '@mui/material/TextField';
 import { useRiskProfile } from '../../hooks/useRiskProfile';
-import { RiskProfile } from '../../types/core';
+import { RiskProfile } from '@/types/core';
 
 export const RiskProfileManager: React.FC = () => {
   const { activeProfile, profiles, isLoading, error, updateProfile, setActiveProfile } =

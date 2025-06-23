@@ -1,12 +1,15 @@
-from typing import Dict
-import shap
-import numpy as np
 import logging
+from typing import Dict
+
+import numpy as np
+import shap
+
 
 # Dummy model for demonstration; replace with your real model
 class DummyModel:
     def predict(self, X):
         return np.sum(X, axis=1)
+
 
 # SHAP Explainer integration
 class ShapExplainer:
@@ -20,5 +23,7 @@ class ShapExplainer:
             shap_values = self.explainer(X)
             return {k: float(v) for k, v in zip(features.keys(), shap_values.values[0])}
         except Exception as e:
-            logging.error({'event': 'shap_explain_error', 'error': str(e), 'features': features})
+            logging.error(
+                {"event": "shap_explain_error", "error": str(e), "features": features}
+            )
             return {k: 0.0 for k in features.keys()}

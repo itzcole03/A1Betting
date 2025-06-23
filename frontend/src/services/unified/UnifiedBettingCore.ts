@@ -1,6 +1,6 @@
 import EventEmitter from 'eventemitter3';
 import { BetRecord, ClvAnalysis, Opportunity } from '../types/core';
-import { BettingContext, BettingDecision, PerformanceMetrics, PredictionResult } from '../types';
+import { BettingContext, BettingDecision, PerformanceMetrics, PredictionResult } from '@/types';
 
 export class UnifiedBettingCore extends EventEmitter {
   private static instance: UnifiedBettingCore;

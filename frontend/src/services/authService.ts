@@ -1,5 +1,5 @@
 import { AppError, APIError } from '../core/UnifiedError';
-import { User } from '../types';
+import { User } from '@/types';
 import { unifiedMonitor } from '../core/UnifiedMonitor';
 
 // src/services/authService.ts

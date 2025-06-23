@@ -1,5 +1,5 @@
 import React from 'react';
-import { LiveOddsTickerProps, BookOdds } from '../types/betting';
+import { LiveOddsTickerProps, BookOdds } from '@/types/betting';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const LiveOddsTicker: React.FC<LiveOddsTickerProps> = ({ data, className = '' }) => {

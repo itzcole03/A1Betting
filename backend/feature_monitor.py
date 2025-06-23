@@ -1,6 +1,7 @@
 # Copied and adapted from Newfolder (example structure)
-from typing import Dict, Any
 from datetime import datetime
+from typing import Any, Dict
+
 
 class FeatureMonitor:
     def __init__(self):
@@ -8,9 +9,9 @@ class FeatureMonitor:
 
     def record(self, features: Dict[str, Any], processing_time: float):
         metric = {
-            'timestamp': datetime.utcnow(),
-            'feature_count': len(features),
-            'processing_time': processing_time
+            "timestamp": datetime.utcnow(),
+            "feature_count": len(features),
+            "processing_time": processing_time,
         }
         self.metrics.append(metric)
 

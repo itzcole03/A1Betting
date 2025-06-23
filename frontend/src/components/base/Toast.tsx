@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { cn } from '../../utils/classNames';
+import { cn } from '@/utils/classNames';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export interface ToastProps {

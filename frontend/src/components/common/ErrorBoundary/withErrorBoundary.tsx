@@ -1,5 +1,5 @@
-import ErrorBoundary from './ErrorBoundary';
 import React from 'react';
+import ErrorBoundary from '../ErrorBoundary';
 
 
 
@@ -34,4 +34,4 @@ export function withErrorBoundary<P extends object>(
 //     // Log to error tracking service
 //     console.error('Component error:', error, errorInfo);
 //   }
-// }); 
+// });

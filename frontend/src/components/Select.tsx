@@ -1,6 +1,6 @@
 import React from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { cn } from '../../utils/classNames';
+import { cn } from '@/utils/classNames';
 
 export interface SelectOption {
   value: string | number;

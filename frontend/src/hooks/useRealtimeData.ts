@@ -1,269 +1,335 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-interface WebSocketMessage<T = unknown> {
-  type: string;
-  data: T;
-  timestamp: number;
-}
+// ============================================================================
+// TYPES
+// ============================================================================
 
-interface UseRealtimeDataOptions<T> {
-  url: string;
-  initialData?: T | null;
-  onMessage?: (message: WebSocketMessage<T>) => void;
-  onError?: (error: Error) => void;
-  onConnected?: () => void;
-  onDisconnected?: () => void;
-  reconnectAttempts?: number;
-  reconnectDelay?: number;
-  heartbeatInterval?: number;
-  subscriptions?: string[];
-}
-
-interface UseRealtimeDataResult<T> {
-  data: T | null;
-  isConnected: boolean;
-  error: Error | null;
-  send: (message: any) => void;
-  subscribe: (channel: string) => void;
-  unsubscribe: (channel: string) => void;
-  reconnect: () => void;
-}
-
-export function useRealtimeData<T>({
-  url,
-  initialData = null,
-  onMessage,
-  onError,
-  onConnected,
-  onDisconnected,
-  reconnectAttempts = 5,
-  reconnectDelay = 1000,
-  heartbeatInterval = 30000,
-  subscriptions = [],
-}: UseRealtimeDataOptions<T>): UseRealtimeDataResult<T> {
-  const [data, setData] = useState<T | null>(initialData);
-  const [isConnected, setIsConnected] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const [activeSubscriptions, setActiveSubscriptions] = useState<Set<string>>(
-    new Set(subscriptions),
-  );
-
-  const wsRef = useRef<WebSocket | null>(null);
-  const reconnectCountRef = useRef(0);
-  const heartbeatTimeoutRef = useRef<number>();
-
-  const connect = useCallback(() => {
-    // Safety checks to prevent invalid WebSocket connections
-    if (
-      !url ||
-      url === "" ||
-      url === "wss://api.betproai.com/ws" ||
-      url.includes("api.betproai.com") ||
-      url.includes("localhost:8000") ||
-      url.includes("localhost:3001") ||
-      import.meta.env.VITE_ENABLE_WEBSOCKET === "false"
-    ) {
-      console.log("WebSocket connection disabled for realtime data:", url);
-      setError("WebSocket connections are currently disabled");
-      return;
-    }
-
-    try {
-      const ws = new WebSocket(url);
-      wsRef.current = ws;
-
-      ws.onopen = () => {
-        setIsConnected(true);
-        setError(null);
-        reconnectCountRef.current = 0;
-        onConnected?.();
-
-        // Subscribe to all active channels
-        activeSubscriptions.forEach((channel) => {
-          ws.send(JSON.stringify({ type: "subscribe", channel }));
-        });
-
-        // Start heartbeat
-        if (heartbeatInterval > 0) {
-          heartbeatTimeoutRef.current = window.setInterval(() => {
-            ws.send(JSON.stringify({ type: "ping" }));
-          }, heartbeatInterval);
-        }
-      };
-
-      ws.onmessage = (event) => {
-        try {
-          const message: WebSocketMessage<T> = JSON.parse(event.data);
-
-          if (message.type === "pong") {
-            return; // Ignore heartbeat responses
-          }
-
-          setData(message.data);
-          onMessage?.(message);
-        } catch (error) {
-          console.error("Failed to parse WebSocket message:", error);
-        }
-      };
-
-      ws.onerror = (event) => {
-        const wsError = new Error("WebSocket error");
-        setError(wsError);
-        onError?.(wsError);
-      };
-
-      ws.onclose = () => {
-        setIsConnected(false);
-        onDisconnected?.();
-
-        // Clear heartbeat interval
-        if (heartbeatTimeoutRef.current) {
-          clearInterval(heartbeatTimeoutRef.current);
-        }
-
-        // Attempt to reconnect
-        if (reconnectCountRef.current < reconnectAttempts) {
-          reconnectCountRef.current++;
-          setTimeout(connect, reconnectDelay * reconnectCountRef.current);
-        }
-      };
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error);
-        onError?.(error);
-      }
-    }
-  }, [
-    url,
-    onMessage,
-    onError,
-    onConnected,
-    onDisconnected,
-    reconnectAttempts,
-    reconnectDelay,
-    heartbeatInterval,
-    activeSubscriptions,
-  ]);
-
-  const send = useCallback((message: any) => {
-    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
-      throw new Error("WebSocket is not connected");
-    }
-
-    wsRef.current.send(JSON.stringify(message));
-  }, []);
-
-  const subscribe = useCallback(
-    (channel: string) => {
-      setActiveSubscriptions((prev) => {
-        const next = new Set(prev);
-        next.add(channel);
-        return next;
-      });
-
-      if (wsRef.current?.readyState === WebSocket.OPEN) {
-        send({ type: "subscribe", channel });
-      }
-    },
-    [send],
-  );
-
-  const unsubscribe = useCallback(
-    (channel: string) => {
-      setActiveSubscriptions((prev) => {
-        const next = new Set(prev);
-        next.delete(channel);
-        return next;
-      });
-
-      if (wsRef.current?.readyState === WebSocket.OPEN) {
-        send({ type: "unsubscribe", channel });
-      }
-    },
-    [send],
-  );
-
-  const reconnect = useCallback(() => {
-    if (wsRef.current) {
-      wsRef.current.close();
-    }
-    reconnectCountRef.current = 0;
-    connect();
-  }, [connect]);
-
-  useEffect(() => {
-    connect();
-
-    return () => {
-      if (wsRef.current) {
-        wsRef.current.close();
-      }
-      if (heartbeatTimeoutRef.current) {
-        clearInterval(heartbeatTimeoutRef.current);
-      }
-    };
-  }, [connect]);
-
-  return {
-    data,
-    isConnected,
-    error,
-    send,
-    subscribe,
-    unsubscribe,
-    reconnect,
-  };
-}
-
-// Example usage:
-/*
-interface OddsUpdate {
-  gameId: string;
+interface Prediction {
+  id: string;
+  sport: string;
+  game: string;
+  player?: string;
+  market: string;
+  prediction: string;
   odds: number;
+  confidence: number;
+  expectedValue: number;
   timestamp: number;
+  status: "active" | "completed" | "cancelled";
 }
 
-function LiveOddsTracker() {
-  const {
-    data,
-    isConnected,
-    error,
-    subscribe,
-    unsubscribe
-  } = useRealtimeData<OddsUpdate>({
-    url: 'wss://api.betproai.com/odds',
-    onMessage: (message) => {
+interface DataSource {
+  id: string;
+  name: string;
+  type: "odds" | "stats" | "news" | "weather" | "social";
+  status: "connected" | "disconnected" | "error";
+  lastUpdate: number | null;
+  quality: number; // 0-1
+  reliability: number; // 0-1
+}
 
-    },
-    onError: (error) => {
-      console.error('WebSocket error:', error);
-    },
-    subscriptions: ['NFL', 'NBA']
+interface RealTimeDataState {
+  predictions: Prediction[];
+  dataSources: DataSource[];
+  loading: boolean;
+  connectionStatus: "connected" | "connecting" | "disconnected" | "error";
+  dataQuality: number;
+  lastUpdate: Date | null;
+  connectedSourcesCount: number;
+  totalSourcesCount: number;
+  reliability: number;
+}
+
+// ============================================================================
+// MOCK DATA FOR DEMONSTRATION
+// ============================================================================
+
+const mockDataSources: DataSource[] = [
+  {
+    id: "odds-api-1",
+    name: "The Odds API",
+    type: "odds",
+    status: "connected",
+    lastUpdate: Date.now() - 30000,
+    quality: 0.95,
+    reliability: 0.92,
+  },
+  {
+    id: "espn-api",
+    name: "ESPN Stats API",
+    type: "stats",
+    status: "connected",
+    lastUpdate: Date.now() - 45000,
+    quality: 0.89,
+    reliability: 0.94,
+  },
+  {
+    id: "weather-api",
+    name: "Weather API",
+    type: "weather",
+    status: "connected",
+    lastUpdate: Date.now() - 120000,
+    quality: 0.87,
+    reliability: 0.88,
+  },
+  {
+    id: "social-sentiment",
+    name: "Social Sentiment",
+    type: "social",
+    status: "connected",
+    lastUpdate: Date.now() - 60000,
+    quality: 0.73,
+    reliability: 0.69,
+  },
+  {
+    id: "news-api",
+    name: "Sports News API",
+    type: "news",
+    status: "disconnected",
+    lastUpdate: Date.now() - 300000,
+    quality: 0.82,
+    reliability: 0.79,
+  },
+];
+
+const mockPredictions: Prediction[] = [
+  {
+    id: "pred-1",
+    sport: "NBA",
+    game: "Lakers vs Warriors",
+    player: "LeBron James",
+    market: "Points",
+    prediction: "Over 27.5",
+    odds: -110,
+    confidence: 0.78,
+    expectedValue: 12.5,
+    timestamp: Date.now() - 60000,
+    status: "active",
+  },
+  {
+    id: "pred-2",
+    sport: "NFL",
+    game: "Chiefs vs Bills",
+    market: "Total Points",
+    prediction: "Over 52.5",
+    odds: -105,
+    confidence: 0.85,
+    expectedValue: 18.3,
+    timestamp: Date.now() - 120000,
+    status: "active",
+  },
+  {
+    id: "pred-3",
+    sport: "NBA",
+    game: "Celtics vs Heat",
+    player: "Jayson Tatum",
+    market: "Rebounds",
+    prediction: "Under 8.5",
+    odds: +115,
+    confidence: 0.72,
+    expectedValue: 9.8,
+    timestamp: Date.now() - 180000,
+    status: "active",
+  },
+];
+
+// ============================================================================
+// REAL-TIME DATA HOOK
+// ============================================================================
+
+export const useRealTimeData = () => {
+  const [state, setState] = useState<RealTimeDataState>({
+    predictions: [],
+    dataSources: mockDataSources,
+    loading: true,
+    connectionStatus: "connecting",
+    dataQuality: 0,
+    lastUpdate: null,
+    connectedSourcesCount: 0,
+    totalSourcesCount: mockDataSources.length,
+    reliability: 0,
   });
 
+  // Initialize data and start real-time updates
   useEffect(() => {
-    // Subscribe to additional channels
-    subscribe('MLB');
+    const initializeData = async () => {
+      setState((prev) => ({
+        ...prev,
+        loading: true,
+        connectionStatus: "connecting",
+      }));
 
-    return () => {
-      // Cleanup subscriptions
-      unsubscribe('MLB');
+      // Simulate API connection delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const connectedSources = mockDataSources.filter(
+        (source) => source.status === "connected",
+      );
+      const avgQuality =
+        connectedSources.reduce((sum, source) => sum + source.quality, 0) /
+        connectedSources.length;
+      const avgReliability =
+        connectedSources.reduce((sum, source) => sum + source.reliability, 0) /
+        connectedSources.length;
+
+      setState((prev) => ({
+        ...prev,
+        predictions: mockPredictions,
+        loading: false,
+        connectionStatus: "connected",
+        dataQuality: avgQuality,
+        connectedSourcesCount: connectedSources.length,
+        reliability: avgReliability,
+        lastUpdate: new Date(),
+      }));
     };
-  }, [subscribe, unsubscribe]);
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+    initializeData();
+  }, []);
 
-  return (
-    <div>
-      <div>Connection status: {isConnected ? 'Connected' : 'Disconnected'}</div>
-      {data && (
-        <div>
-          Latest odds: {data.odds} (Game: {data.gameId})
-        </div>
-      )}
-    </div>
+  // Simulate real-time updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setState((prev) => {
+        // Randomly update some prediction confidences
+        const updatedPredictions = prev.predictions.map((pred) => ({
+          ...pred,
+          confidence: Math.max(
+            0.5,
+            Math.min(0.95, pred.confidence + (Math.random() - 0.5) * 0.05),
+          ),
+        }));
+
+        // Update data source statuses occasionally
+        const updatedSources = prev.dataSources.map((source) => {
+          if (Math.random() < 0.1) {
+            // 10% chance to update
+            return {
+              ...source,
+              lastUpdate:
+                source.status === "connected" ? Date.now() : source.lastUpdate,
+              quality:
+                source.status === "connected"
+                  ? Math.max(
+                      0.6,
+                      Math.min(
+                        0.98,
+                        source.quality + (Math.random() - 0.5) * 0.03,
+                      ),
+                    )
+                  : source.quality,
+            };
+          }
+          return source;
+        });
+
+        const connectedSources = updatedSources.filter(
+          (source) => source.status === "connected",
+        );
+        const avgQuality =
+          connectedSources.length > 0
+            ? connectedSources.reduce(
+                (sum, source) => sum + source.quality,
+                0,
+              ) / connectedSources.length
+            : 0;
+
+        return {
+          ...prev,
+          predictions: updatedPredictions,
+          dataSources: updatedSources,
+          dataQuality: avgQuality,
+          lastUpdate: new Date(),
+        };
+      });
+    }, 3000); // Update every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Refresh data manually
+  const refreshData = useCallback(async () => {
+    setState((prev) => ({ ...prev, loading: true }));
+
+    // Simulate API refresh
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    setState((prev) => ({
+      ...prev,
+      loading: false,
+      lastUpdate: new Date(),
+      predictions: mockPredictions.map((pred) => ({
+        ...pred,
+        confidence: Math.max(0.6, Math.min(0.95, Math.random() * 0.35 + 0.6)),
+        timestamp: Date.now(),
+      })),
+    }));
+  }, []);
+
+  // Get all predictions
+  const getAllPredictions = useCallback(() => {
+    return state.predictions;
+  }, [state.predictions]);
+
+  // Get top predictions by confidence
+  const getTopPredictions = useCallback(
+    (limit: number = 10) => {
+      return state.predictions
+        .sort((a, b) => b.confidence - a.confidence)
+        .slice(0, limit);
+    },
+    [state.predictions],
   );
-}
-*/
+
+  // Get predictions by sport
+  const getPredictionsBySport = useCallback(
+    (sport: string) => {
+      return state.predictions.filter(
+        (pred) => pred.sport.toLowerCase() === sport.toLowerCase(),
+      );
+    },
+    [state.predictions],
+  );
+
+  // Get data source by type
+  const getDataSourcesByType = useCallback(
+    (type: DataSource["type"]) => {
+      return state.dataSources.filter((source) => source.type === type);
+    },
+    [state.dataSources],
+  );
+
+  return {
+    // State
+    predictions: state.predictions,
+    dataSources: state.dataSources,
+    loading: state.loading,
+    connectionStatus: state.connectionStatus,
+    dataQuality: state.dataQuality,
+    lastUpdate: state.lastUpdate,
+    connectedSourcesCount: state.connectedSourcesCount,
+    totalSourcesCount: state.totalSourcesCount,
+    reliability: state.reliability,
+
+    // Actions
+    refreshData,
+
+    // Computed data
+    getAllPredictions,
+    getTopPredictions,
+    getPredictionsBySport,
+    getDataSourcesByType,
+
+    // Derived state
+    isConnected: state.connectionStatus === "connected",
+    hasRecentData: state.lastUpdate
+      ? Date.now() - state.lastUpdate.getTime() < 300000
+      : false, // 5 minutes
+    healthScore: (state.dataQuality + state.reliability) / 2,
+    activePredictionsCount: state.predictions.filter(
+      (p) => p.status === "active",
+    ).length,
+  };
+};
+
+export default useRealTimeData;

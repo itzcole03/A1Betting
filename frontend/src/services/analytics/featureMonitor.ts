@@ -1,4 +1,4 @@
-import { FeatureConfig, EngineeredFeatures, FeatureMonitoringConfig } from './types';
+import { FeatureConfig, EngineeredFeatures, FeatureMonitoringConfig } from '@/types';
 import { FeatureLogger } from './featureLogging';
 
 interface MonitoringMetrics {

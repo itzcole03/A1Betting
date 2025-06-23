@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 import { X } from 'lucide-react';
 
 const BetSlipSidebar: React.FC = () => {

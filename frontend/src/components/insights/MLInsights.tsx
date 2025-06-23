@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { useAppStore } from '../../store/useAppStore'; // If insights come via general app state
+// import { useAppStore } from '@/store/useAppStore'; // If insights come via general app state
 import { predictionService, GeneralInsight } from '../../services/predictionService'; // If fetched directly, added GeneralInsight
 import { Loader2, AlertTriangle } from 'lucide-react';
 

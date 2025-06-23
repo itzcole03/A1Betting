@@ -1,6 +1,6 @@
 import React from 'react';
-import { formatCurrency, formatPercentage } from '../utils/formatters';
-import { RiskProfileType, BetRecommendation } from '../types/betting';
+import { formatCurrency, formatPercentage } from '@/utils/formatters';
+import { RiskProfileType, BetRecommendation } from '@/types/betting';
 
 interface PerformanceMetricsProps {
   bankroll: number;

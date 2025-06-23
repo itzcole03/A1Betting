@@ -4,7 +4,7 @@ import { unifiedState } from './UnifiedState';
 
 // src/core/PluginSystem.ts
 
-// import { EventBus } from './EventBus'; // To be created
+// import { EventBus } from '@/core/EventBus'; // To be created
 // import { UnifiedConfig } from './UnifiedConfig'; // To be created
 
 // Potentially: import { useAppStore } from '../store/useAppStore';

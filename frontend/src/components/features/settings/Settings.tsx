@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Sun, Moon, ToggleLeft, ToggleRight, Loader2, AlertTriangle } from 'lucide-react';
 import { UnifiedApplicationConfig } from '../../core/UnifiedConfig';
 import { configService } from '../../services/configService';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore } from '@/store/useAppStore';
 import { useTheme } from '../../providers/ThemeProvider';
 
 

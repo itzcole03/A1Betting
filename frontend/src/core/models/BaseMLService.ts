@@ -1,5 +1,5 @@
 import { MLService } from './MLService';
-import { ModelMetadata, ModelVersion, ModelEvaluation, ModelTrainingConfig } from './types';
+import { ModelMetadata, ModelVersion, ModelEvaluation, ModelTrainingConfig } from '@/types';
 import { ModelManager } from './ModelManager';
 import { FeatureLogger } from '../../services/analytics/featureLogging';
 

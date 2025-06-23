@@ -1,5 +1,6 @@
 # Copied and adapted from Newfolder (example structure)
-from typing import Dict, Any
+from typing import Any, Dict
+
 
 class FeatureRegistry:
     def __init__(self):

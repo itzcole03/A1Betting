@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { OddsData, MarketOdds } from '../types/betting';
+import { OddsData, MarketOdds } from '@/types/betting';
 
 interface OddsState {
   oddsByEvent: Record<string, OddsData>;

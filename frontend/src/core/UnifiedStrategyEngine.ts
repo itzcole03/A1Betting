@@ -1,13 +1,13 @@
-import { EventBus } from './EventBus.ts';
-import { PerformanceMonitor } from './PerformanceMonitor.ts';
-import { UnifiedConfigManager } from './UnifiedConfigManager.ts';
-import { unifiedDataEngine } from './UnifiedDataEngine.ts';
-import { unifiedMonitor } from './UnifiedMonitor.ts';
-import { UnifiedPredictionEngine, PredictionFactor } from './UnifiedPredictionEngine.ts';
+import { EventBus } from './EventBus';
+import { PerformanceMonitor } from './PerformanceMonitor';
+import { UnifiedConfigManager } from './UnifiedConfigManager';
+import { unifiedDataEngine } from './UnifiedDataEngine';
+import { unifiedMonitor } from './UnifiedMonitor';
+import { UnifiedPredictionEngine, PredictionFactor } from './UnifiedPredictionEngine';
 import {
   UnifiedPredictionService,
   PredictionResult,
-} from '../services/unified/UnifiedPredictionService.ts';
+} from '../services/unified/UnifiedPredictionService';
 import {
   StrategyRecommendation,
   AnalysisResult,
@@ -16,7 +16,7 @@ import {
   TimestampedData,
   BettingOpportunity,
   BetRecord,
-} from '../types/core.ts';
+} from '../types/core';
 
 interface PredictionContext {
   playerId: string;

@@ -1,5 +1,5 @@
+import { Bet, Headline, PerformanceData, Prop, User, UserStats } from '@/types';
 import { create } from 'zustand';
-import { User, Bet, Prop, UserStats, PerformanceData, Headline } from '../types';
 
 interface AppState {
   // User state
@@ -93,3 +93,6 @@ export const useStore = create<AppState>(set => ({
   selectedLeague: 'all',
   setSelectedLeague: league => set({ selectedLeague: league }),
 }));
+
+// Export the new Zustand-based store
+export { default as useAppStore } from './useAppStore';

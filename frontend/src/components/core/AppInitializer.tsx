@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { UnifiedBettingSystem } from './core/UnifiedBettingSystem';
-import { UnifiedDataEngine } from './core/UnifiedDataEngine';
-import { UnifiedPredictionEngine } from './core/UnifiedPredictionEngine';
-import { UnifiedStrategyEngine } from './core/UnifiedStrategyEngine';
-import { UnifiedStateManager } from './core/UnifiedState';
-import { UnifiedMonitor } from './core/UnifiedMonitor';
-import { unifiedConfig } from './core/UnifiedConfig';
-import { SystemError } from './core/UnifiedError';
+import { UnifiedBettingSystem } from '../../core/UnifiedBettingSystem';
+import { unifiedConfig } from '../../core/UnifiedConfig';
+import { UnifiedDataEngine } from '../../core/UnifiedDataEngine';
+import { SystemError } from '../../core/UnifiedError';
+import { UnifiedMonitor } from '../../core/UnifiedMonitor';
+import { UnifiedPredictionEngine } from '../../core/UnifiedPredictionEngine';
+import { UnifiedStateManager } from '../../core/UnifiedState';
+import { UnifiedStrategyEngine } from '../../core/UnifiedStrategyEngine';
 
 interface AppInitializerProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export const AppInitializer: React.FC<AppInitializerProps> = ({ children }) => {
       try {
         // Initialize configuration first
         await unifiedConfig.initialize();
-        
+
         // Initialize core systems
         const systems = [
           UnifiedDataEngine.getInstance(),
@@ -34,7 +34,7 @@ export const AppInitializer: React.FC<AppInitializerProps> = ({ children }) => {
 
         // Initialize all systems in parallel
         await Promise.all(systems.map(system => system.initialize()));
-        
+
         setIsInitialized(true);
       } catch (err) {
         const error = err instanceof Error ? err : new SystemError('INITIALIZATION_FAILED', 'Failed to initialize application');
@@ -75,4 +75,4 @@ export const AppInitializer: React.FC<AppInitializerProps> = ({ children }) => {
   }
 
   return <>{children}</>;
-}; 
+};

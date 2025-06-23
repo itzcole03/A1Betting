@@ -1,6 +1,7 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { BankrollTracker } from '../BankrollTracker';
 import * as bankrollStore from '../../../store/slices/bankrollSlice';
+import { BankrollTracker } from '../BankrollTracker';
 
 describe('BankrollTracker', () => {
   beforeEach(() => {

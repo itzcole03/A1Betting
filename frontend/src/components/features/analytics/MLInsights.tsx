@@ -1,8 +1,8 @@
+import { AlertTriangle, Loader2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { Loader2, AlertTriangle } from 'lucide-react';
-import { predictionService, GeneralInsight } from '../../services/predictionService'; // If fetched directly, added GeneralInsight
+import { GeneralInsight, predictionService } from '../../../services/predictionService';
 
-// import { useAppStore } from '../../store/useAppStore'; // If insights come via general app state
+// import { useAppStore } from '@/store/useAppStore'; // If insights come via general app state
 
 // interface Insight { // Using GeneralInsight from service now
 //     id: string;
@@ -21,8 +21,8 @@ const MLInsights: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await predictionService.fetchGeneralInsights(); 
-        setInsights(data); 
+        const data = await predictionService.fetchGeneralInsights();
+        setInsights(data);
       } catch (e: any) {
         console.error("Failed to fetch ML insights", e);
         setError(e.message || "An unknown error occurred while fetching insights.");
@@ -43,14 +43,14 @@ const MLInsights: React.FC = () => {
 
   if (isLoading) return (
     <div className="flex items-center justify-center p-6 glass rounded-xl bg-gradient-to-r from-purple-500/10 to-blue-500/10 animate-pulse-soft">
-        <Loader2 className="w-6 h-6 animate-spin text-primary mr-2" /> 
-        <p className="text-text-muted">Loading AI insights...</p>
+      <Loader2 className="w-6 h-6 animate-spin text-primary mr-2" />
+      <p className="text-text-muted">Loading AI insights...</p>
     </div>
   );
 
   if (error) return (
     <div className="p-6 glass rounded-xl bg-red-500/10 text-red-400 flex items-center animate-fade-in">
-        <AlertTriangle size={20} className="mr-2"/> Error: {error}
+      <AlertTriangle size={20} className="mr-2" /> Error: {error}
     </div>
   );
 
@@ -65,9 +65,9 @@ const MLInsights: React.FC = () => {
           <div key={insight.id} className="p-4 glass rounded-xl shadow-md bg-gradient-to-r from-purple-400/10 to-blue-400/10 animate-fade-in">
             <p className="text-base text-text font-semibold mb-1">{insight.text}</p>
             <p className="text-xs text-text-muted mt-1">
-                Source: {insight.source} 
-                {insight.confidence && ` | Confidence: ${(insight.confidence * 100).toFixed(0)}%`}
-                {insight.type && ` | Type: ${insight.type}`}
+              Source: {insight.source}
+              {insight.confidence && ` | Confidence: ${(insight.confidence * 100).toFixed(0)}%`}
+              {insight.type && ` | Type: ${insight.type}`}
             </p>
           </div>
         ))
@@ -78,4 +78,4 @@ const MLInsights: React.FC = () => {
   );
 };
 
-export default MLInsights; 
+export default MLInsights;

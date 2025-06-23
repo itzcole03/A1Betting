@@ -1,5 +1,5 @@
 import { ModelEnsemble, AdvancedPrediction } from '../../types/prediction';
-import { MarketContext, BettingContext } from '../../types/core';
+import { MarketContext, BettingContext } from '@/types/core';
 import { ShapExplanation } from '../../types/ml';
 
 export class AdvancedEnsemble {

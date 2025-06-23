@@ -1,97 +1,80 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
+  Analytics,
+  Assessment,
+  Download,
+  EmojiEvents,
+  Insights,
+  PieChart,
+  PrecisionManufacturing,
+  Psychology,
+  Refresh,
+  ShowChart,
+  Timeline,
+  TrendingDown,
+  TrendingUp,
+  Warning
+} from "@mui/icons-material";
+import {
+  Alert,
+  Avatar,
+  Badge,
+  Box,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Button,
-  Box,
-  Grid,
   Chip,
-  Alert,
-  LinearProgress,
-  Tooltip,
-  IconButton,
+  CircularProgress,
   Divider,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  InputLabel,
+  LinearProgress,
+  MenuItem,
   Paper,
+  Select,
   Stack,
   Switch,
-  FormControlLabel,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Tab,
-  Tabs,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  CircularProgress,
-  Avatar,
-  Badge,
+  Tabs,
+  Tooltip,
+  Typography
 } from "@mui/material";
+import { motion } from "framer-motion";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  TrendingUp,
-  TrendingDown,
-  Assessment,
-  MonetizationOn,
-  Warning,
-  Info,
-  Download,
-  Settings,
-  Timeline,
-  ExpandMore,
-  Refresh,
-  Speed,
-  ShowChart,
-  Analytics,
-  Psychology,
-  EmojiEvents,
-  FilterList,
-  CalendarToday,
-  PieChart,
-  BarChart,
-  AutoGraph,
-  Insights,
-  PrecisionManufacturing,
-  TrendingFlat,
-} from "@mui/icons-material";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip as RechartsTooltip,
-  Legend,
-  ResponsiveContainer,
-  AreaChart,
   Area,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  ScatterChart,
-  Scatter,
-  BarChart as RechartsBarChart,
+  AreaChart,
   Bar,
-  PieChart as RechartsPieChart,
-  Pie,
+  CartesianGrid,
   Cell,
   ComposedChart,
+  Legend,
+  Line,
+  Pie,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  BarChart as RechartsBarChart,
+  PieChart as RechartsPieChart,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer,
+  XAxis,
+  YAxis
 } from "recharts";
 import { useUnifiedAnalytics } from "../../hooks/useUnifiedAnalytics";
 import {
   formatCurrency,
-  formatPercentage,
-  formatDateTime,
+  formatPercentage
 } from "../../utils/formatters";
 
 interface PerformanceMetrics {
@@ -196,14 +179,12 @@ export const PerformanceAnalyticsDashboard: React.FC<
 
   // Analytics Hook
   const { performance, ml, betting } = useUnifiedAnalytics({
-    performance: {
+    performance: true,
+    ml: {
       autoUpdate: true,
-      updateInterval: 60000,
-      timeRange: selectedTimeRange,
-      userId,
+      updateInterval: 60000
     },
-    ml: { autoUpdate: true },
-    betting: { autoUpdate: true },
+    betting: true,
   });
 
   // Load Performance Data
@@ -279,7 +260,7 @@ export const PerformanceAnalyticsDashboard: React.FC<
       const startDate = new Date();
       startDate.setDate(
         startDate.getDate() - parseInt(selectedTimeRange.replace(/\D/g, "")) ||
-          30,
+        30,
       );
 
       let cumulativeProfit = 0;
@@ -300,7 +281,7 @@ export const PerformanceAnalyticsDashboard: React.FC<
           drawdown: Math.min(
             0,
             cumulativeProfit -
-              Math.max(...mockTimeSeriesData.map((d) => d.cumulativeProfit), 0),
+            Math.max(...mockTimeSeriesData.map((d) => d.cumulativeProfit), 0),
           ),
         });
       }
@@ -444,15 +425,19 @@ export const PerformanceAnalyticsDashboard: React.FC<
         roi: metrics?.roi || 0,
         sharpeRatio: metrics?.sharpeRatio || 0,
         bestCategory:
-          categoryPerformance.reduce(
-            (best, cat) => (cat.roi > best.roi ? cat : best),
-            categoryPerformance[0] || {},
-          )?.category || "N/A",
+          categoryPerformance.length > 0
+            ? categoryPerformance.reduce(
+              (best, cat) => (cat.roi > best.roi ? cat : best),
+              categoryPerformance[0]
+            ).category
+            : "N/A",
         topModel:
-          predictions.reduce(
-            (top, pred) => (pred.accuracy > top.accuracy ? pred : top),
-            predictions[0] || {},
-          )?.modelName || "N/A",
+          predictions.length > 0
+            ? predictions.reduce(
+              (top, pred) => (pred.accuracy > top.accuracy ? pred : top),
+              predictions[0]
+            ).modelName
+            : "N/A",
       },
     };
 
@@ -578,8 +563,8 @@ export const PerformanceAnalyticsDashboard: React.FC<
           </Box>
 
           {/* Performance Overview Cards */}
-          <Grid container spacing={2} sx={{ mb: 3 }}>
-            <Grid item xs={12} sm={6} md={2}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
+            <div>
               <Paper sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="h4" color="primary.main">
                   {formatCurrency(metrics?.profitLoss || 0)}
@@ -600,9 +585,9 @@ export const PerformanceAnalyticsDashboard: React.FC<
                   )}
                 </Box>
               </Paper>
-            </Grid>
+            </div>
 
-            <Grid item xs={12} sm={6} md={2}>
+            <div>
               <Paper sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="h4" color="secondary.main">
                   {formatPercentage(metrics?.winRate || 0)}
@@ -630,9 +615,9 @@ export const PerformanceAnalyticsDashboard: React.FC<
                   />
                 </Box>
               </Paper>
-            </Grid>
+            </div>
 
-            <Grid item xs={12} sm={6} md={2}>
+            <div>
               <Paper sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="h4" color="success.main">
                   {formatPercentage(metrics?.roi || 0)}
@@ -654,9 +639,9 @@ export const PerformanceAnalyticsDashboard: React.FC<
                   />
                 </Box>
               </Paper>
-            </Grid>
+            </div>
 
-            <Grid item xs={12} sm={6} md={2}>
+            <div>
               <Paper sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="h4" color="info.main">
                   {(metrics?.sharpeRatio || 0).toFixed(2)}
@@ -684,9 +669,9 @@ export const PerformanceAnalyticsDashboard: React.FC<
                   />
                 </Box>
               </Paper>
-            </Grid>
+            </div>
 
-            <Grid item xs={12} sm={6} md={2}>
+            <div>
               <Paper sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="h4" color="warning.main">
                   {formatPercentage(Math.abs(metrics?.maxDrawdown || 0))}
@@ -707,9 +692,9 @@ export const PerformanceAnalyticsDashboard: React.FC<
                   />
                 </Box>
               </Paper>
-            </Grid>
+            </div>
 
-            <Grid item xs={12} sm={6} md={2}>
+            <div>
               <Paper sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="h4">{metrics?.totalBets || 0}</Typography>
                 <Typography variant="caption" color="textSecondary">
@@ -724,8 +709,8 @@ export const PerformanceAnalyticsDashboard: React.FC<
                   streak
                 </Typography>
               </Paper>
-            </Grid>
-          </Grid>
+            </div>
+          </div>
 
           {/* Tab Navigation */}
           <Tabs
@@ -926,7 +911,7 @@ export const PerformanceAnalyticsDashboard: React.FC<
                           value: p.profitContribution,
                           color:
                             PIE_COLORS[
-                              predictions.indexOf(p) % PIE_COLORS.length
+                            predictions.indexOf(p) % PIE_COLORS.length
                             ],
                         }))}
                         dataKey="value"

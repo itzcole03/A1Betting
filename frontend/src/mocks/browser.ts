@@ -1,4 +1,4 @@
-import { Player, Entry, Lineup, EntryStatus, LineupType, PropType } from '../types';
+import { Player, Entry, Lineup, EntryStatus, LineupType, PropType } from '@/types';
 import { http, HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
 

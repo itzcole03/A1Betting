@@ -1,5 +1,6 @@
 // betaTest4/src/test/a11y/authPageA11y.test.tsx
 
+import React from 'react';
 import { render, act } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import AuthPage from '../../pages/AuthPage';

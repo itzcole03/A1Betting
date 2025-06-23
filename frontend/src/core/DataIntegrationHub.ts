@@ -1,7 +1,7 @@
 import { DailyFantasyAdapter } from '../adapters/DailyFantasyAdapter';
 import { DataSource, DataSourceConfig, DataSourceMetrics } from './DataSource';
 import { ESPNAdapter } from '../adapters/ESPNAdapter';
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { PrizePicksAdapter } from '../adapters/PrizePicksAdapter';
 import { PrizePicksData, PrizePicksProjection } from '../types/prizePicks';

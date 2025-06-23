@@ -1,9 +1,9 @@
-import { PlayerPropService } from '../betting/playerPropService';
-import { ModelTrainingService } from './modelTrainingService';
-import { FeatureEngineeringService } from './featureEngineeringService';
-import { dataIntegrationService } from '../data/dataIntegrationService';
 import * as tf from '@tensorflow/tfjs';
 import dayjs from 'dayjs';
+import { PlayerPropService } from '../betting/PlayerPropService';
+import { dataIntegrationService } from '../data/dataIntegrationService';
+import { FeatureEngineeringService } from './featureEngineeringService';
+import { ModelTrainingService } from './modelTrainingService';
 
 // Enhanced interfaces for BacktestingService
 export interface BacktestData {
@@ -310,7 +310,7 @@ export class BacktestingService {
   }
   private async getAvailableProps(dayData: HistoricalData[]): Promise<BacktestProp[]> {
     // Extract available props from day's data
-    return dayData.flatMap(item => 
+    return dayData.flatMap(item =>
       item.marketData.map(market => ({
         id: market.propId,
         playerId: market.playerId,
@@ -529,7 +529,7 @@ export class BacktestingService {
       bets.filter(bet => bet.result.won).length;
     const avgLoss = Math.abs(
       bets.filter(bet => !bet.result.won).reduce((sum, bet) => sum + bet.result.pnl, 0) /
-        bets.filter(bet => !bet.result.won).length
+      bets.filter(bet => !bet.result.won).length
     );
 
     return winRate / avgLoss - (1 - winRate) / avgWin;

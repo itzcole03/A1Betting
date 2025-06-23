@@ -1,4 +1,4 @@
-import { FeatureConfig, EngineeredFeatures, FeatureRegistryConfig } from './types';
+import { FeatureConfig, EngineeredFeatures, FeatureRegistryConfig } from '@/types';
 import { FeatureLogger } from './featureLogging';
 import { FeatureStore } from './featureStore';
 

@@ -1,7 +1,7 @@
-import React from 'react';
-import { useWebSocketStore } from '../services/websocket';
-import { Box, Typography, CircularProgress, Alert, Snackbar } from '@mui/material';
+import { Alert, Box, CircularProgress, Snackbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import React from 'react';
+import { useWebSocketStore } from '../stores/websocketStore';
 import { fadeIn } from '../utils/animations';
 
 const StatusContainer = styled(Box)(({ theme }) => ({

@@ -1,5 +1,5 @@
 import { AnalysisRegistry } from './AnalysisFramework';
-import { EventBus } from './EventBus';
+import { EventBus } from '@/core/EventBus';
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { UnifiedPredictionEngine } from './UnifiedPredictionEngine';
 import { UnifiedStrategyEngine } from './UnifiedStrategyEngine';

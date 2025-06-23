@@ -1,22 +1,22 @@
-import { AdvancedAnalysisEngine } from './AdvancedAnalysisEngine.ts';
-import { AnalyticsService } from '../services/AnalyticsService.ts';
-import { EventBus } from './EventBus.ts';
-import { PerformanceMonitor } from './PerformanceMonitor.ts';
-import { UnifiedConfigManager } from './UnifiedConfigManager.ts';
+import { AnalyticsService } from '../services/AnalyticsService';
+import { AdvancedAnalysisEngine } from './AdvancedAnalysisEngine';
+import { EventBus } from '@/core/EventBus';
+import { PerformanceMonitor } from './PerformanceMonitor';
+import { UnifiedConfigManager } from './UnifiedConfigManager';
 
-import { getPvPMatchupFeatures } from '../models/PvPMatchupModel.js';
-import { getPlayerFormFeatures } from '../models/PlayerFormModel.js';
-import { getVenueEffectFeatures } from '../models/VenueEffectModel.js';
-import { getRefereeImpactFeatures } from '../models/RefereeImpactModel.js';
-import { getLineupSynergyFeatures } from '../models/LineupSynergyModel.js';
+import { getLineupSynergyFeatures } from '../models/LineupSynergyModel';
+import { getPlayerFormFeatures } from '../models/PlayerFormModel';
+import { getPvPMatchupFeatures } from '../models/PvPMatchupModel';
+import { getRefereeImpactFeatures } from '../models/RefereeImpactModel';
+import { getVenueEffectFeatures } from '../models/VenueEffectModel';
 
 import {
-  TimestampedData,
-  AnalysisResult as CoreAnalysisResult,
   BettingOpportunity,
+  AnalysisResult as CoreAnalysisResult,
   MarketUpdate,
   PredictionState,
-} from '../types/core.ts';
+  TimestampedData,
+} from '../types/core';
 
 export interface PredictionContext {
   playerId: string;

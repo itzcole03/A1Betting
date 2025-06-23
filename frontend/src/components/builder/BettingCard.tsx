@@ -1,7 +1,6 @@
-import React from 'react';
-import { Builder } from '@builder.io/react';
+import React from "react";
 
-// Custom Betting Card Component for Builder.io
+// Custom Betting Card Component (Builder.io removed)
 interface BettingCardProps {
   title?: string;
   odds?: string;
@@ -13,21 +12,23 @@ interface BettingCardProps {
 }
 
 const BettingCard: React.FC<BettingCardProps> = ({
-  title = 'Match Title',
-  odds = '2.5',
-  team1 = 'Team A',
-  team2 = 'Team B',
-  sport = 'Football',
-  time = 'Today 3:00 PM',
-  onClick
+  title = "Match Title",
+  odds = "2.5",
+  team1 = "Team A",
+  team2 = "Team B",
+  sport = "Football",
+  time = "Today 3:00 PM",
+  onClick,
 }) => {
   return (
-    <div 
+    <div
       className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
       onClick={onClick}
     >
       <div className="flex justify-between items-center mb-2">
-        <span className="text-sm text-gray-500 dark:text-gray-400">{sport}</span>
+        <span className="text-sm text-gray-500 dark:text-gray-400">
+          {sport}
+        </span>
         <span className="text-sm text-gray-500 dark:text-gray-400">{time}</span>
       </div>
       <h3 className="text-lg font-semibold mb-2 dark:text-white">{title}</h3>
@@ -45,47 +46,6 @@ const BettingCard: React.FC<BettingCardProps> = ({
   );
 };
 
-// Register the component with Builder.io
-Builder.registerComponent(BettingCard, {
-  name: 'BettingCard',
-  inputs: [
-    {
-      name: 'title',
-      type: 'string',
-      defaultValue: 'Match Title',
-      helperText: 'Title of the betting match'
-    },
-    {
-      name: 'odds',
-      type: 'string',
-      defaultValue: '2.5',
-      helperText: 'Betting odds'
-    },
-    {
-      name: 'team1',
-      type: 'string',
-      defaultValue: 'Team A',
-      helperText: 'First team name'
-    },
-    {
-      name: 'team2',
-      type: 'string',
-      defaultValue: 'Team B',
-      helperText: 'Second team name'
-    },
-    {
-      name: 'sport',
-      type: 'string',
-      defaultValue: 'Football',
-      helperText: 'Sport type'
-    },
-    {
-      name: 'time',
-      type: 'string',
-      defaultValue: 'Today 3:00 PM',
-      helperText: 'Match time'
-    }
-  ]
-});
+// Builder.io registration completely removed
 
 export default BettingCard;

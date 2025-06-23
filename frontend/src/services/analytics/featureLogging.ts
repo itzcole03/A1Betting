@@ -1,4 +1,4 @@
-import { FeatureConfig, FeatureLoggerConfig } from './types';
+import { FeatureConfig, FeatureLoggerConfig } from '@/types';
 
 export class FeatureLogger {
   private readonly config: FeatureLoggerConfig;

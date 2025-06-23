@@ -33,3 +33,21 @@ export interface TimestampedData {
   timestamp: number;
   value: number;
 }
+
+export interface ModelPerformanceMetrics {
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  winRate: number;
+  roi: number;
+  profitLoss: number;
+  sharpeRatio: number;
+  maxDrawdown: number;
+  betterThanExpected: number;
+  clvAverage: number;
+  variance: number;
+  predictions: number;
+  successes: number;
+  failures: number;
+}

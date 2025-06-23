@@ -1,15 +1,15 @@
-import { motion } from 'framer-motion';
-import React from 'react';
-import { twMerge } from 'tailwind-merge';
-import { UnifiedSettingsService } from '../../services/unified/UnifiedSettingsService';
+import { motion } from "framer-motion";
+import React from "react";
+import { twMerge } from "tailwind-merge";
+import { UnifiedSettingsService } from "../../services/unified/UnifiedSettingsService";
 // (icons removed, not used)
 
 // (animation variants removed, not used)
 
 // Common button component
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'ghost';
-  size?: 'small' | 'medium' | 'large';
+  variant?: "primary" | "secondary" | "success" | "danger" | "ghost";
+  size?: "small" | "medium" | "large";
   isLoading?: boolean;
   disabled?: boolean;
   onClick?: () => void;
@@ -20,12 +20,12 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button: React.FC<ButtonProps> = ({
   children,
-  variant = 'primary',
-  size = 'medium',
+  variant = "primary",
+  size = "medium",
   isLoading = false,
   disabled = false,
   onClick,
-  className = '',
+  className = "",
   ariaLabel,
   ...props
 }) => {
@@ -33,25 +33,33 @@ export const Button: React.FC<ButtonProps> = ({
   // const theme = settings.getSettingValue<'light' | 'dark'>('theme');
 
   const baseClasses =
-    'inline-flex items-center justify-center rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900';
+    "inline-flex items-center justify-center rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900";
 
   const variantClasses = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 active:bg-blue-800',
+    primary:
+      "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 active:bg-blue-800",
     secondary:
-      'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500 active:bg-gray-400 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600',
-    success: 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500 active:bg-green-800',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 active:bg-red-800',
+      "bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500 active:bg-gray-400 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600",
+    success:
+      "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500 active:bg-green-800",
+    danger:
+      "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 active:bg-red-800",
     ghost:
-      'bg-transparent text-gray-600 hover:bg-gray-100 focus:ring-gray-500 active:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-800',
+      "bg-transparent text-gray-600 hover:bg-gray-100 focus:ring-gray-500 active:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-800",
   };
 
   const sizeClasses = {
-    small: 'px-3 py-1.5 text-sm',
-    medium: 'px-4 py-2 text-base',
-    large: 'px-6 py-3 text-lg',
+    small: "px-3 py-1.5 text-sm",
+    medium: "px-4 py-2 text-base",
+    large: "px-6 py-3 text-lg",
   };
 
-  const classes = twMerge(baseClasses, variantClasses[variant], sizeClasses[size], className);
+  const classes = twMerge(
+    baseClasses,
+    variantClasses[variant],
+    sizeClasses[size],
+    className,
+  );
 
   return (
     <motion.button
@@ -79,14 +87,17 @@ interface CardProps {
   className?: string;
 }
 
-export const Card: React.FC<CardProps> = ({ children, className = '' }) => (
-  <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 ${className}`}>
+export const Card: React.FC<CardProps> = ({ children, className = "" }) => (
+  <div
+    className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 ${className}`}
+  >
     {children}
   </div>
 );
 
 // Input component
-interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   type?: string;
   label?: string;
   value: string;
@@ -99,20 +110,20 @@ interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, '
 }
 
 export const Input: React.FC<InputProps> = ({
-  type = 'text',
+  type = "text",
   label,
   value,
   onChange,
   error,
   disabled = false,
   placeholder,
-  className = '',
+  className = "",
   helperText,
   required = false,
   ...props
 }) => {
   const settings = UnifiedSettingsService.getInstance();
-  const theme = settings.getSettingValue<'light' | 'dark'>('theme');
+  const theme = settings.getSettingValue<"light" | "dark">("theme");
   const id = React.useId();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +131,7 @@ export const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <div className={twMerge('w-full', className)}>
+    <div className={twMerge("w-full", className)}>
       {label && (
         <label
           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
@@ -132,17 +143,21 @@ export const Input: React.FC<InputProps> = ({
       )}
       <motion.div transition={{ duration: 0.2 }} whileFocus={{ scale: 1.01 }}>
         <input
-          aria-describedby={error ? `${id}-error` : helperText ? `${id}-helper` : undefined}
+          aria-describedby={
+            error ? `${id}-error` : helperText ? `${id}-helper` : undefined
+          }
           aria-invalid={!!error}
           className={twMerge(
-            'w-full rounded-lg border transition-colors duration-200',
-            theme === 'dark'
-              ? 'bg-gray-700 border-gray-600 text-white'
-              : 'bg-white border-gray-300 text-gray-900',
-            error ? 'border-red-500 focus:border-red-500' : 'focus:border-blue-500',
-            disabled ? 'opacity-50 cursor-not-allowed' : '',
-            'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-            'px-4 py-2'
+            "w-full rounded-lg border transition-colors duration-200",
+            theme === "dark"
+              ? "bg-gray-700 border-gray-600 text-white"
+              : "bg-white border-gray-300 text-gray-900",
+            error
+              ? "border-red-500 focus:border-red-500"
+              : "focus:border-blue-500",
+            disabled ? "opacity-50 cursor-not-allowed" : "",
+            "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+            "px-4 py-2",
           )}
           disabled={disabled}
           id={id}
@@ -166,7 +181,10 @@ export const Input: React.FC<InputProps> = ({
         </motion.p>
       )}
       {helperText && !error && (
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400" id={`${id}-helper`}>
+        <p
+          className="mt-1 text-sm text-gray-500 dark:text-gray-400"
+          id={`${id}-helper`}
+        >
           {helperText}
         </p>
       )}
@@ -175,7 +193,8 @@ export const Input: React.FC<InputProps> = ({
 };
 
 // Select component
-interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'onChange'> {
+interface SelectProps
+  extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "onChange"> {
   label?: string;
   value: string;
   onChange: (value: string) => void;
@@ -191,10 +210,10 @@ export const Select: React.FC<SelectProps> = ({
   options,
   error,
   disabled = false,
-  className = '',
+  className = "",
 }) => {
   const settings = UnifiedSettingsService.getInstance();
-  const theme = settings.getSettingValue<'light' | 'dark'>('theme');
+  const theme = settings.getSettingValue<"light" | "dark">("theme");
   const id = React.useId();
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -202,7 +221,7 @@ export const Select: React.FC<SelectProps> = ({
   };
 
   return (
-    <div className={twMerge('w-full', className)}>
+    <div className={twMerge("w-full", className)}>
       {label && (
         <label
           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
@@ -214,21 +233,23 @@ export const Select: React.FC<SelectProps> = ({
       <select
         aria-invalid={!!error}
         className={twMerge(
-          'w-full rounded-lg border transition-colors duration-200',
-          theme === 'dark'
-            ? 'bg-gray-700 border-gray-600 text-white'
-            : 'bg-white border-gray-300 text-gray-900',
-          error ? 'border-red-500 focus:border-red-500' : 'focus:border-blue-500',
-          disabled ? 'opacity-50 cursor-not-allowed' : '',
-          'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-          'px-4 py-2'
+          "w-full rounded-lg border transition-colors duration-200",
+          theme === "dark"
+            ? "bg-gray-700 border-gray-600 text-white"
+            : "bg-white border-gray-300 text-gray-900",
+          error
+            ? "border-red-500 focus:border-red-500"
+            : "focus:border-blue-500",
+          disabled ? "opacity-50 cursor-not-allowed" : "",
+          "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+          "px-4 py-2",
         )}
         disabled={disabled}
         id={id}
         value={value}
         onChange={handleChange}
       >
-        {options.map(option => (
+        {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
@@ -256,17 +277,24 @@ export const Modal: React.FC<{
   title?: string;
   children: React.ReactNode;
   className?: string;
-}> = ({ isOpen, onClose, title, children, className = '' }) => {
+}> = ({ isOpen, onClose, title, children, className = "" }) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <div aria-hidden="true" className="fixed inset-0 transition-opacity" onClick={onClose}>
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 transition-opacity"
+          onClick={onClose}
+        >
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
 
-        <span aria-hidden="true" className="hidden sm:inline-block sm:align-middle sm:h-screen">
+        <span
+          aria-hidden="true"
+          className="hidden sm:inline-block sm:align-middle sm:h-screen"
+        >
           &#8203;
         </span>
 
@@ -291,22 +319,21 @@ export const Modal: React.FC<{
 // Toast component
 interface ToastProps {
   message: string;
-  type?: 'success' | 'error' | 'warning' | 'info';
+  type?: "success" | "error" | "warning" | "info";
   onClose: () => void;
   duration?: number;
 }
 
-
 const toastTypeStyles = {
-  success: 'from-green-500/90 to-green-700/90',
-  error: 'from-red-500/90 to-red-700/90',
-  warning: 'from-yellow-400/90 to-yellow-600/90',
-  info: 'from-blue-500/90 to-blue-700/90',
+  success: "from-green-500/90 to-green-700/90",
+  error: "from-red-500/90 to-red-700/90",
+  warning: "from-yellow-400/90 to-yellow-600/90",
+  info: "from-blue-500/90 to-blue-700/90",
 };
 
 export const Toast: React.FC<ToastProps & { index?: number }> = ({
   message,
-  type = 'info',
+  type = "info",
   onClose,
   duration = 4000,
   index = 0,
@@ -323,7 +350,7 @@ export const Toast: React.FC<ToastProps & { index?: number }> = ({
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 40 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
       onClick={onClose}
       className={`
         fixed z-50
@@ -348,15 +375,18 @@ export const Toast: React.FC<ToastProps & { index?: number }> = ({
 
 // Loading spinner component
 interface SpinnerProps {
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
   className?: string;
 }
 
-export const Spinner: React.FC<SpinnerProps> = ({ size = 'medium', className = '' }) => {
+export const Spinner: React.FC<SpinnerProps> = ({
+  size = "medium",
+  className = "",
+}) => {
   const sizes = {
-    small: 'w-4 h-4',
-    medium: 'w-6 h-6',
-    large: 'w-8 h-8',
+    small: "w-4 h-4",
+    medium: "w-6 h-6",
+    large: "w-8 h-8",
   };
 
   return (
@@ -388,16 +418,22 @@ export const Spinner: React.FC<SpinnerProps> = ({ size = 'medium', className = '
 // Badge component
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'success' | 'warning' | 'danger' | 'info';
+  variant?: "success" | "warning" | "danger" | "info";
   className?: string;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ children, variant = 'info', className = '' }) => {
+export const Badge: React.FC<BadgeProps> = ({
+  children,
+  variant = "info",
+  className = "",
+}) => {
   const colors = {
-    success: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-    warning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
-    danger: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-    info: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+    success:
+      "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+    warning:
+      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+    danger: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+    info: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
   };
 
   return (
@@ -430,7 +466,7 @@ export const Slider: React.FC<SliderProps> = ({
   className,
 }) => {
   return (
-    <div className={twMerge('w-full', className)}>
+    <div className={twMerge("w-full", className)}>
       {label && (
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           {label}
@@ -443,7 +479,7 @@ export const Slider: React.FC<SliderProps> = ({
         step={step}
         type="range"
         value={value}
-        onChange={e => onChange(Number(e.target.value))}
+        onChange={(e) => onChange(Number(e.target.value))}
       />
       <div className="flex justify-between text-sm text-gray-500 mt-1">
         <span>{min}</span>
@@ -461,14 +497,18 @@ interface ProgressProps {
   className?: string;
 }
 
-export const Progress: React.FC<ProgressProps> = ({ value, max = 100, className }) => {
+export const Progress: React.FC<ProgressProps> = ({
+  value,
+  max = 100,
+  className,
+}) => {
   const percentage = (value / max) * 100;
 
   return (
     <div
       className={twMerge(
-        'w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700',
-        className
+        "w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700",
+        className,
       )}
     >
       <div
@@ -487,10 +527,18 @@ interface TabsProps {
   className?: string;
 }
 
-export const Tabs: React.FC<TabsProps> = ({ value, onChange, children, className }) => {
+export const Tabs: React.FC<TabsProps> = ({
+  value,
+  onChange,
+  children,
+  className,
+}) => {
   return (
     <div
-      className={twMerge('flex space-x-2 border-b border-gray-200 dark:border-gray-700', className)}
+      className={twMerge(
+        "flex space-x-2 border-b border-gray-200 dark:border-gray-700",
+        className,
+      )}
     >
       {children}
     </div>
@@ -502,19 +550,25 @@ interface TabProps {
   value: string;
   label: string;
   className?: string;
+  onClick?: (value: string) => void;
 }
 
-export const Tab: React.FC<TabProps> = ({ value, label, className }) => {
+export const Tab: React.FC<TabProps> = ({
+  value,
+  label,
+  className,
+  onClick,
+}) => {
   return (
     <button
       className={twMerge(
-        'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
-        'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
-        'border-transparent hover:border-gray-300 dark:hover:border-gray-600',
-        'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300',
-        className
+        "px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+        "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500",
+        "border-transparent hover:border-gray-300 dark:hover:border-gray-600",
+        "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300",
+        className,
       )}
-      onClick={() => onChange(value)}
+      onClick={() => onClick?.(value)}
     >
       {label}
     </button>
@@ -527,12 +581,12 @@ interface IconProps {
   className?: string;
 }
 
-export const Icon: React.FC<IconProps> = ({ name, className = '' }) => {
+export const Icon: React.FC<IconProps> = ({ name, className = "" }) => {
   const icons: Record<string, string> = {
-    info: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-    'exclamation-circle': 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-    'chevron-up': 'M5 15l7-7 7 7',
-    'chevron-down': 'M19 9l-7 7-7-7',
+    info: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+    "exclamation-circle": "M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+    "chevron-up": "M5 15l7-7 7 7",
+    "chevron-down": "M19 9l-7 7-7-7",
   };
 
   return (
@@ -543,7 +597,12 @@ export const Icon: React.FC<IconProps> = ({ name, className = '' }) => {
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d={icons[name] || ''} strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+      <path
+        d={icons[name] || ""}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+      />
     </svg>
   );
 };
@@ -551,17 +610,21 @@ export const Icon: React.FC<IconProps> = ({ name, className = '' }) => {
 interface TooltipProps {
   children: React.ReactNode;
   content: React.ReactNode;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: "top" | "bottom" | "left" | "right";
 }
 
-export const Tooltip: React.FC<TooltipProps> = ({ children, content, position = 'top' }) => {
+export const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  content,
+  position = "top",
+}) => {
   const [isVisible, setIsVisible] = React.useState(false);
 
   const positions = {
-    top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
-    bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
-    left: 'right-full top-1/2 -translate-y-1/2 mr-2',
-    right: 'left-full top-1/2 -translate-y-1/2 ml-2',
+    top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
+    bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
+    left: "right-full top-1/2 -translate-y-1/2 mr-2",
+    right: "left-full top-1/2 -translate-y-1/2 ml-2",
   };
 
   return (

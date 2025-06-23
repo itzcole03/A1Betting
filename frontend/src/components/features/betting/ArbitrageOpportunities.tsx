@@ -9,8 +9,8 @@ import {
   Tooltip,
   IconButton,
 } from '@mui/material';
-import { formatCurrency, formatPercentage } from '../utils/formatters';
-import type { ArbitrageOpportunity } from '../types/betting';
+import { formatCurrency, formatPercentage } from '@/utils/formatters';
+import type { ArbitrageOpportunity } from '@/types/betting';
 import InfoIcon from '@mui/icons-material/Info';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
