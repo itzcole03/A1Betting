@@ -301,7 +301,7 @@ export const UserFriendlyApp: React.FC = () => {
       id: "backend-test",
       label: "Backend Status",
       icon: <Search className="w-5 h-5" />,
-      component: BackendConnectionTest,
+      component: ApiDebug,
       badge: isOffline ? "ERROR" : "OK",
     },
   ];
