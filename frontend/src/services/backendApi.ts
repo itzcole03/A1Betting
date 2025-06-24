@@ -193,7 +193,10 @@ class BackendApiService {
       };
 
       this.wsConnection.onerror = (error) => {
-        console.error("[WebSocket] Error:", error);
+        console.error(
+          "[WebSocket] Connection error. WebSocket may not be available in production deployment.",
+        );
+        // Don't log the full error object as it's not serializable
       };
     } catch (error) {
       console.error("[WebSocket] Failed to initialize:", error);
