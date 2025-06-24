@@ -1,7 +1,7 @@
 import { EventBus } from "../core/EventBus";
 import { UnifiedPredictionEngine } from "../core/UnifiedPredictionEngine";
 import { UnifiedStrategyEngine } from "../core/UnifiedStrategyEngine";
-import { UnifiedDataEngine } from "../core/UnifiedDataEngine";
+import { unifiedDataEngine } from "../core/UnifiedDataEngine";
 import { UnifiedLogger } from "../core/UnifiedLogger";
 
 /**
