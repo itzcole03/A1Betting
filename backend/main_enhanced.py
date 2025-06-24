@@ -2040,9 +2040,9 @@ app.include_router(websocket_router, prefix="/ws", tags=["websockets"])
 if __name__ == "__main__":
     uvicorn.run(
         "main_enhanced:app",
-        host=config.host,
-        port=config.port,
-        reload=config.debug,
-        workers=config.workers if not config.debug else 1,
-        log_level=config.log_level.lower(),
+        host="0.0.0.0",  # Bind to all interfaces for network access
+        port=8000,
+        reload=True,
+        workers=1,
+        log_level="info",
     )
