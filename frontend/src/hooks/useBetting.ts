@@ -87,14 +87,23 @@ export const useValueBets = (filters?: {
 
   // Calculate statistics
   const stats = useMemo(() => {
+    // Ensure filteredValueBets is an array before using reduce
+    if (!Array.isArray(filteredValueBets) || filteredValueBets.length === 0) {
+      return {
+        count: 0,
+        averageEdge: 0,
+        maximumEdge: 0,
+        totalValue: 0,
+      };
+    }
+
     const totalEdge = filteredValueBets.reduce(
-      (sum: number, bet: ValueBet) => sum + bet.edge,
+      (sum: number, bet: ValueBet) => sum + (bet.edge || 0),
       0,
     );
-    const avgEdge =
-      filteredValueBets.length > 0 ? totalEdge / filteredValueBets.length : 0;
+    const avgEdge = totalEdge / filteredValueBets.length;
     const maxEdge = filteredValueBets.reduce(
-      (max: number, bet: ValueBet) => Math.max(max, bet.edge),
+      (max: number, bet: ValueBet) => Math.max(max, bet.edge || 0),
       0,
     );
 
