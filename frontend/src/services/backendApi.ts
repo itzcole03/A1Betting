@@ -457,6 +457,58 @@ class BackendApiService {
     const response = await this.api.delete(endpoint);
     return response.data;
   }
+
+  // Debug method to test connection and get backend status
+  public async getConnectionStatus(): Promise<{
+    isConnected: boolean;
+    baseURL: string;
+    error?: string;
+    endpoints: { [key: string]: boolean };
+  }> {
+    const status = {
+      isConnected: false,
+      baseURL: this.api.defaults.baseURL || "not set",
+      endpoints: {} as { [key: string]: boolean },
+      error: undefined as string | undefined,
+    };
+
+    // Test basic health endpoint
+    try {
+      await this.getHealth();
+      status.isConnected = true;
+      status.endpoints["/health"] = true;
+    } catch (error: any) {
+      status.error = error.message || "Unknown connection error";
+      status.endpoints["/health"] = false;
+    }
+
+    // Test other key endpoints
+    const testEndpoints = [
+      {
+        name: "/api/betting-opportunities",
+        fn: () => this.getBettingOpportunities(),
+      },
+      {
+        name: "/api/arbitrage-opportunities",
+        fn: () => this.getArbitrageOpportunities(),
+      },
+      {
+        name: "/api/analytics/advanced",
+        fn: () => this.getAdvancedAnalytics(),
+      },
+    ];
+
+    for (const endpoint of testEndpoints) {
+      try {
+        await endpoint.fn();
+        status.endpoints[endpoint.name] = true;
+      } catch (error) {
+        status.endpoints[endpoint.name] = false;
+      }
+    }
+
+    return status;
+  }
 }
 
 // Create singleton instance
