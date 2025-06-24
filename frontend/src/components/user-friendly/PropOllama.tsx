@@ -45,6 +45,12 @@ export const PropOllama: React.FC = () => {
 
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [liveData, setLiveData] = useState({
+    activeAnalyses: 0,
+    liveGames: 0,
+    confidencePicks: 0,
+    valueBets: 0,
+  });
 
   // Helper function to detect analysis type from user message
   const detectAnalysisType = (
