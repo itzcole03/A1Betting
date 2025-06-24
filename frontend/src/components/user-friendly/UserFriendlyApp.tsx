@@ -370,24 +370,10 @@ export const UserFriendlyApp: React.FC = () => {
       component: UserFriendlyDashboard, // Will show analytics view
     },
     {
-      id: "ultra-accuracy",
-      label: "Ultra Accuracy",
-      icon: <Brain className="w-5 h-5" />,
-      component: UltraAccuracyDashboard,
-      badge: "99%+",
-    },
-    {
       id: "settings",
       label: "Settings",
       icon: <SettingsIcon className="w-5 h-5" />,
       component: SimpleSettings,
-    },
-    {
-      id: "backend-test",
-      label: "Admin Panel",
-      icon: <Search className="w-5 h-5" />,
-      component: AdminSettings,
-      badge: isOffline ? "ERROR" : "ADMIN",
     },
   ];
 
