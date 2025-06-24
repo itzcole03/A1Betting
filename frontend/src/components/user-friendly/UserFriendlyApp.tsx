@@ -368,7 +368,7 @@ export const UserFriendlyApp: React.FC = () => {
       id: "settings",
       label: "Settings",
       icon: <SettingsIcon className="w-5 h-5" />,
-      component: SettingsTest,
+      component: SimpleSettings,
     },
     {
       id: "backend-test",
