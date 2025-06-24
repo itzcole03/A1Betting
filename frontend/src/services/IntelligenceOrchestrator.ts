@@ -75,7 +75,7 @@ export class IntelligenceOrchestrator {
     this.logger = UnifiedLogger.getInstance();
     this.predictionEngine = UnifiedPredictionEngine.getInstance();
     this.strategyEngine = UnifiedStrategyEngine.getInstance();
-    this.dataEngine = UnifiedDataEngine.getInstance();
+    // unifiedDataEngine is already available as imported singleton
 
     this.automationSettings = {
       enableAutoOptimization: true,
