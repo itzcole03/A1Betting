@@ -113,15 +113,8 @@ export class IntegrationService {
         by_sport: performance.performance_by_sport,
       };
     } catch (error) {
-      return {
-        overall_accuracy: 0,
-        recent_accuracy: 0,
-        precision: 0,
-        recall: 0,
-        f1_score: 0,
-        auc_roc: 0,
-        by_sport: {},
-      };
+      // Re-throw the error to let React Query handle it properly
+      throw error;
     }
   }
 
