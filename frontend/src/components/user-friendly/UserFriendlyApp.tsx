@@ -233,6 +233,14 @@ export const UserFriendlyApp: React.FC = () => {
     retry: false,
   });
 
+  // Debug error logging
+  useEffect(() => {
+    if (healthError) console.log("[Debug] Health error:", healthError);
+    if (analyticsError) console.log("[Debug] Analytics error:", analyticsError);
+    if (userError) console.log("[Debug] User error:", userError);
+    if (accuracyError) console.log("[Debug] Accuracy error:", accuracyError);
+  }, [healthError, analyticsError, userError, accuracyError]);
+
   // Check if backend is offline - detect when we're getting error responses or specific error patterns
   const isOffline =
     healthError ||
@@ -243,6 +251,14 @@ export const UserFriendlyApp: React.FC = () => {
     (userProfile?.name === "User" &&
       userAnalytics?.current_balance === 0 &&
       accuracyMetrics?.overall_accuracy === 0);
+
+  console.log("[Debug] Offline status:", isOffline, {
+    healthError: !!healthError,
+    analyticsError: !!analyticsError,
+    userError: !!userError,
+    accuracyError: !!accuracyError,
+    healthStatus: healthStatus?.status,
+  });
 
   // Handle retry functionality
   const handleRetry = () => {
