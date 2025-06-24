@@ -232,14 +232,22 @@ class BackendApiService {
     sport?: string,
     limit?: number,
   ): Promise<BettingOpportunity[]> {
-    const params: any = {};
-    if (sport) params.sport = sport;
-    if (limit) params.limit = limit;
+    try {
+      const params: any = {};
+      if (sport) params.sport = sport;
+      if (limit) params.limit = limit;
 
-    const response = await this.api.get("/api/betting-opportunities", {
-      params,
-    });
-    return response.data;
+      const response = await this.api.get("/api/betting-opportunities", {
+        params,
+      });
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        console.warn("[API] Betting opportunities endpoint not available");
+        return [];
+      }
+      throw error;
+    }
   }
 
   public async getArbitrageOpportunities(
