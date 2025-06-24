@@ -119,17 +119,30 @@ class BackendApiService {
   private wsCallbacks: Map<string, Function[]> = new Map();
 
   constructor() {
-    // Use environment variable first, detect cloud environment, then fallback to localhost
+    // Use environment variable first, detect cloud environment, then use appropriate URL
     const isCloudEnvironment = window.location.hostname.includes("fly.dev");
-    const baseURL =
-      import.meta.env.VITE_API_URL ||
-      (isCloudEnvironment ? "/api" : "http://localhost:8000");
+    const isDevelopment = import.meta.env.DEV;
 
-    console.log(
-      "[BackendApi] Connecting to backend:",
+    let baseURL = import.meta.env.VITE_API_URL;
+
+    if (!baseURL) {
+      if (isCloudEnvironment) {
+        // In cloud, use relative URLs which will be proxied
+        baseURL = "";
+      } else if (isDevelopment) {
+        // In development, use relative URLs to leverage Vite proxy
+        baseURL = "";
+      } else {
+        // Production fallback
+        baseURL = "http://localhost:8000";
+      }
+    }
+
+    console.log("[BackendApi] Environment:", {
+      isCloudEnvironment,
+      isDevelopment,
       baseURL,
-      isCloudEnvironment ? "(cloud proxy)" : "(local)",
-    );
+    });
 
     this.api = axios.create({
       baseURL,
@@ -204,19 +217,28 @@ class BackendApiService {
     // Skip WebSocket in production deployments where it may not be available
     if (typeof window === "undefined") return;
 
-    // Use environment variable first, detect cloud environment, then fallback to local
+    // Use environment variable first, detect environment, then use appropriate URL
     const isCloudEnvironment = window.location.hostname.includes("fly.dev");
-    const wsUrl =
-      import.meta.env.VITE_WEBSOCKET_URL ||
-      (isCloudEnvironment
-        ? `wss://${window.location.hostname}/ws`
-        : "ws://localhost:8000");
+    const isDevelopment = import.meta.env.DEV;
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 
-    console.log(
-      "[WebSocket] Connecting to:",
+    let wsUrl = import.meta.env.VITE_WEBSOCKET_URL;
+
+    if (!wsUrl) {
+      if (isCloudEnvironment) {
+        wsUrl = `${protocol}//${window.location.hostname}/ws`;
+      } else if (isDevelopment) {
+        wsUrl = `ws://${window.location.hostname}:${window.location.port}/ws`;
+      } else {
+        wsUrl = "ws://localhost:8000";
+      }
+    }
+
+    console.log("[WebSocket] Environment:", {
+      isCloudEnvironment,
+      isDevelopment,
       wsUrl,
-      isCloudEnvironment ? "(cloud)" : "(local)",
-    );
+    });
 
     try {
       // Always try to connect to WebSocket when we have a specific URL
