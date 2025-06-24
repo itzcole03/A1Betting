@@ -776,6 +776,9 @@ export const UserFriendlyApp: React.FC = () => {
         isOffline={!!isOffline}
         onStatusChange={handleBackendStatusChange}
       />
+
+      {/* Connection Test - Debug component */}
+      <ConnectionTest />
     </div>
   );
 };
