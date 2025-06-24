@@ -1595,7 +1595,7 @@ export const AdvancedIntelligenceHub: React.FC = () => {
       <Tabs
         value={selectedView}
         onValueChange={setSelectedView}
-        className="space-y-6 relative z-10"
+        className="space-y-6 relative z-10 mt-8"
       >
         <TabsList className="grid w-full grid-cols-5 bg-slate-800/50 backdrop-blur-sm">
           <TabsTrigger value="orchestrator" className="flex items-center gap-2">
