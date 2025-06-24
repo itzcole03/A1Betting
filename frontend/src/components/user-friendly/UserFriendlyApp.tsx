@@ -408,11 +408,7 @@ export const UserFriendlyApp: React.FC = () => {
           service="Backend Services"
           onRetry={handleRetry}
         />
-        {/* Electric Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/10 to-green-500/5" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(34,197,94,0.1)_0%,transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(59,130,246,0.1)_0%,transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_90%_10%,rgba(168,85,247,0.1)_0%,transparent_50%)]" />
+
         {/* Header */}
         <header className="sticky top-0 z-50 bg-black/30 backdrop-blur-2xl border-b border-cyan-500/20 shadow-lg shadow-cyan-500/10 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-green-500/5" />
