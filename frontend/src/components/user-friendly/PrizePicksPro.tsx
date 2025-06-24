@@ -450,6 +450,29 @@ export const PrizePicksPro: React.FC = () => {
         </div>
       </motion.div>
 
+      {/* Sport Filter */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-card rounded-xl p-4 border border-cyan-500/20"
+      >
+        <div className="flex items-center gap-4">
+          <span className="text-white font-semibold">Filter by Sport:</span>
+          <select
+            value={selectedSport}
+            onChange={(e) => setSelectedSport(e.target.value)}
+            className="px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
+          >
+            <option value="all">All Sports</option>
+            <option value="nba">NBA</option>
+            <option value="nfl">NFL</option>
+            <option value="mlb">MLB</option>
+            <option value="nhl">NHL</option>
+            <option value="soccer">Soccer</option>
+          </select>
+        </div>
+      </motion.div>
+
       {/* Current Lineup Display */}
       {selectedPicks.length > 0 && (
         <motion.div
