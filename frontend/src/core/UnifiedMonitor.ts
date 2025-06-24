@@ -80,6 +80,15 @@ export class UnifiedMonitor {
     this.metrics.set(name, { value, tags, timestamp: Date.now() });
   }
 
+  captureMessage(message: string, level: string = "info", extra?: any) {
+    console.log(`[${level.toUpperCase()}] ${message}`, extra || {});
+  }
+
+  captureException(error: Error, context?: any) {
+    console.error("Exception captured:", error, context || {});
+    this.reportError(error, context);
+  }
+
   private metrics?: Map<
     string,
     {
