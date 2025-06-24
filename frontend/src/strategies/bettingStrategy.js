@@ -129,7 +129,7 @@ export const placeBets = async (request) => {
       created_at: new Date().toISOString(), // Backend will likely overwrite this
       type: opp.type,
     }));
-    const response = await post(endpoint, backendPayload);
+    const response = await axios.post(endpoint, backendPayload);
     if (trace) {
       trace.setHttpStatus(response.status);
       unifiedMonitor.endTrace(trace);
