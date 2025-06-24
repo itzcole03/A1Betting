@@ -652,8 +652,12 @@ export const AdvancedIntelligenceHub: React.FC = () => {
         cyberIntegrationScore: 91.8,
       } as IntelligenceMetrics;
     },
-    refetchInterval: 5000,
+    refetchInterval: isAutoRefreshEnabled ? refreshInterval : false,
     retry: 2,
+    onSuccess: () => {
+      setLastUpdated(new Date());
+      setIsManualRefreshing(false);
+    },
   });
 
   const { data: ensembleOutput, isLoading: ensembleLoading } = useQuery({
