@@ -7,6 +7,9 @@ import "./utils/chartSetup";
 // Import the user-friendly main interface
 import UserFriendlyApp from "./components/user-friendly/UserFriendlyApp";
 
+// Import theme provider
+import { ThemeProvider } from "./components/common/theme/ThemeProvider";
+
 // Import styling
 import "./App.css";
 
