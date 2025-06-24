@@ -119,7 +119,9 @@ class BackendApiService {
   private wsCallbacks: Map<string, Function[]> = new Map();
 
   constructor() {
-    const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+    // Use the frontend's base URL for API calls to leverage Vite's proxy
+    // In development, this will be proxied to the backend via vite.config.ts
+    const baseURL = import.meta.env.VITE_API_URL || "";
 
     this.api = axios.create({
       baseURL,
