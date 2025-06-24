@@ -355,6 +355,12 @@ export const UserFriendlyApp: React.FC = () => {
       badge: "99%+",
     },
     {
+      id: "settings",
+      label: "Settings",
+      icon: <SettingsIcon className="w-5 h-5" />,
+      component: Settings,
+    },
+    {
       id: "backend-test",
       label: "Backend Status",
       icon: <Search className="w-5 h-5" />,
