@@ -1011,8 +1011,7 @@ export const UserFriendlyApp: React.FC = () => {
                 </motion.button>
               </div>
             </div>
-          </div>
-        </header>
+          </header>
 
         <div className="flex">
           {/* Sidebar */}
