@@ -751,21 +751,14 @@ export const UserFriendlyApp: React.FC = () => {
           {/* Main Content */}
           <main className="flex-1 min-h-screen">
             <div className="p-6">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={isAdvancedMode ? "advanced" : currentPage}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {isAdvancedMode ? (
-                    <UltraAdvancedMLDashboard />
-                  ) : (
-                    <CurrentComponent onNavigate={setCurrentPage} />
-                  )}
-                </motion.div>
-              </AnimatePresence>
+              {/* Temporarily disable animations for debugging */}
+              <div>
+                {isAdvancedMode ? (
+                  <UltraAdvancedMLDashboard />
+                ) : (
+                  <CurrentComponent onNavigate={setCurrentPage} />
+                )}
+              </div>
             </div>
           </main>
         </div>
