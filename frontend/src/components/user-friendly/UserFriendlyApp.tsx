@@ -548,8 +548,8 @@ export const UserFriendlyApp: React.FC = () => {
                     onClick={() => setIsAdvancedMode(!isAdvancedMode)}
                     className={`p-3 rounded-xl transition-all duration-300 backdrop-blur-sm border-2 ${
                       isAdvancedMode
-                        ? "bg-gradient-to-r from-red-500/50 to-orange-500/50 border-red-400 text-red-300 shadow-2xl shadow-red-500/50"
-                        : "bg-gray-800/80 hover:bg-gray-700/80 border-gray-500 text-gray-300 hover:text-red-300 hover:border-red-400 hover:bg-gray-600/80"
+                        ? "bg-gradient-to-r from-purple-500/50 to-blue-500/50 border-purple-400 text-purple-300 shadow-2xl shadow-purple-500/50"
+                        : "bg-gray-800/80 hover:bg-gray-700/80 border-gray-500 text-gray-300 hover:text-purple-300 hover:border-purple-400 hover:bg-gray-600/80"
                     }`}
                     title={
                       isAdvancedMode
