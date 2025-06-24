@@ -183,8 +183,8 @@ export const useArbitrageOpportunities = (filters?: {
       ) / filteredOpportunities.length;
 
     return {
-      count: filteredOpportunities.length,
-      totalGuaranteedProfit: totalProfit,
+      totalOpportunities: filteredOpportunities.length,
+      totalProfit: totalProfit,
       averageProfitPercent: avgProfitPercent,
     };
   }, [filteredOpportunities]);
