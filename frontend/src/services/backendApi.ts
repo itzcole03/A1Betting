@@ -4,7 +4,6 @@
  */
 
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { mockBackendService } from "./mockBackendService";
 
 // Types
 export interface BettingOpportunity {
