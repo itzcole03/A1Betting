@@ -63,6 +63,33 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
   const { theme, setTheme } = useTheme();
   const { addToast } = useAppStore();
 
+  // Force text visibility with aggressive CSS override
+  React.useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = `
+      * {
+        color: white !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+      }
+      h1, h2, h3, h4, h5, h6, p, span, label, div {
+        color: white !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        background-clip: border-box !important;
+      }
+      .text-transparent {
+        color: white !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      if (document.head.contains(style)) {
+        document.head.removeChild(style);
+      }
+    };
+  }, []);
+
   // Core settings state
   const [appConfig, setAppConfig] = useState<UnifiedApplicationConfig | null>(
     null,
