@@ -8,10 +8,11 @@ import {
   Menu,
   MessageCircle,
   Search,
+  Settings as SettingsIcon,
   Trophy,
+  TrendingUp,
   X,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../services/integrationService";
 import OfflineIndicator from "../ui/OfflineIndicator";
