@@ -139,7 +139,7 @@ import UniversalPredictions from "../predictions/UniversalPredictions";
 
 // Import strategy modules
 import UnifiedStrategyEngineDisplay from "../strategy/UnifiedStrategyEngineDisplay";
-import UnifiedStrategyConfig from "../strategy/UnifiedStrategyConfig";
+import { UnifiedStrategyConfig } from "../strategy/UnifiedStrategyConfig";
 
 // Import quantum modules
 import { QuantumPlatform } from "../../quantum";
