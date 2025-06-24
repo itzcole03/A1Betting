@@ -60,17 +60,19 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS configuration for frontend integration
+# CORS configuration for cloud frontend integration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "*",  # Allow all for development
+        "https://7fb6bf6978914ca48f089e6151180b03-a1b171efc67d4aea943f921a9.fly.dev",  # Cloud frontend
         "http://localhost:5173",  # Vite dev server
         "http://localhost:3000",  # Alternative React dev server
         "http://localhost:8080",  # Another common dev port
         "http://127.0.0.1:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:8080",
-        # Add production domains here
+        "http://192.168.1.125:5173",  # Local network access
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
