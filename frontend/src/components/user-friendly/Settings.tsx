@@ -61,6 +61,8 @@ interface SettingsProps {
 }
 
 export const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
+  console.log("Settings component rendering...");
+
   const queryClient = useQueryClient();
   const [settings, setSettings] = useState<UserSettings>({
     profile: {
