@@ -144,13 +144,19 @@ class BackendApiService {
     this.api.interceptors.response.use(
       (response) => response,
       (error) => {
-        console.error("[API Error]:", {
+        const errorInfo = {
           url: error.config?.url,
           method: error.config?.method,
           status: error.response?.status,
-          data: error.response?.data,
           message: error.message,
-        });
+        };
+
+        if (error.response?.status === 404) {
+          console.warn("[API] Endpoint not found:", errorInfo);
+        } else {
+          console.error("[API Error]:", errorInfo);
+        }
+
         return Promise.reject(error);
       },
     );
