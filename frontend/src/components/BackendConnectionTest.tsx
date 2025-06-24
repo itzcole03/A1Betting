@@ -9,6 +9,7 @@ import {
   HealthStatus,
   BettingOpportunity,
 } from "../services/backendApi";
+import IntegrationStatus from "./IntegrationStatus";
 
 interface ConnectionStatus {
   backend: "connected" | "disconnected" | "loading";
