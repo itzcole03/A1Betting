@@ -18,6 +18,7 @@ import OfflineIndicator from "../ui/OfflineIndicator";
 import BackendControl from "../ui/BackendControl";
 import BackendConnectionTest from "../BackendConnectionTest";
 import ApiDebug from "../ApiDebug";
+import { ultraAccuracyIntegrationService } from "../../services/UltraAccuracyIntegrationService";
 
 // Import user-friendly components
 import MoneyMakerPro from "./MoneyMakerPro";
