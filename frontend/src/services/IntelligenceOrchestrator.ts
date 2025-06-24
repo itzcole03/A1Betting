@@ -56,7 +56,7 @@ export class IntelligenceOrchestrator {
   private readonly logger: UnifiedLogger;
   private readonly predictionEngine: UnifiedPredictionEngine;
   private readonly strategyEngine: UnifiedStrategyEngine;
-  private readonly dataEngine: UnifiedDataEngine;
+  // Note: dataEngine is the singleton instance, not a class
 
   private isInitialized = false;
   private isOptimizing = false;
