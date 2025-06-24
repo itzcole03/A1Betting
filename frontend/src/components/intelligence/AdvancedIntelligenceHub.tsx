@@ -66,7 +66,7 @@ import toast from "react-hot-toast";
 // Import core engines
 import { UnifiedPredictionEngine } from "../../core/UnifiedPredictionEngine";
 import { UnifiedStrategyEngine } from "../../core/UnifiedStrategyEngine";
-import { UnifiedDataEngine } from "../../core/UnifiedDataEngine";
+import { unifiedDataEngine } from "../../core/UnifiedDataEngine";
 
 // Import Intelligence Orchestrator
 import {
