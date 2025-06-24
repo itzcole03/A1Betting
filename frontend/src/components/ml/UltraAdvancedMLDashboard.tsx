@@ -531,6 +531,12 @@ const UltraAdvancedMLDashboard: React.FC = () => {
       icon: Microscope,
       active: selectedView === "research",
     },
+    {
+      id: "admin",
+      label: "Admin Panel",
+      icon: Settings,
+      active: selectedView === "admin",
+    },
   ];
 
   // Main status metrics for header
