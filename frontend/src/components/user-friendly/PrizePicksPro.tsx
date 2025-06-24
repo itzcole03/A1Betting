@@ -177,6 +177,7 @@ export const PrizePicksPro: React.FC = () => {
   const [selectedPicks, setSelectedPicks] = useState<SelectedPick[]>([]);
   const [isRulesModalOpen, setIsRulesModalOpen] = useState(false);
   const [currentLineup, setCurrentLineup] = useState<LineupEntry | null>(null);
+  const [selectedSport, setSelectedSport] = useState<string>("all");
 
   // Real data fetching with React Query
   const {
