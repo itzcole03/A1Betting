@@ -135,10 +135,19 @@ class BackendApiService {
     });
 
     // Request interceptor for debugging
-    this.api.interceptors.request.use((config) => {
-      console.log(`[API] ${config.method?.toUpperCase()} ${config.url}`);
-      return config;
-    });
+    this.api.interceptors.request.use(
+      (config) => {
+        const debugInfo = `[API Request] ${(config.method || "unknown").toUpperCase()} ${baseURL}${config.url}`;
+        if (import.meta.env.DEV) {
+          console.log(debugInfo);
+        }
+        return config;
+      },
+      (error) => {
+        console.error("[API Request Error]:", error.message || error);
+        return Promise.reject(error);
+      },
+    );
 
     // Response interceptor for error handling
     this.api.interceptors.response.use(
