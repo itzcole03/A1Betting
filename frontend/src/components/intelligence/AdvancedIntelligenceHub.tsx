@@ -125,6 +125,9 @@ import RiskInsights from "../analytics/RiskInsights";
 import ShapExplanation from "../analytics/ShapExplanation";
 import ModelComparison from "../analytics/ModelComparison";
 
+// Import monitoring modules
+import PerformanceDashboard from "../monitoring/PerformanceDashboard";
+
 // Import ML modules
 import UltraAdvancedMLDashboard from "../ml/UltraAdvancedMLDashboard";
 import MLModelCenter from "../ml/MLModelCenter";
