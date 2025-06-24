@@ -1372,6 +1372,28 @@ const UltraAdvancedMLDashboard: React.FC = () => {
             </div>
           )}
 
+          {/* Admin Settings View */}
+          {selectedView === "admin" && (
+            <div className="space-y-6">
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <Shield className="w-6 h-6 text-red-400" />
+                  <div>
+                    <h3 className="text-red-400 font-semibold">
+                      Administrator Access
+                    </h3>
+                    <p className="text-red-300 text-sm">
+                      You are accessing advanced system configuration. Changes
+                      can affect system stability.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <AdminSettings />
+            </div>
+          )}
+
           {/* Fallback for other views */}
           {![
             "overview",
@@ -1379,6 +1401,7 @@ const UltraAdvancedMLDashboard: React.FC = () => {
             "predictions",
             "health",
             "research",
+            "admin",
           ].includes(selectedView) && (
             <div className="text-center py-12">
               <h2 className="text-xl font-semibold text-white mb-2">
