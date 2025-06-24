@@ -196,6 +196,14 @@ export const UserFriendlyApp: React.FC = () => {
   const [ultraAccuracyStats, setUltraAccuracyStats] = useState<any>(null);
   const queryClient = useQueryClient();
 
+  // Debug currentPage changes
+  useEffect(() => {
+    console.log("[Debug] currentPage changed to:", currentPage);
+  }, [currentPage]);
+
+  // Debug component re-renders
+  console.log("[Debug] UserFriendlyApp rendering, currentPage:", currentPage);
+
   // Initialize Ultra Accuracy integration
   useEffect(() => {
     const updateStats = () => {
