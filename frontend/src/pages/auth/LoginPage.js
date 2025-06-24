@@ -16,7 +16,7 @@ export default function LoginPage() {
     setError("");
     setIsLoading(true);
     try {
-      const user = await apiService.login(email, password);
+      const user = await ApiService.login(email, password);
       setUser(user);
       navigate("/dashboard");
     } catch (err) {
