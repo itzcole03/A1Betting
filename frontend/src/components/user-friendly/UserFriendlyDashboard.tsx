@@ -104,19 +104,28 @@ export const UserFriendlyDashboard: React.FC<{
     },
   });
 
-  // Calculate live stats from real data
-  const liveStats: LiveStats = {
-    totalProfit: userAnalytics?.yearly?.[new Date().getFullYear()] || 0,
-    winRate: accuracyMetrics?.overall_accuracy
-      ? accuracyMetrics.overall_accuracy * 100
-      : 0,
-    activeGames: healthStatus?.metrics?.active_predictions || 0,
-    aiAccuracy: accuracyMetrics?.overall_accuracy
-      ? accuracyMetrics.overall_accuracy * 100
-      : 0,
-    todaysPicks: valueBets?.length || 0,
-    liveAlerts: arbitrageOpportunities?.length || 0,
-  };
+  // Calculate live stats from real data - memoized to prevent infinite re-renders
+  const liveStats: LiveStats = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return {
+      totalProfit: userAnalytics?.yearly?.[currentYear] || 0,
+      winRate: accuracyMetrics?.overall_accuracy
+        ? accuracyMetrics.overall_accuracy * 100
+        : 0,
+      activeGames: healthStatus?.metrics?.active_predictions || 0,
+      aiAccuracy: accuracyMetrics?.overall_accuracy
+        ? accuracyMetrics.overall_accuracy * 100
+        : 0,
+      todaysPicks: valueBets?.length || 0,
+      liveAlerts: arbitrageOpportunities?.length || 0,
+    };
+  }, [
+    userAnalytics,
+    accuracyMetrics,
+    healthStatus,
+    valueBets,
+    arbitrageOpportunities,
+  ]);
 
   // Handle retry functionality
   const handleRetry = () => {

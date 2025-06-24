@@ -275,13 +275,14 @@ export const UserFriendlyApp: React.FC = () => {
   // Check if backend is offline
   const isOffline = healthError || healthStatus?.status === "offline";
 
-  console.log("[Debug] Backend Status Check:", {
-    isOffline,
-    healthError: healthError ? healthError.message : null,
-    healthStatus: healthStatus?.status,
-    baseURL: "http://192.168.1.125:8000",
-    timestamp: new Date().toISOString(),
-  });
+  // Only log when status actually changes
+  useEffect(() => {
+    console.log("[Debug] Backend Status Check:", {
+      isOffline,
+      healthError: healthError ? healthError.message : null,
+      healthStatus: healthStatus?.status,
+    });
+  }, [isOffline, healthError, healthStatus]);
 
   // Handle retry functionality
   const handleRetry = () => {
