@@ -20,6 +20,11 @@ import { api } from "../../services/integrationService";
 import OfflineIndicator from "../ui/OfflineIndicator";
 import ApiErrorBoundary from "../ApiErrorBoundary";
 import { ultraAccuracyIntegrationService } from "../../services/UltraAccuracyIntegrationService";
+import {
+  initializeSettings,
+  getUserDisplayName,
+  getUserEmail,
+} from "../../utils/userSettings";
 
 // Import user-friendly components
 import MoneyMakerPro from "./MoneyMakerPro";
