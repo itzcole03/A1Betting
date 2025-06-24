@@ -110,6 +110,9 @@ export const BackendConnectionTest: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
+      {/* Development Setup Guide */}
+      <DevelopmentGuide />
+
       {/* Comprehensive Integration Status */}
       <IntegrationStatus />
 
