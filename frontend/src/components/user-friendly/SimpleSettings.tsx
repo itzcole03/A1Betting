@@ -160,7 +160,22 @@ export const SimpleSettings: React.FC<SimpleSettingsProps> = ({
     if (
       confirm("Are you sure you want to reset all settings to default values?")
     ) {
-      window.location.reload();
+      setSettings(DEFAULT_SETTINGS);
+      localStorage.removeItem("a1betting-user-settings");
+      localStorage.removeItem("a1betting-user-name");
+      localStorage.removeItem("a1betting-user-email");
+
+      // Apply default settings
+      document.documentElement.classList.add("dark");
+      document.body.style.backgroundColor = "#0f172a";
+      document.documentElement.style.fontSize = "16px";
+
+      // Trigger settings changed event
+      window.dispatchEvent(
+        new CustomEvent("settingsChanged", { detail: DEFAULT_SETTINGS }),
+      );
+
+      toast.success("Settings reset to defaults!");
     }
   };
 
