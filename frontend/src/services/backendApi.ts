@@ -208,8 +208,15 @@ class BackendApiService {
         console.log("[WebSocket] Connection closed");
         this.triggerCallbacks("disconnection", { status: "disconnected" });
 
-        // Reconnect after 5 seconds
-        setTimeout(() => this.initializeWebSocket(), 5000);
+        // Only attempt reconnection in development or if not on a deployment platform
+        const isDevelopment = import.meta.env.DEV;
+        const isDeployment =
+          window.location.hostname.includes("fly.dev") ||
+          window.location.hostname.includes("herokuapp.com");
+
+        if (isDevelopment && !isDeployment) {
+          setTimeout(() => this.initializeWebSocket(), 5000);
+        }
       };
 
       this.wsConnection.onerror = (error) => {
