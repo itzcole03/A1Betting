@@ -18,11 +18,7 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../services/integrationService";
 import OfflineIndicator from "../ui/OfflineIndicator";
-import BackendConnectionTest from "../BackendConnectionTest";
-import ApiDebug from "../ApiDebug";
-import ConnectionTest from "../ConnectionTest";
 import ApiErrorBoundary from "../ApiErrorBoundary";
-import DebugApiStatus from "../DebugApiStatus";
 import { ultraAccuracyIntegrationService } from "../../services/UltraAccuracyIntegrationService";
 
 // Import user-friendly components
