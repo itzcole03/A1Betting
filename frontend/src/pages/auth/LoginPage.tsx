@@ -1,36 +1,36 @@
-import React from 'react';
-import { useState } from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { Box, Button, TextField, Link, Typography, Alert } from '@mui/material';
-import { useStore } from '@/store';
-import { apiService } from '@/services/api';
+import React from "react";
+import { useState } from "react";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { Box, Button, TextField, Link, Typography, Alert } from "@mui/material";
+import { useStore } from "@/store";
+import { ApiService } from "@/services/api";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const setUser = useStore(state => state.setUser);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const setUser = useStore((state) => state.setUser);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     try {
       const user = await apiService.login(email, password);
       setUser(user);
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (err) {
-      setError('Invalid email or password');
+      setError("Invalid email or password");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Box component="form" sx={{ width: '100%' }} onSubmit={handleSubmit}>
+    <Box component="form" sx={{ width: "100%" }} onSubmit={handleSubmit}>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
@@ -47,7 +47,7 @@ export default function LoginPage() {
         margin="normal"
         name="email"
         value={email}
-        onChange={e => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
       />
 
       <TextField
@@ -60,7 +60,7 @@ export default function LoginPage() {
         name="password"
         type="password"
         value={password}
-        onChange={e => setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
       />
 
       <Button
@@ -70,12 +70,12 @@ export default function LoginPage() {
         type="submit"
         variant="contained"
       >
-        {isLoading ? 'Signing in...' : 'Sign In'}
+        {isLoading ? "Signing in..." : "Sign In"}
       </Button>
 
-      <Box sx={{ textAlign: 'center' }}>
+      <Box sx={{ textAlign: "center" }}>
         <Typography sx={{ mb: 1 }} variant="body2">
-          Don't have an account?{' '}
+          Don't have an account?{" "}
           <Link component={RouterLink} to="/register" variant="body2">
             Sign up
           </Link>
