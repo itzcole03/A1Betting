@@ -245,6 +245,19 @@ class BackendApiService {
     return response.data;
   }
 
+  public async getValueBets(): Promise<BettingOpportunity[]> {
+    // Map to existing betting opportunities endpoint since value bets endpoint doesn't exist
+    try {
+      const response = await this.api.get("/api/betting-opportunities", {
+        params: { limit: 20 },
+      });
+      return response.data;
+    } catch (error) {
+      console.warn("[API] getValueBets endpoint not available, using fallback");
+      return [];
+    }
+  }
+
   public async getTransactions(): Promise<{
     transactions: Transaction[];
     total_count: number;
