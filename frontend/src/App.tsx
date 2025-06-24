@@ -38,7 +38,9 @@ const queryClient = new QueryClient({
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <UserFriendlyApp />
+      <ThemeProvider defaultTheme="dark">
+        <UserFriendlyApp />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
