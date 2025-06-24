@@ -28,8 +28,8 @@ import PropOllama from "./PropOllama";
 import UserFriendlyDashboard from "./UserFriendlyDashboard";
 import SimpleSettings from "./SimpleSettings";
 import SettingsTest from "./SettingsTest";
-// Import advanced dashboard
-import UltraAdvancedMLDashboard from "../ml/UltraAdvancedMLDashboard";
+// Import advanced intelligence hub
+import AdvancedIntelligenceHub from "../intelligence/AdvancedIntelligenceHub";
 // Import ultra-accuracy component
 import UltraAccuracyDashboard from "../prediction/UltraAccuracyDashboard";
 // Import admin settings
