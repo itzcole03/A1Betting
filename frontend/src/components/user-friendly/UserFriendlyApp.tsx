@@ -31,7 +31,7 @@ import MoneyMakerPro from "./MoneyMakerPro";
 import PrizePicksPro from "./PrizePicksPro";
 import PropOllama from "./PropOllama";
 import UserFriendlyDashboard from "./UserFriendlyDashboard";
-import Settings from "./Settings";
+import SimpleSettings from "./SimpleSettings";
 import SettingsTest from "./SettingsTest";
 // Import advanced dashboard
 import UltraAdvancedMLDashboard from "../ml/UltraAdvancedMLDashboard";
