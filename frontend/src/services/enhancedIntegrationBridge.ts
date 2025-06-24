@@ -12,6 +12,7 @@ import { UltraAccuracyService } from "./UltraAccuracyService";
 import { AnalyticsService } from "./analytics/AnalyticsService";
 import { BettingService } from "./unified/BettingService";
 import { PredictionService } from "./unified/predictionService";
+import { ultraAccuracyBackgroundService } from "./UltraAccuracyBackgroundService";
 
 export interface SimplifiedPrediction {
   id: string;
