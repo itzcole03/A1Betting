@@ -124,10 +124,32 @@ export const SimpleSettings: React.FC<SimpleSettingsProps> = ({
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Simulate saving settings
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Save settings to localStorage
+      localStorage.setItem("a1betting-user-settings", JSON.stringify(settings));
+
+      // Apply settings immediately
+      if (settings.display.darkMode) {
+        document.documentElement.classList.add("dark");
+        document.body.style.backgroundColor = "#0f172a";
+      } else {
+        document.documentElement.classList.remove("dark");
+        document.body.style.backgroundColor = "#ffffff";
+      }
+
+      // Store user data for app-wide access
+      localStorage.setItem("a1betting-user-name", settings.profile.name);
+      localStorage.setItem("a1betting-user-email", settings.profile.email);
+
+      // Trigger a custom event to notify other components
+      window.dispatchEvent(
+        new CustomEvent("settingsChanged", { detail: settings }),
+      );
+
+      // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 500));
       toast.success("Settings saved successfully!");
     } catch (error) {
+      console.error("Failed to save settings:", error);
       toast.error("Failed to save settings");
     } finally {
       setIsSaving(false);
