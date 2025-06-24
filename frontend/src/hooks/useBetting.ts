@@ -175,7 +175,7 @@ export const usePlaceBet = () => {
       bookmaker: string;
       odds: number;
       stake: number;
-    }) => api.placeBet(betData),
+    }) => Promise.reject(new Error("Bet placement not implemented yet")), // TODO: Implement placeBet in integration service
     onSuccess: (data) => {
       toast.success("Bet placed successfully!");
       // Invalidate relevant queries to refresh data
