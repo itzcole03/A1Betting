@@ -211,6 +211,11 @@ export const UserFriendlyApp: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
   const [ultraAccuracyStats, setUltraAccuracyStats] = useState<any>(null);
+  const [userSettings, setUserSettings] = useState({
+    name: "User",
+    email: "user@a1betting.com",
+    darkMode: true,
+  });
   const queryClient = useQueryClient();
 
   // Initialize settings on app mount
