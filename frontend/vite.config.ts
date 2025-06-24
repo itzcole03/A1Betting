@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import path from "path";
 import react from "@vitejs/plugin-react";
-import { backendPlugin } from "./vite-backend-plugin.mjs";
+import { backendPlugin } from "./vite-backend-plugin";
 
 // https://vite.dev/config/
 export default defineConfig({
