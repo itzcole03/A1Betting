@@ -17,11 +17,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import { api } from "../../services/integrationService";
-import {
-  getSimplifiedAnalytics,
-  getSimplifiedPredictions,
-  getSimplifiedOpportunities,
-} from "../../services/enhancedIntegrationBridge";
+import { enhancedIntegrationBridge } from "../../services/enhancedIntegrationBridge";
 import {
   useValueBets,
   useArbitrageOpportunities,
