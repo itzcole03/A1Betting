@@ -3,8 +3,31 @@
  * Automatically enhances Money Maker and PrizePicks predictions using Ultra Accuracy engine
  */
 
-import { EventEmitter } from "events";
 import { backendApi } from "./backendApi";
+
+// Simple browser-compatible event emitter
+class SimpleEventEmitter {
+  private events: { [key: string]: Function[] } = {};
+
+  on(event: string, callback: Function): void {
+    if (!this.events[event]) {
+      this.events[event] = [];
+    }
+    this.events[event].push(callback);
+  }
+
+  off(event: string, callback: Function): void {
+    if (this.events[event]) {
+      this.events[event] = this.events[event].filter((cb) => cb !== callback);
+    }
+  }
+
+  emit(event: string, ...args: any[]): void {
+    if (this.events[event]) {
+      this.events[event].forEach((callback) => callback(...args));
+    }
+  }
+}
 
 export interface UltraAccuracyEnhancement {
   originalPrediction: any;
