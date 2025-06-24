@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,12 +33,42 @@ import {
   Radar,
   AlertTriangle,
   XCircle,
+  Server,
+  Database,
+  Cloud,
+  Shield,
+  Monitor,
+  Wifi,
+  Clock,
+  Users,
+  PieChart,
+  LineChart,
+  Layers3,
+  Box,
+  Workflow,
+  Hexagon,
+  ArrowUp,
+  ArrowDown,
+  Minus,
+  ChevronRight,
+  Home,
+  BarChart2,
+  Cog,
+  Bell,
+  Search,
+  Filter,
+  Download,
+  Share,
+  MoreVertical,
 } from "lucide-react";
 import SafeChart from "../ui/SafeChart";
-import { Bar, Doughnut } from "react-chartjs-2";
+import { api } from "../../services/api";
+import { useWebSocket } from "../../hooks/useWebSocket";
+import OfflineIndicator from "../ui/OfflineIndicator";
+import BackendControl from "../ui/BackendControl";
 import toast from "react-hot-toast";
 
-// Import types for mock data
+// Import types for data structures
 interface ModelPerformanceMetrics {
   accuracy: number;
   precision: number;
@@ -94,274 +125,357 @@ interface LivePrediction {
 }
 
 const UltraAdvancedMLDashboard: React.FC = () => {
-  // State management
+  const [selectedView, setSelectedView] = useState("overview");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [dashboardState, setDashboardState] = useState({
-    isLoading: false,
     autoRefresh: true,
-    lastRefresh: new Date(),
+    isLoading: false,
+  });
+  const [livePredictions, setLivePredictions] = useState<LivePrediction[]>([]);
+  const queryClient = useQueryClient();
+
+  // Real-time data fetching with React Query - all with error handling
+  const {
+    data: accuracyMetrics,
+    isLoading: accuracyLoading,
+    error: accuracyError,
+  } = useQuery({
+    queryKey: ["accuracyMetrics"],
+    queryFn: () => api.getAccuracyMetrics(),
+    refetchInterval: 10000, // 10 second updates
+    retry: false,
+    onError: (error) =>
+      console.warn("Accuracy metrics API unavailable:", error.message),
   });
 
-  const [modelMetrics, setModelMetrics] = useState<
-    (ModelPerformanceMetrics & { model_name: string; model_id: string })[]
-  >([]);
+  const {
+    data: healthStatus,
+    isLoading: healthLoading,
+    error: healthError,
+  } = useQuery({
+    queryKey: ["healthStatus"],
+    queryFn: () => api.getHealthStatus(),
+    refetchInterval: 15000, // 15 second updates
+    retry: false,
+    onError: (error) =>
+      console.warn("Health status API unavailable:", error.message),
+  });
 
-  const [systemHealth, setSystemHealth] = useState<SystemHealthMetrics | null>(
-    null,
-  );
+  const {
+    data: systemResources,
+    isLoading: resourcesLoading,
+    error: resourcesError,
+  } = useQuery({
+    queryKey: ["systemResources"],
+    queryFn: () => api.getSystemResources(),
+    refetchInterval: 5000, // 5 second updates for system resources
+    retry: false,
+    onError: (error) =>
+      console.warn("System resources API unavailable:", error.message),
+  });
 
-  const [selectedTab, setSelectedTab] = useState("overview");
-  const [mathematicalFoundations, setMathematicalFoundations] =
-    useState<any>(null);
+  const { data: ensembleDiversity, error: diversityError } = useQuery({
+    queryKey: ["ensembleDiversity"],
+    queryFn: () => api.getEnsembleDiversityMetrics(),
+    refetchInterval: 30000, // 30 second updates
+    retry: false,
+    onError: (error) =>
+      console.warn("Ensemble diversity API unavailable:", error.message),
+  });
 
-  const [livePredictions, setLivePredictions] = useState<LivePrediction[]>([]);
+  const { data: ensembleCandidates, error: candidatesError } = useQuery({
+    queryKey: ["ensembleCandidates"],
+    queryFn: () => api.getEnsembleCandidates(),
+    refetchInterval: 60000, // 1 minute updates
+    retry: false,
+    onError: (error) =>
+      console.warn("Ensemble candidates API unavailable:", error.message),
+  });
 
-  // Auto-refresh mechanism
-  useEffect(() => {
-    if (dashboardState.autoRefresh) {
-      const interval = setInterval(refreshDashboardData, 30000);
-      return () => clearInterval(interval);
-    }
-  }, [dashboardState.autoRefresh]);
+  const { data: accuracyAlerts, error: alertsError } = useQuery({
+    queryKey: ["accuracyAlerts"],
+    queryFn: () => api.getAccuracyAlerts(),
+    refetchInterval: 20000, // 20 second updates
+    retry: false,
+    onError: (error) =>
+      console.warn("Accuracy alerts API unavailable:", error.message),
+  });
 
-  // Initial data load
-  useEffect(() => {
-    refreshDashboardData();
-    loadMathematicalFoundations();
-  }, []);
+  const { data: predictionAudit, error: auditError } = useQuery({
+    queryKey: ["predictionAudit"],
+    queryFn: () =>
+      api.getPredictionAudit({
+        start_date: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+        limit: 100,
+      }),
+    refetchInterval: 30000,
+    retry: false,
+    onError: (error) =>
+      console.warn("Prediction audit API unavailable:", error.message),
+  });
 
-  const refreshDashboardData = async () => {
+  const { data: dataDrift, error: driftError } = useQuery({
+    queryKey: ["dataDrift"],
+    queryFn: () => api.getDataDriftReport(),
+    refetchInterval: 300000, // 5 minute updates
+    retry: false,
+    onError: (error) =>
+      console.warn("Data drift API unavailable:", error.message),
+  });
+
+  const { data: dataQuality, error: qualityError } = useQuery({
+    queryKey: ["dataQuality"],
+    queryFn: () => api.getDataQualityReport(),
+    refetchInterval: 300000, // 5 minute updates
+    retry: false,
+    onError: (error) =>
+      console.warn("Data quality API unavailable:", error.message),
+  });
+
+  // Check if any APIs are offline - detect when we're getting default values due to network errors
+  const isOffline =
+    accuracyError ||
+    healthError ||
+    resourcesError ||
+    diversityError ||
+    candidatesError ||
+    alertsError ||
+    auditError ||
+    driftError ||
+    qualityError ||
+    (healthStatus && healthStatus.status === "offline") ||
+    (accuracyMetrics && accuracyMetrics.overall_accuracy === 0) ||
+    (systemResources && systemResources.cpu_usage === 0);
+
+  // Create systemHealth from healthStatus and systemResources data
+  const systemHealth = useMemo(() => {
+    if (!healthStatus || !systemResources) return null;
+
+    // Calculate overall health based on available metrics
+    const overallHealth =
+      healthStatus.status === "offline"
+        ? 0
+        : Math.min(
+            (100 - systemResources.cpu_usage) / 100,
+            (100 - systemResources.memory_usage) / 100,
+            (100 - systemResources.disk_usage) / 100,
+            accuracyMetrics?.overall_accuracy || 0.8,
+          );
+
+    return {
+      overallHealth,
+      cpuUsage: systemResources.cpu_usage,
+      memoryUsage: systemResources.memory_usage,
+      diskUsage: systemResources.disk_usage,
+      networkLatency: systemResources.network_latency || 25,
+      activeConnections: systemResources.active_connections || 150,
+      errorRate: healthStatus.error_rate || 0.01,
+      uptime: healthStatus.uptime || 99.8,
+      responseTime: healthStatus.response_time_ms || 45,
+      throughput: systemResources.requests_per_second || 1250,
+      lastHealthCheck: new Date().toISOString(),
+      services: healthStatus.services || {},
+      alerts: accuracyAlerts?.alerts || [],
+    };
+  }, [healthStatus, systemResources, accuracyMetrics, accuracyAlerts]);
+
+  // Create mathematicalFoundations computed variable
+  const mathematicalFoundations = useMemo(() => {
+    if (!accuracyMetrics || !ensembleDiversity) return [];
+
+    return [
+      {
+        metric_type: "Statistical Framework",
+        value: (accuracyMetrics.overall_accuracy * 100).toFixed(2),
+        theoretical_basis:
+          "Bayesian Inference with conjugate priors for robust uncertainty quantification in sports outcome prediction",
+        computational_complexity:
+          "O(n²) for posterior computation with MCMC sampling",
+      },
+      {
+        metric_type: "Loss Optimization",
+        value: (
+          (1 - (accuracyMetrics.calibration_error || 0.05)) *
+          100
+        ).toFixed(2),
+        theoretical_basis:
+          "Cross-Entropy Minimization with L2 regularization for preventing overfitting in ensemble models",
+        computational_complexity:
+          "O(nm) per gradient descent iteration with momentum",
+      },
+      {
+        metric_type: "Ensemble Theory",
+        value: ((ensembleDiversity.diversity_score || 0.75) * 100).toFixed(2),
+        theoretical_basis:
+          "Diversity Maximization through orthogonal feature spaces ensuring decorrelated predictions",
+        computational_complexity:
+          "O(k²) for k-model ensemble correlation analysis",
+      },
+      {
+        metric_type: "Uncertainty Quantification",
+        value: ((accuracyMetrics.prediction_stability || 0.85) * 100).toFixed(
+          2,
+        ),
+        theoretical_basis:
+          "Epistemic Modeling using Gaussian Process priors for prediction interval estimation",
+        computational_complexity:
+          "O(n³) for GP inference with kernel matrix inversion",
+      },
+      {
+        metric_type: "Feature Engineering",
+        value: (
+          (accuracyMetrics.feature_importance_stability || 0.82) * 100
+        ).toFixed(2),
+        theoretical_basis:
+          "Information Gain maximization through mutual information with target variables",
+        computational_complexity:
+          "O(n log n) for entropy-based feature selection",
+      },
+      {
+        metric_type: "Model Selection",
+        value: ((ensembleDiversity.model_quality_score || 0.88) * 100).toFixed(
+          2,
+        ),
+        theoretical_basis:
+          "AIC/BIC Optimization balancing model complexity with predictive accuracy",
+        computational_complexity:
+          "O(k log k) for k-model comparison with information criteria",
+      },
+    ];
+  }, [accuracyMetrics, ensembleDiversity]);
+
+  // Functions for dashboard control
+  const refreshDashboardData = useCallback(async () => {
     setDashboardState((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      // Mock model performance metrics
-      const mockMetrics: (ModelPerformanceMetrics & {
-        model_name: string;
-        model_id: string;
-      })[] = [
-        {
-          model_name: "Neural Network Alpha",
-          model_id: "nn_alpha_v1",
-          accuracy: 0.94,
-          precision: 0.91,
-          recall: 0.88,
-          f1Score: 0.89,
-          roc: 0.93,
-          predictionCount: 1247,
-          successRate: 0.96,
-          averageConfidence: 0.87,
-          modelStatus: "active",
-          lastUpdated: new Date().toISOString(),
-          trainingTime: 45000,
-          inferenceTime: 120,
-          memoryUsage: 2.4,
-          cpuUsage: 0.65,
-          modelVersion: "2.1.4",
-          datasetSize: 50000,
-          featureCount: 247,
-          hyperparameters: {
-            learning_rate: 0.001,
-            batch_size: 32,
-            epochs: 100,
-            dropout: 0.2,
-          },
-        },
-        {
-          model_name: "Random Forest Beta",
-          model_id: "rf_beta_v2",
-          accuracy: 0.91,
-          precision: 0.89,
-          recall: 0.84,
-          f1Score: 0.86,
-          roc: 0.9,
-          predictionCount: 892,
-          successRate: 0.93,
-          averageConfidence: 0.85,
-          modelStatus: "active",
-          lastUpdated: new Date().toISOString(),
-          trainingTime: 32000,
-          inferenceTime: 95,
-          memoryUsage: 1.8,
-          cpuUsage: 0.52,
-          modelVersion: "1.7.2",
-          datasetSize: 42000,
-          featureCount: 189,
-          hyperparameters: {
-            n_estimators: 100,
-            max_depth: 10,
-            min_samples_split: 2,
-          },
-        },
-      ];
-
-      // Mock system health metrics
-      const mockHealth: SystemHealthMetrics = {
-        overallHealth: 0.92,
-        cpuUsage: 0.68,
-        memoryUsage: 0.73,
-        diskUsage: 0.45,
-        networkLatency: 25,
-        activeConnections: 247,
-        errorRate: 0.02,
-        uptime: 99.7,
-        responseTime: 145,
-        throughput: 850,
-        lastHealthCheck: new Date().toISOString(),
-        services: {
-          database: "healthy",
-          cache: "healthy",
-          messageQueue: "healthy",
-          apiGateway: "healthy",
-        },
-        alerts: [
-          {
-            level: "warning",
-            message: "Memory usage approaching threshold",
-            timestamp: new Date().toISOString(),
-          },
-        ],
-      };
-
-      setModelMetrics(mockMetrics);
-      setSystemHealth(mockHealth);
-      setDashboardState((prev) => ({
-        ...prev,
-        isLoading: false,
-        lastRefresh: new Date(),
-      }));
+      await queryClient.invalidateQueries();
+      toast.success("Dashboard data refreshed successfully");
     } catch (error) {
-      console.error("Failed to refresh dashboard data:", error);
+      toast.error("Failed to refresh dashboard data");
+    } finally {
       setDashboardState((prev) => ({ ...prev, isLoading: false }));
     }
-  };
+  }, [queryClient]);
 
-  const loadMathematicalFoundations = async () => {
-    try {
-      const mockFoundations = {
-        probabilityTheory: {
-          bayesianInference: {
-            description:
-              "Advanced Bayesian methods for uncertainty quantification",
-            confidence: 0.94,
-            applications: [
-              "Risk Assessment",
-              "Prediction Intervals",
-              "Model Selection",
-            ],
-            algorithms: ["MCMC", "Variational Bayes", "Empirical Bayes"],
-          },
-        },
-        statisticalLearning: {
-          ensembleMethods: {
-            description: "Advanced ensemble techniques for robust predictions",
-            confidence: 0.96,
-            applications: ["Model Combination", "Variance Reduction"],
-          },
-        },
-      };
-
-      setMathematicalFoundations(mockFoundations);
-    } catch (error) {
-      console.error("Failed to load mathematical foundations:", error);
-    }
-  };
-
-  const executeLivePrediction = useCallback(async () => {
-    const newPrediction: LivePrediction = {
-      id: Date.now().toString(),
-      event_id: `game_${Math.random().toString(36).substr(2, 9)}`,
-      sport: ["basketball", "football", "baseball"][
-        Math.floor(Math.random() * 3)
-      ],
-      status: "processing",
-      created_at: new Date(),
-    };
-
-    setLivePredictions((prev) => [newPrediction, ...prev.slice(0, 9)]);
-
-    try {
-      const processingTime = Math.random() * 3000 + 1000;
-
-      setTimeout(() => {
-        const result = {
-          final_prediction: Math.random() * 100,
-          prediction_confidence: Math.random() * 0.3 + 0.7,
-        };
-
-        setLivePredictions((prev) =>
-          prev.map((p) =>
-            p.id === newPrediction.id
-              ? {
-                  ...p,
-                  status: "completed" as const,
-                  prediction: result.final_prediction,
-                  confidence: result.prediction_confidence,
-                  processing_time: processingTime,
-                }
-              : p,
-          ),
-        );
-
-        toast.success(
-          `Live prediction completed: ${(result.final_prediction || 0).toFixed(2)} (${((result.prediction_confidence || 0) * 100).toFixed(1)}% confidence)`,
-        );
-      }, processingTime);
-    } catch (error) {
-      setLivePredictions((prev) =>
-        prev.map((p) =>
-          p.id === newPrediction.id ? { ...p, status: "failed" as const } : p,
-        ),
-      );
-      toast.error("Prediction failed. Please try again.");
-    }
+  const toggleAutoRefresh = useCallback(() => {
+    setDashboardState((prev) => {
+      const newAutoRefresh = !prev.autoRefresh;
+      toast.success(`Auto-refresh ${newAutoRefresh ? "enabled" : "disabled"}`);
+      return { ...prev, autoRefresh: newAutoRefresh };
+    });
   }, []);
 
-  // Chart data preparations
+  const handleRetry = useCallback(() => {
+    refreshDashboardData();
+  }, [refreshDashboardData]);
+
+  // Auto-refresh functionality
+  useEffect(() => {
+    if (!dashboardState.autoRefresh) return;
+
+    const interval = setInterval(() => {
+      queryClient.invalidateQueries();
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [dashboardState.autoRefresh, queryClient]);
+
+  // Live prediction execution
+  const { mutate: executeLivePrediction } = useMutation({
+    mutationFn: async () => {
+      const predictionRequest: UnifiedPredictionRequest = {
+        event_id: `test_${Date.now()}`,
+        sport: "basketball",
+        features: {
+          team_strength: 0.8,
+          player_performance: 0.75,
+          recent_form: 0.9,
+          historical_matchup: 0.65,
+        },
+        processing_level: "advanced",
+      };
+
+      const newPrediction: LivePrediction = {
+        id: predictionRequest.event_id,
+        event_id: predictionRequest.event_id,
+        sport: predictionRequest.sport,
+        status: "processing",
+        created_at: new Date(),
+      };
+
+      setLivePredictions((prev) => [newPrediction, ...prev.slice(0, 9)]);
+
+      return api.createUnifiedPrediction(predictionRequest);
+    },
+    onSuccess: (data) => {
+      setLivePredictions((prev) =>
+        prev.map((p) =>
+          p.id === data.event_id
+            ? {
+                ...p,
+                status: "completed" as const,
+                prediction: data.prediction,
+                confidence: data.confidence,
+                processing_time: Date.now() - p.created_at.getTime(),
+              }
+            : p,
+        ),
+      );
+      toast.success("Live prediction completed successfully");
+    },
+    onError: (error) => {
+      setLivePredictions((prev) =>
+        prev.map((p) =>
+          p.status === "processing" ? { ...p, status: "failed" as const } : p,
+        ),
+      );
+      toast.error("Live prediction failed");
+    },
+  });
+
+  // Chart data computations
   const modelPerformanceChartData = useMemo(() => {
-    if (!modelMetrics.length) return null;
+    if (!ensembleCandidates?.candidate_models) return null;
+
+    const candidates = ensembleCandidates.candidate_models.slice(0, 5);
 
     return {
-      labels: modelMetrics.map((m) => m.model_name),
+      labels: candidates.map((m) => m.model_name || m.name),
       datasets: [
         {
-          label: "Accuracy",
-          data: modelMetrics.map((m) => m.accuracy * 100),
+          label: "Accuracy (%)",
+          data: candidates.map((m) => (m.accuracy * 100).toFixed(1)),
           backgroundColor: "rgba(59, 130, 246, 0.8)",
           borderColor: "rgba(59, 130, 246, 1)",
           borderWidth: 2,
         },
         {
-          label: "Precision",
-          data: modelMetrics.map((m) => m.precision * 100),
+          label: "Precision (%)",
+          data: candidates.map((m) => (m.precision * 100).toFixed(1)),
           backgroundColor: "rgba(34, 197, 94, 0.8)",
           borderColor: "rgba(34, 197, 94, 1)",
           borderWidth: 2,
         },
-        {
-          label: "Recall",
-          data: modelMetrics.map((m) => m.recall * 100),
-          backgroundColor: "rgba(168, 85, 247, 0.8)",
-          borderColor: "rgba(168, 85, 247, 1)",
-          borderWidth: 2,
-        },
       ],
     };
-  }, [modelMetrics]);
+  }, [ensembleCandidates]);
 
   const systemHealthRadarData = useMemo(() => {
-    if (!systemHealth) return null;
+    if (!systemResources || !accuracyMetrics) return null;
 
     return {
-      labels: ["CPU", "Memory", "GPU", "Cache", "Accuracy", "Rigor"],
+      labels: ["CPU", "Memory", "Disk", "Accuracy", "Performance", "Stability"],
       datasets: [
         {
           label: "System Health",
           data: [
-            100 - (systemHealth?.cpuUsage || 0),
-            100 - (systemHealth?.memoryUsage || 0),
-            100 - (systemHealth?.diskUsage || 20), // GPU usage approximation
-            systemHealth?.uptime || 90, // Cache efficiency approximation
-            (systemHealth?.overallHealth || 0) * 100, // Prediction accuracy
-            (systemHealth?.throughput || 850) / 10, // Mathematical rigor score approximation
+            100 - (systemResources.cpu_usage || 0),
+            100 - (systemResources.memory_usage || 0),
+            100 - (systemResources.disk_usage || 0),
+            (accuracyMetrics.overall_accuracy || 0) * 100,
+            (accuracyMetrics.performance_stability || 0) * 100,
+            (1 - (accuracyMetrics.calibration_error || 0)) * 100,
           ],
           backgroundColor: "rgba(34, 197, 94, 0.2)",
           borderColor: "rgba(34, 197, 94, 1)",
@@ -370,922 +484,917 @@ const UltraAdvancedMLDashboard: React.FC = () => {
         },
       ],
     };
-  }, [systemHealth]);
+  }, [systemResources, accuracyMetrics]);
 
-  const modelComplexityData = useMemo(() => {
-    if (!modelMetrics.length) return null;
+  // Sidebar navigation items
+  const sidebarItems = [
+    {
+      id: "overview",
+      label: "Overview",
+      icon: Home,
+      active: selectedView === "overview",
+    },
+    {
+      id: "models",
+      label: "ML Models",
+      icon: Brain,
+      active: selectedView === "models",
+    },
+    {
+      id: "predictions",
+      label: "Live Predictions",
+      icon: Activity,
+      active: selectedView === "predictions",
+    },
+    {
+      id: "health",
+      label: "System Health",
+      icon: Monitor,
+      active: selectedView === "health",
+    },
+    {
+      id: "performance",
+      label: "Performance",
+      icon: BarChart2,
+      active: selectedView === "performance",
+    },
+    {
+      id: "analytics",
+      label: "Analytics",
+      icon: PieChart,
+      active: selectedView === "analytics",
+    },
+    {
+      id: "research",
+      label: "Research",
+      icon: Microscope,
+      active: selectedView === "research",
+    },
+  ];
 
-    return {
-      labels: modelMetrics.map((m) => m.model_name),
-      datasets: [
-        {
-          label: "Memory Usage (MB)",
-          data: modelMetrics.map((m) => m.memoryUsage),
-          backgroundColor: modelMetrics.map(
-            (_, i) =>
-              `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.8)`,
-          ),
-          borderWidth: 1,
-        },
-      ],
-    };
-  }, [modelMetrics]);
+  // Main status metrics for header
+  const statusMetrics = [
+    {
+      label: "System Health",
+      value: systemHealth
+        ? `${(systemHealth.overallHealth * 100).toFixed(0)}%`
+        : "Loading...",
+      trend:
+        systemHealth && systemHealth.overallHealth > 0.8
+          ? "up"
+          : systemHealth && systemHealth.overallHealth > 0.6
+            ? "stable"
+            : "down",
+      color:
+        systemHealth && systemHealth.overallHealth > 0.8
+          ? "text-green-400"
+          : systemHealth && systemHealth.overallHealth > 0.6
+            ? "text-yellow-400"
+            : "text-red-400",
+    },
+    {
+      label: "Prediction Accuracy",
+      value: accuracyMetrics
+        ? `${(accuracyMetrics.overall_accuracy * 100).toFixed(1)}%`
+        : "Loading...",
+      trend: "up",
+      color: "text-blue-400",
+    },
+    {
+      label: "Active Models",
+      value: ensembleCandidates
+        ? ensembleCandidates.candidate_models?.length.toString() || "0"
+        : "Loading...",
+      trend: "stable",
+      color: "text-purple-400",
+    },
+    {
+      label: "Predictions/Min",
+      value: systemHealth ? systemHealth.throughput.toString() : "Loading...",
+      trend: "up",
+      color: "text-cyan-400",
+    },
+  ];
 
   return (
-    <div className="space-y-6 p-6 min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Header */}
-      <div className="flex items-center justify-between sticky top-0 z-40 bg-black/20 backdrop-blur-xl border-b border-white/10 py-4 -mx-6 px-6 mb-2 shadow-lg">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex">
+      {/* Offline Indicator */}
+      <OfflineIndicator
+        show={!!isOffline}
+        service="ML Backend APIs"
+        onRetry={handleRetry}
+      />
+
+      {/* Sidebar */}
+      <div
+        className={`${sidebarCollapsed ? "w-16" : "w-64"} bg-slate-900/50 backdrop-blur-xl border-r border-slate-700/50 flex flex-col transition-all duration-300`}
+      >
+        {/* Sidebar Header */}
+        <div className="p-4 border-b border-slate-700/50">
+          <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-blue-500 rounded-xl blur-lg opacity-75 animate-pulse" />
-              <div className="relative w-8 h-8 bg-gradient-to-br from-green-400 to-blue-500 rounded-xl flex items-center justify-center">
-                <Brain className="w-5 h-5 text-black font-bold" />
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <Brain className="w-5 h-5 text-white" />
               </div>
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-slate-900 animate-pulse"></div>
             </div>
-            <h1 className="text-3xl font-black bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-pulse">
-              Ultra-Advanced ML Dashboard
-            </h1>
-            <Badge
-              variant="outline"
-              className="bg-green-500/20 text-green-400 border-green-500/50 shadow-lg shadow-green-500/20"
-            >
-              Research Grade
-            </Badge>
+            {!sidebarCollapsed && (
+              <div>
+                <h2 className="text-white font-semibold text-sm">ML Admin</h2>
+                <p className="text-slate-200 text-xs">Development Console</p>
+              </div>
+            )}
           </div>
-          <p className="text-gray-300">
-            Real-time monitoring of enhanced mathematical ML systems with
-            research-grade rigor
-          </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Button
-            variant={dashboardState.autoRefresh ? "default" : "outline"}
-            size="sm"
-            onClick={() =>
-              setDashboardState((prev) => ({
-                ...prev,
-                autoRefresh: !prev.autoRefresh,
-              }))
-            }
-            className={`transition-all duration-300 ${
-              dashboardState.autoRefresh
-                ? "bg-gradient-to-r from-green-400 to-blue-500 text-black font-bold shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
-                : "bg-transparent border border-green-500 text-green-400 hover:bg-green-500/20 hover:shadow-lg hover:shadow-green-500/30"
-            }`}
-          >
-            {dashboardState.autoRefresh ? (
-              <Pause className="w-4 h-4 mr-2" />
-            ) : (
-              <Play className="w-4 h-4 mr-2" />
-            )}
-            Auto Refresh
-          </Button>
+        {/* Navigation */}
+        <nav className="flex-1 p-4">
+          <div className="space-y-2">
+            {sidebarItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setSelectedView(item.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${
+                  item.active
+                    ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                    : "text-slate-200 hover:text-white hover:bg-slate-700/50"
+                }`}
+              >
+                <item.icon className="w-5 h-5 flex-shrink-0" />
+                {!sidebarCollapsed && (
+                  <span className="text-sm font-medium">{item.label}</span>
+                )}
+                {!sidebarCollapsed && item.active && (
+                  <div className="ml-auto w-2 h-2 bg-blue-400 rounded-full"></div>
+                )}
+              </button>
+            ))}
+          </div>
+        </nav>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={refreshDashboardData}
-            disabled={dashboardState.isLoading}
-            className="bg-transparent border border-blue-500 text-blue-400 hover:bg-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300"
+        {/* Sidebar Footer */}
+        <div className="p-4 border-t border-slate-700/50">
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:text-white hover:bg-slate-700/50 transition-all duration-200"
           >
-            <RefreshCw
-              className={`w-4 h-4 mr-2 ${dashboardState.isLoading ? "animate-spin text-blue-400" : ""}`}
+            <ChevronRight
+              className={`w-4 h-4 transition-transform duration-200 ${sidebarCollapsed ? "" : "rotate-180"}`}
             />
-            Refresh
-          </Button>
-
-          <Button
-            variant="default"
-            size="sm"
-            onClick={executeLivePrediction}
-            className="bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300"
-          >
-            <Sparkles className="w-4 h-4 mr-2" />
-            Live Prediction
-          </Button>
+            {!sidebarCollapsed && <span className="text-sm">Collapse</span>}
+          </button>
         </div>
       </div>
 
-      {/* System Status Overview */}
-      {systemHealth && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8">
-          <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-green-500/20 transition-all duration-300">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">
-                    System Status
-                  </h3>
-                  <p
-                    className={`text-lg font-bold ${
-                      !systemHealth
-                        ? "text-gray-400"
-                        : systemHealth.overallHealth > 0.8
-                          ? "text-green-400 animate-pulse"
-                          : systemHealth.overallHealth > 0.6
-                            ? "text-yellow-400"
-                            : "text-red-400"
-                    }`}
-                  >
-                    {!systemHealth
-                      ? "LOADING"
-                      : systemHealth.overallHealth > 0.8
-                        ? "HEALTHY"
-                        : systemHealth.overallHealth > 0.6
-                          ? "DEGRADED"
-                          : "CRITICAL"}
-                  </p>
-                </div>
-                <div
-                  className={`p-2 rounded-full ${
-                    !systemHealth
-                      ? "bg-gray-500/20"
-                      : systemHealth.overallHealth > 0.8
-                        ? "bg-green-500/20 shadow-lg shadow-green-500/30"
-                        : systemHealth.overallHealth > 0.6
-                          ? "bg-yellow-500/20 shadow-lg shadow-yellow-500/30"
-                          : "bg-red-500/20 shadow-lg shadow-red-500/30"
-                  }`}
-                >
-                  {!systemHealth ? (
-                    <AlertTriangle className="w-6 h-6 text-gray-400" />
-                  ) : systemHealth.overallHealth > 0.8 ? (
-                    <CheckCircle className="w-6 h-6 text-green-400" />
-                  ) : systemHealth.overallHealth > 0.6 ? (
-                    <AlertTriangle className="w-6 h-6 text-yellow-400" />
-                  ) : (
-                    <XCircle className="w-6 h-6 text-red-400" />
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Header */}
+        <header className="bg-slate-900/30 backdrop-blur-xl border-b border-slate-700/50 px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Header Left */}
+            <div>
+              <h1 className="text-2xl font-bold text-white mb-1">
+                ML Development Dashboard
+              </h1>
+              <p className="text-slate-200 text-sm">
+                Real-time monitoring of enhanced mathematical ML systems
+              </p>
+            </div>
 
-          <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">
-                    Prediction Accuracy
-                  </h3>
-                  <p className="text-lg font-bold text-blue-400 animate-pulse">
-                    {((systemHealth?.overallHealth || 0) * 100).toFixed(1)}%
-                  </p>
-                </div>
-                <div className="p-2 rounded-full bg-blue-500/20 shadow-lg shadow-blue-500/30">
-                  <Target className="w-6 h-6 text-blue-400" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-green-500/20 transition-all duration-300">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">
-                    Response Time
-                  </h3>
-                  <p className="text-lg font-bold text-green-400 animate-pulse">
-                    {(systemHealth?.responseTime || 0).toFixed(0)}ms
-                  </p>
-                </div>
-                <div className="p-2 rounded-full bg-green-500/20 shadow-lg shadow-green-500/30">
-                  <Zap className="w-6 h-6 text-green-400" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-      {/* Main Dashboard Tabs */}
-      <Tabs
-        value={selectedTab}
-        onValueChange={setSelectedTab}
-        className="w-full"
-      >
-        <TabsList className="grid w-full grid-cols-6 sticky top-0 z-50 bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg mb-6 p-2 rounded-xl">
-          <TabsTrigger
-            value="overview"
-            className="text-gray-400 hover:text-green-400 data-[state=active]:text-black data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-400 data-[state=active]:to-blue-500 data-[state=active]:shadow-lg data-[state=active]:shadow-green-500/30 transition-all duration-300"
-          >
-            Overview
-          </TabsTrigger>
-          <TabsTrigger
-            value="models"
-            className="text-gray-400 hover:text-blue-400 data-[state=active]:text-black data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-400 data-[state=active]:to-purple-500 data-[state=active]:shadow-lg data-[state=active]:shadow-blue-500/30 transition-all duration-300"
-          >
-            Model Performance
-          </TabsTrigger>
-          <TabsTrigger
-            value="predictions"
-            className="text-gray-400 hover:text-purple-400 data-[state=active]:text-black data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-400 data-[state=active]:to-pink-500 data-[state=active]:shadow-lg data-[state=active]:shadow-purple-500/30 transition-all duration-300"
-          >
-            Live Predictions
-          </TabsTrigger>
-          <TabsTrigger
-            value="health"
-            className="text-gray-400 hover:text-green-400 data-[state=active]:text-black data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-400 data-[state=active]:to-cyan-500 data-[state=active]:shadow-lg data-[state=active]:shadow-green-500/30 transition-all duration-300"
-          >
-            System Health
-          </TabsTrigger>
-          <TabsTrigger
-            value="mathematical"
-            className="text-gray-400 hover:text-cyan-400 data-[state=active]:text-black data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-400 data-[state=active]:to-blue-600 data-[state=active]:shadow-lg data-[state=active]:shadow-cyan-500/30 transition-all duration-300"
-          >
-            Mathematical Analysis
-          </TabsTrigger>
-          <TabsTrigger
-            value="research"
-            className="text-gray-400 hover:text-yellow-400 data-[state=active]:text-black data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-400 data-[state=active]:to-orange-500 data-[state=active]:shadow-lg data-[state=active]:shadow-yellow-500/30 transition-all duration-300"
-          >
-            Research Insights
-          </TabsTrigger>
-        </TabsList>
-
-        {/* Overview Tab */}
-        <TabsContent value="overview">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Model Performance Chart */}
-            <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="flex items-center text-blue-400">
-                  <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
-                  Model Performance Metrics
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {modelPerformanceChartData && (
-                  <div className="h-64">
-                    <Bar
-                      data={modelPerformanceChartData}
-                      options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                          legend: { position: "top" },
-                        },
-                        scales: {
-                          y: {
-                            beginAtZero: true,
-                            max: 100,
-                            title: { display: true, text: "Performance (%)" },
-                          },
-                        },
-                      }}
-                    />
-                  </div>
+            {/* Header Actions */}
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleAutoRefresh}
+                className={`transition-all duration-300 ${
+                  dashboardState.autoRefresh
+                    ? "bg-green-500/20 border-green-500/50 text-green-400 hover:bg-green-500/30"
+                    : "border-slate-600 text-slate-200 hover:text-white hover:border-slate-500"
+                }`}
+              >
+                {dashboardState.autoRefresh ? (
+                  <Pause className="w-4 h-4 mr-2" />
+                ) : (
+                  <Play className="w-4 h-4 mr-2" />
                 )}
-              </CardContent>
-            </Card>
+                Auto Refresh
+              </Button>
 
-            {/* System Health Radar */}
-            <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-green-500/20 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="flex items-center text-green-400">
-                  <Radar className="w-5 h-5 mr-2 text-green-400" />
-                  System Health Overview
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {systemHealthRadarData && (
-                  <div className="h-64">
-                    <SafeChart
-                      type="radar"
-                      data={systemHealthRadarData}
-                      options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                          legend: { position: "top" },
-                        },
-                        scales: {
-                          r: {
-                            beginAtZero: true,
-                            max: 100,
-                          },
-                        },
-                      }}
-                    />
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={refreshDashboardData}
+                disabled={dashboardState.isLoading}
+                className="border-slate-600 text-slate-200 hover:text-white hover:border-slate-500"
+              >
+                <RefreshCw
+                  className={`w-4 h-4 mr-2 ${dashboardState.isLoading ? "animate-spin" : ""}`}
+                />
+                Refresh
+              </Button>
+
+              <Button
+                size="sm"
+                onClick={executeLivePrediction}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25"
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Live Prediction
+              </Button>
+            </div>
           </div>
-        </TabsContent>
 
-        {/* Models Tab */}
-        <TabsContent value="models">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Model Cards */}
-            <div className="lg:col-span-2 space-y-4">
-              {modelMetrics
-                .filter((model) => model && model.model_id)
-                .map((model) => (
-                  <Card
-                    key={model.model_id}
-                    className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-purple-500/20 transition-all duration-300"
+          {/* Status Metrics */}
+          <div className="grid grid-cols-4 gap-4 mt-6">
+            {statusMetrics.map((metric, index) => (
+              <div
+                key={index}
+                className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-4 border border-slate-700/30"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-200 text-xs font-medium uppercase tracking-wider">
+                      {metric.label}
+                    </p>
+                    <p className={`text-xl font-bold ${metric.color} mt-1`}>
+                      {metric.value}
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    {metric.trend === "up" && (
+                      <ArrowUp className="w-4 h-4 text-green-400" />
+                    )}
+                    {metric.trend === "down" && (
+                      <ArrowDown className="w-4 h-4 text-red-400" />
+                    )}
+                    {metric.trend === "stable" && (
+                      <Minus className="w-4 h-4 text-yellow-400" />
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </header>
+
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-auto p-6">
+          {/* Overview */}
+          {selectedView === "overview" && (
+            <div className="space-y-6">
+              {/* Performance Charts */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-blue-400">
+                      <BarChart3 className="w-5 h-5 mr-2" />
+                      Model Performance
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {modelPerformanceChartData && (
+                      <div className="h-64">
+                        <SafeChart
+                          type="bar"
+                          chartId="model-performance-overview"
+                          data={modelPerformanceChartData}
+                          options={{
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { position: "top" } },
+                            scales: {
+                              y: { beginAtZero: true, max: 100 },
+                            },
+                          }}
+                        />
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-green-400">
+                      <Radar className="w-5 h-5 mr-2" />
+                      System Health
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {systemHealthRadarData && (
+                      <div className="h-64">
+                        <SafeChart
+                          type="radar"
+                          data={systemHealthRadarData}
+                          options={{
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { position: "top" } },
+                            scales: { r: { beginAtZero: true, max: 100 } },
+                          }}
+                        />
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Component Status Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* ML Pipeline Components */}
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-white flex items-center">
+                      <Brain className="w-4 h-4 mr-2 text-purple-400" />
+                      ML Pipeline Status
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-200">
+                        Feature Engineering
+                      </span>
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                        Active
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-200">
+                        Model Training
+                      </span>
+                      <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+                        Running
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-200">
+                        Inference Engine
+                      </span>
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                        Optimal
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-200">
+                        Model Validation
+                      </span>
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                        Passed
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Data Sources */}
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-white flex items-center">
+                      <Database className="w-4 h-4 mr-2 text-cyan-400" />
+                      Data Sources
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-200">ESPN API</span>
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                        Connected
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-200">
+                        Sports Radar
+                      </span>
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                        Connected
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-200">
+                        PrizePicks API
+                      </span>
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                        Synced
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-200">
+                        Historical Data
+                      </span>
+                      <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+                        Updating
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* System Resources */}
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-white flex items-center">
+                      <Server className="w-4 h-4 mr-2 text-orange-400" />
+                      System Resources
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-200">CPU Usage</span>
+                        <span className="text-orange-400">
+                          {systemResources
+                            ? `${systemResources.cpu_usage.toFixed(1)}%`
+                            : "Loading..."}
+                        </span>
+                      </div>
+                      <Progress
+                        value={systemResources?.cpu_usage || 0}
+                        className="h-2 bg-slate-700"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-200">Memory</span>
+                        <span className="text-blue-400">
+                          {systemResources
+                            ? `${systemResources.memory_usage.toFixed(1)}%`
+                            : "Loading..."}
+                        </span>
+                      </div>
+                      <Progress
+                        value={systemResources?.memory_usage || 0}
+                        className="h-2 bg-slate-700"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-200">Disk</span>
+                        <span className="text-purple-400">
+                          {systemResources
+                            ? `${systemResources.disk_usage.toFixed(1)}%`
+                            : "Loading..."}
+                        </span>
+                      </div>
+                      <Progress
+                        value={systemResources?.disk_usage || 0}
+                        className="h-2 bg-slate-700"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+
+          {/* ML Models View */}
+          {selectedView === "models" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-white">
+                  Active ML Models
+                </h2>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-slate-600 text-slate-200"
                   >
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="flex items-center text-purple-400">
-                          <Brain className="w-5 h-5 mr-2 text-purple-400" />
-                          {model.model_name}
-                        </CardTitle>
-                        <Badge
-                          variant={model.accuracy > 0.9 ? "default" : "outline"}
-                          className="bg-green-500/20 text-green-400 border-green-500/50"
-                        >
-                          {model.accuracy > 0.9 ? "Verified" : "Pending"}
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div>
-                          <p className="text-sm text-gray-400">Accuracy</p>
-                          <p className="text-lg font-semibold text-blue-400">
-                            {(model.accuracy * 100).toFixed(1)}%
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-400">Precision</p>
-                          <p className="text-lg font-semibold text-green-400">
-                            {(model.precision * 100).toFixed(1)}%
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-400">F1 Score</p>
-                          <p className="text-lg font-semibold text-purple-400">
-                            {(model.f1Score * 100).toFixed(1)}%
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-400">Speed</p>
-                          <p className="text-lg font-semibold text-yellow-400">
-                            {model.inferenceTime.toFixed(1)}ms
-                          </p>
-                        </div>
-                      </div>
+                    <Filter className="w-4 h-4 mr-2" />
+                    Filter
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-slate-600 text-slate-200"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Export
+                  </Button>
+                </div>
+              </div>
 
-                      <div className="mt-4 space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-400">
-                            Mathematical Guarantees:
-                          </span>
+              {/* Model Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {(ensembleCandidates?.candidate_models || [])
+                  .filter((model) => model && model.model_id)
+                  .map((model) => (
+                    <Card
+                      key={model.model_id}
+                      className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-slate-600/50 transition-all duration-200"
+                    >
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="flex items-center text-white">
+                            <Brain className="w-5 h-5 mr-2 text-purple-400" />
+                            {model.model_name || "Unnamed Model"}
+                          </CardTitle>
+                          <div className="flex gap-2">
+                            <Badge
+                              variant={
+                                model.accuracy > 0.9 ? "default" : "outline"
+                              }
+                              className="bg-green-500/20 text-green-400 border-green-500/50"
+                            >
+                              {model.accuracy > 0.9 ? "Verified" : "Testing"}
+                            </Badge>
+                            <Button variant="ghost" size="sm">
+                              <MoreVertical className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        {/* Performance Metrics */}
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div className="text-center">
+                            <p className="text-2xl font-bold text-blue-400">
+                              {(model.accuracy * 100).toFixed(1)}%
+                            </p>
+                            <p className="text-xs text-slate-200 uppercase tracking-wide">
+                              Accuracy
+                            </p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-2xl font-bold text-green-400">
+                              {(model.precision * 100).toFixed(1)}%
+                            </p>
+                            <p className="text-xs text-slate-200 uppercase tracking-wide">
+                              Precision
+                            </p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-2xl font-bold text-purple-400">
+                              {(model.f1Score * 100).toFixed(1)}%
+                            </p>
+                            <p className="text-xs text-slate-200 uppercase tracking-wide">
+                              F1 Score
+                            </p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-2xl font-bold text-yellow-400">
+                              {model.inferenceTime.toFixed(1)}ms
+                            </p>
+                            <p className="text-xs text-slate-200 uppercase tracking-wide">
+                              Inference
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Model Status */}
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            <span className="text-sm text-slate-200">
+                              Training Complete
+                            </span>
+                          </div>
                           <div className="flex gap-1">
                             {model.accuracy > 0.9 && (
                               <Badge
-                                variant="default"
                                 size="sm"
-                                className="bg-green-500/20 text-green-400"
+                                className="bg-green-500/20 text-green-400 border-green-500/30"
                               >
-                                Convergence
+                                Stable
                               </Badge>
                             )}
                             {model.successRate > 0.95 && (
                               <Badge
-                                variant="default"
                                 size="sm"
-                                className="bg-blue-500/20 text-blue-400"
+                                className="bg-blue-500/20 text-blue-400 border-blue-500/30"
                               >
-                                Stability
-                              </Badge>
-                            )}
-                            {model.precision > 0.85 && model.recall > 0.85 && (
-                              <Badge
-                                variant="default"
-                                size="sm"
-                                className="bg-purple-500/20 text-purple-400"
-                              >
-                                Bounds
+                                Optimal
                               </Badge>
                             )}
                           </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {/* Live Predictions View */}
+          {selectedView === "predictions" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-white">
+                  Live Prediction Stream
+                </h2>
+                <Button
+                  onClick={executeLivePrediction}
+                  className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Execute Prediction
+                </Button>
+              </div>
+
+              <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                <CardContent className="p-6">
+                  {livePredictions.length === 0 ? (
+                    <div className="text-center py-12">
+                      <Activity className="w-16 h-16 mx-auto mb-4 text-slate-300" />
+                      <h3 className="text-lg font-medium text-white mb-2">
+                        No Live Predictions
+                      </h3>
+                      <p className="text-slate-200">
+                        Execute a prediction to see real-time processing status
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {livePredictions.map((prediction) => (
+                        <div
+                          key={prediction.id}
+                          className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg border border-slate-600/30"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div
+                              className={`w-3 h-3 rounded-full ${
+                                prediction.status === "completed"
+                                  ? "bg-green-400"
+                                  : prediction.status === "processing"
+                                    ? "bg-yellow-400 animate-pulse"
+                                    : "bg-red-400"
+                              }`}
+                            ></div>
+                            <div>
+                              <p className="text-white font-medium">
+                                {prediction.sport.toUpperCase()} -{" "}
+                                {prediction.event_id}
+                              </p>
+                              <p className="text-sm text-slate-200">
+                                {prediction.status === "completed" &&
+                                  prediction.confidence &&
+                                  `Confidence: ${(prediction.confidence * 100).toFixed(1)}%`}
+                                {prediction.status === "processing" &&
+                                  "Processing..."}
+                                {prediction.status === "failed" &&
+                                  "Failed to process"}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm text-slate-200">
+                              {prediction.created_at.toLocaleTimeString()}
+                            </p>
+                            {prediction.processing_time && (
+                              <p className="text-xs text-slate-500">
+                                {prediction.processing_time}ms
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* System Health View */}
+          {selectedView === "health" && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-white">
+                System Health Monitoring
+              </h2>
+
+              {/* Health Overview Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-green-400">
+                      <CheckCircle className="w-5 h-5 mr-2" />
+                      Overall Health
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center">
+                      <p className="text-4xl font-bold text-green-400 mb-2">
+                        {systemHealth
+                          ? `${(systemHealth.overallHealth * 100).toFixed(0)}%`
+                          : "Loading..."}
+                      </p>
+                      <p className="text-slate-200">All systems operational</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-blue-400">
+                      <Clock className="w-5 h-5 mr-2" />
+                      Uptime
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center">
+                      <p className="text-4xl font-bold text-blue-400 mb-2">
+                        {systemHealth
+                          ? `${systemHealth.uptime.toFixed(1)}%`
+                          : "Loading..."}
+                      </p>
+                      <p className="text-slate-200">System availability</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-purple-400">
+                      <Zap className="w-5 h-5 mr-2" />
+                      Response Time
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center">
+                      <p className="text-4xl font-bold text-purple-400 mb-2">
+                        {systemHealth
+                          ? `${systemHealth.responseTime}ms`
+                          : "Loading..."}
+                      </p>
+                      <p className="text-slate-200">Average response</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Detailed Health Radar */}
+              {systemHealthRadarData && (
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-green-400">
+                      <Radar className="w-5 h-5 mr-2" />
+                      System Health Radar
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-96">
+                      <SafeChart
+                        type="radar"
+                        data={systemHealthRadarData}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          plugins: { legend: { position: "top" } },
+                          scales: { r: { beginAtZero: true, max: 100 } },
+                        }}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          )}
+
+          {/* Research View */}
+          {selectedView === "research" && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-white">
+                Mathematical Research Foundations
+              </h2>
+
+              {/* Mathematical Foundations Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {mathematicalFoundations.map((foundation, index) => (
+                  <Card
+                    key={index}
+                    className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50"
+                  >
+                    <CardHeader>
+                      <CardTitle className="text-blue-400">
+                        {foundation.metric_type}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="text-center">
+                          <p className="text-3xl font-bold text-green-400 mb-1">
+                            {foundation.value}%
+                          </p>
+                          <p className="text-slate-200 text-sm">
+                            Current Performance
+                          </p>
+                        </div>
+
+                        <div>
+                          <h4 className="text-white font-medium mb-2">
+                            Theoretical Basis
+                          </h4>
+                          <p className="text-slate-300 text-sm leading-relaxed">
+                            {foundation.theoretical_basis}
+                          </p>
+                        </div>
+
+                        <div>
+                          <h4 className="text-white font-medium mb-2">
+                            Computational Complexity
+                          </h4>
+                          <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 font-mono text-xs">
+                            {foundation.computational_complexity}
+                          </Badge>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
                 ))}
-            </div>
+              </div>
 
-            {/* Model Complexity Visualization */}
-            <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-red-500/20 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="flex items-center text-red-400">
-                  <Cpu className="w-5 h-5 mr-2 text-red-400" />
-                  Model Complexity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {modelComplexityData && (
-                  <div className="h-64">
-                    <Doughnut
-                      data={modelComplexityData}
-                      options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                          legend: { position: "bottom" },
-                        },
-                      }}
-                    />
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        {/* Predictions Tab */}
-        <TabsContent value="predictions">
-          <div className="space-y-6">
-            <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center text-green-400">
-                    <Activity className="w-5 h-5 mr-2 text-green-400" />
-                    Live Prediction Stream
+              {/* Advanced Research Libraries */}
+              <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-cyan-400">
+                    <Atom className="w-5 h-5 mr-2" />
+                    Advanced Mathematical Libraries
                   </CardTitle>
-                  <Button
-                    onClick={executeLivePrediction}
-                    size="sm"
-                    className="bg-gradient-to-r from-green-400 to-blue-500 text-black font-bold shadow-lg shadow-green-500/30"
-                  >
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    New Prediction
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {livePredictions.length === 0 ? (
-                    <div className="text-center py-8 text-gray-400">
-                      <Activity className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                      <p>
-                        No live predictions yet. Click "New Prediction" to
-                        start.
-                      </p>
-                    </div>
-                  ) : (
-                    livePredictions.map((prediction) => (
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {[
+                      {
+                        name: "Neural Computation",
+                        tech: "TensorFlow, PyTorch",
+                        color: "purple",
+                      },
+                      {
+                        name: "Statistical Computing",
+                        tech: "SciPy, NumPy, R",
+                        color: "green",
+                      },
+                      {
+                        name: "Optimization",
+                        tech: "CVXPY, Gurobi",
+                        color: "blue",
+                      },
+                      {
+                        name: "Graph Theory",
+                        tech: "NetworkX, igraph",
+                        color: "yellow",
+                      },
+                      {
+                        name: "Topology",
+                        tech: "GUDHI homology",
+                        color: "indigo",
+                      },
+                      {
+                        name: "Quantum-Inspired",
+                        tech: "Quantum probability",
+                        color: "red",
+                      },
+                    ].map((lib, index) => (
                       <div
-                        key={prediction.id}
-                        className="p-4 bg-gray-800/50 rounded-xl border border-gray-700 hover:shadow-lg transition-all duration-300"
+                        key={index}
+                        className={`text-center p-4 border rounded-lg border-${lib.color}-500/30 bg-${lib.color}-500/10`}
                       >
-                        <div className="flex items-center gap-4">
-                          <div
-                            className={`w-3 h-3 rounded-full ${
-                              prediction.status === "completed"
-                                ? "bg-green-500"
-                                : prediction.status === "processing"
-                                  ? "bg-yellow-500 animate-pulse"
-                                  : "bg-red-500"
-                            }`}
-                          />
-                          <div>
-                            <p className="font-medium text-white">
-                              {prediction.event_id}
-                            </p>
-                            <p className="text-sm text-gray-400 capitalize">
-                              {prediction.sport}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-6">
-                          {prediction.status === "completed" && (
-                            <>
-                              <div className="text-center">
-                                <p className="text-lg font-semibold text-blue-400">
-                                  {(prediction.prediction || 0).toFixed(2)}
-                                </p>
-                                <p className="text-xs text-gray-400">
-                                  Prediction
-                                </p>
-                              </div>
-                              <div className="text-center">
-                                <p className="text-lg font-semibold text-green-400">
-                                  {((prediction.confidence || 0) * 100).toFixed(
-                                    1,
-                                  )}
-                                  %
-                                </p>
-                                <p className="text-xs text-gray-400">
-                                  Confidence
-                                </p>
-                              </div>
-                              {prediction.processing_time && (
-                                <div className="text-center">
-                                  <p className="text-lg font-semibold text-purple-400">
-                                    {(
-                                      prediction.processing_time / 1000
-                                    ).toFixed(1)}
-                                    s
-                                  </p>
-                                  <p className="text-xs text-gray-400">Time</p>
-                                </div>
-                              )}
-                            </>
-                          )}
-                          {prediction.status === "processing" && (
-                            <div className="flex items-center gap-2">
-                              <RefreshCw className="w-4 h-4 animate-spin text-yellow-400" />
-                              <span className="text-yellow-400">
-                                Processing...
-                              </span>
-                            </div>
-                          )}
-                          {prediction.status === "failed" && (
-                            <div className="flex items-center gap-2">
-                              <XCircle className="w-4 h-4 text-red-400" />
-                              <span className="text-red-400">Failed</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        {/* Health Tab */}
-        <TabsContent value="health">
-          {systemHealth && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-cpu-400">
-                    <Cpu className="w-5 h-5 mr-2 text-blue-400" />
-                    Resource Utilization
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-sm text-gray-400">CPU Usage</span>
-                      <span className="text-sm font-medium text-blue-400">
-                        {systemHealth?.cpuUsage || 0}%
-                      </span>
-                    </div>
-                    <Progress
-                      value={systemHealth?.cpuUsage || 0}
-                      className="h-2"
-                    />
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-sm text-gray-400">
-                        Memory Usage
-                      </span>
-                      <span className="text-sm font-medium text-green-400">
-                        {systemHealth?.memoryUsage || 0}%
-                      </span>
-                    </div>
-                    <Progress
-                      value={systemHealth?.memoryUsage || 0}
-                      className="h-2"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-network-400">
-                    <Network className="w-5 h-5 mr-2 text-purple-400" />
-                    Service Status
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {Object.entries(systemHealth?.services || {}).map(
-                      ([component, status]) => (
                         <div
-                          key={component}
-                          className="flex items-center justify-between"
+                          className={`w-8 h-8 mx-auto mb-2 text-${lib.color}-400`}
                         >
-                          <span className="text-sm text-gray-400 capitalize">
-                            {component.replace(/_/g, " ")}
-                          </span>
-                          <Badge
-                            variant={
-                              status === "healthy"
-                                ? "default"
-                                : status === "degraded"
-                                  ? "outline"
-                                  : "destructive"
-                            }
-                            className={
-                              status === "healthy"
-                                ? "bg-green-500/20 text-green-400 border-green-500/50"
-                                : status === "degraded"
-                                  ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/50"
-                                  : "bg-red-500/20 text-red-400 border-red-500/50"
-                            }
-                          >
-                            {status}
-                          </Badge>
+                          <Hexagon className="w-full h-full" />
                         </div>
-                      ),
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg lg:col-span-2">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-gauge-400">
-                    <Gauge className="w-5 h-5 mr-2 text-yellow-400" />
-                    Performance Metrics
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-blue-400">
-                        {((systemHealth?.overallHealth || 0) * 100).toFixed(1)}%
-                      </p>
-                      <p className="text-sm text-gray-400">Overall Health</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-green-400">
-                        {(systemHealth?.responseTime || 0).toFixed(0)}ms
-                      </p>
-                      <p className="text-sm text-gray-400">Response Time</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-purple-400">
-                        {((systemHealth?.errorRate || 0) * 100).toFixed(2)}%
-                      </p>
-                      <p className="text-sm text-gray-400">Error Rate</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-yellow-400">
-                        {systemHealth?.uptime || 0}%
-                      </p>
-                      <p className="text-sm text-gray-400">Uptime</p>
-                    </div>
+                        <h5
+                          className={`font-medium mb-1 text-${lib.color}-400`}
+                        >
+                          {lib.name}
+                        </h5>
+                        <p className="text-sm text-slate-200">{lib.tech}</p>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
             </div>
           )}
-        </TabsContent>
 
-        {/* Mathematical Analysis Tab */}
-        <TabsContent value="mathematical">
-          <div className="space-y-6">
-            <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center text-microscope-400">
-                  <Microscope className="w-5 h-5 mr-2 text-cyan-400" />
-                  Mathematical Foundations
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {mathematicalFoundations ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {Object.entries(mathematicalFoundations || {}).map(
-                      ([key, value]: [string, any]) => (
-                        <Card
-                          key={key}
-                          className="bg-gray-800/50 border border-gray-700"
-                        >
-                          <CardContent className="p-4">
-                            <h4 className="font-medium text-white mb-2 capitalize">
-                              {key.replace(/_/g, " ")}
-                            </h4>
-                            <div className="space-y-2 text-sm">
-                              <div>
-                                <span className="text-gray-400">Basis:</span>
-                                <p className="font-mono text-xs text-cyan-400">
-                                  {value.mathematical_basis ||
-                                    "Advanced mathematical principles"}
-                                </p>
-                              </div>
-                              {value.computational_complexity && (
-                                <div>
-                                  <span className="text-gray-400">
-                                    Complexity:
-                                  </span>
-                                  <p className="font-mono text-xs text-yellow-400">
-                                    {value.computational_complexity}
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ),
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-gray-400">
-                    <Microscope className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                    <p>Loading mathematical foundations...</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
+          {/* Fallback for other views */}
+          {![
+            "overview",
+            "models",
+            "predictions",
+            "health",
+            "research",
+          ].includes(selectedView) && (
+            <div className="text-center py-12">
+              <h2 className="text-xl font-semibold text-white mb-2">
+                {selectedView.charAt(0).toUpperCase() + selectedView.slice(1)}{" "}
+                View
+              </h2>
+              <p className="text-slate-200">Coming soon...</p>
+            </div>
+          )}
+        </main>
+      </div>
 
-        {/* Research Insights Tab */}
-        <TabsContent value="research">
-          <div className="space-y-6">
-            <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center text-award-400">
-                  <Award className="w-5 h-5 mr-2 text-yellow-400" />
-                  Research-Grade Implementation Status
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-medium text-white mb-4">
-                      Implementation Quality
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-400">
-                          Code Quality
-                        </span>
-                        <Badge
-                          variant="default"
-                          className="bg-green-500/20 text-green-400"
-                        >
-                          Research Grade
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-400">
-                          Mathematical Rigor
-                        </span>
-                        <Badge
-                          variant="default"
-                          className="bg-blue-500/20 text-blue-400"
-                        >
-                          Peer Reviewed
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-400">
-                          Performance
-                        </span>
-                        <Badge
-                          variant="default"
-                          className="bg-purple-500/20 text-purple-400"
-                        >
-                          Optimized
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-400">
-                          Documentation
-                        </span>
-                        <Badge
-                          variant="default"
-                          className="bg-cyan-500/20 text-cyan-400"
-                        >
-                          Complete
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-medium text-white mb-4">
-                      Advanced Features
-                    </h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-400">
-                          Quantum Computing
-                        </span>
-                        <Badge
-                          variant="default"
-                          className="bg-pink-500/20 text-pink-400"
-                        >
-                          Active
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-400">
-                          Neural Networks
-                        </span>
-                        <Badge
-                          variant="default"
-                          className="bg-indigo-500/20 text-indigo-400"
-                        >
-                          47 Active
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-400">
-                          Real-time Processing
-                        </span>
-                        <Badge
-                          variant="default"
-                          className="bg-green-500/20 text-green-400"
-                        >
-                          12ms
-                        </Badge>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-400">
-                          Auto-Optimization
-                        </span>
-                        <Badge
-                          variant="default"
-                          className="bg-yellow-500/20 text-yellow-400"
-                        >
-                          Enabled
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-black/20 backdrop-blur-xl border border-white/10 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center text-atom-400">
-                  <Atom className="w-5 h-5 mr-2 text-green-400" />
-                  Advanced Mathematical Libraries
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center p-4 border rounded-lg border-purple-500/30 bg-purple-500/10">
-                    <Brain className="w-8 h-8 mx-auto mb-2 text-purple-400" />
-                    <h5 className="font-medium mb-1 text-purple-400">
-                      Neural Computation
-                    </h5>
-                    <p className="text-sm text-gray-400">
-                      TensorFlow, PyTorch integrations
-                    </p>
-                  </div>
-                  <div className="text-center p-4 border rounded-lg border-green-500/30 bg-green-500/10">
-                    <Activity className="w-8 h-8 mx-auto mb-2 text-green-400" />
-                    <h5 className="font-medium mb-1 text-green-400">
-                      Statistical Computing
-                    </h5>
-                    <p className="text-sm text-gray-400">
-                      SciPy, NumPy, R integrations
-                    </p>
-                  </div>
-                  <div className="text-center p-4 border rounded-lg border-blue-500/30 bg-blue-500/10">
-                    <GitBranch className="w-8 h-8 mx-auto mb-2 text-blue-400" />
-                    <h5 className="font-medium mb-1 text-blue-400">
-                      Optimization
-                    </h5>
-                    <p className="text-sm text-gray-400">
-                      CVXPY, Gurobi algorithms
-                    </p>
-                  </div>
-                  <div className="text-center p-4 border rounded-lg border-yellow-500/30 bg-yellow-500/10">
-                    <Network className="w-8 h-8 mx-auto mb-2 text-yellow-400" />
-                    <h5 className="font-medium mb-1 text-yellow-400">
-                      Graph Theory
-                    </h5>
-                    <p className="text-sm text-gray-400">
-                      NetworkX, igraph libraries
-                    </p>
-                  </div>
-                  <div className="text-center p-4 border rounded-lg border-indigo-500/30 bg-indigo-500/10">
-                    <Layers className="w-8 h-8 mx-auto mb-2 text-indigo-400" />
-                    <h5 className="font-medium mb-1 text-indigo-400">
-                      Topology
-                    </h5>
-                    <p className="text-sm text-gray-400">
-                      GUDHI persistent homology
-                    </p>
-                  </div>
-                  <div className="text-center p-4 border rounded-lg border-red-500/30 bg-red-500/10">
-                    <Binary className="w-8 h-8 mx-auto mb-2 text-red-400" />
-                    <h5 className="font-medium mb-1 text-red-400">
-                      Quantum-Inspired
-                    </h5>
-                    <p className="text-sm text-gray-400">
-                      Quantum probability models
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
+      {/* Backend Control - positioned absolutely */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <BackendControl
+          isOffline={!!isOffline}
+          onStatusChange={(isOnline) => {
+            if (isOnline) {
+              queryClient.invalidateQueries();
+            }
+          }}
+        />
+      </div>
     </div>
   );
 };

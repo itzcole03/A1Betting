@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   DollarSign,
   TrendingUp,
@@ -12,6 +13,10 @@ import {
   Trophy,
   Activity,
 } from "lucide-react";
+import { api } from "../../services/api";
+import { useValueBets, useBankroll } from "../../hooks/useBetting";
+import OfflineIndicator from "../ui/OfflineIndicator";
+import toast from "react-hot-toast";
 
 interface PredictionResult {
   investment: number;
@@ -47,6 +52,7 @@ interface MoneyMakerConfig {
 }
 
 export const MoneyMakerPro: React.FC = () => {
+  const queryClient = useQueryClient();
   const [config, setConfig] = useState<MoneyMakerConfig>({
     investment: 100,
     strategy: "balanced",
@@ -58,63 +64,145 @@ export const MoneyMakerPro: React.FC = () => {
   const [result, setResult] = useState<PredictionResult | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // Real data fetching
+  const {
+    valueBets,
+    isLoading: valueBetsLoading,
+    error: valueBetsError,
+  } = useValueBets({
+    sport: config.sport === "all" ? undefined : config.sport,
+    minEdge:
+      config.strategy === "conservative"
+        ? 0.05
+        : config.strategy === "balanced"
+          ? 0.03
+          : 0.01,
+  });
+
+  const { calculateKellyBetSize } = useBankroll("default_user");
+
+  // Health status check
+  const { data: healthStatus, error: healthError } = useQuery({
+    queryKey: ["healthStatus"],
+    queryFn: () => api.getHealthStatus(),
+    refetchInterval: 30000,
+    retry: false,
+  });
+
+  // Check if backend is offline
+  const isOffline =
+    valueBetsError ||
+    healthError ||
+    (healthStatus && healthStatus.status === "offline") ||
+    (!valueBets && !valueBetsLoading);
+
+  // Handle retry functionality
+  const handleRetry = () => {
+    queryClient.invalidateQueries();
+    toast.success("Reconnecting to backend services...");
+  };
+
   const generatePredictions = async () => {
     setIsGenerating(true);
 
-    // Simulate AI processing with realistic delay
-    await new Promise((resolve) =>
-      setTimeout(resolve, 3000 + Math.random() * 2000),
-    );
+    try {
+      // Get real value bets from API
+      if (!valueBets || valueBets.length === 0) {
+        toast.error("No value bets available. Please try again later.");
+        setIsGenerating(false);
+        return;
+      }
 
-    // Generate AI-powered predictions based on config
-    const mockResult: PredictionResult = {
-      investment: config.investment,
-      confidence: 85 + Math.random() * 12,
-      projectedReturn: config.investment * (1.8 + Math.random() * 1.2),
-      expectedProfit: config.investment * (0.8 + Math.random() * 1.2),
-      riskLevel:
-        config.strategy === "conservative"
-          ? "low"
-          : config.strategy === "balanced"
-            ? "medium"
-            : "high",
-      picks: [
-        {
-          game: "Lakers vs Warriors",
-          pick: "LeBron James Over 25.5 Points",
-          confidence: 94.7,
-          odds: "-110",
-          reasoning:
-            "LeBron averaging 28.3 PPG vs Warriors this season. Warriors allowing 118 PPG at home.",
-        },
-        {
-          game: "Chiefs vs Bills",
-          pick: "Patrick Mahomes Over 275.5 Passing Yards",
-          confidence: 91.2,
-          odds: "-105",
-          reasoning:
-            "Mahomes has thrown for 300+ yards in 4 of last 5 games. Bills secondary ranks 24th vs pass.",
-        },
-        {
-          game: "Celtics vs Heat",
-          pick: "Jayson Tatum Over 27.5 Points",
-          confidence: 89.8,
-          odds: "-115",
-          reasoning:
-            "Tatum shooting 48% from field in last 10 games. Heat missing key defenders.",
-        },
-      ].slice(
-        0,
+      // Filter and process value bets based on strategy
+      const filteredBets = valueBets.filter((bet) => {
+        const minEdge =
+          config.strategy === "conservative"
+            ? 0.05
+            : config.strategy === "balanced"
+              ? 0.03
+              : 0.01;
+        return bet.edge >= minEdge;
+      });
+
+      const maxPicks =
         config.strategy === "conservative"
           ? 2
           : config.strategy === "balanced"
             ? 3
-            : 4,
-      ),
-    };
+            : 4;
 
-    setResult(mockResult);
-    setIsGenerating(false);
+      const selectedBets = filteredBets
+        .sort((a, b) => b.edge - a.edge) // Sort by highest edge
+        .slice(0, maxPicks);
+
+      if (selectedBets.length === 0) {
+        toast.error(
+          "No suitable bets found for your strategy. Try adjusting your settings.",
+        );
+        setIsGenerating(false);
+        return;
+      }
+
+      // Calculate Kelly criterion bet sizes
+      const picks = selectedBets.map((bet) => {
+        const kellySize = calculateKellyBetSize(bet.edge, bet.odds);
+        const adjustedSize = Math.min(kellySize, config.investment * 0.25); // Max 25% of bankroll per bet
+
+        return {
+          game: bet.event,
+          pick: `${bet.outcome} (${bet.odds})`,
+          confidence: bet.model_prob * 100,
+          odds: bet.odds.toString(),
+          reasoning:
+            bet.rationale ||
+            `Edge: ${(bet.edge * 100).toFixed(1)}%, Kelly Size: $${adjustedSize.toFixed(2)}`,
+          recommendedStake: adjustedSize,
+          edge: bet.edge,
+        };
+      });
+
+      // Calculate expected returns
+      const totalStake = picks.reduce(
+        (sum, pick) => sum + pick.recommendedStake,
+        0,
+      );
+      const averageEdge =
+        picks.reduce((sum, pick) => sum + pick.edge, 0) / picks.length;
+      const projectedReturn = totalStake * (1 + averageEdge);
+      const expectedProfit = projectedReturn - totalStake;
+
+      const newResult: PredictionResult = {
+        investment: config.investment,
+        confidence: Math.min(
+          95,
+          picks.reduce((sum, pick) => sum + pick.confidence, 0) / picks.length,
+        ),
+        projectedReturn,
+        expectedProfit,
+        riskLevel:
+          config.strategy === "conservative"
+            ? "low"
+            : config.strategy === "balanced"
+              ? "medium"
+              : "high",
+        picks: picks.map((pick) => ({
+          game: pick.game,
+          pick: pick.pick,
+          confidence: pick.confidence,
+          odds: pick.odds,
+          reasoning: pick.reasoning,
+        })),
+      };
+
+      setResult(newResult);
+      toast.success(
+        `Generated ${picks.length} high-value picks with ${averageEdge.toFixed(1)}% average edge!`,
+      );
+    } catch (error: any) {
+      toast.error(`Failed to generate predictions: ${error.message}`);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const strategyDescriptions = {
@@ -126,6 +214,12 @@ export const MoneyMakerPro: React.FC = () => {
 
   return (
     <div className="space-y-8 animate-slide-in-up">
+      {/* Offline Indicator */}
+      <OfflineIndicator
+        show={!!isOffline}
+        service="Money Maker API"
+        onRetry={handleRetry}
+      />
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

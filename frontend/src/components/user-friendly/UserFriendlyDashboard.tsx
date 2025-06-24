@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import {
   DollarSign,
   TrendingUp,
@@ -15,6 +16,15 @@ import {
   PlayCircle,
   BarChart3,
 } from "lucide-react";
+import { api } from "../../services/api";
+import {
+  useValueBets,
+  useArbitrageOpportunities,
+} from "../../hooks/useBetting";
+import { useWebSocket } from "../../hooks/useWebSocket";
+import OfflineIndicator from "../ui/OfflineIndicator";
+import EmptyState from "../ui/EmptyState";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LiveStats {
   totalProfit: number;
@@ -37,68 +47,101 @@ interface LiveGame {
 export const UserFriendlyDashboard: React.FC<{
   onNavigate: (page: string) => void;
 }> = ({ onNavigate }) => {
-  const [liveStats, setLiveStats] = useState<LiveStats>({
-    totalProfit: 47756,
-    winRate: 94.7,
-    activeGames: 23,
-    aiAccuracy: 97.3,
-    todaysPicks: 12,
-    liveAlerts: 8,
+  const queryClient = useQueryClient();
+
+  // Real API data fetching
+  const {
+    valueBets,
+    stats: valueBetStats,
+    error: valueBetsError,
+  } = useValueBets();
+  const {
+    arbitrageOpportunities,
+    stats: arbStats,
+    error: arbError,
+  } = useArbitrageOpportunities();
+
+  // Real-time accuracy metrics
+  const { data: accuracyMetrics, error: accuracyError } = useQuery({
+    queryKey: ["accuracyMetrics"],
+    queryFn: () => api.getAccuracyMetrics(),
+    refetchInterval: 10000, // Update every 10 seconds
+    retry: false,
   });
 
-  const [liveGames] = useState<LiveGame[]>([
-    {
-      id: "1",
-      teams: "Lakers vs Warriors",
-      time: "Live - Q3 2:47",
-      aiPick: "LeBron Over 25.5 Points ✅",
-      confidence: 94.7,
-      status: "live",
-    },
-    {
-      id: "2",
-      teams: "Chiefs vs Bills",
-      time: "Live - Q2 8:23",
-      aiPick: "Mahomes Over 275.5 Yards",
-      confidence: 91.2,
-      status: "live",
-    },
-    {
-      id: "3",
-      teams: "Celtics vs Heat",
-      time: "Tonight 8:00 PM",
-      aiPick: "Tatum Over 27.5 Points",
-      confidence: 89.8,
-      status: "upcoming",
-    },
-  ]);
+  // Real-time health status
+  const { data: healthStatus, error: healthError } = useQuery({
+    queryKey: ["healthStatus"],
+    queryFn: () => api.getHealthStatus(),
+    refetchInterval: 30000, // Update every 30 seconds
+    retry: false,
+  });
 
-  // Real-time updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLiveStats((prev) => ({
-        ...prev,
-        totalProfit: prev.totalProfit + Math.floor(Math.random() * 500 + 100),
-        winRate: Math.min(99.9, prev.winRate + (Math.random() - 0.5) * 0.1),
-        aiAccuracy: Math.min(
-          99.9,
-          prev.aiAccuracy + (Math.random() - 0.5) * 0.05,
-        ),
-        activeGames: Math.max(
-          15,
-          prev.activeGames + Math.floor(Math.random() * 3 - 1),
-        ),
-        liveAlerts: Math.max(
-          5,
-          prev.liveAlerts + Math.floor(Math.random() * 2 - 1),
-        ),
-      }));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+  // User analytics
+  const { data: userAnalytics, error: analyticsError } = useQuery({
+    queryKey: ["userAnalytics"],
+    queryFn: () => api.getUserAnalytics("default_user"),
+    refetchInterval: 60000, // Update every minute
+    retry: false,
+  });
+
+  // Check if backend is offline - detect when we're getting default/empty values due to network errors
+  const isOffline =
+    valueBetsError ||
+    arbError ||
+    accuracyError ||
+    healthError ||
+    analyticsError ||
+    (healthStatus && healthStatus.status === "offline") ||
+    (accuracyMetrics && accuracyMetrics.overall_accuracy === 0) ||
+    (userAnalytics && userAnalytics.current_balance === 0) ||
+    (valueBets && valueBets.length === 0 && !valueBetsError); // Empty but no error indicates fallback
+
+  // WebSocket for real-time updates
+  const { lastMessage } = useWebSocket("/ws/dashboard", {
+    onMessage: (message) => {
+      console.log("Dashboard real-time update:", message);
+    },
+  });
+
+  // Calculate live stats from real data
+  const liveStats: LiveStats = {
+    totalProfit: userAnalytics?.yearly?.[new Date().getFullYear()] || 0,
+    winRate: accuracyMetrics?.overall_accuracy
+      ? accuracyMetrics.overall_accuracy * 100
+      : 0,
+    activeGames: healthStatus?.metrics?.active_predictions || 0,
+    aiAccuracy: accuracyMetrics?.overall_accuracy
+      ? accuracyMetrics.overall_accuracy * 100
+      : 0,
+    todaysPicks: valueBets?.length || 0,
+    liveAlerts: arbitrageOpportunities?.length || 0,
+  };
+
+  // Handle retry functionality
+  const handleRetry = () => {
+    queryClient.invalidateQueries();
+  };
+
+  // Convert value bets to live games format
+  const liveGames: LiveGame[] =
+    valueBets?.slice(0, 6).map((bet, index) => ({
+      id: bet.event + index,
+      teams: bet.event,
+      time: new Date(bet.commence_time).toLocaleTimeString(),
+      aiPick: `${bet.outcome} (${bet.odds}) - Edge: ${(bet.edge * 100).toFixed(1)}%`,
+      confidence: bet.model_prob * 100,
+      status: new Date(bet.commence_time) > new Date() ? "upcoming" : "live",
+    })) || [];
 
   return (
     <div className="space-y-8 animate-slide-in-up">
+      {/* Offline Indicator */}
+      <OfflineIndicator
+        show={!!isOffline}
+        service="Backend API"
+        onRetry={handleRetry}
+      />
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -112,28 +155,50 @@ export const UserFriendlyDashboard: React.FC<{
             A1BETTING INTELLIGENCE
           </h1>
           <div className="text-6xl font-black text-electric-500 mb-6 animate-cyber-pulse">
-            $∞
+            {isOffline
+              ? "OFFLINE"
+              : `$${liveStats.totalProfit.toLocaleString()}`}
           </div>
           <p className="text-2xl text-gray-300 mb-8">
             Real-time AI-powered sports analysis with quantum enhancement
           </p>
           <div className="flex justify-center space-x-8 text-sm">
-            <div className="flex items-center space-x-2 px-3 py-2 bg-green-500/10 rounded-lg border border-green-500/30 backdrop-blur-sm">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50" />
-              <span className="text-green-400 font-semibold drop-shadow-lg">
-                All Systems Online
+            <div
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg border backdrop-blur-sm ${isOffline ? "bg-red-500/10 border-red-500/30" : "bg-green-500/10 border-green-500/30"}`}
+            >
+              <div
+                className={`w-2 h-2 rounded-full shadow-lg ${isOffline ? "bg-red-400 shadow-red-400/50" : "bg-green-400 shadow-green-400/50 animate-pulse"}`}
+              />
+              <span
+                className={`font-semibold drop-shadow-lg ${isOffline ? "text-red-400" : "text-green-400"}`}
+              >
+                {isOffline ? "Services Offline" : "All Systems Online"}
               </span>
             </div>
-            <div className="flex items-center space-x-2 px-3 py-2 bg-blue-500/10 rounded-lg border border-blue-500/30 backdrop-blur-sm">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse shadow-lg shadow-blue-400/50" />
-              <span className="text-blue-400 font-semibold drop-shadow-lg">
-                {liveStats.activeGames} Live Games
+            <div
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg border backdrop-blur-sm ${isOffline ? "bg-red-500/10 border-red-500/30" : "bg-blue-500/10 border-blue-500/30"}`}
+            >
+              <div
+                className={`w-2 h-2 rounded-full shadow-lg ${isOffline ? "bg-red-400 shadow-red-400/50" : "bg-blue-400 shadow-blue-400/50 animate-pulse"}`}
+              />
+              <span
+                className={`font-semibold drop-shadow-lg ${isOffline ? "text-red-400" : "text-blue-400"}`}
+              >
+                {isOffline
+                  ? "No Games Data"
+                  : `${liveStats.activeGames} Live Games`}
               </span>
             </div>
-            <div className="flex items-center space-x-2 px-3 py-2 bg-purple-500/10 rounded-lg border border-purple-500/30 backdrop-blur-sm">
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse shadow-lg shadow-purple-400/50" />
-              <span className="text-purple-400 font-semibold drop-shadow-lg">
-                Quantum Processing Active
+            <div
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg border backdrop-blur-sm ${isOffline ? "bg-red-500/10 border-red-500/30" : "bg-purple-500/10 border-purple-500/30"}`}
+            >
+              <div
+                className={`w-2 h-2 rounded-full shadow-lg ${isOffline ? "bg-red-400 shadow-red-400/50" : "bg-purple-400 shadow-purple-400/50 animate-pulse"}`}
+              />
+              <span
+                className={`font-semibold drop-shadow-lg ${isOffline ? "text-red-400" : "text-purple-400"}`}
+              >
+                {isOffline ? "Processing Offline" : "Quantum Processing Active"}
               </span>
             </div>
           </div>
@@ -155,9 +220,8 @@ export const UserFriendlyDashboard: React.FC<{
             ${liveStats.totalProfit.toLocaleString()}
           </div>
           <div className="text-gray-400 text-sm mb-2">Total Profit (Today)</div>
-          <div className="flex items-center justify-center text-xs text-green-400">
-            <i className="fas fa-arrow-up mr-1"></i>
-            +$1.2K (1h)
+          <div className="flex items-center justify-center text-xs text-gray-500">
+            {isOffline ? "API Offline" : "Real-time data"}
           </div>
         </div>
 
@@ -169,9 +233,8 @@ export const UserFriendlyDashboard: React.FC<{
             {liveStats.winRate.toFixed(1)}%
           </div>
           <div className="text-gray-400 text-sm mb-2">AI Win Rate</div>
-          <div className="flex items-center justify-center text-xs text-green-400">
-            <i className="fas fa-arrow-up mr-1"></i>
-            +0.3% (24h)
+          <div className="flex items-center justify-center text-xs text-gray-500">
+            {isOffline ? "API Offline" : "Real-time data"}
           </div>
         </div>
 
@@ -183,9 +246,8 @@ export const UserFriendlyDashboard: React.FC<{
             {liveStats.aiAccuracy.toFixed(1)}%
           </div>
           <div className="text-gray-400 text-sm mb-2">Real-Time Accuracy</div>
-          <div className="flex items-center justify-center text-xs text-green-400">
-            <i className="fas fa-arrow-up mr-1"></i>
-            +0.2% (1h)
+          <div className="flex items-center justify-center text-xs text-gray-500">
+            {isOffline ? "API Offline" : "Real-time data"}
           </div>
         </div>
 
@@ -197,9 +259,8 @@ export const UserFriendlyDashboard: React.FC<{
             {liveStats.liveAlerts}
           </div>
           <div className="text-gray-400 text-sm mb-2">Live Alerts</div>
-          <div className="flex items-center justify-center text-xs text-green-400">
-            <i className="fas fa-arrow-up mr-1"></i>
-            +3 new
+          <div className="flex items-center justify-center text-xs text-gray-500">
+            {isOffline ? "API Offline" : "Real-time data"}
           </div>
         </div>
       </motion.div>

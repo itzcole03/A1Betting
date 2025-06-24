@@ -1,6 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 
+// Import Chart.js setup (must be imported early)
+import "./utils/chartSetup";
+
 // Import the user-friendly main interface
 import UserFriendlyApp from "./components/user-friendly/UserFriendlyApp";
 

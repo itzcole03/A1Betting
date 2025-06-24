@@ -9,9 +9,13 @@ import {
   MessageCircle,
   Search,
   Trophy,
-  X
+  X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { api } from "../../services/api";
+import OfflineIndicator from "../ui/OfflineIndicator";
+import BackendControl from "../ui/BackendControl";
 
 // Import user-friendly components
 import MoneyMakerPro from "./MoneyMakerPro";
@@ -178,41 +182,71 @@ export const UserFriendlyApp: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
+  const queryClient = useQueryClient();
 
-  const [user] = useState<UserData>({
-    name: "Alex Chen",
-    email: "alex@a1betting.com",
-    balance: 127430.5,
-    tier: "Quantum Pro",
-    winRate: 94.7,
-    totalProfit: 47230,
+  // Real API data fetching
+  const { data: userProfile, error: userError } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: () => api.getUserProfile("default_user"),
+    retry: false,
   });
 
-  const [liveStats, setLiveStats] = useState({
-    liveGames: 23,
-    aiAccuracy: 97.3,
-    profit24h: 12847,
-    activeUsers: 15429,
+  const { data: userAnalytics, error: analyticsError } = useQuery({
+    queryKey: ["userAnalytics"],
+    queryFn: () => api.getUserAnalytics("default_user"),
+    retry: false,
   });
 
-  // Real-time stats updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLiveStats((prev) => ({
-        liveGames: Math.max(
-          15,
-          prev.liveGames + Math.floor(Math.random() * 3 - 1),
-        ),
-        aiAccuracy: Math.min(
-          99.9,
-          prev.aiAccuracy + (Math.random() - 0.5) * 0.1,
-        ),
-        profit24h: prev.profit24h + Math.floor(Math.random() * 100 + 50),
-        activeUsers: prev.activeUsers + Math.floor(Math.random() * 10),
-      }));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+  const { data: healthStatus, error: healthError } = useQuery({
+    queryKey: ["healthStatus"],
+    queryFn: () => api.getHealthStatus(),
+    refetchInterval: 30000,
+    retry: false,
+  });
+
+  const { data: accuracyMetrics, error: accuracyError } = useQuery({
+    queryKey: ["accuracyMetrics"],
+    queryFn: () => api.getAccuracyMetrics(),
+    refetchInterval: 10000,
+    retry: false,
+  });
+
+  // Check if backend is offline - detect when we're getting default values due to network errors
+  const isOffline =
+    healthStatus?.status === "offline" ||
+    accuracyMetrics?.overall_accuracy === 0 ||
+    userAnalytics?.current_balance === 0 ||
+    userProfile?.name === "User";
+
+  // Handle retry functionality
+  const handleRetry = () => {
+    queryClient.invalidateQueries();
+  };
+
+  const handleBackendStatusChange = (isOnline: boolean) => {
+    if (isOnline) {
+      queryClient.invalidateQueries();
+    }
+  };
+
+  // Extract real user data or use fallback values only for display
+  const user: UserData = {
+    name: userProfile?.name || "User",
+    email: userProfile?.email || "user@a1betting.com",
+    balance: userAnalytics?.current_balance || 0,
+    tier: userProfile?.tier || "Free",
+    winRate: accuracyMetrics?.overall_accuracy * 100 || 0,
+    totalProfit: userAnalytics?.total_profit || 0,
+  };
+
+  // Extract live stats from real API data
+  const liveStats = {
+    liveGames: healthStatus?.metrics?.active_predictions || 0,
+    aiAccuracy: accuracyMetrics?.overall_accuracy * 100 || 0,
+    profit24h:
+      userAnalytics?.daily?.[new Date().toISOString().split("T")[0]] || 0,
+    activeUsers: healthStatus?.metrics?.active_connections || 0,
+  };
 
   const navigationItems: NavigationItem[] = [
     {
@@ -261,6 +295,12 @@ export const UserFriendlyApp: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white relative overflow-hidden">
+      {/* Offline Indicator */}
+      <OfflineIndicator
+        show={!!isOffline}
+        service="Backend Services"
+        onRetry={handleRetry}
+      />
       {/* Electric Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/10 to-green-500/5" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(34,197,94,0.1)_0%,transparent_50%)]" />
@@ -300,15 +340,27 @@ export const UserFriendlyApp: React.FC = () => {
               {/* Live Stats */}
               <div className="hidden lg:flex items-center space-x-6 ml-8">
                 <div className="flex items-center space-x-2 px-3 py-2 bg-green-500/10 rounded-lg border border-green-500/30 backdrop-blur-sm">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50" />
-                  <span className="text-green-400 text-sm font-semibold drop-shadow-lg">
-                    {liveStats.liveGames} Live Games
+                  <div
+                    className={`w-2 h-2 rounded-full shadow-lg ${isOffline ? "bg-red-400 shadow-red-400/50" : "bg-green-400 shadow-green-400/50 animate-pulse"}`}
+                  />
+                  <span
+                    className={`text-sm font-semibold drop-shadow-lg ${isOffline ? "text-red-400" : "text-green-400"}`}
+                  >
+                    {isOffline
+                      ? "Services Offline"
+                      : `${liveStats.liveGames} Live Games`}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 px-3 py-2 bg-blue-500/10 rounded-lg border border-blue-500/30 backdrop-blur-sm">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse shadow-lg shadow-blue-400/50" />
-                  <span className="text-blue-400 text-sm font-semibold drop-shadow-lg">
-                    {liveStats.aiAccuracy.toFixed(1)}% AI Accuracy
+                  <div
+                    className={`w-2 h-2 rounded-full shadow-lg ${isOffline ? "bg-red-400 shadow-red-400/50" : "bg-blue-400 shadow-blue-400/50 animate-pulse"}`}
+                  />
+                  <span
+                    className={`text-sm font-semibold drop-shadow-lg ${isOffline ? "text-red-400" : "text-blue-400"}`}
+                  >
+                    {isOffline
+                      ? "API Unavailable"
+                      : `${liveStats.aiAccuracy.toFixed(1)}% AI Accuracy`}
                   </span>
                 </div>
               </div>
@@ -318,28 +370,48 @@ export const UserFriendlyApp: React.FC = () => {
             <div className="flex items-center space-x-6">
               {/* Balance & Stats */}
               <div className="hidden md:flex items-center space-x-6 text-sm">
-                <div className="text-center px-4 py-2 bg-green-500/10 rounded-lg border border-green-500/30 backdrop-blur-sm">
-                  <div className="text-xs text-green-300/80 uppercase font-semibold">
+                <div
+                  className={`text-center px-4 py-2 rounded-lg border backdrop-blur-sm ${isOffline ? "bg-red-500/10 border-red-500/30" : "bg-green-500/10 border-green-500/30"}`}
+                >
+                  <div
+                    className={`text-xs uppercase font-semibold ${isOffline ? "text-red-300/80" : "text-green-300/80"}`}
+                  >
                     Balance
                   </div>
-                  <div className="font-bold text-green-400 drop-shadow-lg">
-                    ${user.balance.toLocaleString()}
+                  <div
+                    className={`font-bold drop-shadow-lg ${isOffline ? "text-red-400" : "text-green-400"}`}
+                  >
+                    {isOffline
+                      ? "Offline"
+                      : `$${user.balance.toLocaleString()}`}
                   </div>
                 </div>
-                <div className="text-center px-4 py-2 bg-cyan-500/10 rounded-lg border border-cyan-500/30 backdrop-blur-sm">
-                  <div className="text-xs text-cyan-300/80 uppercase font-semibold">
+                <div
+                  className={`text-center px-4 py-2 rounded-lg border backdrop-blur-sm ${isOffline ? "bg-red-500/10 border-red-500/30" : "bg-cyan-500/10 border-cyan-500/30"}`}
+                >
+                  <div
+                    className={`text-xs uppercase font-semibold ${isOffline ? "text-red-300/80" : "text-cyan-300/80"}`}
+                  >
                     Win Rate
                   </div>
-                  <div className="font-bold text-cyan-400 drop-shadow-lg">
-                    {user.winRate}%
+                  <div
+                    className={`font-bold drop-shadow-lg ${isOffline ? "text-red-400" : "text-cyan-400"}`}
+                  >
+                    {isOffline ? "N/A" : `${user.winRate.toFixed(1)}%`}
                   </div>
                 </div>
-                <div className="text-center px-4 py-2 bg-purple-500/10 rounded-lg border border-purple-500/30 backdrop-blur-sm">
-                  <div className="text-xs text-purple-300/80 uppercase font-semibold">
+                <div
+                  className={`text-center px-4 py-2 rounded-lg border backdrop-blur-sm ${isOffline ? "bg-red-500/10 border-red-500/30" : "bg-purple-500/10 border-purple-500/30"}`}
+                >
+                  <div
+                    className={`text-xs uppercase font-semibold ${isOffline ? "text-red-300/80" : "text-purple-300/80"}`}
+                  >
                     Tier
                   </div>
-                  <div className="font-bold text-purple-400 drop-shadow-lg">
-                    {user.tier}
+                  <div
+                    className={`font-bold drop-shadow-lg ${isOffline ? "text-red-400" : "text-purple-400"}`}
+                  >
+                    {isOffline ? "N/A" : user.tier}
                   </div>
                 </div>
               </div>
@@ -351,10 +423,11 @@ export const UserFriendlyApp: React.FC = () => {
                   whileHover={{ scale: 1.1, rotate: 180 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsAdvancedMode(!isAdvancedMode)}
-                  className={`p-3 rounded-xl transition-all duration-300 backdrop-blur-sm border-2 ${isAdvancedMode
+                  className={`p-3 rounded-xl transition-all duration-300 backdrop-blur-sm border-2 ${
+                    isAdvancedMode
                       ? "bg-gradient-to-r from-cyan-500/50 to-blue-500/50 border-cyan-400 text-cyan-300 shadow-2xl shadow-cyan-500/50"
                       : "bg-gray-800/80 hover:bg-gray-700/80 border-gray-500 text-gray-300 hover:text-cyan-300 hover:border-cyan-400 hover:bg-gray-600/80"
-                    }`}
+                  }`}
                   title={
                     isAdvancedMode
                       ? "Switch to User-Friendly Mode"
@@ -430,10 +503,11 @@ export const UserFriendlyApp: React.FC = () => {
                   whileHover={{ x: 4, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setCurrentPage(item.id)}
-                  className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl text-left transition-all duration-300 backdrop-blur-sm border-2 ${currentPage === item.id
+                  className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl text-left transition-all duration-300 backdrop-blur-sm border-2 ${
+                    currentPage === item.id
                       ? "bg-gradient-to-r from-cyan-500/50 to-blue-500/50 border-cyan-400 text-cyan-200 shadow-2xl shadow-cyan-500/50"
                       : "text-gray-200 hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-blue-500/20 hover:border-cyan-400 hover:text-cyan-200 hover:shadow-lg hover:shadow-cyan-500/30 border-gray-600 hover:border-cyan-400 bg-gray-800/50 hover:bg-gray-700/70"
-                    }`}
+                  }`}
                 >
                   <div
                     className={`${currentPage === item.id ? "text-cyan-400 drop-shadow-lg" : "text-gray-400"} transition-all`}
@@ -468,8 +542,12 @@ export const UserFriendlyApp: React.FC = () => {
                       Neural Networks
                     </span>
                     <span className="text-green-400 font-bold drop-shadow-lg flex items-center gap-1">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50" />
-                      47 Active
+                      <div
+                        className={`w-2 h-2 rounded-full shadow-lg ${isOffline ? "bg-red-400 shadow-red-400/50" : "bg-green-400 shadow-green-400/50 animate-pulse"}`}
+                      />
+                      {isOffline
+                        ? "Offline"
+                        : `${accuracyMetrics?.models_active || 0} Active`}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/30">
@@ -477,15 +555,19 @@ export const UserFriendlyApp: React.FC = () => {
                       Processing Speed
                     </span>
                     <span className="text-cyan-400 font-bold drop-shadow-lg">
-                      12ms
+                      {isOffline
+                        ? "N/A"
+                        : `${accuracyMetrics?.prediction_latency?.toFixed(0) || 0}ms`}
                     </span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-purple-500/10 rounded-lg border border-purple-500/30">
                     <span className="text-purple-300/80 font-medium">
-                      Quantum Qubits
+                      Model Accuracy
                     </span>
                     <span className="text-purple-400 font-bold drop-shadow-lg animate-pulse">
-                      ∞
+                      {isOffline
+                        ? "N/A"
+                        : `${(accuracyMetrics?.overall_accuracy * 100)?.toFixed(1) || 0}%`}
                     </span>
                   </div>
                 </div>
@@ -521,10 +603,11 @@ export const UserFriendlyApp: React.FC = () => {
                           setCurrentPage(item.id);
                           setIsMobileMenuOpen(false);
                         }}
-                        className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl text-left transition-all backdrop-blur-sm border-2 ${currentPage === item.id
+                        className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl text-left transition-all backdrop-blur-sm border-2 ${
+                          currentPage === item.id
                             ? "bg-gradient-to-r from-cyan-500/50 to-blue-500/50 border-cyan-400 text-cyan-200 shadow-2xl shadow-cyan-500/50"
                             : "text-gray-200 hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-blue-500/20 hover:border-cyan-400 hover:text-cyan-200 border-gray-600 hover:border-cyan-400 bg-gray-800/60 hover:bg-gray-700/80"
-                          }`}
+                        }`}
                       >
                         <div
                           className={`${currentPage === item.id ? "text-cyan-400 drop-shadow-lg" : "text-gray-400"} transition-all`}
@@ -589,6 +672,12 @@ export const UserFriendlyApp: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Backend Control */}
+      <BackendControl
+        isOffline={!!isOffline}
+        onStatusChange={handleBackendStatusChange}
+      />
     </div>
   );
 };

@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Brain,
-  Send
-} from "lucide-react";
+import { Brain, Send } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { llmService } from "../../services/LLMService";
+import { api } from "../../services/api";
+import { useValueBets } from "../../hooks/useBetting";
+import OfflineIndicator from "../ui/OfflineIndicator";
+import toast from "react-hot-toast";
 
 interface Message {
   id: string;
@@ -23,6 +25,7 @@ interface QuickAction {
 }
 
 export const PropOllama: React.FC = () => {
+  const queryClient = useQueryClient();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -41,12 +44,50 @@ export const PropOllama: React.FC = () => {
 
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [liveData, setLiveData] = useState({
-    activeAnalyses: 247,
-    liveGames: 23,
-    confidencePicks: 12,
-    valueBets: 8,
+
+  // Real API data fetching
+  const { data: healthStatus, error: healthError } = useQuery({
+    queryKey: ["healthStatus"],
+    queryFn: () => api.getHealthStatus(),
+    refetchInterval: 30000,
+    retry: false,
+    onError: (error) =>
+      console.warn("Health status API unavailable:", error.message),
   });
+
+  const { data: accuracyMetrics, error: accuracyError } = useQuery({
+    queryKey: ["accuracyMetrics"],
+    queryFn: () => api.getAccuracyMetrics(),
+    refetchInterval: 10000,
+    retry: false,
+    onError: (error) =>
+      console.warn("Accuracy metrics API unavailable:", error.message),
+  });
+
+  const { valueBets, error: valueBetsError } = useValueBets();
+
+  // Check if backend is offline
+  const isOffline =
+    healthError ||
+    accuracyError ||
+    valueBetsError ||
+    (healthStatus && healthStatus.status === "offline") ||
+    (accuracyMetrics && accuracyMetrics.overall_accuracy === 0);
+
+  // Handle retry functionality
+  const handleRetry = () => {
+    queryClient.invalidateQueries();
+    toast.success("Reconnecting to PropOllama services...");
+  };
+
+  // Extract live data from real APIs
+  const liveData = {
+    activeAnalyses: healthStatus?.metrics?.active_predictions || 0,
+    liveGames: healthStatus?.metrics?.active_predictions || 0,
+    confidencePicks:
+      valueBets?.filter((bet) => bet.confidence > 0.9).length || 0,
+    valueBets: valueBets?.length || 0,
+  };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -145,8 +186,8 @@ export const PropOllama: React.FC = () => {
         userPreferences: {
           riskTolerance: "moderate",
           preferredSports: ["NBA", "NFL"],
-          betTypes: ["player_props", "game_totals"]
-        }
+          betTypes: ["player_props", "game_totals"],
+        },
       });
 
       const aiMessage: Message = {
@@ -165,9 +206,14 @@ export const PropOllama: React.FC = () => {
       const fallbackMessage: Message = {
         id: `ai-${Date.now()}`,
         type: "ai",
-        content: "I'm experiencing some technical difficulties connecting to my analysis engine. Please try again in a moment, or check the system status.",
+        content:
+          "I'm experiencing some technical difficulties connecting to my analysis engine. Please try again in a moment, or check the system status.",
         timestamp: new Date(),
-        suggestions: ["Check system status", "Retry request", "Contact support"],
+        suggestions: [
+          "Check system status",
+          "Retry request",
+          "Contact support",
+        ],
       };
 
       setMessages((prev) => [...prev, fallbackMessage]);
@@ -178,6 +224,12 @@ export const PropOllama: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-slide-in-up h-full flex flex-col">
+      {/* Offline Indicator */}
+      <OfflineIndicator
+        show={!!isOffline}
+        service="PropOllama API"
+        onRetry={handleRetry}
+      />
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -242,10 +294,11 @@ export const PropOllama: React.FC = () => {
                   >
                     {/* Avatar */}
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${message.type === "user"
+                      className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        message.type === "user"
                           ? "bg-gradient-to-r from-green-500 to-blue-500"
                           : "bg-gradient-to-r from-purple-500 to-pink-500"
-                        }`}
+                      }`}
                     >
                       {message.type === "user" ? (
                         <span className="text-white font-bold">U</span>
@@ -256,10 +309,11 @@ export const PropOllama: React.FC = () => {
 
                     {/* Message Bubble */}
                     <div
-                      className={`rounded-2xl p-4 ${message.type === "user"
+                      className={`rounded-2xl p-4 ${
+                        message.type === "user"
                           ? "bg-gradient-to-r from-green-500 to-blue-500 text-white"
                           : "bg-gray-800/50 border border-gray-700/50 text-white"
-                        }`}
+                      }`}
                     >
                       <div className="whitespace-pre-wrap text-sm leading-relaxed">
                         {message.content}
@@ -267,10 +321,11 @@ export const PropOllama: React.FC = () => {
 
                       {/* Timestamp */}
                       <div
-                        className={`text-xs mt-2 ${message.type === "user"
+                        className={`text-xs mt-2 ${
+                          message.type === "user"
                             ? "text-white/70"
                             : "text-gray-400"
-                          }`}
+                        }`}
                       >
                         {message.timestamp.toLocaleTimeString([], {
                           hour: "2-digit",

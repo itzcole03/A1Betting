@@ -1,6 +1,11 @@
 import React from "react";
 import { Line, Bar, Doughnut, Radar, Scatter } from "react-chartjs-2";
 import { Activity, BarChart3, PieChart, Zap } from "lucide-react";
+import { defaultChartOptions, chartTheme } from "../../utils/chartSetup";
+import ChartWrapper from "./ChartWrapper";
+
+// Ensure Chart.js setup is imported
+import "../../utils/chartSetup";
 
 interface SafeChartProps {
   type: "line" | "bar" | "doughnut" | "radar" | "scatter";
@@ -9,6 +14,7 @@ interface SafeChartProps {
   className?: string;
   loadingMessage?: string;
   fallbackIcon?: React.ReactNode;
+  chartId?: string; // Add unique ID to prevent canvas reuse issues
 }
 
 const SafeChart: React.FC<SafeChartProps> = ({
@@ -18,7 +24,31 @@ const SafeChart: React.FC<SafeChartProps> = ({
   className = "",
   loadingMessage = "Loading chart data...",
   fallbackIcon,
+  chartId,
 }) => {
+  // Generate unique ID if not provided to prevent canvas reuse issues
+  const uniqueChartId = React.useMemo(() => {
+    return (
+      chartId ||
+      `chart-${type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    );
+  }, [chartId, type]);
+
+  // Ref to track chart instance for proper cleanup
+  const chartRef = React.useRef<any>(null);
+
+  // Cleanup effect to destroy chart on unmount
+  React.useEffect(() => {
+    return () => {
+      if (chartRef.current) {
+        try {
+          chartRef.current.destroy();
+        } catch (error) {
+          console.warn("Chart cleanup warning:", error);
+        }
+      }
+    };
+  }, []);
   // Enhanced validation for chart data structure
   const isValidData = React.useMemo(() => {
     try {
@@ -60,30 +90,16 @@ const SafeChart: React.FC<SafeChartProps> = ({
     );
   }
 
-  // Default safe options
+  // Default safe options using centralized theme
   const safeOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top" as const,
-        labels: { color: "#e5e7eb" },
-      },
-    },
+    ...defaultChartOptions,
     scales:
-      type !== "doughnut"
-        ? {
-            x: {
-              ticks: { color: "#9ca3af" },
-              grid: { color: "rgba(156, 163, 175, 0.2)" },
-            },
-            y: {
-              ticks: { color: "#9ca3af" },
-              grid: { color: "rgba(156, 163, 175, 0.2)" },
-            },
-          }
+      type !== "doughnut" && type !== "radar"
+        ? defaultChartOptions.scales
         : undefined,
     ...options,
+    // Ensure onDestroy is preserved if provided
+    onDestroy: options?.onDestroy || (() => {}),
   };
 
   try {
@@ -123,24 +139,39 @@ const SafeChart: React.FC<SafeChartProps> = ({
     }
 
     return (
-      <React.Suspense
-        fallback={
-          <div
-            className={`flex items-center justify-center h-full text-gray-400 ${className}`}
-          >
-            <div className="text-center">
-              <BarChart3 className="w-8 h-8 mx-auto mb-2 animate-pulse" />
-              <p className="text-sm">Loading chart...</p>
-            </div>
-          </div>
-        }
+      <ChartWrapper
+        fallbackTitle={`${type.charAt(0).toUpperCase() + type.slice(1)} Chart`}
+        height="h-full"
       >
-        <ChartComponent
-          data={data}
-          options={safeOptions}
-          className={className}
-        />
-      </React.Suspense>
+        <React.Suspense
+          fallback={
+            <div
+              className={`flex items-center justify-center h-full text-gray-400 ${className}`}
+            >
+              <div className="text-center">
+                <BarChart3 className="w-8 h-8 mx-auto mb-2 animate-pulse" />
+                <p className="text-sm">Loading chart...</p>
+              </div>
+            </div>
+          }
+        >
+          <ChartComponent
+            key={uniqueChartId} // Ensure unique rendering
+            ref={chartRef}
+            data={data}
+            options={{
+              ...safeOptions,
+              // Enhanced error handling and cleanup
+              onDestroy: () => {
+                if (chartRef.current) {
+                  chartRef.current = null;
+                }
+              },
+            }}
+            className={className}
+          />
+        </React.Suspense>
+      </ChartWrapper>
     );
   } catch (error) {
     console.error("SafeChart rendering error:", error);
