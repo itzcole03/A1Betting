@@ -68,6 +68,13 @@ import { UnifiedPredictionEngine } from "../../core/UnifiedPredictionEngine";
 import { UnifiedStrategyEngine } from "../../core/UnifiedStrategyEngine";
 import { UnifiedDataEngine } from "../../core/UnifiedDataEngine";
 
+// Import Intelligence Orchestrator
+import {
+  intelligenceOrchestrator,
+  type EnsemblePrediction,
+  type AutomationSettings,
+} from "../../services/IntelligenceOrchestrator";
+
 // Import PropOllama for explanations
 import { PropOllama } from "../user-friendly/PropOllama";
 
