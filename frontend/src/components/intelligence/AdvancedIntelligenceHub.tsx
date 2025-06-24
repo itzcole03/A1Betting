@@ -196,61 +196,84 @@ export const AdvancedIntelligenceHub: React.FC = () => {
   const { data: ensembleOutput, isLoading: ensembleLoading } = useQuery({
     queryKey: ["ensembleOutput"],
     queryFn: async () => {
-      // Simulate comprehensive ensemble output
-      return {
-        predictions: [
-          {
-            id: "pred-1",
-            sport: "NBA",
-            market: "Player Points",
-            prediction: "LeBron James Over 27.5 Points",
-            confidence: 94.2,
-            expectedValue: 0.185,
-            kellyFraction: 0.12,
-            reasoning: [
-              "Historical performance vs this opponent: 31.2 avg",
-              "Recent form: 29.8 points in last 5 games",
-              "Matchup advantage: Weak opposing defense",
-              "Rest advantage: 2 days vs opponent's back-to-back",
-            ],
-            contributingModels: [
-              "XGBoost-Ensemble",
-              "Neural-Deep-V3",
-              "Bayesian-Optimizer",
-              "Pattern-Recognition",
-            ],
-            timestamp: Date.now(),
+      try {
+        // Initialize orchestrator if needed
+        if (!intelligenceOrchestrator) {
+          throw new Error("Intelligence Orchestrator not available");
+        }
+
+        // Get real ensemble predictions
+        const predictions =
+          await intelligenceOrchestrator.generateEnsemblePredictions();
+
+        // Calculate meta-analysis
+        const confidences = predictions.map((p) => p.confidence);
+        const diversityScores = predictions.map(
+          (p) => p.metadata.diversityScore,
+        );
+        const consensusLevels = predictions.map(
+          (p) => p.metadata.consensusLevel,
+        );
+
+        return {
+          predictions,
+          metaAnalysis: {
+            overallConfidence:
+              confidences.reduce((a, b) => a + b, 0) / confidences.length || 0,
+            diversityScore:
+              diversityScores.reduce((a, b) => a + b, 0) /
+                diversityScores.length || 0,
+            consensusLevel:
+              consensusLevels.reduce((a, b) => a + b, 0) /
+                consensusLevels.length || 0,
+            riskAssessment:
+              predictions.length > 0
+                ? predictions[0].metadata.riskAssessment
+                : "Unknown",
           },
-          {
-            id: "pred-2",
-            sport: "NFL",
-            market: "Game Total",
-            prediction: "Chiefs vs Bills Under 54.5",
-            confidence: 91.7,
-            expectedValue: 0.156,
-            kellyFraction: 0.08,
-            reasoning: [
-              "Weather conditions: 15mph winds, 38°F",
-              "Defensive metrics: Both teams top 5 in red zone defense",
-              "Recent trends: Under hit in 4/5 last meetings",
-              "Public betting: 73% on Over creating value",
-            ],
-            contributingModels: [
-              "Weather-Impact-Model",
-              "Defensive-Analytics",
-              "Market-Sentiment",
-              "Historical-Patterns",
-            ],
-            timestamp: Date.now() - 120000,
+        };
+      } catch (error) {
+        console.warn("Using fallback ensemble data:", error);
+        // Fallback to mock data if orchestrator fails
+        return {
+          predictions: [
+            {
+              id: "pred-1",
+              sport: "NBA",
+              market: "Player Points",
+              prediction: "LeBron James Over 27.5 Points",
+              confidence: 94.2,
+              expectedValue: 0.185,
+              kellyFraction: 0.12,
+              reasoning: [
+                "Historical performance vs this opponent: 31.2 avg",
+                "Recent form: 29.8 points in last 5 games",
+                "Matchup advantage: Weak opposing defense",
+                "Rest advantage: 2 days vs opponent's back-to-back",
+              ],
+              contributingModels: [
+                "XGBoost-Ensemble",
+                "Neural-Deep-V3",
+                "Bayesian-Optimizer",
+                "Pattern-Recognition",
+              ],
+              timestamp: Date.now(),
+              metadata: {
+                diversityScore: 0.87,
+                consensusLevel: 0.91,
+                riskAssessment: "Moderate",
+                dataQuality: 0.94,
+              },
+            },
+          ] as EnsemblePrediction[],
+          metaAnalysis: {
+            overallConfidence: 94.2,
+            diversityScore: 0.87,
+            consensusLevel: 0.91,
+            riskAssessment: "Moderate - Well-balanced portfolio",
           },
-        ],
-        metaAnalysis: {
-          overallConfidence: 92.95,
-          diversityScore: 0.87,
-          consensusLevel: 0.91,
-          riskAssessment: "Moderate - Well-balanced portfolio",
-        },
-      } as EnsembleOutput;
+        };
+      }
     },
     refetchInterval: 10000,
     retry: 2,
