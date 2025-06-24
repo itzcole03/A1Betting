@@ -29,6 +29,10 @@ interface ArbitrageOpportunity {
   odds_a: number;
   odds_b: number;
   profit_margin: number;
+  guaranteed_profit?: number;
+  profit_percent?: number;
+  stakes?: { [key: string]: number };
+  required_stake?: number;
 }
 import toast from "react-hot-toast";
 
