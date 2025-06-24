@@ -46,12 +46,18 @@ export class UnifiedMonitor {
     return UnifiedMonitor.instance;
   }
 
-  startTrace(name: string, type: string) {
+  startTrace(name: string, type: string, description?: string) {
     return {
       name,
       type,
+      description,
       startTime: Date.now(),
-      setHttpStatus: (status: number) => {},
+      setHttpStatus: (status: number) => {
+        console.debug(`[TRACE] ${name} HTTP Status: ${status}`);
+      },
+      setDuration: (duration: number) => {
+        console.debug(`[TRACE] ${name} Duration: ${duration}ms`);
+      },
     };
   }
 
