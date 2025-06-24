@@ -69,11 +69,9 @@ export class IntelligenceOrchestrator {
   private currentPredictions: Map<string, EnsemblePrediction> = new Map();
 
   private constructor() {
-    this.eventBus = EventBus.getInstance();
-    this.logger = UnifiedLogger.getInstance();
     this.predictionEngine = UnifiedPredictionEngine.getInstance();
     this.strategyEngine = UnifiedStrategyEngine.getInstance();
-    // unifiedDataEngine is already available as imported singleton
+    // eventBus, unifiedLogger, and unifiedDataEngine are already available as imported singletons
 
     this.automationSettings = {
       enableAutoOptimization: true,
