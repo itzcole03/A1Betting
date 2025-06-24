@@ -45,7 +45,8 @@ export const useValueBets = (filters?: {
     refetch,
   } = useQuery({
     queryKey: ["valueBets", filters],
-    queryFn: () => api.getValueBets(),
+    queryFn: () =>
+      api.getBettingOpportunities(filters?.sport, filters?.limit || 10),
     refetchInterval: 30000, // Refetch every 30 seconds
     staleTime: 10000, // Data is fresh for 10 seconds
     retry: false, // Don't retry on error
