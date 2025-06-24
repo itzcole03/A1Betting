@@ -548,16 +548,16 @@ export const UserFriendlyApp: React.FC = () => {
                     onClick={() => setIsAdvancedMode(!isAdvancedMode)}
                     className={`p-3 rounded-xl transition-all duration-300 backdrop-blur-sm border-2 ${
                       isAdvancedMode
-                        ? "bg-gradient-to-r from-cyan-500/50 to-blue-500/50 border-cyan-400 text-cyan-300 shadow-2xl shadow-cyan-500/50"
-                        : "bg-gray-800/80 hover:bg-gray-700/80 border-gray-500 text-gray-300 hover:text-cyan-300 hover:border-cyan-400 hover:bg-gray-600/80"
+                        ? "bg-gradient-to-r from-red-500/50 to-orange-500/50 border-red-400 text-red-300 shadow-2xl shadow-red-500/50"
+                        : "bg-gray-800/80 hover:bg-gray-700/80 border-gray-500 text-gray-300 hover:text-red-300 hover:border-red-400 hover:bg-gray-600/80"
                     }`}
                     title={
-                      isAdvancedMode
-                        ? "Switch to User-Friendly Mode"
-                        : "Switch to Advanced Mode"
+                      isAdvancedMode ? "Exit Admin Mode" : "Enter Admin Mode"
                     }
                   >
-                    <span className="text-lg drop-shadow-lg font-bold">🔄</span>
+                    <span className="text-lg drop-shadow-lg font-bold">
+                      {isAdvancedMode ? "🔧" : "🔄"}
+                    </span>
                   </motion.button>
 
                   <motion.button
