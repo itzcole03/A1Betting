@@ -191,6 +191,21 @@ export const PrizePicksPro: React.FC = () => {
     retry: false,
   });
 
+  // Ultra Accuracy enhanced props
+  const {
+    data: enhancedProps = [],
+    isLoading: enhancedLoading,
+    error: enhancedError,
+  } = useQuery({
+    queryKey: ["enhancedProps", selectedSport],
+    queryFn: () =>
+      getPrizePicksRecommendations(
+        selectedSport === "all" ? undefined : selectedSport,
+      ),
+    refetchInterval: 45000, // Refresh every 45 seconds
+    retry: false,
+  });
+
   const {
     data: sportsData,
     isLoading: sportsLoading,
