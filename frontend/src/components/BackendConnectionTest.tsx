@@ -12,6 +12,7 @@ import {
 import IntegrationStatus from "./IntegrationStatus";
 import DevelopmentGuide from "./DevelopmentGuide";
 import SimpleAdvancedIntegrationStatus from "./SimpleAdvancedIntegrationStatus";
+import OllamaStatus from "./OllamaStatus";
 
 interface ConnectionStatus {
   backend: "connected" | "disconnected" | "loading";
