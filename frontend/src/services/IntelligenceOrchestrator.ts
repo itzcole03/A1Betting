@@ -98,7 +98,7 @@ export class IntelligenceOrchestrator {
     if (this.isInitialized) return;
 
     try {
-      this.logger.info("Initializing Intelligence Orchestrator...");
+      unifiedLogger.info("Initializing Intelligence Orchestrator...");
 
       // Initialize all core engines
       await Promise.all([
