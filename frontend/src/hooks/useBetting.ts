@@ -5,7 +5,31 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, ValueBet, ArbitrageOpportunity } from "../services/api";
+import { api } from "../services/integrationService";
+
+// Define types locally since they're not exported from integrationService
+interface ValueBet {
+  id: string;
+  sport: string;
+  event: string;
+  market: string;
+  odds: number;
+  probability: number;
+  expected_value: number;
+  confidence: number;
+  recommendation: string;
+}
+
+interface ArbitrageOpportunity {
+  id: string;
+  sport: string;
+  event: string;
+  bookmaker_a: string;
+  bookmaker_b: string;
+  odds_a: number;
+  odds_b: number;
+  profit_margin: number;
+}
 import toast from "react-hot-toast";
 
 // Hook for value bets
