@@ -93,14 +93,7 @@ interface IntelligenceMetrics {
   confidenceScore: number;
 }
 
-interface AutomationConfig {
-  enableAutoOptimization: boolean;
-  enableRealTimeEnsemble: boolean;
-  enableSmartRebalancing: boolean;
-  enablePredictiveScaling: boolean;
-  optimizationThreshold: number;
-  rebalanceFrequency: string;
-}
+// Remove local AutomationConfig interface since we're using the one from orchestrator
 
 interface EnsembleOutput {
   predictions: Array<{
