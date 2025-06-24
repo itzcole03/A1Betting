@@ -787,12 +787,6 @@ export const UserFriendlyApp: React.FC = () => {
           </div>
         </footer>
 
-        {/* Backend Control */}
-        <BackendControl
-          isOffline={!!isOffline}
-          onStatusChange={handleBackendStatusChange}
-        />
-
         {/* Connection Test - Debug component */}
         <ConnectionTest />
 
