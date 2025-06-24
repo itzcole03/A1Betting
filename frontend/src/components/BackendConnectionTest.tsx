@@ -118,6 +118,9 @@ export const BackendConnectionTest: React.FC = () => {
       {/* Simple-to-Advanced Integration Status */}
       <SimpleAdvancedIntegrationStatus />
 
+      {/* Ollama AI Engine Status */}
+      <OllamaStatus />
+
       {/* Comprehensive Integration Status */}
       <IntegrationStatus />
 
