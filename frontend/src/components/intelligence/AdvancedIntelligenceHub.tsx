@@ -126,7 +126,7 @@ import RiskAssessmentMatrix from "../analytics/RiskAssessmentMatrix";
 import ShapExplanation from "../analytics/ShapExplanation";
 import ModelComparison from "../analytics/ModelComparison";
 import TimeSeriesInsights from "../analytics/TimeSeriesInsights";
-import SHAPInsight from "../analytics/SHAPInsight";
+import { SHAPInsight } from "../analytics/SHAPInsight";
 
 // Import monitoring modules
 import PerformanceDashboard from "../monitoring/PerformanceDashboard";
