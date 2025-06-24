@@ -429,7 +429,7 @@ class UltraAccuracyBackgroundService extends SimpleEventEmitter {
       queueSize: this.processingQueue.length,
       isProcessing: this.isProcessing,
       config: this.config,
-      uptime: process.uptime?.() || 0,
+      uptime: Date.now() / 1000, // Browser-compatible uptime simulation
     };
   }
 }
