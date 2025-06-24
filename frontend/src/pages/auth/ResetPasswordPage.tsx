@@ -1,37 +1,37 @@
-import React from 'react';
-import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Box, Button, TextField, Typography, Alert } from '@mui/material';
-import { apiService } from '@/services/api';
+import React from "react";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Box, Button, TextField, Typography, Alert } from "@mui/material";
+import { ApiService } from "@/services/api";
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
+  const token = searchParams.get("token");
 
   const [formData, setFormData] = useState({
-    password: '',
-    confirmPassword: '',
+    password: "",
+    confirmPassword: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!token) {
-      setError('Invalid reset token');
+      setError("Invalid reset token");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
@@ -39,9 +39,11 @@ export default function ResetPasswordPage() {
 
     try {
       await apiService.resetPassword(token, formData.password);
-      navigate('/login', { state: { message: 'Password reset successful. Please sign in.' } });
+      navigate("/login", {
+        state: { message: "Password reset successful. Please sign in." },
+      });
     } catch (err) {
-      setError('Failed to reset password. Please try again.');
+      setError("Failed to reset password. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -49,16 +51,17 @@ export default function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: "100%" }}>
         <Alert severity="error">
-          Invalid or expired reset token. Please request a new password reset link.
+          Invalid or expired reset token. Please request a new password reset
+          link.
         </Alert>
       </Box>
     );
   }
 
   return (
-    <Box component="form" sx={{ width: '100%' }} onSubmit={handleSubmit}>
+    <Box component="form" sx={{ width: "100%" }} onSubmit={handleSubmit}>
       <Typography sx={{ mb: 2 }} variant="h6">
         Reset your password
       </Typography>
@@ -102,7 +105,7 @@ export default function ResetPasswordPage() {
         type="submit"
         variant="contained"
       >
-        {isLoading ? 'Resetting...' : 'Reset Password'}
+        {isLoading ? "Resetting..." : "Reset Password"}
       </Button>
     </Box>
   );
