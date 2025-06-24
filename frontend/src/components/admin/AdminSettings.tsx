@@ -277,21 +277,6 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
       className="w-full h-full overflow-auto bg-gradient-to-br from-slate-900 via-red-900 to-slate-900 text-white"
       style={{ color: "#ffffff" }}
     >
-      {/* TEST ELEMENT */}
-      <div
-        style={{
-          position: "fixed",
-          top: "10px",
-          left: "10px",
-          background: "red",
-          color: "white",
-          padding: "10px",
-          zIndex: 9999,
-          fontSize: "20px",
-        }}
-      >
-        ADMIN SETTINGS COMPONENT IS RENDERING
-      </div>
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="text-center mb-8">
