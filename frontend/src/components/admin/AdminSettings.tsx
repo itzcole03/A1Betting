@@ -280,7 +280,10 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-black/30 backdrop-blur-lg rounded-2xl p-6 border border-blue-500/20 mb-6"
         >
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <h2
+            className="text-xl font-bold text-white mb-4 flex items-center gap-2"
+            style={{ color: "#ffffff" }}
+          >
             <ToggleRight className="w-6 h-6 text-blue-400" />
             Feature Flags
           </h2>
