@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== CHART TEXT RENDERING IMPROVEMENTS ===== */
+canvas {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "liga", "kern";
+}
+
 /* ===== PREMIUM COMPONENT LIBRARY ===== */
 @layer components {
   /* === CARDS & CONTAINERS === */
