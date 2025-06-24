@@ -123,7 +123,7 @@ export const SimpleSettings: React.FC<SimpleSettingsProps> = ({
               Settings
             </h1>
           </div>
-          <p className="text-gray-300 text-lg">
+          <p className="text-gray-300 text-lg" style={{ color: "#d1d5db" }}>
             Customize your basic preferences
           </p>
         </motion.div>
