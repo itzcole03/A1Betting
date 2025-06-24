@@ -135,20 +135,36 @@ export class IntegrationService {
 
   // System Status Methods
   public async getHealthStatus() {
-    const health = await backendApi.getHealth();
+    try {
+      const health = await backendApi.getHealth();
 
-    return {
-      status: health.status === "healthy" ? "online" : "offline",
-      services: health.services,
-      uptime: health.uptime,
-      version: health.version,
-      metrics: {
-        active_predictions: Object.keys(health.services).length,
-        active_connections: 1, // From real-time metrics when available
-        api_calls_per_minute: 45, // From real-time metrics when available
-        average_response_time: 120, // From real-time metrics when available
-      },
-    };
+      return {
+        status: health.status === "healthy" ? "online" : "offline",
+        services: health.services,
+        uptime: health.uptime,
+        version: health.version,
+        metrics: {
+          active_predictions: Object.keys(health.services || {}).length,
+          active_connections: 1, // From real-time metrics when available
+          api_calls_per_minute: 45, // From real-time metrics when available
+          average_response_time: 120, // From real-time metrics when available
+        },
+      };
+    } catch (error: any) {
+      console.warn("[IntegrationService] Health check failed:", error.message);
+      return {
+        status: "offline",
+        services: {},
+        uptime: 0,
+        version: "unknown",
+        metrics: {
+          active_predictions: 0,
+          active_connections: 0,
+          api_calls_per_minute: 0,
+          average_response_time: 0,
+        },
+      };
+    }
   }
 
   // WebSocket Methods
