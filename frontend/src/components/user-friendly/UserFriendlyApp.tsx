@@ -17,6 +17,7 @@ import { api } from "../../services/integrationService";
 import OfflineIndicator from "../ui/OfflineIndicator";
 import BackendControl from "../ui/BackendControl";
 import BackendConnectionTest from "../BackendConnectionTest";
+import ApiDebug from "../ApiDebug";
 
 // Import user-friendly components
 import MoneyMakerPro from "./MoneyMakerPro";
