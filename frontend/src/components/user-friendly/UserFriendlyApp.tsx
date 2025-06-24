@@ -536,7 +536,7 @@ export const UserFriendlyApp: React.FC = () => {
 
                 {/* Action Buttons */}
                 <div className="flex items-center space-x-3">
-                  {/* Advanced Mode Toggle */}
+                  {/* Intelligence Hub Toggle */}
                   <motion.button
                     whileHover={{ scale: 1.1, rotate: 180 }}
                     whileTap={{ scale: 0.95 }}
@@ -548,12 +548,12 @@ export const UserFriendlyApp: React.FC = () => {
                     }`}
                     title={
                       isAdvancedMode
-                        ? "Exit Dev Monitoring"
-                        : "Enter Dev Monitoring"
+                        ? "Exit Intelligence Hub"
+                        : "Enter Intelligence Hub"
                     }
                   >
                     <span className="text-lg drop-shadow-lg font-bold">
-                      {isAdvancedMode ? "📊" : "🔬"}
+                      {isAdvancedMode ? "🧠" : "⚡"}
                     </span>
                   </motion.button>
 
