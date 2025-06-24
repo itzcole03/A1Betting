@@ -158,11 +158,11 @@ export const useArbitrageOpportunities = (filters?: {
       if (filters.sport && opp.sport !== filters.sport) return false;
       if (filters.minProfit && opp.profit_percent < filters.minProfit)
         return false;
-      if (filters.maxStake) {
-        const totalStake = Object.values(opp.stakes).reduce(
-          (sum, stake) => sum + stake,
-          0,
-        );
+      if (filters.maxStake && opp.stakes) {
+        const stakes = Object.values(opp.stakes);
+        const totalStake = Array.isArray(stakes)
+          ? stakes.reduce((sum, stake) => sum + (stake || 0), 0)
+          : 0;
         if (totalStake > filters.maxStake) return false;
       }
       return true;
