@@ -37,7 +37,7 @@ statsmodels>=0.14.0
 sparse>=0.14.0
 
 # Differential equations solving
-diffeqpy>=1.2.0  # Optional: requires Julia backend
+# diffeqpy>=1.2.0  # Optional: requires Julia backend - DISABLED due to Windows Unicode issues
 
 # High-performance computing
 cython>=0.29.0
