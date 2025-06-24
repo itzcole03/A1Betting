@@ -194,52 +194,80 @@ class OllamaLLMService {
     request: PropOllamaRequest,
     startTime: number,
   ): Promise<PropOllamaResponse> {
-    try {
-      const enhancedPrompt = this.buildSportsPrompt(request);
+    const enhancedPrompt = this.buildSportsPrompt(request);
 
-      const ollamaRequest: OllamaRequest = {
-        model: this.defaultModel,
-        prompt: enhancedPrompt,
-        stream: false,
-        options: {
-          temperature: 0.3, // Lower for more consistent sports analysis
-          max_tokens: 500,
-          top_p: 0.9,
-        },
-      };
+    const ollamaRequest: OllamaRequest = {
+      model: this.defaultModel,
+      prompt: enhancedPrompt,
+      stream: false,
+      options: {
+        temperature: 0.3, // Lower for more consistent sports analysis
+        max_tokens: 500,
+        top_p: 0.9,
+      },
+    };
 
-      const response = await fetch(`${this.baseUrl}/api/generate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(ollamaRequest),
-        signal: AbortSignal.timeout(30000),
-      });
+    const response = await fetch(`${this.baseUrl}/api/generate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ollamaRequest),
+      signal: AbortSignal.timeout(30000),
+    });
 
-      if (!response.ok) {
-        throw new Error(`Ollama API error: ${response.status}`);
-      }
-
-      const ollamaResponse: OllamaResponse = await response.json();
-
-      return {
-        content: this.formatResponse(
-          ollamaResponse.response,
-          request.analysisType,
-        ),
-        confidence: this.calculateConfidence(ollamaResponse.response),
-        suggestions: this.generateSuggestions(
-          request.analysisType || "general",
-        ),
-        model_used: this.defaultModel,
-        response_time: Date.now() - startTime,
-        analysis_type: request.analysisType || "general",
-      };
-    } catch (error) {
-      console.error("Ollama generation failed:", error);
-      return this.generateFallbackResponse(request, startTime);
+    if (!response.ok) {
+      throw new Error(`Ollama API error: ${response.status}`);
     }
+
+    const ollamaResponse: OllamaResponse = await response.json();
+
+    return {
+      content: this.formatResponse(
+        ollamaResponse.response,
+        request.analysisType,
+      ),
+      confidence: this.calculateConfidence(ollamaResponse.response),
+      suggestions: this.generateSuggestions(request.analysisType || "general"),
+      model_used: this.defaultModel,
+      response_time: Date.now() - startTime,
+      analysis_type: request.analysisType || "general",
+    };
+  }
+
+  private async generateBackendResponse(
+    request: PropOllamaRequest,
+    startTime: number,
+  ): Promise<PropOllamaResponse> {
+    const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+    const response = await fetch(`${backendUrl}/api/ollama/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: request.message,
+        context: request.context,
+        analysisType: request.analysisType,
+      }),
+      signal: AbortSignal.timeout(15000),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Backend Ollama API error: ${response.status}`);
+    }
+
+    const backendResponse = await response.json();
+
+    return {
+      content: backendResponse.content,
+      confidence: backendResponse.confidence,
+      suggestions: backendResponse.suggestions,
+      model_used: backendResponse.model_used,
+      response_time: Date.now() - startTime,
+      analysis_type: backendResponse.analysis_type,
+    };
   }
 
   private buildSportsPrompt(request: PropOllamaRequest): string {
