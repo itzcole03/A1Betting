@@ -762,8 +762,7 @@ export const UserFriendlyApp: React.FC = () => {
           onClose={() => setShowNotifications(false)}
         />
 
-        {/* Floating Action Bar */}
-        <div className="fixed top-20 right-4 z-40 flex flex-col space-y-3">
+
           {/* Intelligence Hub Toggle */}
           <motion.button
             whileHover={{ scale: 1.1, rotate: 180 }}
