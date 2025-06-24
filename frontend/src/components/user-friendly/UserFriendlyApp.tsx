@@ -305,15 +305,16 @@ export const UserFriendlyApp: React.FC = () => {
     totalProfit: userAnalytics?.total_profit || 0,
   };
 
-  // Extract live stats from real API data
-  const liveStats = {
-    liveGames: healthStatus?.metrics?.active_predictions || 0,
-    aiAccuracy: accuracyMetrics?.overall_accuracy * 100 || 0,
-    profit24h:
-      userAnalytics?.daily?.[new Date().toISOString().split("T")[0]] || 0,
-    activeUsers: healthStatus?.metrics?.active_connections || 0,
-  };
-
+  // Extract live stats from real API data - memoized to prevent infinite re-renders
+  const liveStats = useMemo(() => {
+    const today = new Date().toISOString().split("T")[0];
+    return {
+      liveGames: healthStatus?.metrics?.active_predictions || 0,
+      aiAccuracy: accuracyMetrics?.overall_accuracy * 100 || 0,
+      profit24h: userAnalytics?.daily?.[today] || 0,
+      activeUsers: healthStatus?.metrics?.active_connections || 0,
+    };
+  }, [healthStatus, accuracyMetrics, userAnalytics]);
   const navigationItems: NavigationItem[] = [
     {
       id: "dashboard",

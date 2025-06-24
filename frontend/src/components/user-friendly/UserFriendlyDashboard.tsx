@@ -143,6 +143,17 @@ export const UserFriendlyDashboard: React.FC<{
       status: new Date(bet.commence_time) > new Date() ? "upcoming" : "live",
     })) || [];
 
+  // Memoize processed bets to prevent re-renders from new Date() calls
+  const processedBets = useMemo(() => {
+    const now = new Date();
+    return (valueBets || []).slice(0, 5).map((bet: any) => ({
+      ...bet,
+      edge: bet.expected_value || 0,
+      confidence: bet.model_prob * 100,
+      status: new Date(bet.commence_time) > now ? "upcoming" : "live",
+    }));
+  }, [valueBets]);
+
   return (
     <div className="space-y-8 animate-slide-in-up">
       {/* Offline Indicator */}
