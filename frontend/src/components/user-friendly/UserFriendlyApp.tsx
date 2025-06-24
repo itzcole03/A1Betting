@@ -213,6 +213,11 @@ export const UserFriendlyApp: React.FC = () => {
   const [ultraAccuracyStats, setUltraAccuracyStats] = useState<any>(null);
   const queryClient = useQueryClient();
 
+  // Initialize settings on app mount
+  useEffect(() => {
+    initializeSettings();
+  }, []);
+
   // Debug currentPage changes
   useEffect(() => {
     console.log("[Debug] currentPage changed to:", currentPage);
