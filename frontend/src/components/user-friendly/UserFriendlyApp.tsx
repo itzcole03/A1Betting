@@ -212,12 +212,16 @@ export const UserFriendlyApp: React.FC = () => {
     retry: false,
   });
 
-  // Check if backend is offline - detect when we're getting default values due to network errors
+  // Check if backend is offline - detect when we're getting error responses or specific error patterns
   const isOffline =
+    healthError ||
+    analyticsError ||
+    userError ||
+    accuracyError ||
     healthStatus?.status === "offline" ||
-    accuracyMetrics?.overall_accuracy === 0 ||
-    userAnalytics?.current_balance === 0 ||
-    userProfile?.name === "User";
+    (userProfile?.name === "User" &&
+      userAnalytics?.current_balance === 0 &&
+      accuracyMetrics?.overall_accuracy === 0);
 
   // Handle retry functionality
   const handleRetry = () => {
