@@ -5,7 +5,34 @@
 
 import { ultraAccuracyBackgroundService } from "./UltraAccuracyBackgroundService";
 import { integrationService } from "./integrationService";
-import { EventEmitter } from "events";
+
+// Simple browser-compatible event emitter
+class SimpleEventEmitter {
+  private events: { [key: string]: Function[] } = {};
+
+  on(event: string, callback: Function): void {
+    if (!this.events[event]) {
+      this.events[event] = [];
+    }
+    this.events[event].push(callback);
+  }
+
+  off(event: string, callback: Function): void {
+    if (this.events[event]) {
+      this.events[event] = this.events[event].filter((cb) => cb !== callback);
+    }
+  }
+
+  emit(event: string, ...args: any[]): void {
+    if (this.events[event]) {
+      this.events[event].forEach((callback) => callback(...args));
+    }
+  }
+
+  removeAllListeners(): void {
+    this.events = {};
+  }
+}
 
 interface UltraAccuracyStatus {
   isActive: boolean;
