@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "../../services/api";
+import { api } from "../../services/integrationService";
 import OfflineIndicator from "../ui/OfflineIndicator";
 import BackendControl from "../ui/BackendControl";
 import BackendConnectionTest from "../BackendConnectionTest";
