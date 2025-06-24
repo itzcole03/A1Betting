@@ -14,6 +14,7 @@ import {
   Activity,
 } from "lucide-react";
 import { api } from "../../services/integrationService";
+import { getMoneyMakerRecommendations } from "../../services/enhancedIntegrationBridge";
 import { useValueBets, useBankroll } from "../../hooks/useBetting";
 import OfflineIndicator from "../ui/OfflineIndicator";
 import toast from "react-hot-toast";
