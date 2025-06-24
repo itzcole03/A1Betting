@@ -62,6 +62,32 @@ export class UnifiedMonitor {
   reportError(error: any, context: any) {
     console.error("Error:", error, "Context:", context);
   }
+
+  recordMetric(
+    name: string,
+    value: number,
+    tags?: Record<string, string | number | boolean>,
+  ) {
+    // Simple implementation - in production this would integrate with monitoring services
+    if (typeof console !== "undefined") {
+      console.debug(`[METRIC] ${name}: ${value}`, tags || {});
+    }
+
+    // Store metrics for potential retrieval
+    if (!this.metrics) {
+      this.metrics = new Map();
+    }
+    this.metrics.set(name, { value, tags, timestamp: Date.now() });
+  }
+
+  private metrics?: Map<
+    string,
+    {
+      value: number;
+      tags?: Record<string, string | number | boolean>;
+      timestamp: number;
+    }
+  >;
 }
 
 export const unifiedMonitor = new UnifiedMonitor();
