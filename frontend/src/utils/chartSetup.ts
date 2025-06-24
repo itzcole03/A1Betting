@@ -110,23 +110,49 @@ export const defaultChartOptions = {
         color: chartTheme.colors.text,
         usePointStyle: true,
         padding: 20,
+        font: {
+          size: 12,
+          family: "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+          weight: "500",
+        },
       },
     },
     tooltip: {
-      backgroundColor: "rgba(0, 0, 0, 0.8)",
+      backgroundColor: "rgba(0, 0, 0, 0.9)",
       titleColor: chartTheme.colors.text,
       bodyColor: chartTheme.colors.text,
       borderColor: chartTheme.colors.primary,
       borderWidth: 1,
+      titleFont: {
+        size: 13,
+        family: "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        weight: "600",
+      },
+      bodyFont: {
+        size: 12,
+        family: "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      },
     },
   },
   scales: {
     x: {
-      ticks: { color: chartTheme.colors.text },
+      ticks: {
+        color: chartTheme.colors.text,
+        font: {
+          size: 11,
+          family: "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        },
+      },
       grid: { color: chartTheme.colors.grid },
     },
     y: {
-      ticks: { color: chartTheme.colors.text },
+      ticks: {
+        color: chartTheme.colors.text,
+        font: {
+          size: 11,
+          family: "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        },
+      },
       grid: { color: chartTheme.colors.grid },
     },
   },
