@@ -136,12 +136,22 @@ export const PropOllama: React.FC = () => {
   // Initialize live data from APIs when available
   useEffect(() => {
     if (healthStatus && valueBets) {
-      setLiveData({
+      const newData = {
         activeAnalyses: healthStatus?.metrics?.active_predictions || 0,
         liveGames: healthStatus?.metrics?.active_predictions || 0,
         confidencePicks:
           valueBets?.filter((bet) => bet.confidence > 0.9).length || 0,
         valueBets: valueBets?.length || 0,
+      };
+
+      // Only update if data actually changed
+      setLiveData((prev) => {
+        const hasChanged =
+          prev.activeAnalyses !== newData.activeAnalyses ||
+          prev.liveGames !== newData.liveGames ||
+          prev.confidencePicks !== newData.confidencePicks ||
+          prev.valueBets !== newData.valueBets;
+        return hasChanged ? newData : prev;
       });
     }
   }, [healthStatus, valueBets]);
