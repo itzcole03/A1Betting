@@ -108,7 +108,8 @@ export class IntelligenceOrchestrator {
       await Promise.all([
         this.predictionEngine.initialize(),
         this.strategyEngine.initialize(),
-        this.dataEngine.initialize(),
+        // unifiedDataEngine doesn't have an initialize method - it's ready to use
+        Promise.resolve(),
       ]);
 
       // Start automation timers
