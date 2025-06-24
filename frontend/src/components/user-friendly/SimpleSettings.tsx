@@ -135,7 +135,10 @@ export const SimpleSettings: React.FC<SimpleSettingsProps> = ({
             animate={{ opacity: 1, x: 0 }}
             className="bg-black/30 backdrop-blur-lg rounded-2xl p-6 border border-cyan-500/20"
           >
-            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <h2
+              className="text-xl font-bold text-white mb-4 flex items-center gap-2"
+              style={{ color: "#ffffff" }}
+            >
               <User className="w-6 h-6 text-cyan-400" />
               Profile
             </h2>
