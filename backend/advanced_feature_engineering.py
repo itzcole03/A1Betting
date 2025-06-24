@@ -20,7 +20,8 @@ import ta  # Technical analysis library
 from nltk.sentiment import SentimentIntensityAnalyzer
 from scipy import stats
 from scipy.fft import fft, fftfreq
-from sklearn.cluster import DBSCAN, GaussianMixture, KMeans, SpectralClustering
+from sklearn.cluster import DBSCAN, KMeans, SpectralClustering
+from sklearn.mixture import GaussianMixture
 from sklearn.covariance import EllipticEnvelope
 from sklearn.decomposition import (
     PCA,
