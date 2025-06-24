@@ -181,7 +181,7 @@ export class IntelligenceOrchestrator {
       this.performanceHistory.set(model.name, []);
     }
 
-    this.logger.info(`Initialized ${models.length} ensemble models`);
+    unifiedLogger.info(`Initialized ${models.length} ensemble models`);
   }
 
   private startAutomationTimers(): void {
@@ -234,7 +234,7 @@ export class IntelligenceOrchestrator {
 
       return filteredPredictions;
     } catch (error) {
-      this.logger.error("Failed to generate ensemble predictions", error);
+      unifiedLogger.error("Failed to generate ensemble predictions", error);
       throw error;
     }
   }
@@ -415,7 +415,7 @@ export class IntelligenceOrchestrator {
         metrics.ensemblePerformance <
         this.automationSettings.optimizationThreshold
       ) {
-        this.logger.info(
+        unifiedLogger.info(
           "Triggering automatic optimization due to performance threshold",
         );
         await this.optimizeEnsemble();
@@ -426,7 +426,7 @@ export class IntelligenceOrchestrator {
         });
       }
     } catch (error) {
-      this.logger.error("Automatic optimization failed", error);
+      unifiedLogger.error("Automatic optimization failed", error);
     } finally {
       this.isOptimizing = false;
     }
@@ -456,9 +456,9 @@ export class IntelligenceOrchestrator {
       // Normalize weights to sum to 1
       this.normalizeModelWeights();
 
-      this.logger.info("Smart rebalancing completed");
+      unifiedLogger.info("Smart rebalancing completed");
     } catch (error) {
-      this.logger.error("Smart rebalancing failed", error);
+      unifiedLogger.error("Smart rebalancing failed", error);
     }
   }
 
@@ -477,7 +477,7 @@ export class IntelligenceOrchestrator {
 
   private async optimizeEnsemble(): Promise<void> {
     // Sophisticated ensemble optimization
-    this.logger.info("Starting ensemble optimization...");
+    unifiedLogger.info("Starting ensemble optimization...");
 
     // Simulate optimization process
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -485,7 +485,7 @@ export class IntelligenceOrchestrator {
     // Update model weights based on recent performance
     this.performSmartRebalancing();
 
-    this.logger.info("Ensemble optimization completed");
+    unifiedLogger.info("Ensemble optimization completed");
   }
 
   public async getOrchestrationMetrics(): Promise<OrchestrationMetrics> {
@@ -578,7 +578,7 @@ export class IntelligenceOrchestrator {
 
   private handleStrategyRecommendation(event: any): void {
     // Log strategy recommendations for analysis
-    this.logger.info("Strategy recommendation received", event);
+    unifiedLogger.info("Strategy recommendation received", event);
   }
 
   private handleResourceThreshold(event: any): void {
@@ -592,7 +592,7 @@ export class IntelligenceOrchestrator {
   }
 
   public async shutdown(): Promise<void> {
-    this.logger.info("Shutting down Intelligence Orchestrator...");
+    unifiedLogger.info("Shutting down Intelligence Orchestrator...");
 
     if (this.optimizationTimer) {
       clearInterval(this.optimizationTimer);
@@ -603,7 +603,7 @@ export class IntelligenceOrchestrator {
     }
 
     this.isInitialized = false;
-    this.logger.info("Intelligence Orchestrator shutdown complete");
+    unifiedLogger.info("Intelligence Orchestrator shutdown complete");
   }
 }
 
