@@ -132,27 +132,27 @@ export class IntelligenceOrchestrator {
 
   private setupEventListeners(): void {
     // Listen for prediction engine events
-    this.eventBus.on(
+    eventBus.on(
       "prediction:generated",
       this.handlePredictionGenerated.bind(this),
     );
-    this.eventBus.on(
+    eventBus.on(
       "model:performance_updated",
       this.handleModelPerformanceUpdate.bind(this),
     );
-    this.eventBus.on(
+    eventBus.on(
       "data:quality_changed",
       this.handleDataQualityChange.bind(this),
     );
 
     // Listen for strategy engine events
-    this.eventBus.on(
+    eventBus.on(
       "strategy:recommendation",
       this.handleStrategyRecommendation.bind(this),
     );
 
     // Listen for system events
-    this.eventBus.on(
+    eventBus.on(
       "system:resource_threshold",
       this.handleResourceThreshold.bind(this),
     );
