@@ -1597,7 +1597,7 @@ export const AdvancedIntelligenceHub: React.FC = () => {
         onValueChange={setSelectedView}
         className="space-y-6 relative z-10 mt-8"
       >
-        <TabsList className="grid w-full grid-cols-5 bg-slate-800/50 backdrop-blur-sm relative z-[60]">
+        <TabsList className="flex w-full justify-center items-center space-x-1 bg-slate-800/50 backdrop-blur-sm relative z-[60] min-h-[3rem]">
           <TabsTrigger value="orchestrator" className="flex items-center gap-2">
             <Workflow className="w-4 h-4" />
             Orchestrator
