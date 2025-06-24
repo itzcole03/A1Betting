@@ -22,7 +22,7 @@ import {
 import { UnifiedApplicationConfig } from "../../core/UnifiedConfig";
 import { configService } from "../../services/configService";
 import { useAppStore } from "@/store/useAppStore";
-import { useTheme } from "../../providers/ThemeProvider";
+import { useTheme } from "../common/theme/ThemeProvider";
 import toast from "react-hot-toast";
 
 interface AdminSettingsProps {
