@@ -435,6 +435,21 @@ export const UserFriendlyApp: React.FC = () => {
                       : `${liveStats.aiAccuracy.toFixed(1)}% AI Accuracy`}
                   </span>
                 </div>
+                {ultraAccuracyStats && (
+                  <div className="flex items-center space-x-2 px-3 py-2 bg-purple-500/10 rounded-lg border border-purple-500/30 backdrop-blur-sm">
+                    <div
+                      className={`w-2 h-2 rounded-full shadow-lg ${ultraAccuracyStats.isActive ? "bg-purple-400 shadow-purple-400/50 animate-pulse" : "bg-gray-400 shadow-gray-400/50"}`}
+                    />
+                    <span
+                      className={`text-sm font-semibold drop-shadow-lg ${ultraAccuracyStats.isActive ? "text-purple-400" : "text-gray-400"}`}
+                    >
+                      Ultra:{" "}
+                      {ultraAccuracyStats.isActive
+                        ? `${(ultraAccuracyStats.currentQuality * 100).toFixed(1)}%`
+                        : "Offline"}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
