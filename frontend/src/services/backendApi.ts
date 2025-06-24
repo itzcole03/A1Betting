@@ -165,6 +165,9 @@ class BackendApiService {
   }
 
   private initializeWebSocket() {
+    // Skip WebSocket in production deployments where it may not be available
+    if (typeof window === "undefined") return;
+
     // In development, connect directly to backend WebSocket
     const isDevelopment = import.meta.env.DEV;
     const wsUrl =
@@ -174,6 +177,17 @@ class BackendApiService {
         : `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}/ws`);
 
     try {
+      // Skip WebSocket connection if we're on a deployment platform that doesn't support it
+      if (
+        window.location.hostname.includes("fly.dev") ||
+        window.location.hostname.includes("herokuapp.com")
+      ) {
+        console.info(
+          "[WebSocket] Skipping WebSocket connection on deployment platform",
+        );
+        return;
+      }
+
       this.wsConnection = new WebSocket(wsUrl);
 
       this.wsConnection.onopen = () => {
