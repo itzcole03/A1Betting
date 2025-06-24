@@ -144,7 +144,7 @@ export const AdvancedIntelligenceHub: React.FC = () => {
     [],
   );
   const strategyEngine = useMemo(() => UnifiedStrategyEngine.getInstance(), []);
-  const dataEngine = useMemo(() => UnifiedDataEngine.getInstance(), []);
+  // Note: unifiedDataEngine is already a singleton instance, not a class
 
   // ========== API QUERIES ==========
   const { data: intelligenceMetrics, isLoading: metricsLoading } = useQuery({
