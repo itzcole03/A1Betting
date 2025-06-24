@@ -584,7 +584,7 @@ export class IntelligenceOrchestrator {
   private handleResourceThreshold(event: any): void {
     // Implement predictive scaling if enabled
     if (this.automationSettings.enablePredictiveScaling) {
-      this.logger.info(
+      unifiedLogger.info(
         "Resource threshold reached, implementing predictive scaling",
         event,
       );
