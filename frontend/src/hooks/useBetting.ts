@@ -68,8 +68,12 @@ export const useValueBets = (filters?: {
     retry: false, // Don't retry on error
   });
 
+  // Ensure we always have an array
+  const valueBets = Array.isArray(valueBetsData) ? valueBetsData : [];
+
   // Filter value bets based on criteria
   const filteredValueBets = useMemo(() => {
+    if (!Array.isArray(valueBets)) return [];
     if (!filters) return valueBets;
 
     return valueBets.filter((bet: ValueBet) => {
