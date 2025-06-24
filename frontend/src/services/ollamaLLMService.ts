@@ -157,7 +157,7 @@ class OllamaLLMService {
       );
       if (found) {
         this.defaultModel = found.name;
-        console.log(`🎯 Selected model for PropOllama: ${this.defaultModel}`);
+        console.log(`���� Selected model for PropOllama: ${this.defaultModel}`);
         return;
       }
     }
@@ -241,6 +241,38 @@ class OllamaLLMService {
   ): Promise<PropOllamaResponse> {
     const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
+    // Try enhanced PropOllama API first
+    try {
+      const response = await fetch(`${backendUrl}/api/propollama/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: request.message,
+          context: request.context,
+          analysisType: request.analysisType,
+          sport: request.sport,
+        }),
+        signal: AbortSignal.timeout(15000),
+      });
+
+      if (response.ok) {
+        const backendResponse = await response.json();
+        return {
+          content: backendResponse.content,
+          confidence: backendResponse.confidence,
+          suggestions: backendResponse.suggestions,
+          model_used: backendResponse.model_used,
+          response_time: backendResponse.response_time,
+          analysis_type: backendResponse.analysis_type,
+        };
+      }
+    } catch (error) {
+      console.warn("Enhanced PropOllama API failed, trying fallback:", error);
+    }
+
+    // Fallback to basic ollama endpoint
     const response = await fetch(`${backendUrl}/api/ollama/chat`, {
       method: "POST",
       headers: {
@@ -255,7 +287,7 @@ class OllamaLLMService {
     });
 
     if (!response.ok) {
-      throw new Error(`Backend Ollama API error: ${response.status}`);
+      throw new Error(`Backend API error: ${response.status}`);
     }
 
     const backendResponse = await response.json();
