@@ -207,15 +207,26 @@ export const Settings: React.FC = () => {
   };
 
   const handleUltraAccuracyUpdate = (updates: any) => {
-    ultraAccuracyIntegrationService.updateConfig({
-      enabled: updates.enabled,
-      targetAccuracy: updates.targetAccuracy,
-      enhanceMoneyMaker: updates.enhanceMoneyMaker,
-      enhancePrizePicks: updates.enhancePrizePicks,
-    });
+    try {
+      if (
+        typeof ultraAccuracyIntegrationService !== "undefined" &&
+        ultraAccuracyIntegrationService.updateConfig
+      ) {
+        ultraAccuracyIntegrationService.updateConfig({
+          enabled: updates.enabled,
+          targetAccuracy: updates.targetAccuracy,
+          enhanceMoneyMaker: updates.enhanceMoneyMaker,
+          enhancePrizePicks: updates.enhancePrizePicks,
+        });
+      }
 
-    handleSectionUpdate("ultraAccuracy", updates);
-    toast.success("Ultra Accuracy settings updated!");
+      handleSectionUpdate("ultraAccuracy", updates);
+      toast.success("Ultra Accuracy settings updated!");
+    } catch (error) {
+      console.warn("Ultra Accuracy update failed:", error);
+      handleSectionUpdate("ultraAccuracy", updates);
+      toast.success("Settings updated locally!");
+    }
   };
 
   const handleSave = async () => {
