@@ -4,6 +4,7 @@
  */
 
 import axios, { AxiosInstance, AxiosResponse } from "axios";
+import { cloudMockService } from "./cloudMockService";
 
 // Types
 export interface BettingOpportunity {
@@ -302,6 +303,10 @@ class BackendApiService {
 
   // API Methods
   public async getHealth(): Promise<HealthStatus> {
+    if (this.useMockService) {
+      return cloudMockService.getHealth();
+    }
+
     try {
       const response = await this.api.get("/health");
       return response.data;
@@ -319,6 +324,14 @@ class BackendApiService {
     sport?: string,
     limit?: number,
   ): Promise<BettingOpportunity[]> {
+    if (this.useMockService) {
+      const opportunities = await cloudMockService.getBettingOpportunities();
+      let filtered = opportunities;
+      if (sport) filtered = opportunities.filter((o) => o.sport === sport);
+      if (limit) filtered = filtered.slice(0, limit);
+      return filtered;
+    }
+
     try {
       const params: any = {};
       if (sport) params.sport = sport;
@@ -342,6 +355,11 @@ class BackendApiService {
   public async getArbitrageOpportunities(
     limit?: number,
   ): Promise<ArbitrageOpportunity[]> {
+    if (this.useMockService) {
+      const opportunities = await cloudMockService.getArbitrageOpportunities();
+      return limit ? opportunities.slice(0, limit) : opportunities;
+    }
+
     try {
       const params: any = {};
       if (limit) params.limit = limit;
@@ -470,6 +488,10 @@ class BackendApiService {
   }
 
   public async getModelPerformance(): Promise<ModelPerformance> {
+    if (this.useMockService) {
+      return cloudMockService.getModelPerformance();
+    }
+
     try {
       const response = await this.api.get(
         "/api/ultra-accuracy/model-performance",
@@ -500,6 +522,10 @@ class BackendApiService {
   }
 
   public async getAdvancedAnalytics(): Promise<AdvancedAnalytics> {
+    if (this.useMockService) {
+      return cloudMockService.getAdvancedAnalytics();
+    }
+
     try {
       const response = await this.api.get("/api/analytics/advanced");
       return response.data;
