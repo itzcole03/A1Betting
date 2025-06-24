@@ -43,7 +43,7 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const user = await apiService.register({
+      const user = await ApiService.register({
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
