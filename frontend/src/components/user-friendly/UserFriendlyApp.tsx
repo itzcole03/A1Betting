@@ -26,6 +26,7 @@ import {
   getUserEmail,
 } from "../../utils/userSettings";
 import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 
 // Import user-friendly components
 import MoneyMakerPro from "./MoneyMakerPro";
