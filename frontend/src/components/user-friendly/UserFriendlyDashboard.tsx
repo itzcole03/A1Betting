@@ -18,6 +18,11 @@ import {
 } from "lucide-react";
 import { api } from "../../services/integrationService";
 import {
+  getSimplifiedAnalytics,
+  getSimplifiedPredictions,
+  getSimplifiedOpportunities,
+} from "../../services/enhancedIntegrationBridge";
+import {
   useValueBets,
   useArbitrageOpportunities,
 } from "../../hooks/useBetting";
