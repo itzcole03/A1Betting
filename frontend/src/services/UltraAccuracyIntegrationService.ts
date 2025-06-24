@@ -305,6 +305,40 @@ class UltraAccuracyIntegrationService extends SimpleEventEmitter {
   }
 
   /**
+   * Update Ultra Accuracy configuration
+   */
+  public updateConfig(config: {
+    enabled?: boolean;
+    targetAccuracy?: number;
+    enhanceMoneyMaker?: boolean;
+    enhancePrizePicks?: boolean;
+  }): void {
+    try {
+      // Update background service config
+      ultraAccuracyBackgroundService.updateConfig(config);
+
+      // Update local status
+      if (typeof config.enabled !== "undefined") {
+        this.status.isActive = config.enabled;
+      }
+      if (typeof config.enhanceMoneyMaker !== "undefined") {
+        this.status.moneyMakerEnhanced = config.enhanceMoneyMaker;
+      }
+      if (typeof config.enhancePrizePicks !== "undefined") {
+        this.status.prizePicksEnhanced = config.enhancePrizePicks;
+      }
+
+      this.status.lastUpdate = new Date().toISOString();
+      this.emit("configUpdated", config);
+      this.emit("statusUpdated", this.status);
+
+      console.log("[Ultra Accuracy] Configuration updated:", config);
+    } catch (error) {
+      console.warn("[Ultra Accuracy] Failed to update config:", error);
+    }
+  }
+
+  /**
    * Get live Ultra Accuracy stats for dashboard display
    */
   public getLiveStats(): any {
