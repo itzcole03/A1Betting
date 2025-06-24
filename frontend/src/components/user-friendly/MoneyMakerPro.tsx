@@ -297,10 +297,7 @@ export const MoneyMakerPro: React.FC = () => {
               <option value="conservative" style={OPTION_STYLES}>
                 Conservative
               </option>
-              <option
-                value="balanced"
-                style={{ backgroundColor: "#1f2937", color: "white" }}
-              >
+              <option value="balanced" style={OPTION_STYLES}>
                 Balanced
               </option>
               <option
