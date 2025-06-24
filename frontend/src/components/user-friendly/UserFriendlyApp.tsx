@@ -216,6 +216,17 @@ export const UserFriendlyApp: React.FC = () => {
   // Debug component re-renders
   console.log("[Debug] UserFriendlyApp rendering, currentPage:", currentPage);
 
+  // Apply dark mode to body when settings change
+  useEffect(() => {
+    if (userSettings.darkMode) {
+      document.body.classList.add("dark");
+      document.documentElement.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+      document.documentElement.classList.remove("dark");
+    }
+  }, [userSettings.darkMode]);
+
   // Initialize Ultra Accuracy integration
   useEffect(() => {
     const updateStats = () => {
