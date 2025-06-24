@@ -16,6 +16,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../services/api";
 import OfflineIndicator from "../ui/OfflineIndicator";
 import BackendControl from "../ui/BackendControl";
+import BackendConnectionTest from "../BackendConnectionTest";
 
 // Import user-friendly components
 import MoneyMakerPro from "./MoneyMakerPro";
