@@ -3,6 +3,7 @@ import { Brain, Send } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { llmService } from "../../services/LLMService";
+import { ollamaLLMService } from "../../services/ollamaLLMService";
 import { api } from "../../services/integrationService";
 import { useValueBets } from "../../hooks/useBetting";
 import OfflineIndicator from "../ui/OfflineIndicator";
