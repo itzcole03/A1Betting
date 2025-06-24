@@ -166,7 +166,7 @@ export const Settings: React.FC = () => {
 
   const handleExportData = () => {
     const exportData = {
-      userAnalytics,
+      analyticsData,
       settings,
       exportedAt: new Date().toISOString(),
     };
