@@ -33,7 +33,7 @@ export const fetchDailyFantasyProjections = async (date, league) => {
     if (date) params.append("game_date", date);
     if (league) params.append("league", league);
     if (params.toString()) endpoint += `?${params.toString()}`;
-    const response = await get(endpoint);
+    const response = await axios.get(endpoint);
     if (trace) {
       trace.setHttpStatus(response.status);
       unifiedMonitor.endTrace(trace);
