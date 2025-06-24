@@ -203,8 +203,8 @@ export const Settings: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="w-full h-full overflow-auto bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
+      <div className="max-w-6xl mx-auto p-6">
         <OfflineIndicator
           show={!!isOffline}
           service="Settings API"
