@@ -110,6 +110,21 @@ export const SimpleSettings: React.FC<SimpleSettingsProps> = ({
       className="w-full h-full overflow-auto bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white"
       style={{ color: "#ffffff" }}
     >
+      {/* TEST ELEMENT */}
+      <div
+        style={{
+          position: "fixed",
+          top: "10px",
+          left: "10px",
+          background: "green",
+          color: "white",
+          padding: "10px",
+          zIndex: 9999,
+          fontSize: "20px",
+        }}
+      >
+        SIMPLE SETTINGS COMPONENT IS RENDERING
+      </div>
       <div className="max-w-4xl mx-auto p-6">
         {/* Header */}
         <motion.div
