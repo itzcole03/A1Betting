@@ -552,7 +552,9 @@ export const UserFriendlyApp: React.FC = () => {
                         : "bg-gray-800/80 hover:bg-gray-700/80 border-gray-500 text-gray-300 hover:text-red-300 hover:border-red-400 hover:bg-gray-600/80"
                     }`}
                     title={
-                      isAdvancedMode ? "Exit Admin Mode" : "Enter Admin Mode"
+                      isAdvancedMode
+                        ? "Exit Dev Monitoring"
+                        : "Enter Dev Monitoring"
                     }
                   >
                     <span className="text-lg drop-shadow-lg font-bold">
