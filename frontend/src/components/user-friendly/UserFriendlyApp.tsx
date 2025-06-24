@@ -347,28 +347,11 @@ export const UserFriendlyApp: React.FC = () => {
   // Load user settings from localStorage
   useEffect(() => {
     const loadUserSettings = () => {
-      const savedName = localStorage.getItem("a1betting-user-name");
-      const savedEmail = localStorage.getItem("a1betting-user-email");
-      const savedSettings = localStorage.getItem("a1betting-user-settings");
-
-      if (savedSettings) {
-        try {
-          const parsed = JSON.parse(savedSettings);
-          setUserSettings({
-            name: parsed.profile?.name || savedName || "User",
-            email: parsed.profile?.email || savedEmail || "user@a1betting.com",
-            darkMode: parsed.display?.darkMode ?? true,
-          });
-        } catch (error) {
-          console.warn("Failed to parse user settings:", error);
-        }
-      } else if (savedName || savedEmail) {
-        setUserSettings((prev) => ({
-          ...prev,
-          name: savedName || prev.name,
-          email: savedEmail || prev.email,
-        }));
-      }
+      setUserSettings({
+        name: getUserDisplayName(),
+        email: getUserEmail(),
+        darkMode: true, // Will be set by settings utility
+      });
     };
 
     loadUserSettings();
@@ -377,8 +360,8 @@ export const UserFriendlyApp: React.FC = () => {
     const handleSettingsChange = (event: CustomEvent) => {
       const newSettings = event.detail;
       setUserSettings({
-        name: newSettings.profile?.name || "User",
-        email: newSettings.profile?.email || "user@a1betting.com",
+        name: newSettings.profile?.name || getUserDisplayName(),
+        email: newSettings.profile?.email || getUserEmail(),
         darkMode: newSettings.display?.darkMode ?? true,
       });
     };
