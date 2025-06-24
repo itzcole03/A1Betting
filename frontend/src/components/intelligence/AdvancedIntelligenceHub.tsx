@@ -122,6 +122,7 @@ import ClusteringInsights from "../analytics/ClusteringInsights";
 import EnsembleInsights from "../analytics/EnsembleInsights";
 import FeatureInsights from "../analytics/FeatureInsights";
 import RiskInsights from "../analytics/RiskInsights";
+import RiskAssessmentMatrix from "../analytics/RiskAssessmentMatrix";
 import ShapExplanation from "../analytics/ShapExplanation";
 import ModelComparison from "../analytics/ModelComparison";
 
