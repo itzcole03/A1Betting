@@ -103,20 +103,20 @@ class EnhancedIntegrationBridge {
     }
   }
 
-  /**
-   * Get simplified analytics powered by advanced analytics services
-   */
-  public async getSimplifiedAnalytics(): Promise<SimplifiedAnalytics> {
-    try {
-      const [analytics, opportunities, modelPerformance] = await Promise.all([
-        integrationService.getUserAnalytics("default_user"),
-        integrationService.getBettingOpportunities(),
-        integrationService.getModelPerformance(),
-      ]);
-
-      return {
-        totalProfit: analytics.total_profit || 0,
-        winRate: Math.round((analytics.win_rate || 0) * 100),
+/**
+ * Get Money Maker Pro recommendations with advanced analysis and Ultra Accuracy enhancement
+ */
+export async function getMoneyMakerRecommendations(
+  investment: number,
+  strategy: string,
+  sport: string,
+): Promise<any> {
+  try {
+    const [analytics, opportunities, modelPerformance] = await Promise.all([
+      integrationService.getUserAnalytics("default_user"),
+      integrationService.getBettingOpportunities(),
+      integrationService.getModelPerformance(),
+    ]);
         roi: analytics.roi || 0,
         todaysPicks: opportunities.length || 0,
         activeGames:
