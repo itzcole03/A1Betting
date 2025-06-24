@@ -577,7 +577,22 @@ const UltraAdvancedMLDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex">
+    <div className="w-full h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-auto">
+      {/* TEST ELEMENT */}
+      <div
+        style={{
+          position: "fixed",
+          top: "10px",
+          left: "10px",
+          background: "blue",
+          color: "white",
+          padding: "10px",
+          zIndex: 9999,
+          fontSize: "20px",
+        }}
+      >
+        ULTRA ADVANCED ML DASHBOARD IS RENDERING
+      </div>
       {/* Offline Indicator */}
       <OfflineIndicator
         show={!!isOffline}
