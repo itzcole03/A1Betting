@@ -412,6 +412,16 @@ export const UserFriendlyApp: React.FC = () => {
                 </p>
               </div>
 
+              {/* Environment Indicator */}
+              {window.location.hostname.includes("fly.dev") && (
+                <div className="flex items-center space-x-2 px-3 py-2 bg-blue-500/10 rounded-lg border border-blue-500/30 backdrop-blur-sm">
+                  <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                  <span className="text-xs font-semibold text-blue-400">
+                    CLOUD PREVIEW
+                  </span>
+                </div>
+              )}
+
               {/* Live Stats */}
               <div className="hidden lg:flex items-center space-x-6 ml-8">
                 <div className="flex items-center space-x-2 px-3 py-2 bg-green-500/10 rounded-lg border border-green-500/30 backdrop-blur-sm">

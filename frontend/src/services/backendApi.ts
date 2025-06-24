@@ -4,6 +4,7 @@
  */
 
 import axios, { AxiosInstance, AxiosResponse } from "axios";
+import { mockBackendService } from "./mockBackendService";
 
 // Types
 export interface BettingOpportunity {
@@ -117,12 +118,28 @@ class BackendApiService {
   private api: AxiosInstance;
   private wsConnection: WebSocket | null = null;
   private wsCallbacks: Map<string, Function[]> = new Map();
+  private isCloudEnvironment: boolean;
+  private useMockService: boolean;
 
   constructor() {
+    // Detect if we're running in cloud environment (HTTPS) trying to connect to local HTTP
+    this.isCloudEnvironment =
+      window.location.protocol === "https:" &&
+      window.location.hostname.includes("fly.dev");
+
+    // Use mock service in cloud environment to avoid CORS/mixed content issues
+    this.useMockService = this.isCloudEnvironment;
+
     // Use environment variable first, then fallback to local network IP
     const baseURL = import.meta.env.VITE_API_URL || "http://192.168.1.125:8000";
 
-    console.log("[BackendApi] Connecting to:", baseURL);
+    if (this.useMockService) {
+      console.log(
+        "[BackendApi] Using mock service for cloud preview environment",
+      );
+    } else {
+      console.log("[BackendApi] Connecting to real backend:", baseURL);
+    }
 
     this.api = axios.create({
       baseURL,
@@ -262,6 +279,9 @@ class BackendApiService {
 
   // API Methods
   public async getHealth(): Promise<HealthStatus> {
+    if (this.useMockService) {
+      return mockBackendService.getHealth();
+    }
     const response = await this.api.get("/health");
     return response.data;
   }
@@ -270,6 +290,10 @@ class BackendApiService {
     sport?: string,
     limit?: number,
   ): Promise<BettingOpportunity[]> {
+    if (this.useMockService) {
+      return mockBackendService.getBettingOpportunities(sport, limit);
+    }
+
     try {
       const params: any = {};
       if (sport) params.sport = sport;
@@ -291,6 +315,10 @@ class BackendApiService {
   public async getArbitrageOpportunities(
     limit?: number,
   ): Promise<ArbitrageOpportunity[]> {
+    if (this.useMockService) {
+      return mockBackendService.getArbitrageOpportunities(limit);
+    }
+
     try {
       const params: any = {};
       if (limit) params.limit = limit;
@@ -309,6 +337,10 @@ class BackendApiService {
   }
 
   public async getValueBets(): Promise<BettingOpportunity[]> {
+    if (this.useMockService) {
+      return mockBackendService.getBettingOpportunities(undefined, 20);
+    }
+
     // Map to existing betting opportunities endpoint since value bets endpoint doesn't exist
     try {
       const response = await this.api.get("/api/betting-opportunities", {
@@ -325,6 +357,9 @@ class BackendApiService {
     transactions: Transaction[];
     total_count: number;
   }> {
+    if (this.useMockService) {
+      return mockBackendService.getTransactions();
+    }
     const response = await this.api.get("/api/transactions");
     return response.data;
   }
@@ -333,11 +368,17 @@ class BackendApiService {
     active_bets: ActiveBet[];
     total_count: number;
   }> {
+    if (this.useMockService) {
+      return mockBackendService.getActiveBets();
+    }
     const response = await this.api.get("/api/active-bets");
     return response.data;
   }
 
   public async getRiskProfiles(): Promise<{ profiles: RiskProfile[] }> {
+    if (this.useMockService) {
+      return mockBackendService.getRiskProfiles();
+    }
     const response = await this.api.get("/api/risk-profiles");
     return response.data;
   }
@@ -346,6 +387,10 @@ class BackendApiService {
     sport?: string,
     limit?: number,
   ): Promise<{ predictions: Prediction[]; total_count: number }> {
+    if (this.useMockService) {
+      return mockBackendService.getPredictions(sport, limit);
+    }
+
     const params: any = {};
     if (sport) params.sport = sport;
     if (limit) params.limit = limit;
@@ -355,11 +400,18 @@ class BackendApiService {
   }
 
   public async getUltraAccuracyPredictions(): Promise<any> {
+    if (this.useMockService) {
+      return mockBackendService.getUltraAccuracyPredictions();
+    }
     const response = await this.api.get("/api/ultra-accuracy/predictions");
     return response.data;
   }
 
   public async getModelPerformance(): Promise<ModelPerformance> {
+    if (this.useMockService) {
+      return mockBackendService.getModelPerformance();
+    }
+
     try {
       const response = await this.api.get(
         "/api/ultra-accuracy/model-performance",
@@ -389,6 +441,10 @@ class BackendApiService {
   }
 
   public async getAdvancedAnalytics(): Promise<AdvancedAnalytics> {
+    if (this.useMockService) {
+      return mockBackendService.getAdvancedAnalytics();
+    }
+
     try {
       const response = await this.api.get("/api/analytics/advanced");
       return response.data;
