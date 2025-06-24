@@ -263,7 +263,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
               Admin Settings
             </h1>
           </div>
-          <p className="text-gray-300 text-lg">
+          <p className="text-gray-300 text-lg" style={{ color: "#d1d5db" }}>
             Advanced configuration and system controls
           </p>
           <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-lg p-3">
