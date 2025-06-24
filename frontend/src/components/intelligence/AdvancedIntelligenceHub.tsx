@@ -281,6 +281,25 @@ export const AdvancedIntelligenceHub: React.FC = () => {
     retry: 2,
   });
 
+  // ========== ORCHESTRATOR INITIALIZATION ==========
+  useEffect(() => {
+    const initializeOrchestrator = async () => {
+      try {
+        await intelligenceOrchestrator.initialize();
+        // Sync automation settings
+        const currentSettings =
+          intelligenceOrchestrator.getAutomationSettings();
+        setAutomationConfig(currentSettings);
+        toast.success("Intelligence Orchestrator initialized successfully");
+      } catch (error) {
+        console.error("Failed to initialize orchestrator:", error);
+        toast.error("Failed to initialize orchestrator - using fallback mode");
+      }
+    };
+
+    initializeOrchestrator();
+  }, []);
+
   // ========== AUTOMATION HANDLERS ==========
   const triggerSystemOptimization = useCallback(async () => {
     setIsSystemOptimizing(true);
@@ -289,11 +308,10 @@ export const AdvancedIntelligenceHub: React.FC = () => {
         duration: 2000,
       });
 
-      // Simulate comprehensive optimization
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
+      // Use real orchestrator optimization
+      const metrics = await intelligenceOrchestrator.getOrchestrationMetrics();
       toast.success(
-        "System optimization complete! Performance improved by 3.2%",
+        `System optimization complete! Performance: ${(metrics.ensemblePerformance * 100).toFixed(1)}%`,
       );
       queryClient.invalidateQueries();
     } catch (error) {
@@ -304,14 +322,17 @@ export const AdvancedIntelligenceHub: React.FC = () => {
   }, [queryClient]);
 
   const handleAutomationToggle = useCallback(
-    (key: keyof AutomationConfig, value: boolean | string | number) => {
-      setAutomationConfig((prev) => ({
-        ...prev,
+    (key: keyof AutomationSettings, value: boolean | string | number) => {
+      const newConfig = {
+        ...automationConfig,
         [key]: value,
-      }));
+      };
+
+      setAutomationConfig(newConfig);
+      intelligenceOrchestrator.updateAutomationSettings(newConfig);
       toast.success(`Automation setting updated: ${key}`);
     },
-    [],
+    [automationConfig],
   );
 
   // ========== ORCHESTRATOR VIEW ==========
