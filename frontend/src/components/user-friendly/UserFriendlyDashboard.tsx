@@ -94,9 +94,8 @@ export const UserFriendlyDashboard: React.FC<{
     healthError ||
     analyticsError ||
     (healthStatus && healthStatus.status === "offline") ||
-    (accuracyMetrics && accuracyMetrics.overall_accuracy === 0) ||
-    (userAnalytics && userAnalytics.current_balance === 0) ||
-    (valueBets && valueBets.length === 0 && !valueBetsError); // Empty but no error indicates fallback
+    !userAnalytics ||
+    !accuracyMetrics;
 
   // WebSocket for real-time updates
   const { lastMessage } = useWebSocket("/ws/dashboard", {
