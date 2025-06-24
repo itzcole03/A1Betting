@@ -374,10 +374,10 @@ export const UserFriendlyApp: React.FC = () => {
     },
     {
       id: "backend-test",
-      label: "Backend Status",
+      label: "Admin Panel",
       icon: <Search className="w-5 h-5" />,
-      component: ApiDebug,
-      badge: isOffline ? "ERROR" : "OK",
+      component: AdminSettings,
+      badge: isOffline ? "ERROR" : "ADMIN",
     },
   ];
 
