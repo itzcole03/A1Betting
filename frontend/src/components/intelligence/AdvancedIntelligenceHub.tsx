@@ -1010,6 +1010,51 @@ export const AdvancedIntelligenceHub: React.FC = () => {
               )}
               {isQuantumMode ? "Quantum" : "Classical"}
             </Button>
+            {/* Refresh Controls */}
+            <div className="flex items-center gap-2 ml-4">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setIsAutoRefreshEnabled(!isAutoRefreshEnabled)}
+                className={`${isAutoRefreshEnabled ? "bg-green-500/20 border-green-500/50" : "bg-gray-500/20 border-gray-500/50"}`}
+              >
+                {isAutoRefreshEnabled ? (
+                  <Play className="w-4 h-4" />
+                ) : (
+                  <Pause className="w-4 h-4" />
+                )}
+              </Button>
+
+              <select
+                value={refreshInterval}
+                onChange={(e) => setRefreshInterval(Number(e.target.value))}
+                className="text-xs bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white"
+              >
+                <option value={2000}>2s</option>
+                <option value={5000}>5s</option>
+                <option value={10000}>10s</option>
+                <option value={30000}>30s</option>
+              </select>
+
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setIsManualRefreshing(true);
+                  // This will trigger a refetch in the next render
+                }}
+                disabled={isManualRefreshing}
+                className="h-7"
+              >
+                <RefreshCw
+                  className={`w-4 h-4 ${isManualRefreshing ? "animate-spin" : ""}`}
+                />
+              </Button>
+
+              <span className="text-xs text-slate-400">
+                {lastUpdated.toLocaleTimeString()}
+              </span>
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
