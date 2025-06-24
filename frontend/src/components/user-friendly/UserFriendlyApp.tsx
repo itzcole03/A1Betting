@@ -786,12 +786,6 @@ export const UserFriendlyApp: React.FC = () => {
             </div>
           </div>
         </footer>
-
-        {/* Connection Test - Debug component */}
-        <ConnectionTest />
-
-        {/* Debug API Status - Only in development */}
-        {import.meta.env.DEV && <DebugApiStatus />}
       </div>
     </ApiErrorBoundary>
   );
