@@ -246,13 +246,14 @@ export const UserFriendlyApp: React.FC = () => {
     totalProfit: isOffline ? 0 : userAnalytics?.total_profit || 0,
   };
 
-  // Extract live stats from real API data
+  // Extract live stats from real API data or use fallback when offline
   const liveStats = {
-    liveGames: healthStatus?.metrics?.active_predictions || 0,
-    aiAccuracy: accuracyMetrics?.overall_accuracy * 100 || 0,
-    profit24h:
-      userAnalytics?.daily?.[new Date().toISOString().split("T")[0]] || 0,
-    activeUsers: healthStatus?.metrics?.active_connections || 0,
+    liveGames: isOffline ? 0 : healthStatus?.metrics?.active_predictions || 0,
+    aiAccuracy: isOffline ? 0 : accuracyMetrics?.overall_accuracy * 100 || 0,
+    profit24h: isOffline
+      ? 0
+      : userAnalytics?.daily?.[new Date().toISOString().split("T")[0]] || 0,
+    activeUsers: isOffline ? 0 : healthStatus?.metrics?.active_connections || 0,
   };
 
   const navigationItems: NavigationItem[] = [
