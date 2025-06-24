@@ -115,9 +115,9 @@ export class IntelligenceOrchestrator {
       await this.initializeEnsembleModels();
 
       this.isInitialized = true;
-      this.logger.info("Intelligence Orchestrator initialized successfully");
+      unifiedLogger.info("Intelligence Orchestrator initialized successfully");
 
-      this.eventBus.emit("orchestrator:initialized", {
+      eventBus.emit("orchestrator:initialized", {
         timestamp: Date.now(),
         modelsCount: this.activeModels.size,
       });
