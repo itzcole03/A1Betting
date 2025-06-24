@@ -602,6 +602,7 @@ export const UserFriendlyApp: React.FC = () => {
 
                   <motion.button
                     whileHover={{ scale: 1.1 }}
+                    onClick={() => setShowSearch(true)}
                     className="p-3 bg-gray-800/80 border-2 border-gray-500 rounded-xl hover:bg-blue-500/30 hover:border-blue-400 transition-all backdrop-blur-sm group"
                   >
                     <Search className="w-5 h-5 text-gray-300 group-hover:text-blue-300 transition-colors drop-shadow-lg" />
