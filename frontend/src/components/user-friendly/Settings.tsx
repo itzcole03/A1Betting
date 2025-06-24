@@ -276,6 +276,21 @@ export const Settings: React.FC = () => {
     }
   };
 
+  // Show loading state while component initializes
+  if (!isComponentReady || analyticsLoading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-white mb-2">
+            Loading Settings
+          </h2>
+          <p className="text-gray-400">Initializing your preferences...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full overflow-auto bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
       <div className="max-w-6xl mx-auto p-6">
