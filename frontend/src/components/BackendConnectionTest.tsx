@@ -11,6 +11,7 @@ import {
 } from "../services/backendApi";
 import IntegrationStatus from "./IntegrationStatus";
 import DevelopmentGuide from "./DevelopmentGuide";
+import SimpleAdvancedIntegrationStatus from "./SimpleAdvancedIntegrationStatus";
 
 interface ConnectionStatus {
   backend: "connected" | "disconnected" | "loading";
