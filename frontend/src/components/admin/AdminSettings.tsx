@@ -19,10 +19,10 @@ import {
   Activity,
   Monitor,
 } from "lucide-react";
-import { UnifiedApplicationConfig } from "../../core/UnifiedConfig";
-import { configService } from "../../services/configService";
-import { useAppStore } from "@/store/useAppStore";
-import { useTheme } from "../common/theme/ThemeProvider";
+import { UnifiedApplicationConfig } from '../../core/UnifiedConfig';
+import { configService } from '../../services/configService';
+import { useAppStore } from '@/store/useAppStore';
+import { useTheme } from '../common/theme/ThemeProvider';
 import toast from "react-hot-toast";
 
 interface AdminSettingsProps {
@@ -64,9 +64,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
   const { addToast } = useAppStore();
 
   // Core settings state
-  const [appConfig, setAppConfig] = useState<UnifiedApplicationConfig | null>(
-    null,
-  );
+  const [appConfig, setAppConfig] = useState<UnifiedApplicationConfig | null>(null);
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
   const [configError, setConfigError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -75,7 +73,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
   const [modelSettings, setModelSettings] = useState<ModelSettings>({
     modelType: "ensemble",
     confidenceThreshold: 0.85,
-    kellyThreshold: 0.1,
+    kellyThreshold: 0.10,
     maxBetPercentage: 0.05,
     stopLossPercentage: 0.15,
     takeProfitPercentage: 0.25,
@@ -122,13 +120,8 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
         const config = await configService.fetchAppConfig();
         setAppConfig(config);
       } catch (error: any) {
-        setConfigError(
-          error.message || "Failed to load application configuration.",
-        );
-        addToast({
-          message: "Error loading app configuration.",
-          type: "error",
-        });
+        setConfigError(error.message || 'Failed to load application configuration.');
+        addToast({ message: 'Error loading app configuration.', type: 'error' });
       } finally {
         setIsLoadingConfig(false);
       }
@@ -144,36 +137,36 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
           ...appConfig,
           featureFlags: {
             ...appConfig.featureFlags,
-            [featureName]: !appConfig.featureFlags[featureName],
-          },
+            [featureName]: !appConfig.featureFlags[featureName]
+          }
         };
         setAppConfig(newConfig);
 
         // In a real implementation, you would call an API to persist this
         addToast({
-          message: `Feature "${featureName}" ${newConfig.featureFlags[featureName] ? "enabled" : "disabled"}`,
-          type: "success",
+          message: `Feature "${featureName}" ${newConfig.featureFlags[featureName] ? 'enabled' : 'disabled'}`,
+          type: 'success'
         });
       }
     } catch (error) {
-      addToast({ message: "Failed to toggle feature flag", type: "error" });
+      addToast({ message: 'Failed to toggle feature flag', type: 'error' });
     }
   };
 
   const handleModelSettingsChange = (updates: Partial<ModelSettings>) => {
-    setModelSettings((prev) => ({ ...prev, ...updates }));
+    setModelSettings(prev => ({ ...prev, ...updates }));
   };
 
   const handleApiKeyChange = (key: keyof ApiKeys, value: string) => {
-    setApiKeys((prev) => ({ ...prev, [key]: value }));
+    setApiKeys(prev => ({ ...prev, [key]: value }));
   };
 
   const handleSystemSettingsChange = (updates: Partial<SystemSettings>) => {
-    setSystemSettings((prev) => ({ ...prev, ...updates }));
+    setSystemSettings(prev => ({ ...prev, ...updates }));
   };
 
   const handleUltraAccuracyChange = (updates: any) => {
-    setUltraAccuracySettings((prev) => ({ ...prev, ...updates }));
+    setUltraAccuracySettings(prev => ({ ...prev, ...updates }));
   };
 
   const handleSave = async () => {
@@ -224,11 +217,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
   };
 
   const handleClearCache = () => {
-    if (
-      confirm(
-        "Are you sure you want to clear all cache? This will reset all stored data.",
-      )
-    ) {
+    if (confirm("Are you sure you want to clear all cache? This will reset all stored data.")) {
       localStorage.clear();
       sessionStorage.clear();
       toast.success("Cache cleared successfully!");
@@ -236,40 +225,28 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
   };
 
   const handleResetSettings = () => {
-    if (
-      confirm(
-        "Are you sure you want to reset all settings to defaults? This cannot be undone.",
-      )
-    ) {
+    if (confirm("Are you sure you want to reset all settings to defaults? This cannot be undone.")) {
       window.location.reload();
     }
   };
 
   return (
-    <div
-      className="w-full h-full overflow-auto bg-gradient-to-br from-slate-900 via-red-900 to-slate-900 text-white"
-      style={{ color: "#ffffff" }}
-    >
+    <div className="w-full h-full overflow-auto bg-gradient-to-br from-slate-900 via-red-900 to-slate-900 text-white" style={{ color: '#ffffff' }}>
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
+        <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Shield className="w-10 h-10 text-red-400" />
             <h1 className="text-4xl font-bold text-red-400 bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text">
               Admin Settings
             </h1>
           </div>
-          <p className="text-gray-300 text-lg" style={{ color: "#d1d5db" }}>
+          <p className="text-gray-300 text-lg" style={{ color: '#d1d5db' }}>
             Advanced configuration and system controls
           </p>
           <div className="mt-4 bg-red-500/10 border border-red-500/30 rounded-lg p-3">
             <p className="text-red-300 text-sm font-semibold">
-              ⚠️ WARNING: These are advanced settings. Changes can affect system
-              stability.
+              ⚠️ WARNING: These are advanced settings. Changes can affect system stability.
             </p>
           </div>
         </motion.div>
@@ -280,10 +257,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-black/30 backdrop-blur-lg rounded-2xl p-6 border border-blue-500/20 mb-6"
         >
-          <h2
-            className="text-xl font-bold text-white mb-4 flex items-center gap-2"
-            style={{ color: "#ffffff" }}
-          >
+          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2" style={{ color: '#ffffff' }}>
             <ToggleRight className="w-6 h-6 text-blue-400" />
             Feature Flags
           </h2>
@@ -291,9 +265,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
           {isLoadingConfig && (
             <div className="flex items-center justify-center py-6">
               <Loader2 className="w-7 h-7 animate-spin text-blue-400 mr-3" />
-              <span className="text-blue-200 font-semibold">
-                Loading feature flags...
-              </span>
+              <span className="text-blue-200 font-semibold">Loading feature flags...</span>
             </div>
           )}
 
@@ -305,33 +277,28 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
 
           {!isLoadingConfig && !configError && appConfig?.featureFlags && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Object.entries(appConfig.featureFlags || {}).map(
-                ([flagName, isEnabled]) => (
-                  <div
-                    key={flagName}
-                    className="bg-gray-800/40 rounded-lg p-4 border border-gray-600"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-white font-semibold capitalize">
-                        {flagName.replace(/([A-Z])/g, " $1").trim()}
-                      </span>
-                      <button
-                        onClick={() => handleFeatureToggle(flagName)}
-                        className="focus:outline-none"
-                      >
-                        {isEnabled ? (
-                          <ToggleRight size={24} className="text-green-400" />
-                        ) : (
-                          <ToggleLeft size={24} className="text-gray-400" />
-                        )}
-                      </button>
-                    </div>
-                    <p className="text-gray-400 text-sm">
-                      {isEnabled ? "Feature is active" : "Feature is disabled"}
-                    </p>
+              {Object.entries(appConfig.featureFlags || {}).map(([flagName, isEnabled]) => (
+                <div key={flagName} className="bg-gray-800/40 rounded-lg p-4 border border-gray-600">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-white font-semibold capitalize">
+                      {flagName.replace(/([A-Z])/g, ' $1').trim()}
+                    </span>
+                    <button
+                      onClick={() => handleFeatureToggle(flagName)}
+                      className="focus:outline-none"
+                    >
+                      {isEnabled ? (
+                        <ToggleRight size={24} className="text-green-400" />
+                      ) : (
+                        <ToggleLeft size={24} className="text-gray-400" />
+                      )}
+                    </button>
                   </div>
-                ),
-              )}
+                  <p className="text-gray-400 text-sm">
+                    {isEnabled ? "Feature is active" : "Feature is disabled"}
+                  </p>
+                </div>
+              ))}
             </div>
           )}
         </motion.div>
@@ -351,17 +318,10 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
 
             <div className="space-y-4">
               <div>
-                <label
-                  className="block text-gray-300 mb-2"
-                  style={{ color: "#d1d5db" }}
-                >
-                  Model Type
-                </label>
+                <label className="block text-gray-300 mb-2" style={{ color: '#d1d5db' }}>Model Type</label>
                 <select
                   value={modelSettings.modelType}
-                  onChange={(e) =>
-                    handleModelSettingsChange({ modelType: e.target.value })
-                  }
+                  onChange={(e) => handleModelSettingsChange({ modelType: e.target.value })}
                   className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-purple-400 focus:outline-none"
                 >
                   <option value="ensemble">Ensemble</option>
@@ -373,8 +333,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
 
               <div>
                 <label className="block text-gray-300 mb-2">
-                  Confidence Threshold:{" "}
-                  {(modelSettings.confidenceThreshold * 100).toFixed(1)}%
+                  Confidence Threshold: {(modelSettings.confidenceThreshold * 100).toFixed(1)}%
                 </label>
                 <input
                   type="range"
@@ -382,19 +341,16 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   max="0.99"
                   step="0.01"
                   value={modelSettings.confidenceThreshold}
-                  onChange={(e) =>
-                    handleModelSettingsChange({
-                      confidenceThreshold: parseFloat(e.target.value),
-                    })
-                  }
+                  onChange={(e) => handleModelSettingsChange({
+                    confidenceThreshold: parseFloat(e.target.value)
+                  })}
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
 
               <div>
                 <label className="block text-gray-300 mb-2">
-                  Kelly Threshold:{" "}
-                  {(modelSettings.kellyThreshold * 100).toFixed(1)}%
+                  Kelly Threshold: {(modelSettings.kellyThreshold * 100).toFixed(1)}%
                 </label>
                 <input
                   type="range"
@@ -402,11 +358,9 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   max="0.25"
                   step="0.01"
                   value={modelSettings.kellyThreshold}
-                  onChange={(e) =>
-                    handleModelSettingsChange({
-                      kellyThreshold: parseFloat(e.target.value),
-                    })
-                  }
+                  onChange={(e) => handleModelSettingsChange({
+                    kellyThreshold: parseFloat(e.target.value)
+                  })}
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
@@ -415,14 +369,9 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                 <label className="block text-gray-300 mb-2">Risk Level</label>
                 <select
                   value={modelSettings.riskLevel}
-                  onChange={(e) =>
-                    handleModelSettingsChange({
-                      riskLevel: e.target.value as
-                        | "conservative"
-                        | "moderate"
-                        | "aggressive",
-                    })
-                  }
+                  onChange={(e) => handleModelSettingsChange({
+                    riskLevel: e.target.value as "conservative" | "moderate" | "aggressive"
+                  })}
                   className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-purple-400 focus:outline-none"
                 >
                   <option value="conservative">Conservative</option>
@@ -436,11 +385,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                 <input
                   type="checkbox"
                   checked={modelSettings.autoRebalance}
-                  onChange={(e) =>
-                    handleModelSettingsChange({
-                      autoRebalance: e.target.checked,
-                    })
-                  }
+                  onChange={(e) => handleModelSettingsChange({ autoRebalance: e.target.checked })}
                   className="w-5 h-5 text-purple-400 bg-gray-800 border-gray-600 rounded focus:ring-purple-400 focus:ring-2"
                 />
               </label>
@@ -461,39 +406,29 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-gray-300 mb-2">
-                  SportsRadar API Key
-                </label>
+                <label className="block text-gray-300 mb-2">SportsRadar API Key</label>
                 <input
                   type="password"
                   placeholder="Enter API key"
                   value={apiKeys.sportsRadar}
-                  onChange={(e) =>
-                    handleApiKeyChange("sportsRadar", e.target.value)
-                  }
+                  onChange={(e) => handleApiKeyChange("sportsRadar", e.target.value)}
                   className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-green-400 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-300 mb-2">
-                  TheOdds API Key
-                </label>
+                <label className="block text-gray-300 mb-2">TheOdds API Key</label>
                 <input
                   type="password"
                   placeholder="Enter API key"
                   value={apiKeys.theOddsApi}
-                  onChange={(e) =>
-                    handleApiKeyChange("theOddsApi", e.target.value)
-                  }
+                  onChange={(e) => handleApiKeyChange("theOddsApi", e.target.value)}
                   className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-green-400 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-300 mb-2">
-                  OpenAI API Key
-                </label>
+                <label className="block text-gray-300 mb-2">OpenAI API Key</label>
                 <input
                   type="password"
                   placeholder="Enter API key"
@@ -504,16 +439,12 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
               </div>
 
               <div>
-                <label className="block text-gray-300 mb-2">
-                  Anthropic API Key
-                </label>
+                <label className="block text-gray-300 mb-2">Anthropic API Key</label>
                 <input
                   type="password"
                   placeholder="Enter API key"
                   value={apiKeys.anthropic}
-                  onChange={(e) =>
-                    handleApiKeyChange("anthropic", e.target.value)
-                  }
+                  onChange={(e) => handleApiKeyChange("anthropic", e.target.value)}
                   className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-green-400 focus:outline-none"
                 />
               </div>
@@ -543,11 +474,9 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   max="5000"
                   step="100"
                   value={systemSettings.cacheSize}
-                  onChange={(e) =>
-                    handleSystemSettingsChange({
-                      cacheSize: parseInt(e.target.value),
-                    })
-                  }
+                  onChange={(e) => handleSystemSettingsChange({
+                    cacheSize: parseInt(e.target.value)
+                  })}
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
@@ -562,11 +491,9 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   max="1000"
                   step="10"
                   value={systemSettings.maxConnections}
-                  onChange={(e) =>
-                    handleSystemSettingsChange({
-                      maxConnections: parseInt(e.target.value),
-                    })
-                  }
+                  onChange={(e) => handleSystemSettingsChange({
+                    maxConnections: parseInt(e.target.value)
+                  })}
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
@@ -581,11 +508,9 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   max="1000"
                   step="10"
                   value={systemSettings.rateLimitPerMinute}
-                  onChange={(e) =>
-                    handleSystemSettingsChange({
-                      rateLimitPerMinute: parseInt(e.target.value),
-                    })
-                  }
+                  onChange={(e) => handleSystemSettingsChange({
+                    rateLimitPerMinute: parseInt(e.target.value)
+                  })}
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
@@ -596,11 +521,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   <input
                     type="checkbox"
                     checked={systemSettings.enableLogging}
-                    onChange={(e) =>
-                      handleSystemSettingsChange({
-                        enableLogging: e.target.checked,
-                      })
-                    }
+                    onChange={(e) => handleSystemSettingsChange({ enableLogging: e.target.checked })}
                     className="w-5 h-5 text-orange-400 bg-gray-800 border-gray-600 rounded focus:ring-orange-400 focus:ring-2"
                   />
                 </label>
@@ -610,11 +531,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   <input
                     type="checkbox"
                     checked={systemSettings.debugMode}
-                    onChange={(e) =>
-                      handleSystemSettingsChange({
-                        debugMode: e.target.checked,
-                      })
-                    }
+                    onChange={(e) => handleSystemSettingsChange({ debugMode: e.target.checked })}
                     className="w-5 h-5 text-orange-400 bg-gray-800 border-gray-600 rounded focus:ring-orange-400 focus:ring-2"
                   />
                 </label>
@@ -624,11 +541,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   <input
                     type="checkbox"
                     checked={systemSettings.enableMetrics}
-                    onChange={(e) =>
-                      handleSystemSettingsChange({
-                        enableMetrics: e.target.checked,
-                      })
-                    }
+                    onChange={(e) => handleSystemSettingsChange({ enableMetrics: e.target.checked })}
                     className="w-5 h-5 text-orange-400 bg-gray-800 border-gray-600 rounded focus:ring-orange-400 focus:ring-2"
                   />
                 </label>
@@ -638,11 +551,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   <input
                     type="checkbox"
                     checked={systemSettings.autoBackup}
-                    onChange={(e) =>
-                      handleSystemSettingsChange({
-                        autoBackup: e.target.checked,
-                      })
-                    }
+                    onChange={(e) => handleSystemSettingsChange({ autoBackup: e.target.checked })}
                     className="w-5 h-5 text-orange-400 bg-gray-800 border-gray-600 rounded focus:ring-orange-400 focus:ring-2"
                   />
                 </label>
@@ -668,9 +577,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                 <input
                   type="checkbox"
                   checked={ultraAccuracySettings.enabled}
-                  onChange={(e) =>
-                    handleUltraAccuracyChange({ enabled: e.target.checked })
-                  }
+                  onChange={(e) => handleUltraAccuracyChange({ enabled: e.target.checked })}
                   className="w-5 h-5 text-cyan-400 bg-gray-800 border-gray-600 rounded focus:ring-cyan-400 focus:ring-2"
                 />
               </label>
@@ -685,19 +592,16 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   max="99.9"
                   step="0.1"
                   value={ultraAccuracySettings.targetAccuracy}
-                  onChange={(e) =>
-                    handleUltraAccuracyChange({
-                      targetAccuracy: parseFloat(e.target.value),
-                    })
-                  }
+                  onChange={(e) => handleUltraAccuracyChange({
+                    targetAccuracy: parseFloat(e.target.value)
+                  })}
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
 
               <div>
                 <label className="block text-gray-300 mb-2">
-                  Neural Network Depth:{" "}
-                  {ultraAccuracySettings.neuralNetworkDepth}
+                  Neural Network Depth: {ultraAccuracySettings.neuralNetworkDepth}
                 </label>
                 <input
                   type="range"
@@ -705,11 +609,9 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   max="16"
                   step="1"
                   value={ultraAccuracySettings.neuralNetworkDepth}
-                  onChange={(e) =>
-                    handleUltraAccuracyChange({
-                      neuralNetworkDepth: parseInt(e.target.value),
-                    })
-                  }
+                  onChange={(e) => handleUltraAccuracyChange({
+                    neuralNetworkDepth: parseInt(e.target.value)
+                  })}
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
@@ -724,27 +626,19 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   max="25"
                   step="1"
                   value={ultraAccuracySettings.ensembleSize}
-                  onChange={(e) =>
-                    handleUltraAccuracyChange({
-                      ensembleSize: parseInt(e.target.value),
-                    })
-                  }
+                  onChange={(e) => handleUltraAccuracyChange({
+                    ensembleSize: parseInt(e.target.value)
+                  })}
                   className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
                 />
               </div>
 
               <label className="flex items-center justify-between">
-                <span className="text-gray-300">
-                  Advanced Feature Engineering
-                </span>
+                <span className="text-gray-300">Advanced Feature Engineering</span>
                 <input
                   type="checkbox"
                   checked={ultraAccuracySettings.featureEngineering}
-                  onChange={(e) =>
-                    handleUltraAccuracyChange({
-                      featureEngineering: e.target.checked,
-                    })
-                  }
+                  onChange={(e) => handleUltraAccuracyChange({ featureEngineering: e.target.checked })}
                   className="w-5 h-5 text-cyan-400 bg-gray-800 border-gray-600 rounded focus:ring-cyan-400 focus:ring-2"
                 />
               </label>
@@ -754,11 +648,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                 <input
                   type="checkbox"
                   checked={ultraAccuracySettings.autoOptimization}
-                  onChange={(e) =>
-                    handleUltraAccuracyChange({
-                      autoOptimization: e.target.checked,
-                    })
-                  }
+                  onChange={(e) => handleUltraAccuracyChange({ autoOptimization: e.target.checked })}
                   className="w-5 h-5 text-cyan-400 bg-gray-800 border-gray-600 rounded focus:ring-cyan-400 focus:ring-2"
                 />
               </label>
@@ -843,9 +733,8 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
         >
           <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
             <p className="text-red-300 text-sm">
-              ⚠️ <strong>Administrator Access Required:</strong> These settings
-              affect the entire system. Changes may require system restart.
-              Always backup configurations before making changes.
+              ⚠️ <strong>Administrator Access Required:</strong> These settings affect the entire system.
+              Changes may require system restart. Always backup configurations before making changes.
             </p>
           </div>
         </motion.div>
