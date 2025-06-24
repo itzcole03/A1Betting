@@ -3,25 +3,21 @@
  * Tests and displays the status of backend connectivity
  */
 
-import React, { useState, useEffect } from "react";
-import {
-  backendApi,
-  HealthStatus,
-  BettingOpportunity,
-} from "../services/backendApi";
-import IntegrationStatus from "./IntegrationStatus";
+import React, { useState, useEffect } from 'react';
+import { backendApi, HealthStatus, BettingOpportunity } from '../services/backendApi';
+import IntegrationStatus from './IntegrationStatus';
 
 interface ConnectionStatus {
-  backend: "connected" | "disconnected" | "loading";
-  websocket: "connected" | "disconnected" | "loading";
+  backend: 'connected' | 'disconnected' | 'loading';
+  websocket: 'connected' | 'disconnected' | 'loading';
   lastUpdate: string;
 }
 
 export const BackendConnectionTest: React.FC = () => {
   const [status, setStatus] = useState<ConnectionStatus>({
-    backend: "loading",
-    websocket: "loading",
-    lastUpdate: new Date().toISOString(),
+    backend: 'loading',
+    websocket: 'loading',
+    lastUpdate: new Date().toISOString()
   });
   const [healthData, setHealthData] = useState<HealthStatus | null>(null);
   const [bettingOpps, setBettingOpps] = useState<BettingOpportunity[]>([]);
@@ -39,87 +35,78 @@ export const BackendConnectionTest: React.FC = () => {
   const testBackendConnection = async () => {
     try {
       setError(null);
-      setStatus((prev) => ({ ...prev, backend: "loading" }));
+      setStatus(prev => ({ ...prev, backend: 'loading' }));
 
       // Test health endpoint
       const health = await backendApi.getHealth();
       setHealthData(health);
-      setStatus((prev) => ({
+      setStatus(prev => ({
         ...prev,
-        backend: "connected",
-        lastUpdate: new Date().toISOString(),
+        backend: 'connected',
+        lastUpdate: new Date().toISOString()
       }));
 
       // Test a data endpoint
-      const opportunities = await backendApi.getBettingOpportunities(
-        undefined,
-        3,
-      );
+      const opportunities = await backendApi.getBettingOpportunities(undefined, 3);
       setBettingOpps(opportunities);
+
     } catch (err: any) {
-      console.error("Backend connection test failed:", err);
-      setError(err.message || "Failed to connect to backend");
-      setStatus((prev) => ({
+      console.error('Backend connection test failed:', err);
+      setError(err.message || 'Failed to connect to backend');
+      setStatus(prev => ({
         ...prev,
-        backend: "disconnected",
-        lastUpdate: new Date().toISOString(),
+        backend: 'disconnected',
+        lastUpdate: new Date().toISOString()
       }));
     }
   };
 
   const setupWebSocketListeners = () => {
-    backendApi.onWebSocketEvent("connection", () => {
-      setStatus((prev) => ({ ...prev, websocket: "connected" }));
+    backendApi.onWebSocketEvent('connection', () => {
+      setStatus(prev => ({ ...prev, websocket: 'connected' }));
     });
 
-    backendApi.onWebSocketEvent("disconnection", () => {
-      setStatus((prev) => ({ ...prev, websocket: "disconnected" }));
+    backendApi.onWebSocketEvent('disconnection', () => {
+      setStatus(prev => ({ ...prev, websocket: 'disconnected' }));
     });
 
-    backendApi.onWebSocketEvent("odds_update", (data) => {
-      console.log("Received odds update:", data);
+    backendApi.onWebSocketEvent('odds_update', (data) => {
+      console.log('Received odds update:', data);
     });
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "connected":
-        return "text-green-600";
-      case "disconnected":
-        return "text-red-600";
-      case "loading":
-        return "text-yellow-600";
-      default:
-        return "text-gray-600";
+      case 'connected': return 'text-green-600';
+      case 'disconnected': return 'text-red-600';
+      case 'loading': return 'text-yellow-600';
+      default: return 'text-gray-600';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "connected":
-        return "✅";
-      case "disconnected":
-        return "❌";
-      case "loading":
-        return "⏳";
-      default:
-        return "❓";
+      case 'connected': return '✅';
+      case 'disconnected': return '❌';
+      case 'loading': return '⏳';
+      default: return '❓';
     }
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">
-        Backend Connection Status
-      </h2>
+    <div className="space-y-6 max-w-6xl mx-auto">
+      {/* Comprehensive Integration Status */}
+      <IntegrationStatus />
+
+      {/* Detailed Connection Test */}
+      <div className="p-6 bg-white rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Detailed Connection Test</h2>
 
       {/* Connection Status */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div className="p-4 border rounded-lg">
           <h3 className="font-semibold mb-2">API Connection</h3>
-          <div
-            className={`flex items-center ${getStatusColor(status.backend)}`}
-          >
+          <div className={`flex items-center ${getStatusColor(status.backend)}`}>
             <span className="mr-2">{getStatusIcon(status.backend)}</span>
             <span className="capitalize">{status.backend}</span>
           </div>
@@ -127,9 +114,7 @@ export const BackendConnectionTest: React.FC = () => {
 
         <div className="p-4 border rounded-lg">
           <h3 className="font-semibold mb-2">WebSocket Connection</h3>
-          <div
-            className={`flex items-center ${getStatusColor(status.websocket)}`}
-          >
+          <div className={`flex items-center ${getStatusColor(status.websocket)}`}>
             <span className="mr-2">{getStatusIcon(status.websocket)}</span>
             <span className="capitalize">{status.websocket}</span>
           </div>
@@ -159,9 +144,7 @@ export const BackendConnectionTest: React.FC = () => {
               </div>
               <div>
                 <div className="text-sm text-gray-600">Uptime</div>
-                <div className="font-medium">
-                  {Math.round(healthData.uptime)}s
-                </div>
+                <div className="font-medium">{Math.round(healthData.uptime)}s</div>
               </div>
               <div>
                 <div className="text-sm text-gray-600">Last Check</div>
@@ -175,18 +158,14 @@ export const BackendConnectionTest: React.FC = () => {
             <div className="mt-4">
               <div className="text-sm text-gray-600 mb-2">Services</div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                {Object.entries(healthData.services).map(
-                  ([service, serviceStatus]) => (
-                    <div key={service} className="flex items-center">
-                      <span className="mr-1">
-                        {serviceStatus === "operational" ? "✅" : "❌"}
-                      </span>
-                      <span className="text-xs">
-                        {service.replace("_", " ")}
-                      </span>
-                    </div>
-                  ),
-                )}
+                {Object.entries(healthData.services).map(([service, serviceStatus]) => (
+                  <div key={service} className="flex items-center">
+                    <span className="mr-1">
+                      {serviceStatus === 'operational' ? '✅' : '❌'}
+                    </span>
+                    <span className="text-xs">{service.replace('_', ' ')}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -196,9 +175,7 @@ export const BackendConnectionTest: React.FC = () => {
       {/* Sample Data */}
       {bettingOpps.length > 0 && (
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">
-            Sample Betting Opportunities
-          </h3>
+          <h3 className="text-lg font-semibold mb-2">Sample Betting Opportunities</h3>
           <div className="space-y-2">
             {bettingOpps.map((opp) => (
               <div key={opp.id} className="p-3 bg-blue-50 rounded border">
@@ -210,13 +187,11 @@ export const BackendConnectionTest: React.FC = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div
-                      className={`px-2 py-1 rounded text-xs font-medium ${
-                        opp.recommendation === "STRONG_BUY"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-blue-100 text-blue-800"
-                      }`}
-                    >
+                    <div className={`px-2 py-1 rounded text-xs font-medium ${
+                      opp.recommendation === 'STRONG_BUY'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
                       {opp.recommendation}
                     </div>
                     <div className="text-sm text-gray-600 mt-1">
@@ -235,13 +210,13 @@ export const BackendConnectionTest: React.FC = () => {
         <button
           onClick={testBackendConnection}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-          disabled={status.backend === "loading"}
+          disabled={status.backend === 'loading'}
         >
-          {status.backend === "loading" ? "Testing..." : "Test Connection"}
+          {status.backend === 'loading' ? 'Testing...' : 'Test Connection'}
         </button>
 
         <button
-          onClick={() => window.open("http://localhost:8000/health", "_blank")}
+          onClick={() => window.open('http://localhost:8000/health', '_blank')}
           className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
         >
           Open Backend Health
