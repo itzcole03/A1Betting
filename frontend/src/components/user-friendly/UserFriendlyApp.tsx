@@ -558,7 +558,7 @@ export const UserFriendlyApp: React.FC = () => {
                     }
                   >
                     <span className="text-lg drop-shadow-lg font-bold">
-                      {isAdvancedMode ? "🔧" : "🔄"}
+                      {isAdvancedMode ? "📊" : "🔬"}
                     </span>
                   </motion.button>
 
