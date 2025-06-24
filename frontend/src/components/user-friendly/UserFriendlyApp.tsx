@@ -25,6 +25,7 @@ import MoneyMakerPro from "./MoneyMakerPro";
 import PrizePicksPro from "./PrizePicksPro";
 import PropOllama from "./PropOllama";
 import UserFriendlyDashboard from "./UserFriendlyDashboard";
+import Settings from "./Settings";
 // Import advanced dashboard
 import UltraAdvancedMLDashboard from "../ml/UltraAdvancedMLDashboard";
 // Import ultra-accuracy component
