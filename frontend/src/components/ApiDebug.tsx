@@ -17,6 +17,7 @@ interface ApiTestResult {
 export const ApiDebug: React.FC = () => {
   const [results, setResults] = useState<ApiTestResult[]>([]);
   const [isRunning, setIsRunning] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<any>(null);
 
   const testEndpoints = [
     { name: "Health Check", fn: () => backendApi.getHealth() },
