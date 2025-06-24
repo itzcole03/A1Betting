@@ -281,15 +281,9 @@ export const MoneyMakerPro: React.FC = () => {
                 setConfig({ ...config, strategy: e.target.value as any })
               }
               className="w-full p-3 rounded-xl bg-gray-800/80 border-2 border-gray-500 text-white focus:border-green-400 focus:ring-2 focus:ring-green-400/50 transition-all backdrop-blur-sm shadow-lg"
-              style={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                color: "white",
-              }}
+              style={SELECT_STYLES}
             >
-              <option
-                value="conservative"
-                style={{ backgroundColor: "#1f2937", color: "white" }}
-              >
+              <option value="conservative" style={OPTION_STYLES}>
                 Conservative
               </option>
               <option
