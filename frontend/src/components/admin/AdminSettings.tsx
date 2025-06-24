@@ -256,7 +256,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
         >
           <div className="flex items-center justify-center gap-3 mb-4">
             <Shield className="w-10 h-10 text-red-400" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold text-red-400 bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text">
               Admin Settings
             </h1>
           </div>
