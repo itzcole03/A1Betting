@@ -351,7 +351,12 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-gray-300 mb-2">Model Type</label>
+                <label
+                  className="block text-gray-300 mb-2"
+                  style={{ color: "#d1d5db" }}
+                >
+                  Model Type
+                </label>
                 <select
                   value={modelSettings.modelType}
                   onChange={(e) =>
