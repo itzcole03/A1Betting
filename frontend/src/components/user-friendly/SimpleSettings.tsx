@@ -44,38 +44,75 @@ interface SimpleSettingsProps {
   onNavigate?: (page: string) => void;
 }
 
+const DEFAULT_SETTINGS: UserSettings = {
+  profile: {
+    name: "User",
+    email: "user@a1betting.com",
+    timezone: "UTC-5",
+    currency: "USD",
+  },
+  notifications: {
+    email: true,
+    push: true,
+    sound: false,
+  },
+  display: {
+    darkMode: true,
+    compactView: false,
+    fontSize: 16,
+  },
+  betting: {
+    defaultStake: 10,
+    maxStake: 100,
+    currency: "USD",
+  },
+  privacy: {
+    sharePredictions: false,
+    showStats: true,
+  },
+};
+
 export const SimpleSettings: React.FC<SimpleSettingsProps> = ({
   onNavigate,
 }) => {
-  const [settings, setSettings] = useState<UserSettings>({
-    profile: {
-      name: "User",
-      email: "user@a1betting.com",
-      timezone: "UTC-5",
-      currency: "USD",
-    },
-    notifications: {
-      email: true,
-      push: true,
-      sound: false,
-    },
-    display: {
-      darkMode: true,
-      compactView: false,
-      fontSize: 16,
-    },
-    betting: {
-      defaultStake: 10,
-      maxStake: 100,
-      currency: "USD",
-    },
-    privacy: {
-      sharePredictions: false,
-      showStats: true,
-    },
-  });
-
+  const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Load settings from localStorage on component mount
+  useEffect(() => {
+    const loadSettings = () => {
+      try {
+        const savedSettings = localStorage.getItem("a1betting-user-settings");
+        if (savedSettings) {
+          const parsed = JSON.parse(savedSettings);
+          setSettings((prev) => ({ ...prev, ...parsed }));
+        }
+      } catch (error) {
+        console.warn("Failed to load settings from localStorage:", error);
+      }
+    };
+
+    loadSettings();
+  }, []);
+
+  // Apply settings to the document when they change
+  useEffect(() => {
+    // Apply dark mode
+    if (settings.display.darkMode) {
+      document.documentElement.classList.add("dark");
+      document.body.style.backgroundColor = "#0f172a";
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.body.style.backgroundColor = "#ffffff";
+    }
+
+    // Apply font size
+    document.documentElement.style.fontSize = `${settings.display.fontSize}px`;
+
+    // Store user name in a way the app can access it
+    window.localStorage.setItem("a1betting-user-name", settings.profile.name);
+    window.localStorage.setItem("a1betting-user-email", settings.profile.email);
+  }, [settings]);
 
   const handleSectionUpdate = (section: keyof UserSettings, updates: any) => {
     setSettings((prev) => ({
