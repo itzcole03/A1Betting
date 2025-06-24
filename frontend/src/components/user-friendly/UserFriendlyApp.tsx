@@ -648,7 +648,7 @@ export const UserFriendlyApp: React.FC = () => {
                 <div className="relative">
                   <h3 className="font-bold text-purple-400 mb-3 drop-shadow-lg flex items-center gap-2">
                     <span className="text-lg">🧠</span>
-                    <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                    <span className="text-purple-400 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text">
                       AI Status
                     </span>
                   </h3>
