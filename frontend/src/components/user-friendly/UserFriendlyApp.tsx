@@ -892,67 +892,22 @@ export const UserFriendlyApp: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
+                {/* User Avatar */}
                 <div className="flex items-center space-x-3">
-                  {/* Intelligence Hub Toggle */}
-                  <motion.button
-                    whileHover={{ scale: 1.1, rotate: 180 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setIsAdvancedMode(!isAdvancedMode)}
-                    className={`p-3 rounded-xl transition-all duration-300 backdrop-blur-sm border-2 ${
-                      isAdvancedMode
-                        ? "bg-gradient-to-r from-purple-500/50 to-blue-500/50 border-purple-400 text-purple-300 shadow-2xl shadow-purple-500/50"
-                        : "bg-gray-800/80 hover:bg-gray-700/80 border-gray-500 text-gray-300 hover:text-purple-300 hover:border-purple-400 hover:bg-gray-600/80"
-                    }`}
-                    title={
-                      isAdvancedMode
-                        ? "Exit Intelligence Hub"
-                        : "Enter Intelligence Hub"
-                    }
-                  >
-                    <span className="text-lg drop-shadow-lg font-bold">
-                      {isAdvancedMode ? "🧠" : "⚡"}
-                    </span>
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    onClick={() => setShowSearch(true)}
-                    className="p-3 bg-gray-800/80 border-2 border-gray-500 rounded-xl hover:bg-blue-500/30 hover:border-blue-400 transition-all backdrop-blur-sm group"
-                    title="Search games, players, and predictions"
-                  >
-                    <Search className="w-5 h-5 text-gray-300 group-hover:text-blue-300 transition-colors drop-shadow-lg" />
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    onClick={() => setShowNotifications(true)}
-                    className="relative p-3 bg-gray-800/80 border-2 border-gray-500 rounded-xl hover:bg-red-500/30 hover:border-red-400 transition-all backdrop-blur-sm group"
-                    title="View notifications and alerts"
-                  >
-                    <Bell className="w-5 h-5 text-gray-300 group-hover:text-red-300 transition-colors drop-shadow-lg" />
-                    <div className="absolute top-1 right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-lg shadow-red-500/50 border border-white/50" />
-                  </motion.button>
-
-                  {/* User Avatar */}
-                  <div className="flex items-center space-x-3">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full blur-md opacity-60" />
-                      <div className="absolute inset-0 bg-purple-500 rounded-full blur-sm opacity-40" />
-                      <img
-                        src={`https://ui-avatars.com/api/?name=${user.name}&background=7c3aed&color=fff&bold=true`}
-                        alt="Profile"
-                        className="relative w-10 h-10 rounded-full border-2 border-purple-500 shadow-2xl shadow-purple-500/50"
-                      />
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full blur-md opacity-60" />
+                    <div className="absolute inset-0 bg-purple-500 rounded-full blur-sm opacity-40" />
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${user.name}&background=7c3aed&color=fff&bold=true`}
+                      alt="Profile"
+                      className="relative w-10 h-10 rounded-full border-2 border-purple-500 shadow-2xl shadow-purple-500/50"
+                    />
+                  </div>
+                  <div className="hidden md:block">
+                    <div className="font-semibold text-white text-sm drop-shadow-lg">
+                      {user.name}
                     </div>
-                    <div className="hidden md:block">
-                      <div className="font-semibold text-white text-sm drop-shadow-lg">
-                        {user.name}
-                      </div>
-                      <div className="text-xs text-cyan-300/80">
-                        {user.email}
-                      </div>
-                    </div>
+                    <div className="text-xs text-cyan-300/80">{user.email}</div>
                   </div>
                 </div>
 
