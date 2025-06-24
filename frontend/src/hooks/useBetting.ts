@@ -18,6 +18,8 @@ interface ValueBet {
   expected_value: number;
   confidence: number;
   recommendation: string;
+  edge?: number;
+  bookmaker?: string;
 }
 
 interface ArbitrageOpportunity {
