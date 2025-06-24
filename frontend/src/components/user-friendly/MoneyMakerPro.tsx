@@ -19,6 +19,17 @@ import { useValueBets, useBankroll } from "../../hooks/useBetting";
 import OfflineIndicator from "../ui/OfflineIndicator";
 import toast from "react-hot-toast";
 
+// Constant styles to prevent re-renders
+const SELECT_STYLES = {
+  backgroundColor: "rgba(31, 41, 55, 0.8)",
+  color: "white",
+};
+
+const OPTION_STYLES = {
+  backgroundColor: "#1f2937",
+  color: "white",
+};
+
 interface PredictionResult {
   investment: number;
   confidence: number;
