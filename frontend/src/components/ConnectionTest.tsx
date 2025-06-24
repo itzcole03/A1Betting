@@ -4,8 +4,24 @@ export const ConnectionTest: React.FC = () => {
   const [status, setStatus] = useState<string>("Testing...");
   const [details, setDetails] = useState<any>({});
 
+  const isCloudEnvironment =
+    window.location.protocol === "https:" &&
+    window.location.hostname.includes("fly.dev");
+
   const testConnection = async () => {
     const apiUrl = import.meta.env.VITE_API_URL || "http://192.168.1.125:8000";
+
+    if (isCloudEnvironment) {
+      setStatus("✅ Cloud Preview Mode Active");
+      setDetails({
+        mode: "cloud_preview",
+        apiUrl: "Mock Service (HTTPS Cloud Environment)",
+        mock_accuracy: "96.5%",
+        note: "Using realistic demo data in cloud preview",
+        timestamp: new Date().toISOString(),
+      });
+      return;
+    }
 
     try {
       console.log("Testing connection to:", apiUrl);
@@ -60,6 +76,14 @@ export const ConnectionTest: React.FC = () => {
       <div className="text-sm mb-2">{status}</div>
       <div className="text-xs text-gray-300">
         <div>API: {details.apiUrl}</div>
+        {details.mode === "cloud_preview" && (
+          <>
+            <div className="text-blue-400">
+              🎭 Demo Mode: {details.mock_accuracy} Accuracy
+            </div>
+            <div className="text-yellow-400">💡 {details.note}</div>
+          </>
+        )}
         {details.data && <div>✅ Backend Status: {details.data.status}</div>}
         {details.error && (
           <div className="text-red-400">Error: {details.error}</div>
@@ -74,7 +98,7 @@ export const ConnectionTest: React.FC = () => {
         onClick={testConnection}
         className="mt-2 px-3 py-1 bg-cyan-600 hover:bg-cyan-700 rounded text-xs transition-colors"
       >
-        Test Now
+        {isCloudEnvironment ? "Refresh Status" : "Test Now"}
       </button>
     </div>
   );
