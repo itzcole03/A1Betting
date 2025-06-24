@@ -63,140 +63,6 @@ interface UserData {
   totalProfit: number;
 }
 
-// Add missing CSS classes for prototype styling
-const styleSheet = document.createElement("style");
-styleSheet.textContent = `
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-6px); }
-  }
-
-  @keyframes glow-pulse {
-    0% { box-shadow: 0 0 20px rgba(0,255,136,0.4); }
-    100% { box-shadow: 0 0 40px rgba(0,255,136,0.8); }
-  }
-
-  @keyframes slide-in-up {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes cyber-pulse {
-    0%, 100% { text-shadow: 0 0 10px rgba(0,255,136,0.8); }
-    50% { text-shadow: 0 0 20px rgba(0,255,136,1), 0 0 30px rgba(0,255,136,0.8); }
-  }
-
-  @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  .glass-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  }
-
-  .dark .glass-card {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .holographic {
-    background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5, #ffbe0b);
-    background-size: 400% 400%;
-    animation: gradient-shift 8s ease infinite;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .cyber-btn {
-    background: linear-gradient(45deg, #00ff88, #00d4ff);
-    border: none;
-    color: black;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .cyber-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transition: left 0.5s;
-  }
-
-  .cyber-btn:hover::before {
-    left: 100%;
-  }
-
-  .cyber-btn:hover {
-    box-shadow: 0 0 30px rgba(0,255,136,0.6);
-    transform: translateY(-2px);
-  }
-
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  .animate-glow-pulse {
-    animation: glow-pulse 2s ease-in-out infinite alternate;
-  }
-
-  .animate-slide-in-up {
-    animation: slide-in-up 0.6s ease-out;
-  }
-
-  .animate-cyber-pulse {
-    animation: cyber-pulse 3s ease-in-out infinite;
-  }
-
-  .shadow-neon {
-    box-shadow: 0 0 20px rgba(0,255,136,0.6), 0 0 40px rgba(0,255,136,0.4);
-  }
-
-  .shadow-neon-pink {
-    box-shadow: 0 0 20px rgba(255,16,240,0.6), 0 0 40px rgba(255,16,240,0.4);
-  }
-
-  .shadow-neon-blue {
-    box-shadow: 0 0 20px rgba(0,212,255,0.6), 0 0 40px rgba(0,212,255,0.4);
-  }
-
-  .text-electric-400 { color: #06ffa5; }
-  .text-electric-500 { color: #00ff88; }
-  .text-neon-blue { color: #00d4ff; }
-  .text-neon-pink { color: #ff10f0; }
-  .text-neon-purple { color: #7c3aed; }
-  .text-neon-green { color: #39ff14; }
-
-  /* Global dropdown styling fix */
-  select {
-    background-color: rgba(31, 41, 55, 0.8) !important;
-    color: white !important;
-  }
-
-  select option {
-    background-color: #1f2937 !important;
-    color: white !important;
-  }
-
-  select option:hover {
-    background-color: #374151 !important;
-  }
-`;
-document.head.appendChild(styleSheet);
-
 // Search Modal Component
 const SearchModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
@@ -216,7 +82,6 @@ const SearchModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
       },
     );
 
-    // Simulate search results with useful feedback
     setTimeout(() => {
       toast.success(
         `Found ${Math.floor(Math.random() * 20) + 5} results for "${query}"`,
@@ -247,7 +112,6 @@ const SearchModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-6">
-            {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-cyan-400 flex items-center gap-2">
                 <Search className="w-6 h-6" />
@@ -261,7 +125,6 @@ const SearchModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
               </button>
             </div>
 
-            {/* Search Input */}
             <div className="space-y-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -278,58 +141,6 @@ const SearchModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
                 />
               </div>
 
-              {/* Search Filters */}
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { id: "all", label: "All", icon: Filter },
-                  { id: "games", label: "Live Games", icon: Target },
-                  { id: "predictions", label: "Predictions", icon: Brain },
-                  { id: "players", label: "Players", icon: Trophy },
-                  {
-                    id: "opportunities",
-                    label: "Opportunities",
-                    icon: DollarSign,
-                  },
-                ].map((filter) => (
-                  <button
-                    key={filter.id}
-                    onClick={() => setSearchFilter(filter.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                      searchFilter === filter.id
-                        ? "bg-cyan-500/30 border border-cyan-400 text-cyan-300"
-                        : "bg-gray-800/60 border border-gray-600 text-gray-300 hover:bg-gray-700/60"
-                    }`}
-                  >
-                    <filter.icon className="w-4 h-4" />
-                    {filter.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Quick Actions */}
-              <div className="pt-4 border-t border-gray-700">
-                <h3 className="text-sm font-semibold text-gray-400 mb-3">
-                  Quick Search
-                </h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    "Today's Games",
-                    "High Confidence Picks",
-                    "NBA Predictions",
-                    "Live Opportunities",
-                  ].map((quickSearch) => (
-                    <button
-                      key={quickSearch}
-                      onClick={() => handleSearch(quickSearch)}
-                      className="p-3 bg-gray-800/60 hover:bg-gray-700/60 border border-gray-600 rounded-lg text-left text-sm text-gray-300 hover:text-white transition-all"
-                    >
-                      {quickSearch}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Search Button */}
               <button
                 onClick={() => handleSearch(searchQuery)}
                 className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-black font-bold rounded-xl hover:shadow-lg hover:shadow-cyan-500/30 transition-all"
@@ -368,24 +179,6 @@ const NotificationsModal: React.FC<{
       icon: Target,
       color: "blue",
     },
-    {
-      id: 3,
-      type: "warning",
-      title: "Model Performance Update",
-      message: "NFL model accuracy increased to 87.3%",
-      time: "15 minutes ago",
-      icon: TrendingUp,
-      color: "purple",
-    },
-    {
-      id: 4,
-      type: "info",
-      title: "System Status",
-      message: "All AI models running optimally",
-      time: "1 hour ago",
-      icon: Brain,
-      color: "cyan",
-    },
   ];
 
   if (!isOpen) return null;
@@ -407,7 +200,6 @@ const NotificationsModal: React.FC<{
           onClick={(e) => e.stopPropagation()}
         >
           <div className="p-6">
-            {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-red-400 flex items-center gap-2">
                 <Bell className="w-6 h-6" />
@@ -422,23 +214,15 @@ const NotificationsModal: React.FC<{
               </button>
             </div>
 
-            {/* Notifications List */}
             <div className="space-y-3 max-h-96 overflow-y-auto">
               {notifications.map((notification) => {
                 const IconComponent = notification.icon;
-                const colorClasses = {
-                  green: "border-green-500/30 bg-green-500/10",
-                  blue: "border-blue-500/30 bg-blue-500/10",
-                  purple: "border-purple-500/30 bg-purple-500/10",
-                  cyan: "border-cyan-500/30 bg-cyan-500/10",
-                };
-
                 return (
                   <motion.div
                     key={notification.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className={`p-4 rounded-xl border backdrop-blur-sm ${colorClasses[notification.color as keyof typeof colorClasses]} hover:bg-opacity-20 transition-all cursor-pointer`}
+                    className="p-4 rounded-xl border border-gray-600 bg-gray-800/60 hover:bg-gray-700/60 transition-all cursor-pointer"
                     onClick={() => {
                       toast.success(`Opened: ${notification.title}`, {
                         icon: "👁️",
@@ -447,9 +231,7 @@ const NotificationsModal: React.FC<{
                     }}
                   >
                     <div className="flex items-start gap-3">
-                      <IconComponent
-                        className={`w-5 h-5 mt-0.5 text-${notification.color}-400`}
-                      />
+                      <IconComponent className="w-5 h-5 mt-0.5 text-green-400" />
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-white text-sm">
                           {notification.title}
@@ -469,30 +251,6 @@ const NotificationsModal: React.FC<{
                 );
               })}
             </div>
-
-            {/* Actions */}
-            <div className="mt-6 pt-4 border-t border-gray-700 flex gap-2">
-              <button
-                onClick={() => {
-                  toast.success("All notifications marked as read", {
-                    icon: "✅",
-                  });
-                  onClose();
-                }}
-                className="flex-1 py-2 px-4 bg-gray-800/60 hover:bg-gray-700/60 border border-gray-600 rounded-lg text-sm text-gray-300 hover:text-white transition-all"
-              >
-                Mark All Read
-              </button>
-              <button
-                onClick={() => {
-                  toast.success("Notification settings opened", { icon: "⚙️" });
-                  onClose();
-                }}
-                className="flex-1 py-2 px-4 bg-gradient-to-r from-red-500/20 to-pink-500/20 hover:from-red-500/30 hover:to-pink-500/30 border border-red-500/30 rounded-lg text-sm text-red-300 hover:text-red-200 transition-all"
-              >
-                Settings
-              </button>
-            </div>
           </div>
         </motion.div>
       </motion.div>
@@ -501,21 +259,6 @@ const NotificationsModal: React.FC<{
 };
 
 export const UserFriendlyApp: React.FC = () => {
-  // Ensure text visibility override
-  React.useEffect(() => {
-    const style = document.createElement("style");
-    style.textContent = `
-      .user-friendly-app * {
-        color: inherit !important;
-      }
-      .user-friendly-app h1, .user-friendly-app h2, .user-friendly-app h3, .user-friendly-app p, .user-friendly-app span {
-        opacity: 1 !important;
-        visibility: visible !important;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
@@ -534,14 +277,6 @@ export const UserFriendlyApp: React.FC = () => {
     initializeSettings();
   }, []);
 
-  // Debug currentPage changes
-  useEffect(() => {
-    console.log("[Debug] currentPage changed to:", currentPage);
-  }, [currentPage]);
-
-  // Debug component re-renders
-  console.log("[Debug] UserFriendlyApp rendering, currentPage:", currentPage);
-
   // Initialize Ultra Accuracy integration
   useEffect(() => {
     const updateStats = () => {
@@ -550,7 +285,7 @@ export const UserFriendlyApp: React.FC = () => {
     };
 
     updateStats();
-    const interval = setInterval(updateStats, 10000); // Update every 10 seconds
+    const interval = setInterval(updateStats, 10000);
 
     ultraAccuracyIntegrationService.on("statusUpdated", updateStats);
 
@@ -564,9 +299,7 @@ export const UserFriendlyApp: React.FC = () => {
   const { data: userProfile, error: userError } = useQuery({
     queryKey: ["userProfile"],
     queryFn: async () => {
-      console.log("[Debug] Fetching user profile...");
       const result = await api.getUserProfile("default_user");
-      console.log("[Debug] User profile result:", result);
       return result;
     },
     retry: 2,
@@ -576,9 +309,7 @@ export const UserFriendlyApp: React.FC = () => {
   const { data: userAnalytics, error: analyticsError } = useQuery({
     queryKey: ["userAnalytics"],
     queryFn: async () => {
-      console.log("[Debug] Fetching user analytics...");
       const result = await api.getUserAnalytics("default_user");
-      console.log("[Debug] User analytics result:", result);
       return result;
     },
     retry: 2,
@@ -588,9 +319,7 @@ export const UserFriendlyApp: React.FC = () => {
   const { data: healthStatus, error: healthError } = useQuery({
     queryKey: ["healthStatus"],
     queryFn: async () => {
-      console.log("[Debug] Fetching health status...");
       const result = await api.getHealthStatus();
-      console.log("[Debug] Health status result:", result);
       return result;
     },
     refetchInterval: 30000,
@@ -601,9 +330,7 @@ export const UserFriendlyApp: React.FC = () => {
   const { data: accuracyMetrics, error: accuracyError } = useQuery({
     queryKey: ["accuracyMetrics"],
     queryFn: async () => {
-      console.log("[Debug] Fetching accuracy metrics...");
       const result = await api.getAccuracyMetrics();
-      console.log("[Debug] Accuracy metrics result:", result);
       return result;
     },
     refetchInterval: 10000,
@@ -611,38 +338,13 @@ export const UserFriendlyApp: React.FC = () => {
     retryDelay: 1000,
   });
 
-  // Debug error logging
-  useEffect(() => {
-    if (healthError) console.log("[Debug] Health error:", healthError);
-    if (analyticsError) console.log("[Debug] Analytics error:", analyticsError);
-    if (userError) console.log("[Debug] User error:", userError);
-    if (accuracyError) console.log("[Debug] Accuracy error:", accuracyError);
-  }, [healthError, analyticsError, userError, accuracyError]);
-
   // Check if backend is offline
   const isOffline = healthError || healthStatus?.status === "offline";
-
-  // Only log when status actually changes
-  useEffect(() => {
-    console.log("[Debug] Backend Status Check:", {
-      isOffline,
-      healthError: healthError ? healthError.message : null,
-      healthStatus: healthStatus?.status,
-    });
-  }, [isOffline, healthError, healthStatus]);
 
   // Handle retry functionality
   const handleRetry = () => {
     queryClient.invalidateQueries();
   };
-
-  const handleBackendStatusChange = (isOnline: boolean) => {
-    if (isOnline) {
-      queryClient.invalidateQueries();
-    }
-  };
-
-  // userSettings state already declared above
 
   // Load user settings from localStorage
   useEffect(() => {
@@ -650,13 +352,12 @@ export const UserFriendlyApp: React.FC = () => {
       setUserSettings({
         name: getUserDisplayName(),
         email: getUserEmail(),
-        darkMode: true, // Will be set by settings utility
+        darkMode: true,
       });
     };
 
     loadUserSettings();
 
-    // Listen for settings changes
     const handleSettingsChange = (event: CustomEvent) => {
       const newSettings = event.detail;
       setUserSettings({
@@ -679,7 +380,7 @@ export const UserFriendlyApp: React.FC = () => {
     };
   }, []);
 
-  // Extract real user data from backend, with settings override for display name
+  // Extract real user data from backend
   const user: UserData = {
     name: userSettings.name || userProfile?.name || "User",
     email: userSettings.email || userProfile?.email || "user@a1betting.com",
@@ -689,7 +390,7 @@ export const UserFriendlyApp: React.FC = () => {
     totalProfit: userAnalytics?.total_profit || 0,
   };
 
-  // Extract live stats from real API data - memoized to prevent infinite re-renders
+  // Extract live stats from real API data
   const liveStats = useMemo(() => {
     const today = new Date().toISOString().split("T")[0];
     return {
@@ -699,6 +400,7 @@ export const UserFriendlyApp: React.FC = () => {
       activeUsers: healthStatus?.metrics?.active_connections || 0,
     };
   }, [healthStatus, accuracyMetrics, userAnalytics]);
+
   const navigationItems: NavigationItem[] = [
     {
       id: "dashboard",
@@ -730,7 +432,7 @@ export const UserFriendlyApp: React.FC = () => {
       id: "analytics",
       label: "Analytics",
       icon: <BarChart3 className="w-5 h-5" />,
-      component: UserFriendlyDashboard, // Will show analytics view
+      component: UserFriendlyDashboard,
     },
     {
       id: "settings",
@@ -762,48 +464,6 @@ export const UserFriendlyApp: React.FC = () => {
           onClose={() => setShowNotifications(false)}
         />
 
-
-          {/* Intelligence Hub Toggle */}
-          <motion.button
-            whileHover={{ scale: 1.1, rotate: 180 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsAdvancedMode(!isAdvancedMode)}
-            className={`p-3 rounded-xl transition-all duration-300 backdrop-blur-sm border-2 shadow-lg ${
-              isAdvancedMode
-                ? "bg-gradient-to-r from-purple-500/50 to-blue-500/50 border-purple-400 text-purple-300 shadow-2xl shadow-purple-500/50"
-                : "bg-gray-800/80 hover:bg-gray-700/80 border-gray-500 text-gray-300 hover:text-purple-300 hover:border-purple-400 hover:bg-gray-600/80"
-            }`}
-            title={
-              isAdvancedMode
-                ? "Exit Intelligence Hub"
-                : "Enter Intelligence Hub"
-            }
-          >
-            <span className="text-lg drop-shadow-lg font-bold">
-              {isAdvancedMode ? "🧠" : "⚡"}
-            </span>
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            onClick={() => setShowSearch(true)}
-            className="p-3 bg-gray-800/80 border-2 border-gray-500 rounded-xl hover:bg-blue-500/30 hover:border-blue-400 transition-all backdrop-blur-sm group shadow-lg"
-            title="Search games, players, and predictions"
-          >
-            <Search className="w-5 h-5 text-gray-300 group-hover:text-blue-300 transition-colors drop-shadow-lg" />
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            onClick={() => setShowNotifications(true)}
-            className="relative p-3 bg-gray-800/80 border-2 border-gray-500 rounded-xl hover:bg-red-500/30 hover:border-red-400 transition-all backdrop-blur-sm group shadow-lg"
-            title="View notifications and alerts"
-          >
-            <Bell className="w-5 h-5 text-gray-300 group-hover:text-red-300 transition-colors drop-shadow-lg" />
-            <div className="absolute top-1 right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-lg shadow-red-500/50 border border-white/50" />
-          </motion.button>
-        </div>
-
         {/* Header */}
         <header className="sticky top-0 z-50 bg-black/30 backdrop-blur-2xl border-b border-cyan-500/20 shadow-lg shadow-cyan-500/10 relative">
           <div className="relative max-w-7xl mx-auto px-6 py-4">
@@ -815,7 +475,6 @@ export const UserFriendlyApp: React.FC = () => {
                   className="relative"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 rounded-xl blur-xl opacity-80 animate-pulse" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-xl blur-md opacity-60" />
                   <div className="relative w-12 h-12 bg-gradient-to-br from-cyan-400 via-green-400 to-blue-500 rounded-xl flex items-center justify-center shadow-2xl shadow-cyan-500/50 border border-cyan-400/30">
                     <Brain className="w-7 h-7 text-black font-bold drop-shadow-lg" />
                   </div>
@@ -829,116 +488,14 @@ export const UserFriendlyApp: React.FC = () => {
                     Quantum Intelligence Platform
                   </p>
                 </div>
-
-                {/* Environment Indicator */}
-                {window.location.hostname.includes("fly.dev") && (
-                  <div className="flex items-center space-x-2 px-3 py-2 bg-blue-500/10 rounded-lg border border-blue-500/30 backdrop-blur-sm">
-                    <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-                    <span className="text-xs font-semibold text-blue-400">
-                      CLOUD PREVIEW
-                    </span>
-                  </div>
-                )}
-
-                {/* Live Stats */}
-                <div className="hidden lg:flex items-center space-x-6 ml-8">
-                  <div className="flex items-center space-x-2 px-3 py-2 bg-green-500/10 rounded-lg border border-green-500/30 backdrop-blur-sm">
-                    <div
-                      className={`w-2 h-2 rounded-full shadow-lg ${isOffline ? "bg-red-400 shadow-red-400/50" : "bg-green-400 shadow-green-400/50 animate-pulse"}`}
-                    />
-                    <span
-                      className={`text-sm font-semibold drop-shadow-lg ${isOffline ? "text-red-400" : "text-green-400"}`}
-                    >
-                      {isOffline
-                        ? "Services Offline"
-                        : `${liveStats.liveGames} Live Games`}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2 px-3 py-2 bg-blue-500/10 rounded-lg border border-blue-500/30 backdrop-blur-sm">
-                    <div
-                      className={`w-2 h-2 rounded-full shadow-lg ${isOffline ? "bg-red-400 shadow-red-400/50" : "bg-blue-400 shadow-blue-400/50 animate-pulse"}`}
-                    />
-                    <span
-                      className={`text-sm font-semibold drop-shadow-lg ${isOffline ? "text-red-400" : "text-blue-400"}`}
-                    >
-                      {isOffline
-                        ? "API Unavailable"
-                        : `${liveStats.aiAccuracy.toFixed(1)}% AI Accuracy`}
-                    </span>
-                  </div>
-                  {ultraAccuracyStats && (
-                    <div className="flex items-center space-x-2 px-3 py-2 bg-purple-500/10 rounded-lg border border-purple-500/30 backdrop-blur-sm">
-                      <div
-                        className={`w-2 h-2 rounded-full shadow-lg ${ultraAccuracyStats.isActive ? "bg-purple-400 shadow-purple-400/50 animate-pulse" : "bg-gray-400 shadow-gray-400/50"}`}
-                      />
-                      <span
-                        className={`text-sm font-semibold drop-shadow-lg ${ultraAccuracyStats.isActive ? "text-purple-400" : "text-gray-400"}`}
-                      >
-                        Ultra:{" "}
-                        {ultraAccuracyStats.isActive
-                          ? `${(ultraAccuracyStats.currentQuality * 100).toFixed(1)}%`
-                          : "Offline"}
-                      </span>
-                    </div>
-                  )}
-                </div>
               </div>
 
               {/* User Info & Actions */}
               <div className="flex items-center space-x-6">
-                {/* Balance & Stats */}
-                <div className="hidden md:flex items-center space-x-6 text-sm">
-                  <div
-                    className={`text-center px-4 py-2 rounded-lg border backdrop-blur-sm ${isOffline ? "bg-red-500/10 border-red-500/30" : "bg-green-500/10 border-green-500/30"}`}
-                  >
-                    <div
-                      className={`text-xs uppercase font-semibold ${isOffline ? "text-red-300/80" : "text-green-300/80"}`}
-                    >
-                      Balance
-                    </div>
-                    <div
-                      className={`font-bold drop-shadow-lg ${isOffline ? "text-red-400" : "text-green-400"}`}
-                    >
-                      {isOffline
-                        ? "Offline"
-                        : `$${user.balance.toLocaleString()}`}
-                    </div>
-                  </div>
-                  <div
-                    className={`text-center px-4 py-2 rounded-lg border backdrop-blur-sm ${isOffline ? "bg-red-500/10 border-red-500/30" : "bg-cyan-500/10 border-cyan-500/30"}`}
-                  >
-                    <div
-                      className={`text-xs uppercase font-semibold ${isOffline ? "text-red-300/80" : "text-cyan-300/80"}`}
-                    >
-                      Win Rate
-                    </div>
-                    <div
-                      className={`font-bold drop-shadow-lg ${isOffline ? "text-red-400" : "text-cyan-400"}`}
-                    >
-                      {isOffline ? "N/A" : `${user.winRate.toFixed(1)}%`}
-                    </div>
-                  </div>
-                  <div
-                    className={`text-center px-4 py-2 rounded-lg border backdrop-blur-sm ${isOffline ? "bg-red-500/10 border-red-500/30" : "bg-purple-500/10 border-purple-500/30"}`}
-                  >
-                    <div
-                      className={`text-xs uppercase font-semibold ${isOffline ? "text-red-300/80" : "text-purple-300/80"}`}
-                    >
-                      Tier
-                    </div>
-                    <div
-                      className={`font-bold drop-shadow-lg ${isOffline ? "text-red-400" : "text-purple-400"}`}
-                    >
-                      {isOffline ? "N/A" : user.tier}
-                    </div>
-                  </div>
-                </div>
-
                 {/* User Avatar */}
                 <div className="flex items-center space-x-3">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full blur-md opacity-60" />
-                    <div className="absolute inset-0 bg-purple-500 rounded-full blur-sm opacity-40" />
                     <img
                       src={`https://ui-avatars.com/api/?name=${user.name}&background=7c3aed&color=fff&bold=true`}
                       alt="Profile"
@@ -955,7 +512,6 @@ export const UserFriendlyApp: React.FC = () => {
 
                 {/* Action Buttons */}
                 <div className="flex items-center space-x-3">
-                  {/* Intelligence Hub Toggle */}
                   <motion.button
                     whileHover={{ scale: 1.1, rotate: 180 }}
                     whileTap={{ scale: 0.95 }}
@@ -1017,8 +573,6 @@ export const UserFriendlyApp: React.FC = () => {
         <div className="flex">
           {/* Sidebar */}
           <aside className="hidden lg:block w-80 min-h-screen bg-black/30 backdrop-blur-2xl border-r border-cyan-500/20 relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-purple-500/5 to-green-500/5" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent" />
             <div className="relative p-6">
               <nav className="space-y-2">
                 {navigationItems.map((item) => (
@@ -1049,54 +603,6 @@ export const UserFriendlyApp: React.FC = () => {
                   </motion.button>
                 ))}
               </nav>
-
-              {/* AI Status */}
-              <div className="mt-8 p-4 bg-gradient-to-br from-purple-500/20 via-cyan-500/10 to-green-500/20 rounded-xl border border-purple-500/40 backdrop-blur-sm relative shadow-2xl shadow-purple-500/20">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 rounded-xl" />
-                <div className="relative">
-                  <h3 className="font-bold text-purple-400 mb-3 drop-shadow-lg flex items-center gap-2">
-                    <span className="text-lg">🧠</span>
-                    <span className="text-purple-400 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text">
-                      AI Status
-                    </span>
-                  </h3>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between items-center p-2 bg-green-500/10 rounded-lg border border-green-500/30">
-                      <span className="text-green-300/80 font-medium">
-                        Neural Networks
-                      </span>
-                      <span className="text-green-400 font-bold drop-shadow-lg flex items-center gap-1">
-                        <div
-                          className={`w-2 h-2 rounded-full shadow-lg ${isOffline ? "bg-red-400 shadow-red-400/50" : "bg-green-400 shadow-green-400/50 animate-pulse"}`}
-                        />
-                        {isOffline
-                          ? "Offline"
-                          : `${accuracyMetrics?.models_active || 0} Active`}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/30">
-                      <span className="text-cyan-300/80 font-medium">
-                        Processing Speed
-                      </span>
-                      <span className="text-cyan-400 font-bold drop-shadow-lg">
-                        {isOffline
-                          ? "N/A"
-                          : `${accuracyMetrics?.prediction_latency?.toFixed(0) || 0}ms`}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-purple-500/10 rounded-lg border border-purple-500/30">
-                      <span className="text-purple-300/80 font-medium">
-                        Model Accuracy
-                      </span>
-                      <span className="text-purple-400 font-bold drop-shadow-lg animate-pulse">
-                        {isOffline
-                          ? "N/A"
-                          : `${(accuracyMetrics?.overall_accuracy * 100)?.toFixed(1) || 0}%`}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </aside>
 
@@ -1117,7 +623,6 @@ export const UserFriendlyApp: React.FC = () => {
                   className="w-80 h-full bg-slate-900/95 backdrop-blur-2xl border-r border-cyan-500/30 p-6 relative shadow-2xl shadow-cyan-500/20"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-purple-500/5 to-green-500/5" />
                   <div className="relative">
                     <nav className="space-y-2">
                       {navigationItems.map((item) => (
@@ -1158,7 +663,6 @@ export const UserFriendlyApp: React.FC = () => {
           {/* Main Content */}
           <main className="flex-1 min-h-screen pt-24">
             <div className="p-6">
-              {/* Temporarily disable animations for debugging */}
               <div>
                 {isAdvancedMode ? (
                   <AdvancedIntelligenceHub />
