@@ -93,16 +93,8 @@ export class IntegrationService {
         max_drawdown: analytics.bankroll_metrics.max_drawdown,
       };
     } catch (error) {
-      return {
-        current_balance: 0,
-        total_profit: 0,
-        win_rate: 0,
-        roi: 0,
-        daily: {},
-        monthly_profit: 0,
-        total_wagered: 0,
-        max_drawdown: 0,
-      };
+      // Re-throw the error to let React Query handle it properly
+      throw error;
     }
   }
 
