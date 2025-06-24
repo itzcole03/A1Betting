@@ -48,7 +48,7 @@ export interface UltraAccuracyConfig {
   enhanceArbitrage: boolean;
 }
 
-class UltraAccuracyBackgroundService extends EventEmitter {
+class UltraAccuracyBackgroundService extends SimpleEventEmitter {
   private static instance: UltraAccuracyBackgroundService;
   private config: UltraAccuracyConfig;
   private processingQueue: Array<any> = [];
