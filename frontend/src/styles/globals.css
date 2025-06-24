@@ -10,6 +10,18 @@ canvas {
   font-feature-settings: "liga", "kern";
 }
 
+/* ===== SMOOTH DARK MODE TRANSITIONS ===== */
+html,
+body {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+html {
+  transition: font-size 0.2s ease;
+}
+
 /* ===== PREMIUM COMPONENT LIBRARY ===== */
 @layer components {
   /* === CARDS & CONTAINERS === */
