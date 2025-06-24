@@ -127,14 +127,7 @@ UserFriendlyApp
 
 ## 🎯 IMMEDIATE TODO LIST
 
-### Priority 1 (Critical)
-
-- [ ] **Create Settings Page Component**
-  - File: `frontend/src/components/user-friendly/Settings.tsx`
-  - Features: User preferences, notifications, risk settings
-  - Integration: User profile API
-
-### Priority 2 (Important)
+### Priority 1 (Important)
 
 - [ ] **Improve Backend Status Page**
   - Enhance existing `ApiDebug.tsx` or create dedicated component
