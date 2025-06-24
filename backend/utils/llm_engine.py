@@ -128,7 +128,12 @@ class LLMEngine:
         self.models: List[str] = []
         self.task_model_map: Dict[str, str] = {}
         # Start background model discovery
-        asyncio.create_task(self.refresh_models())
+        # Ensure the asyncio.create_task is wrapped in a running event loop
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            asyncio.create_task(self.refresh_models())
+        else:
+            loop.run_until_complete(self.refresh_models())
 
     async def refresh_models(self):
         """Fetch available models and update task mappings."""

@@ -96,7 +96,8 @@ class ModelPerformance(Base):
     period_start = Column(DateTime, nullable=False)
     period_end = Column(DateTime, nullable=False)
     sample_size = Column(Integer, default=0)
-    metadata = Column(JSON, nullable=True)
+    # Removed the conflicting 'metadata' attribute
+    additional_metadata = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     __table_args__ = (

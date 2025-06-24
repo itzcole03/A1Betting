@@ -263,7 +263,7 @@ class AdvancedEnsembleOptimizer:
                 "elastic_net_ultra": ElasticNet(
                     alpha=0.1, l1_ratio=0.5, random_state=42, max_iter=2000
                 ),
-                "bayesian_ridge": BayesianRidge(n_iter=500, alpha_1=1e-6, alpha_2=1e-6),
+                "bayesian_ridge": BayesianRidge(max_iter=500, alpha_1=1e-6, alpha_2=1e-6),
                 "huber_regressor": HuberRegressor(epsilon=1.35, max_iter=200),
                 "theil_sen": TheilSenRegressor(random_state=42, max_subpopulation=1000),
                 "ransac": RANSACRegressor(random_state=42, max_trials=200),
