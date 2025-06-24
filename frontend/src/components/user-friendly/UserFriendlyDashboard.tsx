@@ -16,7 +16,7 @@ import {
   PlayCircle,
   BarChart3,
 } from "lucide-react";
-import { api } from "../../services/api";
+import { api } from "../../services/integrationService";
 import {
   useValueBets,
   useArbitrageOpportunities,
