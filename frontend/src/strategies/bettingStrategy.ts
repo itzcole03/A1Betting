@@ -190,7 +190,7 @@ export const placeBets = async (
       }),
     );
 
-    const response = await post<BackendBetPlacementResult[]>(
+    const response = await axios.post<BackendBetPlacementResult[]>(
       endpoint,
       backendPayload,
     );
