@@ -116,6 +116,7 @@ import RealTimeAccuracyDashboard from "../analytics/RealTimeAccuracyDashboard";
 import MLInsights from "../analytics/MLInsights";
 import UltraMLInsights from "../analytics/UltraMLInsights";
 import HyperMLInsights from "../analytics/HyperMLInsights";
+import EvolutionaryInsights from "../analytics/EvolutionaryInsights";
 import ClusteringInsights from "../analytics/ClusteringInsights";
 import EnsembleInsights from "../analytics/EnsembleInsights";
 import FeatureInsights from "../analytics/FeatureInsights";
