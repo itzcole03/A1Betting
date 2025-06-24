@@ -247,6 +247,7 @@ export const api = {
     integrationService.getBettingOpportunities(sport, limit),
   getArbitrageOpportunities: (limit?: number) =>
     integrationService.getArbitrageOpportunities(limit),
+  getValueBets: () => backendApi.getValueBets(),
   getActiveBets: () => integrationService.getActiveBets(),
   getTransactions: () => integrationService.getTransactions(),
   getRiskProfiles: () => integrationService.getRiskProfiles(),
