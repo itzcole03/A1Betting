@@ -144,17 +144,38 @@ class BackendApiService {
     this.api.interceptors.response.use(
       (response) => response,
       (error) => {
-        const errorInfo = {
-          url: error.config?.url,
-          method: error.config?.method,
-          status: error.response?.status,
-          message: error.message,
+        // Create a more detailed error object with proper serialization
+        const errorDetails = {
+          url: error.config?.url || "unknown",
+          method: (error.config?.method || "unknown").toUpperCase(),
+          status: error.response?.status || "no status",
+          statusText: error.response?.statusText || "unknown",
+          message: error.message || "no message",
+          responseData: error.response?.data || "no response data",
+          timeout: error.code === "ECONNABORTED" ? "Request timeout" : null,
+          network: !error.response
+            ? "Network error - backend may be offline"
+            : null,
         };
 
         if (error.response?.status === 404) {
-          console.warn("[API] Endpoint not found:", errorInfo);
+          console.warn(
+            `[API] 404 Not Found: ${errorDetails.method} ${errorDetails.url}`,
+          );
+        } else if (!error.response) {
+          console.error(
+            `[API] Network Error: ${errorDetails.method} ${errorDetails.url} - ${errorDetails.network}`,
+          );
         } else {
-          console.error("[API Error]:", errorInfo);
+          console.error(
+            `[API] ${errorDetails.status} Error: ${errorDetails.method} ${errorDetails.url}`,
+            {
+              status: errorDetails.status,
+              statusText: errorDetails.statusText,
+              message: errorDetails.message,
+              responseData: errorDetails.responseData,
+            },
+          );
         }
 
         return Promise.reject(error);
