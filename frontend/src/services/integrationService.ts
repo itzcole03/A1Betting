@@ -61,21 +61,8 @@ export class IntegrationService {
         },
       };
     } catch (error) {
-      // Fallback data
-      return {
-        id: userId,
-        name: "User",
-        email: "user@a1betting.com",
-        tier: "Free",
-        balance: 0,
-        winRate: 0,
-        totalProfit: 0,
-        settings: {
-          notifications: true,
-          autobet: false,
-          riskLevel: "moderate",
-        },
-      };
+      // Re-throw the error to let React Query handle it properly
+      throw error;
     }
   }
 
