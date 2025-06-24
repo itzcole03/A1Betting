@@ -130,13 +130,15 @@ interface EnsembleOutput {
 export const AdvancedIntelligenceHub: React.FC = () => {
   // ========== STATE MANAGEMENT ==========
   const [selectedView, setSelectedView] = useState("orchestrator");
-  const [automationConfig, setAutomationConfig] = useState<AutomationConfig>({
+  const [automationConfig, setAutomationConfig] = useState<AutomationSettings>({
     enableAutoOptimization: true,
     enableRealTimeEnsemble: true,
     enableSmartRebalancing: true,
     enablePredictiveScaling: false,
     optimizationThreshold: 0.85,
-    rebalanceFrequency: "5min",
+    rebalanceFrequency: 5,
+    maxConcurrentPredictions: 50,
+    confidenceThreshold: 0.75,
   });
   const [isSystemOptimizing, setIsSystemOptimizing] = useState(false);
   const [showPropOllama, setShowPropOllama] = useState(false);
