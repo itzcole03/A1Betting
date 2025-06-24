@@ -154,20 +154,35 @@ export async function getMoneyMakerRecommendations(
     };
   }
 }
-        roi: analytics.roi || 0,
-        todaysPicks: opportunities.length || 0,
-        activeGames:
-          opportunities.filter((o) => o.recommendation === "STRONG_BUY")
-            .length || 0,
-        aiAccuracy: Math.round((modelPerformance.overall_accuracy || 0) * 100),
-        recommendations: this.generateRecommendations(opportunities),
-        alerts: this.generateAlerts(analytics, modelPerformance),
-      };
-    } catch (error) {
-      console.error("Error getting simplified analytics:", error);
-      return this.getFallbackAnalytics();
-    }
+
+/**
+ * Get PrizePicks recommendations enhanced with Ultra Accuracy
+ */
+export async function getPrizePicksRecommendations(sport?: string): Promise<any[]> {
+  try {
+    const opportunities = await integrationService.getBettingOpportunities(sport, 10);
+
+    // Convert betting opportunities to PrizePicks format
+    const baseProps = opportunities.map((opp: any) => ({
+      id: opp.id,
+      player: opp.event?.split(' vs ')[0] || "Featured Player",
+      stat: opp.market || "Points",
+      line: opp.odds || 20.5,
+      confidence: opp.confidence || 0.75,
+      projectedValue: opp.expected_value || 0.08,
+      recommendation: opp.recommendation || "BUY",
+      sport: opp.sport || "basketball",
+    }));
+
+    // Enhance with Ultra Accuracy Background Service
+    const enhancedProps = await ultraAccuracyBackgroundService.enhancePrizePicksProps(baseProps);
+
+    return enhancedProps;
+  } catch (error) {
+    console.error("Error getting PrizePicks recommendations:", error);
+    return [];
   }
+}
 
   /**
    * Get simplified opportunities powered by advanced betting algorithms
