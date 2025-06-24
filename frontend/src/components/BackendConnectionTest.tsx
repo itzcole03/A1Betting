@@ -10,6 +10,7 @@ import {
   BettingOpportunity,
 } from "../services/backendApi";
 import IntegrationStatus from "./IntegrationStatus";
+import DevelopmentGuide from "./DevelopmentGuide";
 
 interface ConnectionStatus {
   backend: "connected" | "disconnected" | "loading";
