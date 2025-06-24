@@ -253,13 +253,21 @@ class BackendApiService {
   public async getArbitrageOpportunities(
     limit?: number,
   ): Promise<ArbitrageOpportunity[]> {
-    const params: any = {};
-    if (limit) params.limit = limit;
+    try {
+      const params: any = {};
+      if (limit) params.limit = limit;
 
-    const response = await this.api.get("/api/arbitrage-opportunities", {
-      params,
-    });
-    return response.data;
+      const response = await this.api.get("/api/arbitrage-opportunities", {
+        params,
+      });
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        console.warn("[API] Arbitrage opportunities endpoint not available");
+        return [];
+      }
+      throw error;
+    }
   }
 
   public async getValueBets(): Promise<BettingOpportunity[]> {
