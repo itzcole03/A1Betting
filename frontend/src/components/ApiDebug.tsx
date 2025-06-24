@@ -185,6 +185,45 @@ export const ApiDebug: React.FC = () => {
           </p>
         </div>
       </div>
+
+      {connectionStatus && (
+        <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded">
+          <h3 className="font-semibold text-gray-800 mb-2">
+            Connection Status
+          </h3>
+          <div className="text-sm space-y-2">
+            <div className="flex items-center space-x-2">
+              <span>{connectionStatus.isConnected ? "✅" : "❌"}</span>
+              <span>
+                <strong>Backend Connection:</strong>{" "}
+                {connectionStatus.isConnected ? "Connected" : "Disconnected"}
+              </span>
+            </div>
+            <p>
+              <strong>Base URL:</strong> {connectionStatus.baseURL}
+            </p>
+            {connectionStatus.error && (
+              <p className="text-red-600">
+                <strong>Error:</strong> {connectionStatus.error}
+              </p>
+            )}
+
+            <div className="mt-2">
+              <p className="font-medium mb-1">Endpoint Status:</p>
+              <div className="grid grid-cols-2 gap-1 text-xs">
+                {Object.entries(connectionStatus.endpoints).map(
+                  ([endpoint, isWorking]) => (
+                    <div key={endpoint} className="flex items-center space-x-1">
+                      <span>{isWorking ? "✅" : "❌"}</span>
+                      <span>{endpoint}</span>
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
