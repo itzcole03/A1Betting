@@ -185,7 +185,26 @@ export const UserFriendlyApp: React.FC = () => {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
+  const [ultraAccuracyStats, setUltraAccuracyStats] = useState<any>(null);
   const queryClient = useQueryClient();
+
+  // Initialize Ultra Accuracy integration
+  useEffect(() => {
+    const updateStats = () => {
+      const stats = ultraAccuracyIntegrationService.getLiveStats();
+      setUltraAccuracyStats(stats);
+    };
+
+    updateStats();
+    const interval = setInterval(updateStats, 10000); // Update every 10 seconds
+
+    ultraAccuracyIntegrationService.on("statusUpdated", updateStats);
+
+    return () => {
+      clearInterval(interval);
+      ultraAccuracyIntegrationService.off("statusUpdated", updateStats);
+    };
+  }, []);
 
   // Real API data fetching
   const { data: userProfile, error: userError } = useQuery({
