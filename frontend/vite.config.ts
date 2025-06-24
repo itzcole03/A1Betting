@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import path from "path";
 import react from "@vitejs/plugin-react";
+import { backendPlugin } from "./vite-backend-plugin.js";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -16,7 +17,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
-  plugins: [react()],
+  plugins: [react(), backendPlugin()],
   server: {
     port: 5173,
     host: true,
