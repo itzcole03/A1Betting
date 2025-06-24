@@ -509,9 +509,13 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                   {key === "enablePredictiveScaling" &&
                     "Predictive resource scaling"}
                   {key === "optimizationThreshold" &&
-                    "Threshold for triggering optimization"}
+                    "Threshold for triggering optimization (0-1)"}
                   {key === "rebalanceFrequency" &&
-                    "Frequency of model rebalancing"}
+                    "Frequency of model rebalancing (minutes)"}
+                  {key === "maxConcurrentPredictions" &&
+                    "Maximum concurrent predictions"}
+                  {key === "confidenceThreshold" &&
+                    "Minimum confidence for predictions (0-1)"}
                 </p>
               </div>
               <div>
@@ -521,7 +525,7 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                     size="sm"
                     onClick={() =>
                       handleAutomationToggle(
-                        key as keyof AutomationConfig,
+                        key as keyof AutomationSettings,
                         !value,
                       )
                     }
@@ -529,7 +533,11 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                     {value ? "Enabled" : "Disabled"}
                   </Button>
                 ) : (
-                  <span className="text-blue-400 font-semibold">{value}</span>
+                  <span className="text-blue-400 font-semibold">
+                    {typeof value === "number"
+                      ? value.toFixed(key.includes("Threshold") ? 2 : 0)
+                      : value}
+                  </span>
                 )}
               </div>
             </div>
