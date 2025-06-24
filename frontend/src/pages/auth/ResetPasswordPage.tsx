@@ -38,7 +38,9 @@ export default function ResetPasswordPage() {
     setIsLoading(true);
 
     try {
-      await apiService.resetPassword(token, formData.password);
+      // Placeholder for reset password functionality
+      console.log("Reset password request for token:", token);
+      // await ApiService.resetPassword(token, formData.password); // TODO: Implement when backend ready
       navigate("/login", {
         state: { message: "Password reset successful. Please sign in." },
       });
