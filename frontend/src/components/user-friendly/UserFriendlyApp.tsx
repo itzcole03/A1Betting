@@ -331,12 +331,7 @@ export const UserFriendlyApp: React.FC = () => {
     }
   };
 
-  // State for user settings
-  const [userSettings, setUserSettings] = useState({
-    name: "User",
-    email: "user@a1betting.com",
-    darkMode: true,
-  });
+  // userSettings state already declared above
 
   // Load user settings from localStorage
   useEffect(() => {
