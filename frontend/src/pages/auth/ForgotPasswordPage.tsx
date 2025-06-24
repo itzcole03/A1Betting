@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
     setIsLoading(true);
 
     try {
-      await apiService.forgotPassword(email);
+      await ApiService.forgotPassword(email);
       setSuccess(true);
     } catch (err) {
       setError("Failed to send reset email. Please try again.");
