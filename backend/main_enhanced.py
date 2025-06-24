@@ -18,7 +18,26 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+app = FastAPI(
+    title="A1Betting Enhanced Backend",
+    description="Ultra-Enhanced sports betting prediction platform",
+    version="2.0.0"
+)
+
+# Add CORS middleware for cloud frontend integration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "*",  # Allow all for development
+        "https://7fb6bf6978914ca48f089e6151180b03-a1b171efc67d4aea943f921a9.fly.dev",  # Cloud frontend
+        "http://localhost:5173",  # Local development
+        "http://192.168.1.125:5173",  # Local network access
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
+
 logger = logging.getLogger(__name__)
 import time
 from datetime import datetime
