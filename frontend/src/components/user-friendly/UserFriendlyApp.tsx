@@ -23,6 +23,7 @@ import BackendConnectionTest from "../BackendConnectionTest";
 import ApiDebug from "../ApiDebug";
 import ConnectionTest from "../ConnectionTest";
 import ApiErrorBoundary from "../ApiErrorBoundary";
+import DebugApiStatus from "../DebugApiStatus";
 import { ultraAccuracyIntegrationService } from "../../services/UltraAccuracyIntegrationService";
 
 // Import user-friendly components
@@ -786,6 +787,9 @@ export const UserFriendlyApp: React.FC = () => {
 
         {/* Connection Test - Debug component */}
         <ConnectionTest />
+
+        {/* Debug API Status - Only in development */}
+        {import.meta.env.DEV && <DebugApiStatus />}
       </div>
     </ApiErrorBoundary>
   );
