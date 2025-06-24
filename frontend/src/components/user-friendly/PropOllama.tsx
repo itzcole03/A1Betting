@@ -133,14 +133,18 @@ export const PropOllama: React.FC = () => {
     toast.success("Reconnecting to PropOllama services...");
   };
 
-  // Extract live data from real APIs
-  const liveData = {
-    activeAnalyses: healthStatus?.metrics?.active_predictions || 0,
-    liveGames: healthStatus?.metrics?.active_predictions || 0,
-    confidencePicks:
-      valueBets?.filter((bet) => bet.confidence > 0.9).length || 0,
-    valueBets: valueBets?.length || 0,
-  };
+  // Initialize live data from APIs when available
+  useEffect(() => {
+    if (healthStatus && valueBets) {
+      setLiveData({
+        activeAnalyses: healthStatus?.metrics?.active_predictions || 0,
+        liveGames: healthStatus?.metrics?.active_predictions || 0,
+        confidencePicks:
+          valueBets?.filter((bet) => bet.confidence > 0.9).length || 0,
+        valueBets: valueBets?.length || 0,
+      });
+    }
+  }, [healthStatus, valueBets]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
