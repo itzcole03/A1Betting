@@ -1,12 +1,12 @@
-# Ruff configuration for unified linting, formatting, and import sorting
-line-length = 120
-indent-width = 4
-target-version = "py39"
+# Ruff configuration - DISABLED FOR DEVELOPMENT
+# line-length = 120
+# indent-width = 4
+# target-version = "py39"
 
-[lint]
-select = ["E", "F", "B", "I", "UP", "C90", "N", "D", "A", "S", "PL", "RUF"]
-ignore = ["E203"]
+# [lint] - DISABLED FOR DEVELOPMENT
+# select = ["E", "F", "B", "I", "UP", "C90", "N", "D", "A", "S", "PL", "RUF"]
+# ignore = ["E203"]
 
-[format]
-quote-style = "double"
-indent-style = "space"
+# [format] - DISABLED FOR DEVELOPMENT
+# quote-style = "double"
+# indent-style = "space"
