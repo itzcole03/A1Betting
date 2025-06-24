@@ -204,11 +204,19 @@ class BackendApiService {
     // Skip WebSocket in production deployments where it may not be available
     if (typeof window === "undefined") return;
 
-    // Use environment variable first, then fallback to local network IP
+    // Use environment variable first, detect cloud environment, then fallback to local
+    const isCloudEnvironment = window.location.hostname.includes("fly.dev");
     const wsUrl =
-      import.meta.env.VITE_WEBSOCKET_URL || "ws://192.168.1.125:8000";
+      import.meta.env.VITE_WEBSOCKET_URL ||
+      (isCloudEnvironment
+        ? `wss://${window.location.hostname}/ws`
+        : "ws://localhost:8000");
 
-    console.log("[WebSocket] Connecting to:", wsUrl);
+    console.log(
+      "[WebSocket] Connecting to:",
+      wsUrl,
+      isCloudEnvironment ? "(cloud)" : "(local)",
+    );
 
     try {
       // Always try to connect to WebSocket when we have a specific URL
