@@ -762,7 +762,7 @@ export const UserFriendlyApp: React.FC = () => {
               {/* Temporarily disable animations for debugging */}
               <div>
                 {isAdvancedMode ? (
-                  <AdminSettings />
+                  <UltraAdvancedMLDashboard />
                 ) : (
                   <CurrentComponent onNavigate={setCurrentPage} />
                 )}
