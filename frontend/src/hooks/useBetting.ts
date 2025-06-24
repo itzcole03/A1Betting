@@ -131,7 +131,9 @@ export const useArbitrageOpportunities = (filters?: {
   });
 
   // Ensure we always have an array
-  const arbitrageOpportunities = Array.isArray(arbitrageData) ? arbitrageData : [];
+  const arbitrageOpportunities = Array.isArray(arbitrageData)
+    ? arbitrageData
+    : [];
 
   // Filter arbitrage opportunities
   const filteredOpportunities = useMemo(() => {
@@ -157,7 +159,10 @@ export const useArbitrageOpportunities = (filters?: {
   // Calculate statistics
   const stats = useMemo(() => {
     // Ensure filteredOpportunities is an array before using reduce
-    if (!Array.isArray(filteredOpportunities) || filteredOpportunities.length === 0) {
+    if (
+      !Array.isArray(filteredOpportunities) ||
+      filteredOpportunities.length === 0
+    ) {
       return {
         totalProfit: 0,
         averageProfitPercent: 0,
@@ -166,14 +171,16 @@ export const useArbitrageOpportunities = (filters?: {
     }
 
     const totalProfit = filteredOpportunities.reduce(
-      (sum: number, opp: ArbitrageOpportunity) => sum + (opp.guaranteed_profit || 0),
+      (sum: number, opp: ArbitrageOpportunity) =>
+        sum + (opp.guaranteed_profit || 0),
       0,
     );
-    const avgProfitPercent = filteredOpportunities.reduce(
-      (sum: number, opp: ArbitrageOpportunity) => sum + (opp.profit_percent || 0),
-      0,
-    ) / filteredOpportunities.length;
-        : 0;
+    const avgProfitPercent =
+      filteredOpportunities.reduce(
+        (sum: number, opp: ArbitrageOpportunity) =>
+          sum + (opp.profit_percent || 0),
+        0,
+      ) / filteredOpportunities.length;
 
     return {
       count: filteredOpportunities.length,
