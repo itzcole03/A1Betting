@@ -119,18 +119,17 @@ class BackendApiService {
   private wsCallbacks: Map<string, Function[]> = new Map();
 
   constructor() {
-    // In development, connect directly to the backend
-    // In production, this will be set via environment variables
-    const isDevelopment = import.meta.env.DEV;
-    const baseURL =
-      import.meta.env.VITE_API_URL ||
-      (isDevelopment ? "http://localhost:8000" : "");
+    // Use environment variable first, then fallback to local network IP
+    const baseURL = import.meta.env.VITE_API_URL || "http://192.168.1.125:8000";
+
+    console.log("[BackendApi] Connecting to:", baseURL);
 
     this.api = axios.create({
       baseURL,
       timeout: 30000,
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
     });
 
