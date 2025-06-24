@@ -294,8 +294,8 @@ export const PropOllama: React.FC = () => {
     } catch (error) {
       console.error("LLM response error:", error);
 
-      // Fallback response
-      const fallbackMessage: Message = {
+      // Error response
+      const errorMessage: Message = {
         id: `ai-${Date.now()}`,
         type: "ai",
         content:
@@ -308,7 +308,7 @@ export const PropOllama: React.FC = () => {
         ],
       };
 
-      setMessages((prev) => [...prev, fallbackMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsTyping(false);
     }
