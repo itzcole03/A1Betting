@@ -192,6 +192,21 @@ styleSheet.textContent = `
 document.head.appendChild(styleSheet);
 
 export const UserFriendlyApp: React.FC = () => {
+  // Ensure text visibility override
+  React.useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = `
+      .user-friendly-app * {
+        color: inherit !important;
+      }
+      .user-friendly-app h1, .user-friendly-app h2, .user-friendly-app h3, .user-friendly-app p, .user-friendly-app span {
+        opacity: 1 !important;
+        visibility: visible !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
