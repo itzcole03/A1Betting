@@ -11,46 +11,24 @@ export class UnifiedMonitor {
     return UnifiedMonitor.instance;
   }
 
-  startTrace(name, type) {
+  startTrace(name, type, description) {
     return {
       name,
       type,
+      description,
       startTime: Date.now(),
-      setHttpStatus: (status) => {},
+      setHttpStatus: (status) => {
+        console.debug(`[TRACE] ${name} HTTP Status: ${status}`);
+      },
+      setDuration: (duration) => {
+        console.debug(`[TRACE] ${name} Duration: ${duration}ms`);
+      },
     };
   }
 
   endTrace(trace) {
     const duration = Date.now() - trace.startTime;
-    this.recordMetric(`trace.${trace.name}.duration`, duration, {
-      type: trace.type || "timing",
-    });
-  }
-
-  recordMetric(name, value, metadata = {}) {
-    const metric = {
-      name,
-      value,
-      timestamp: Date.now(),
-      ...metadata,
-    };
-
-    // Store metric
-    if (!this.metrics.has(name)) {
-      this.metrics.set(name, []);
-    }
-    const metrics = this.metrics.get(name);
-    metrics.push(metric);
-
-    // Keep only last 100 metrics per name to prevent memory leaks
-    if (metrics.length > 100) {
-      metrics.shift();
-    }
-
-    // Log metric for debugging (only in development)
-    if (process.env.NODE_ENV === "development") {
-      console.debug(`[Metric] ${name}: ${value}`, metadata);
-    }
+    console.debug(`[TRACE] ${trace.name} completed in ${duration}ms`);
   }
 
   reportError(error, context) {
@@ -64,12 +42,34 @@ export class UnifiedMonitor {
     });
   }
 
+  recordMetric(name, value, tags) {
+    // Simple implementation - in production this would integrate with monitoring services
+    if (typeof console !== "undefined") {
+      console.debug(`[METRIC] ${name}: ${value}`, tags || {});
+    }
+
+    // Store metrics for potential retrieval
+    if (!this.metrics) {
+      this.metrics = new Map();
+    }
+    this.metrics.set(name, { value, tags, timestamp: Date.now() });
+  }
+
+  captureMessage(message, level = "info", extra) {
+    console.log(`[${level.toUpperCase()}] ${message}`, extra || {});
+  }
+
+  captureException(error, context) {
+    console.error("Exception captured:", error, context || {});
+    this.reportError(error, context);
+  }
+
   setUserContext(context) {
     this.userContext = context;
   }
 
   getMetrics(name) {
-    return this.metrics.get(name) || [];
+    return this.metrics.get(name) || null;
   }
 
   getAllMetrics() {
