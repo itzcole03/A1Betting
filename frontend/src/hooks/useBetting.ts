@@ -39,7 +39,7 @@ export const useValueBets = (filters?: {
   bookmaker?: string;
 }) => {
   const {
-    data: valueBets = [],
+    data: valueBetsData = [],
     isLoading,
     error,
     refetch,
