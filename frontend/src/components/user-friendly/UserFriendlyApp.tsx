@@ -266,16 +266,8 @@ export const UserFriendlyApp: React.FC = () => {
     if (accuracyError) console.log("[Debug] Accuracy error:", accuracyError);
   }, [healthError, analyticsError, userError, accuracyError]);
 
-  // Check if backend is offline - detect when we're getting error responses or specific error patterns
-  const isOffline =
-    healthError ||
-    analyticsError ||
-    userError ||
-    accuracyError ||
-    healthStatus?.status === "offline" ||
-    (userProfile?.name === "User" &&
-      userAnalytics?.current_balance === 0 &&
-      accuracyMetrics?.overall_accuracy === 0);
+  // Check if backend is offline - only check health endpoint, other services can have fallbacks
+  const isOffline = healthError || healthStatus?.status === "offline";
 
   console.log("[Debug] Offline status:", isOffline, {
     healthError: !!healthError,
