@@ -84,7 +84,7 @@ export const calculateBettingStrategy = async (
       risk_level: request.riskLevel,
     };
     // Backend returns List[BackendStrategyBet]
-    const response = await post<BackendStrategyBet[]>(
+    const response = await axios.post<BackendStrategyBet[]>(
       endpoint,
       backendRequestPayload,
     );
