@@ -418,11 +418,8 @@ export const UserFriendlyApp: React.FC = () => {
                 </motion.div>
 
                 <div>
-                  <h1 className="text-2xl font-black bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 bg-clip-text text-transparent drop-shadow-2xl relative">
+                  <h1 className="text-2xl font-black text-cyan-400 bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 bg-clip-text drop-shadow-2xl relative">
                     <span className="relative z-10">A1BETTING</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 bg-clip-text text-transparent blur-sm opacity-50">
-                      A1BETTING
-                    </div>
                   </h1>
                   <p className="text-xs text-cyan-300/80 uppercase tracking-wider font-semibold">
                     Quantum Intelligence Platform
