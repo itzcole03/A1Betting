@@ -45,8 +45,24 @@ export const useValueBets = (filters?: {
     refetch,
   } = useQuery({
     queryKey: ["valueBets", filters],
-    queryFn: () =>
-      api.getBettingOpportunities(filters?.sport, filters?.limit || 10),
+    queryFn: async () => {
+      const opportunities = await api.getBettingOpportunities(
+        filters?.sport,
+        filters?.limit || 10,
+      );
+      // Map betting opportunities to ValueBet format
+      return opportunities.map((opp: any) => ({
+        id: opp.id,
+        sport: opp.sport,
+        event: opp.event,
+        market: opp.market,
+        odds: opp.odds,
+        probability: opp.probability,
+        expected_value: opp.expected_value,
+        confidence: opp.confidence,
+        recommendation: opp.recommendation,
+      })) as ValueBet[];
+    },
     refetchInterval: 30000, // Refetch every 30 seconds
     staleTime: 10000, // Data is fresh for 10 seconds
     retry: false, // Don't retry on error
