@@ -33,7 +33,7 @@ export const fetchSocialSentiment = async (topic) => {
       );
     }
     const endpoint = `${SENTIMENT_BACKEND_PREFIX}/${encodeURIComponent(topic)}`;
-    const response = await get(endpoint);
+    const response = await axios.get(endpoint);
     if (trace) {
       trace.setHttpStatus(response.status);
       unifiedMonitor.endTrace(trace);
