@@ -132,24 +132,15 @@ export const UserFriendlyDashboard: React.FC<{
     queryClient.invalidateQueries();
   };
 
-  // Convert value bets to live games format
-  const liveGames: LiveGame[] =
-    valueBets?.slice(0, 6).map((bet, index) => ({
+  // Convert value bets to live games format - memoized to prevent re-renders
+  const liveGames: LiveGame[] = useMemo(() => {
+    const now = new Date();
+    return (valueBets || []).slice(0, 6).map((bet, index) => ({
       id: bet.event + index,
       teams: bet.event,
       time: new Date(bet.commence_time).toLocaleTimeString(),
-      aiPick: `${bet.outcome} (${bet.odds}) - Edge: ${(bet.edge * 100).toFixed(1)}%`,
-      confidence: bet.model_prob * 100,
-      status: new Date(bet.commence_time) > new Date() ? "upcoming" : "live",
-    })) || [];
-
-  // Memoize processed bets to prevent re-renders from new Date() calls
-  const processedBets = useMemo(() => {
-    const now = new Date();
-    return (valueBets || []).slice(0, 5).map((bet: any) => ({
-      ...bet,
-      edge: bet.expected_value || 0,
-      confidence: bet.model_prob * 100,
+      aiPick: `${bet.outcome} (${bet.odds}) - Edge: ${((bet.edge || 0) * 100).toFixed(1)}%`,
+      confidence: (bet.model_prob || 0) * 100,
       status: new Date(bet.commence_time) > now ? "upcoming" : "live",
     }));
   }, [valueBets]);
