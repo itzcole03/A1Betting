@@ -991,27 +991,32 @@ export const AdvancedIntelligenceHub: React.FC = () => {
       {/* Real-time Ensemble Output */}
       <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-yellow-400" />
-            Live Ensemble Predictions
-            <Badge variant="outline" className="ml-auto">
-              {ensembleOutput?.predictions.length || 0} Active
-            </Badge>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setIsQuantumMode(!isQuantumMode)}
-              className={`ml-2 ${isQuantumMode ? "bg-pink-500/20 border-pink-500/50" : ""}`}
-            >
-              {isQuantumMode ? (
-                <Atom className="w-4 h-4 mr-1 animate-spin" />
-              ) : (
-                <Binary className="w-4 h-4 mr-1" />
-              )}
-              {isQuantumMode ? "Quantum" : "Classical"}
-            </Button>
-            {/* Refresh Controls */}
-            <div className="flex items-center gap-2 ml-4">
+          <CardTitle className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-yellow-400" />
+              Live Ensemble Predictions
+              <Badge variant="outline">
+                {ensembleOutput?.predictions.length || 0} Active
+              </Badge>
+            </div>
+
+            <div className="flex items-center gap-2 ml-auto">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setIsQuantumMode(!isQuantumMode)}
+                className={`${isQuantumMode ? "bg-pink-500/20 border-pink-500/50" : ""}`}
+              >
+                {isQuantumMode ? (
+                  <Atom className="w-4 h-4 mr-1 animate-spin" />
+                ) : (
+                  <Binary className="w-4 h-4 mr-1" />
+                )}
+                {isQuantumMode ? "Quantum" : "Classical"}
+              </Button>
+
+              {/* Refresh Controls */}
+              <div className="flex items-center gap-1 relative z-10">
               <Button
                 size="sm"
                 variant="outline"
