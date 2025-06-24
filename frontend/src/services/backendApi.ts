@@ -451,6 +451,14 @@ class BackendApiService {
     sport?: string,
     limit?: number,
   ): Promise<{ predictions: Prediction[]; total_count: number }> {
+    if (this.useMockService) {
+      const result = await cloudMockService.getPredictions();
+      let filtered = result.predictions;
+      if (sport) filtered = result.predictions.filter((p) => p.sport === sport);
+      if (limit) filtered = filtered.slice(0, limit);
+      return { predictions: filtered, total_count: filtered.length };
+    }
+
     try {
       const params: any = {};
       if (sport) params.sport = sport;
