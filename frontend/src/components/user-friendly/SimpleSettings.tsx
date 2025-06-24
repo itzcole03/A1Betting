@@ -482,7 +482,8 @@ export const SimpleSettings: React.FC<SimpleSettingsProps> = ({
             >
               Check the Admin Panel
             </button>{" "}
-            or use the Advanced Mode toggle (🔄) in the header.
+            or use the Advanced Mode toggle (🔄) in the header for developer
+            features.
           </p>
         </motion.div>
       </div>
