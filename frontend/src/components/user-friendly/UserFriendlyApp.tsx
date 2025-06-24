@@ -1116,7 +1116,7 @@ export const UserFriendlyApp: React.FC = () => {
           </AnimatePresence>
 
           {/* Main Content */}
-          <main className="flex-1 min-h-screen">
+          <main className="flex-1 min-h-screen pt-4">
             <div className="p-6">
               {/* Temporarily disable animations for debugging */}
               <div>
