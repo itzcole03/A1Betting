@@ -32,6 +32,7 @@ import PrizePicksPro from "./PrizePicksPro";
 import PropOllama from "./PropOllama";
 import UserFriendlyDashboard from "./UserFriendlyDashboard";
 import Settings from "./Settings";
+import SettingsTest from "./SettingsTest";
 // Import advanced dashboard
 import UltraAdvancedMLDashboard from "../ml/UltraAdvancedMLDashboard";
 // Import ultra-accuracy component
@@ -359,7 +360,7 @@ export const UserFriendlyApp: React.FC = () => {
       id: "settings",
       label: "Settings",
       icon: <SettingsIcon className="w-5 h-5" />,
-      component: Settings,
+      component: SettingsTest,
     },
     {
       id: "backend-test",
