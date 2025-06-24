@@ -144,9 +144,10 @@ export const Settings: React.FC = () => {
   const [isComponentReady, setIsComponentReady] = useState(false);
 
   useEffect(() => {
-    const initializeSettings = async () => {
+    // Simple initialization with immediate readiness
+    const initializeSettings = () => {
       try {
-        // Try to get Ultra Accuracy stats
+        // Try to get Ultra Accuracy stats synchronously
         if (
           typeof ultraAccuracyIntegrationService !== "undefined" &&
           ultraAccuracyIntegrationService.getLiveStats
@@ -169,12 +170,13 @@ export const Settings: React.FC = () => {
         }
       } catch (error) {
         console.warn("Ultra Accuracy service unavailable, using defaults");
-      } finally {
-        // Always mark component as ready
-        setIsComponentReady(true);
       }
+
+      // Mark component as ready immediately
+      setIsComponentReady(true);
     };
 
+    // Initialize immediately
     initializeSettings();
 
     // Set up periodic updates only if service is available
@@ -192,7 +194,7 @@ export const Settings: React.FC = () => {
       } catch (error) {
         // Silently ignore errors during updates
       }
-    }, 30000); // Update every 30 seconds instead of 5
+    }, 30000);
 
     return () => clearInterval(interval);
   }, []);
