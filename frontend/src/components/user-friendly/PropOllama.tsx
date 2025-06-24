@@ -180,16 +180,51 @@ export const PropOllama: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Use real LLM service to generate response
-      const aiResponse = await llmService.processChatMessage(messageContent, {
-        previousMessages: messages,
-        gameData: liveData,
-        userPreferences: {
-          riskTolerance: "moderate",
-          preferredSports: ["NBA", "NFL"],
-          betTypes: ["player_props", "game_totals"],
-        },
-      });
+      // Try to use enhanced Ollama service first, fallback to basic LLM service
+      let aiResponse;
+
+      try {
+        // Use Ollama service for real AI analysis
+        const ollamaResponse = await ollamaLLMService.generateResponse({
+          message: messageContent,
+          context: {
+            previousMessages: messages.slice(-3), // Last 3 messages for context
+            gameData: liveData,
+            userPreferences: {
+              riskTolerance: "moderate",
+              preferredSports: ["NBA", "NFL"],
+              betTypes: ["player_props", "game_totals"],
+            },
+          },
+          analysisType: detectAnalysisType(messageContent),
+        });
+
+        aiResponse = {
+          content: ollamaResponse.content,
+          confidence: ollamaResponse.confidence / 100,
+          suggestions: ollamaResponse.suggestions,
+        };
+
+        // Show connection status in successful responses
+        if (ollamaResponse.model_used !== "offline_fallback") {
+          console.log(
+            `🤖 PropOllama using model: ${ollamaResponse.model_used} (${ollamaResponse.response_time}ms)`,
+          );
+        }
+      } catch (ollamaError) {
+        console.warn("Ollama service failed, using fallback:", ollamaError);
+
+        // Fallback to basic LLM service
+        aiResponse = await llmService.processChatMessage(messageContent, {
+          previousMessages: messages,
+          gameData: liveData,
+          userPreferences: {
+            riskTolerance: "moderate",
+            preferredSports: ["NBA", "NFL"],
+            betTypes: ["player_props", "game_totals"],
+          },
+        });
+      }
 
       const aiMessage: Message = {
         id: `ai-${Date.now()}`,
