@@ -107,8 +107,8 @@ export const triggerScrapingJob = async (
     if (params.toString()) endpoint += `?${params.toString()}`;
 
     // Backend endpoint is POST, but parameters are query parameters for the mock.
-    // If it were a true POST with body, it'd be: post<BackendScrapingJobStatus>(endpoint, { job_type, league, target_date })
-    const response = await post<BackendScrapingJobStatus>(endpoint, null); // Sending null body as params are in URL
+    // If it were a true POST with body, it'd be: axios.post<BackendScrapingJobStatus>(endpoint, { job_type, league, target_date })
+    const response = await axios.post<BackendScrapingJobStatus>(endpoint, null); // Sending null body as params are in URL
 
     if (trace) {
       trace.setHttpStatus(response.status);
