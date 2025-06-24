@@ -289,6 +289,13 @@ export const UserFriendlyApp: React.FC = () => {
       component: UltraAccuracyDashboard,
       badge: "99%+",
     },
+    {
+      id: "backend-test",
+      label: "Backend Status",
+      icon: <Search className="w-5 h-5" />,
+      component: BackendConnectionTest,
+      badge: isOffline ? "ERROR" : "OK",
+    },
   ];
 
   const currentItem = navigationItems.find((item) => item.id === currentPage);
