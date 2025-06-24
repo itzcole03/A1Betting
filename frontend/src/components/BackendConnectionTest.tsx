@@ -116,6 +116,9 @@ export const BackendConnectionTest: React.FC = () => {
       {/* Development Setup Guide */}
       <DevelopmentGuide />
 
+      {/* Enhanced Features Status */}
+      <EnhancedFeaturesStatus />
+
       {/* Simple-to-Advanced Integration Status */}
       <SimpleAdvancedIntegrationStatus />
 
