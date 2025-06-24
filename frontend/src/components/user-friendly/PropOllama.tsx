@@ -236,7 +236,7 @@ export const PropOllama: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Try to use enhanced Ollama service first, fallback to basic LLM service
+      // Use enhanced Ollama service
       let aiResponse;
 
       try {
@@ -268,9 +268,9 @@ export const PropOllama: React.FC = () => {
           );
         }
       } catch (ollamaError) {
-        console.warn("Ollama service failed, using fallback:", ollamaError);
+        console.warn("Ollama service failed:", ollamaError);
 
-        // Fallback to basic LLM service
+        // Use basic LLM service
         aiResponse = await llmService.processChatMessage(messageContent, {
           previousMessages: messages,
           gameData: liveData,
