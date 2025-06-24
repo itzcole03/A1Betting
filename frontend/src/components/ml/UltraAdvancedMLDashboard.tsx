@@ -65,7 +65,6 @@ import SafeChart from "../ui/SafeChart";
 import { api } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
 import OfflineIndicator from "../ui/OfflineIndicator";
-import BackendControl from "../ui/BackendControl";
 import AdminSettings from "../admin/AdminSettings";
 import toast from "react-hot-toast";
 
