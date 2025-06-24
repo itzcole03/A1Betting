@@ -801,8 +801,69 @@ const UltraAdvancedMLDashboard: React.FC = () => {
                           options={{
                             responsive: true,
                             maintainAspectRatio: false,
-                            plugins: { legend: { position: "top" } },
-                            scales: { r: { beginAtZero: true, max: 100 } },
+                            plugins: {
+                              legend: {
+                                position: "top",
+                                labels: {
+                                  color: "#e5e7eb",
+                                  font: {
+                                    size: 11,
+                                    family:
+                                      "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                                  },
+                                  usePointStyle: true,
+                                  padding: 15,
+                                },
+                              },
+                              tooltip: {
+                                backgroundColor: "rgba(0, 0, 0, 0.9)",
+                                titleColor: "#e5e7eb",
+                                bodyColor: "#e5e7eb",
+                                borderColor: "#22c55e",
+                                borderWidth: 1,
+                                titleFont: {
+                                  size: 12,
+                                  family:
+                                    "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                                },
+                                bodyFont: {
+                                  size: 11,
+                                  family:
+                                    "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                                },
+                              },
+                            },
+                            scales: {
+                              r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                  color: "#9ca3af",
+                                  font: {
+                                    size: 10,
+                                    family:
+                                      "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                                  },
+                                  backdropColor: "transparent",
+                                  stepSize: 25,
+                                },
+                                pointLabels: {
+                                  color: "#e5e7eb",
+                                  font: {
+                                    size: 11,
+                                    weight: "500",
+                                    family:
+                                      "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                                  },
+                                },
+                                grid: {
+                                  color: "rgba(156, 163, 175, 0.3)",
+                                },
+                                angleLines: {
+                                  color: "rgba(156, 163, 175, 0.3)",
+                                },
+                              },
+                            },
                           }}
                         />
                       </div>
