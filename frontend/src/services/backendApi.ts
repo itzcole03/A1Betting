@@ -150,7 +150,11 @@ class BackendApiService {
   }
 
   private initializeWebSocket() {
-    const wsUrl = import.meta.env.VITE_WEBSOCKET_URL || "ws://localhost:8000";
+    // Use relative WebSocket URL to leverage Vite's proxy
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const wsUrl =
+      import.meta.env.VITE_WEBSOCKET_URL ||
+      `${protocol}//${window.location.host}/ws`;
 
     try {
       this.wsConnection = new WebSocket(wsUrl);
