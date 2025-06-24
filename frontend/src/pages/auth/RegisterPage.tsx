@@ -1,34 +1,42 @@
-import React from 'react';
-import { useState } from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { Box, Button, TextField, Link, Typography, Alert, Grid } from '@mui/material';
-import { useStore } from '@/store';
-import { apiService } from '@/services/api';
+import React from "react";
+import { useState } from "react";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import {
+  Box,
+  Button,
+  TextField,
+  Link,
+  Typography,
+  Alert,
+  Grid,
+} from "@mui/material";
+import { useStore } from "@/store";
+import { ApiService } from "@/services/api";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const setUser = useStore(state => state.setUser);
+  const setUser = useStore((state) => state.setUser);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
@@ -42,16 +50,16 @@ export default function RegisterPage() {
         password: formData.password,
       });
       setUser(user);
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (err) {
-      setError('Failed to create account. Please try again.');
+      setError("Failed to create account. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Box component="form" sx={{ width: '100%' }} onSubmit={handleSubmit}>
+    <Box component="form" sx={{ width: "100%" }} onSubmit={handleSubmit}>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
@@ -130,12 +138,12 @@ export default function RegisterPage() {
         type="submit"
         variant="contained"
       >
-        {isLoading ? 'Creating Account...' : 'Sign Up'}
+        {isLoading ? "Creating Account..." : "Sign Up"}
       </Button>
 
-      <Box sx={{ textAlign: 'center' }}>
+      <Box sx={{ textAlign: "center" }}>
         <Typography variant="body2">
-          Already have an account?{' '}
+          Already have an account?{" "}
           <Link component={RouterLink} to="/login" variant="body2">
             Sign in
           </Link>
