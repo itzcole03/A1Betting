@@ -767,13 +767,10 @@ export const UserFriendlyApp: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-green-500/5" />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent animate-pulse" />
           <div className="relative max-w-7xl mx-auto px-6 text-center text-sm text-gray-400">
-            <div className="bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 bg-clip-text text-transparent font-bold mb-2 text-lg drop-shadow-2xl relative">
+            <div className="text-cyan-400 bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 bg-clip-text font-bold mb-2 text-lg drop-shadow-2xl relative">
               <span className="relative z-10">
                 A1BETTING QUANTUM INTELLIGENCE
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 bg-clip-text text-transparent blur-sm opacity-50">
-                A1BETTING QUANTUM INTELLIGENCE
-              </div>
             </div>
             <div className="text-cyan-300/60 font-medium">
               © 2024 Advanced Sports Intelligence Platform • Auto-Optimizing AI
