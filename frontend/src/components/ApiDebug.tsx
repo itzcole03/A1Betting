@@ -33,6 +33,15 @@ export const ApiDebug: React.FC = () => {
     setIsRunning(true);
     setResults([]);
 
+    // First, get connection status
+    try {
+      const status = await backendApi.getConnectionStatus();
+      setConnectionStatus(status);
+      console.log("[Debug] Connection status:", status);
+    } catch (error) {
+      console.error("[Debug] Failed to get connection status:", error);
+    }
+
     for (const test of testEndpoints) {
       const startTime = Date.now();
       try {
