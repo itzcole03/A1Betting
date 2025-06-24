@@ -6,7 +6,8 @@ import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseSettings, field_validator
+from pydantic import field_validator
+from pydantic_settings import BaseSettings
 
 logger = logging.getLogger(__name__)
 
