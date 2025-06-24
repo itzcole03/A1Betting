@@ -44,7 +44,7 @@ interface UltraAccuracyStatus {
   predictionQuality: number;
 }
 
-class UltraAccuracyIntegrationService extends EventEmitter {
+class UltraAccuracyIntegrationService extends SimpleEventEmitter {
   private static instance: UltraAccuracyIntegrationService;
   private status: UltraAccuracyStatus;
   private integrationCheckInterval: NodeJS.Timeout | null = null;
