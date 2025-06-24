@@ -338,7 +338,7 @@ export const UserFriendlyApp: React.FC = () => {
       id: "analytics",
       label: "Analytics",
       icon: <BarChart3 className="w-5 h-5" />,
-      component: UserFriendlyDashboard, // Placeholder - will show analytics view
+      component: UserFriendlyDashboard, // Will show analytics view
     },
     {
       id: "ultra-accuracy",
