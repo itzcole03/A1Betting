@@ -1820,18 +1820,6 @@ const UltraAdvancedMLDashboard: React.FC = () => {
           )}
         </main>
       </div>
-
-      {/* Backend Control - positioned absolutely */}
-      <div className="fixed bottom-4 right-4 z-50">
-        <BackendControl
-          isOffline={!!isOffline}
-          onStatusChange={(isOnline) => {
-            if (isOnline) {
-              queryClient.invalidateQueries();
-            }
-          }}
-        />
-      </div>
     </div>
   );
 };
