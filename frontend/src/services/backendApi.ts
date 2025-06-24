@@ -127,8 +127,8 @@ class BackendApiService {
 
     if (!baseURL) {
       if (isCloudEnvironment) {
-        // In cloud, use relative URLs which will be proxied
-        baseURL = "";
+        // In cloud, try direct localhost first, then fallback to deployed backend
+        baseURL = "http://localhost:8000";
       } else if (isDevelopment) {
         // In development, use relative URLs to leverage Vite proxy
         baseURL = "";
