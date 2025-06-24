@@ -15,8 +15,6 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { api } from "../../services/integrationService";
-import { ultraAccuracyIntegrationService } from "../../services/UltraAccuracyIntegrationService";
-import OfflineIndicator from "../ui/OfflineIndicator";
 import toast from "react-hot-toast";
 
 interface UserSettings {
