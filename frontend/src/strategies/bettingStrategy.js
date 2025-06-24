@@ -43,7 +43,7 @@ export const calculateBettingStrategy = async (request) => {
       risk_level: request.riskLevel,
     };
     // Backend returns List[BackendStrategyBet]
-    const response = await post(endpoint, backendRequestPayload);
+    const response = await axios.post(endpoint, backendRequestPayload);
     if (trace) {
       trace.setHttpStatus(response.status);
       unifiedMonitor.endTrace(trace);
