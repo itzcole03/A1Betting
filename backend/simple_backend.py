@@ -36,12 +36,17 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Add CORS middleware
+# Add CORS middleware for cloud frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "*",  # Allow all for development
+        "https://7fb6bf6978914ca48f089e6151180b03-a1b171efc67d4aea943f921a9.fly.dev",  # Cloud frontend
+        "http://localhost:5173",  # Local development
+        "http://192.168.1.125:5173",  # Local network access
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -65,7 +70,7 @@ mock_betting_opportunities = [
     },
     {
         "id": "py_opp_2",
-        "sport": "football", 
+        "sport": "football",
         "event": "Chiefs vs Bills",
         "market": "Over/Under 47.5",
         "odds": 1.91,
@@ -107,7 +112,7 @@ async def health_check():
         uptime=uptime,
         services={
             "api": "operational",
-            "predictions": "operational", 
+            "predictions": "operational",
             "analytics": "operational"
         }
     )
@@ -124,7 +129,7 @@ async def get_arbitrage_opportunities():
             "sport": "basketball",
             "event": "Celtics vs Heat",
             "bookmaker_a": "DraftKings",
-            "bookmaker_b": "FanDuel", 
+            "bookmaker_b": "FanDuel",
             "odds_a": 2.1,
             "odds_b": 1.95,
             "profit_margin": 0.025,
@@ -208,7 +213,7 @@ if __name__ == "__main__":
     print("🐍 Starting A1Betting Simple Python Backend...")
     print("📊 Features: Basic API endpoints, CORS enabled, Mock data")
     print("🔗 Frontend integration ready")
-    
+
     uvicorn.run(
         "simple_backend:app",
         host="0.0.0.0",
