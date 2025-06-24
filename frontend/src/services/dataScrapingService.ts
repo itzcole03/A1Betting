@@ -41,7 +41,7 @@ export const fetchDailyFantasyProjections = async (
     if (league) params.append("league", league);
     if (params.toString()) endpoint += `?${params.toString()}`;
 
-    const response = await get<BackendDFPResponseItem[]>(endpoint);
+    const response = await axios.get<BackendDFPResponseItem[]>(endpoint);
 
     if (trace) {
       trace.setHttpStatus(response.status);
