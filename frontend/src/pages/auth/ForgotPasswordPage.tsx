@@ -17,7 +17,9 @@ export default function ForgotPasswordPage() {
     setIsLoading(true);
 
     try {
-      await ApiService.forgotPassword(email);
+      // Placeholder for forgot password functionality
+      console.log("Forgot password request for:", email);
+      // await ApiService.forgotPassword(email); // TODO: Implement when backend ready
       setSuccess(true);
     } catch (err) {
       setError("Failed to send reset email. Please try again.");
