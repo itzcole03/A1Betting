@@ -269,12 +269,12 @@ export const UserFriendlyApp: React.FC = () => {
   // Check if backend is offline - only check health endpoint, other services can have fallbacks
   const isOffline = healthError || healthStatus?.status === "offline";
 
-  console.log("[Debug] Offline status:", isOffline, {
-    healthError: !!healthError,
-    analyticsError: !!analyticsError,
-    userError: !!userError,
-    accuracyError: !!accuracyError,
+  console.log("[Debug] Backend Status Check:", {
+    isOffline,
+    healthError: healthError ? healthError.message : null,
     healthStatus: healthStatus?.status,
+    baseURL: "http://192.168.1.125:8000",
+    timestamp: new Date().toISOString(),
   });
 
   // Handle retry functionality
