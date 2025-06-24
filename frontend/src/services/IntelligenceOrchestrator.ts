@@ -52,11 +52,9 @@ export interface AutomationSettings {
 
 export class IntelligenceOrchestrator {
   private static instance: IntelligenceOrchestrator;
-  private readonly eventBus: EventBus;
-  private readonly logger: UnifiedLogger;
   private readonly predictionEngine: UnifiedPredictionEngine;
   private readonly strategyEngine: UnifiedStrategyEngine;
-  // Note: dataEngine is the singleton instance, not a class
+  // Note: dataEngine, eventBus, and logger are available as singleton instances
 
   private isInitialized = false;
   private isOptimizing = false;
