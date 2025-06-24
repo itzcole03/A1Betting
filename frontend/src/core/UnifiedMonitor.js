@@ -47,8 +47,10 @@ export class UnifiedMonitor {
       metrics.shift();
     }
 
-    // Log metric for debugging
-    console.debug(`[Metric] ${name}: ${value}`, metadata);
+    // Log metric for debugging (only in development)
+    if (process.env.NODE_ENV === "development") {
+      console.debug(`[Metric] ${name}: ${value}`, metadata);
+    }
   }
 
   reportError(error, context) {
@@ -82,11 +84,13 @@ export class UnifiedMonitor {
     }
   }
 }
+
 export const unifiedMonitor = new UnifiedMonitor();
+
 // Example Usage:
 // unifiedMonitor.reportError(new Error('Something went wrong in payment processing'), { orderId: '12345' });
 // unifiedMonitor.setUserContext({ id: 'user-6789', username: 'jane.doe' });
 // const trace = unifiedMonitor.startTrace('checkout_flow', 'user.action');
 // // ... some operations ...
-// unifiedMonitor.recordMetric({ name: 'items_in_cart', value: 3, type: 'gauge'});
+// unifiedMonitor.recordMetric('items_in_cart', 3, { type: 'gauge'});
 // unifiedMonitor.endTrace(trace);
