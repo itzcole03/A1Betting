@@ -316,10 +316,69 @@ export const UserFriendlyApp: React.FC = () => {
     }
   };
 
-  // Extract real user data from backend
+  // State for user settings
+  const [userSettings, setUserSettings] = useState({
+    name: "User",
+    email: "user@a1betting.com",
+    darkMode: true,
+  });
+
+  // Load user settings from localStorage
+  useEffect(() => {
+    const loadUserSettings = () => {
+      const savedName = localStorage.getItem("a1betting-user-name");
+      const savedEmail = localStorage.getItem("a1betting-user-email");
+      const savedSettings = localStorage.getItem("a1betting-user-settings");
+
+      if (savedSettings) {
+        try {
+          const parsed = JSON.parse(savedSettings);
+          setUserSettings({
+            name: parsed.profile?.name || savedName || "User",
+            email: parsed.profile?.email || savedEmail || "user@a1betting.com",
+            darkMode: parsed.display?.darkMode ?? true,
+          });
+        } catch (error) {
+          console.warn("Failed to parse user settings:", error);
+        }
+      } else if (savedName || savedEmail) {
+        setUserSettings((prev) => ({
+          ...prev,
+          name: savedName || prev.name,
+          email: savedEmail || prev.email,
+        }));
+      }
+    };
+
+    loadUserSettings();
+
+    // Listen for settings changes
+    const handleSettingsChange = (event: CustomEvent) => {
+      const newSettings = event.detail;
+      setUserSettings({
+        name: newSettings.profile?.name || "User",
+        email: newSettings.profile?.email || "user@a1betting.com",
+        darkMode: newSettings.display?.darkMode ?? true,
+      });
+    };
+
+    window.addEventListener(
+      "settingsChanged",
+      handleSettingsChange as EventListener,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "settingsChanged",
+        handleSettingsChange as EventListener,
+      );
+    };
+  }, []);
+
+  // Extract real user data from backend, with settings override for display name
   const user: UserData = {
-    name: userProfile?.name || "User",
-    email: userProfile?.email || "user@a1betting.com",
+    name: userSettings.name || userProfile?.name || "User",
+    email: userSettings.email || userProfile?.email || "user@a1betting.com",
     balance: userAnalytics?.current_balance || 0,
     tier: userProfile?.tier || "Free",
     winRate: accuracyMetrics?.overall_accuracy * 100 || 0,
