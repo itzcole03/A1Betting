@@ -37,12 +37,17 @@ app = FastAPI(
     openapi_url="/openapi.json",
 )
 
-# Add CORS middleware
+# Add CORS middleware for cloud frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "*",  # Allow all for development
+        "https://7fb6bf6978914ca48f089e6151180b03-a1b171efc67d4aea943f921a9.fly.dev",  # Cloud frontend
+        "http://localhost:5173",  # Local development
+        "http://192.168.1.125:5173",  # Local network access
+    ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -92,7 +97,7 @@ class EnhancedPrediction(BaseModel):
 
 class AIExplainabilityEngine:
     """Enhanced AI explainability for sports betting predictions"""
-    
+
     def __init__(self):
         self.model_explanations = {
             'recent_form': 'How well the team/player has performed in recent games',
@@ -105,31 +110,31 @@ class AIExplainabilityEngine:
             'defensive_efficiency': 'How well teams prevent opponent scoring',
             'offensive_efficiency': 'How well teams/players score points'
         }
-    
+
     def generate_prediction_explanation(self, prediction_data: Dict[str, Any]) -> str:
         """Generate human-readable explanation for predictions"""
         confidence = prediction_data.get('confidence', 0)
         sport = prediction_data.get('sport', 'unknown')
         prediction = prediction_data.get('prediction', 'unknown')
         shap_values = prediction_data.get('shap_values', {})
-        
+
         explanation = f"🎯 **{sport.upper()} PREDICTION ANALYSIS**\n\n"
         explanation += f"**Prediction**: {prediction}\n"
         explanation += f"**Confidence**: {int(confidence * 100)}%\n\n"
-        
+
         explanation += "**Key Factors Influencing This Prediction:**\n"
-        
+
         # Sort SHAP values by importance
         if shap_values:
             sorted_features = sorted(shap_values.items(), key=lambda x: abs(x[1]), reverse=True)
-            
+
             for i, (feature, value) in enumerate(sorted_features[:5]):
                 impact = "Strongly supports" if value > 0.1 else "Supports" if value > 0 else "Opposes" if value > -0.1 else "Strongly opposes"
                 explanation_text = self.model_explanations.get(feature, f"Statistical factor: {feature}")
                 explanation += f"{i+1}. **{feature.replace('_', ' ').title()}** ({impact})\n"
                 explanation += f"   {explanation_text}\n"
                 explanation += f"   Impact strength: {abs(value):.3f}\n\n"
-        
+
         # Add confidence assessment
         if confidence >= 0.8:
             explanation += "🟢 **High Confidence**: Strong statistical evidence supports this prediction\n"
@@ -137,9 +142,9 @@ class AIExplainabilityEngine:
             explanation += "🟡 **Medium Confidence**: Good statistical support with some uncertainty\n"
         else:
             explanation += "🟠 **Lower Confidence**: Limited statistical evidence, proceed with caution\n"
-        
+
         explanation += "\n⚠️ *Remember: No prediction is guaranteed. Always bet responsibly.*"
-        
+
         return explanation
 
 # ============================================================================
@@ -148,18 +153,18 @@ class AIExplainabilityEngine:
 
 class PropOllamaEngine:
     """Advanced AI chat engine for sports betting analysis"""
-    
+
     def __init__(self):
         self.explainability_engine = AIExplainabilityEngine()
         self.context_memory = {}
-    
+
     async def process_chat_message(self, request: PropOllamaRequest) -> PropOllamaResponse:
         """Process chat message with AI analysis"""
         start_time = time.time()
-        
+
         message = request.message.lower()
         analysis_type = request.analysisType or self.detect_analysis_type(message)
-        
+
         # Generate contextual response based on analysis type
         if 'prop' in message or analysis_type == 'prop':
             response = await self.analyze_player_props(request)
@@ -171,9 +176,9 @@ class PropOllamaEngine:
             response = await self.provide_strategy_advice(request)
         else:
             response = await self.general_analysis(request)
-        
+
         response_time = int((time.time() - start_time) * 1000)
-        
+
         return PropOllamaResponse(
             content=response['content'],
             confidence=response['confidence'],
@@ -183,7 +188,7 @@ class PropOllamaEngine:
             analysis_type=analysis_type,
             shap_explanation=response.get('shap_explanation')
         )
-    
+
     def detect_analysis_type(self, message: str) -> str:
         """Detect the type of analysis requested"""
         if any(word in message for word in ['prop', 'player', 'points', 'assists', 'rebounds']):
@@ -195,7 +200,7 @@ class PropOllamaEngine:
         elif any(word in message for word in ['strategy', 'bankroll', 'kelly', 'manage']):
             return 'strategy'
         return 'general'
-    
+
     async def analyze_player_props(self, request: PropOllamaRequest) -> Dict[str, Any]:
         """Analyze player prop bets with AI explainability"""
         return {
@@ -225,7 +230,7 @@ Focus on LeBron points prop - highest confidence with good value.""",
             'confidence': 78,
             'suggestions': [
                 'Analyze specific player matchups',
-                'Check injury reports', 
+                'Check injury reports',
                 'Compare prop odds across books',
                 'Show SHAP feature importance'
             ],
@@ -236,7 +241,7 @@ Focus on LeBron points prop - highest confidence with good value.""",
                 'team_motivation': 0.20
             }
         }
-    
+
     async def explain_predictions(self, request: PropOllamaRequest) -> Dict[str, Any]:
         """Provide detailed SHAP explanations for predictions"""
         sample_prediction = {
@@ -252,9 +257,9 @@ Focus on LeBron points prop - highest confidence with good value.""",
                 'defensive_efficiency': 0.21
             }
         }
-        
+
         explanation = self.explainability_engine.generate_prediction_explanation(sample_prediction)
-        
+
         return {
             'content': explanation,
             'confidence': 82,
@@ -266,7 +271,7 @@ Focus on LeBron points prop - highest confidence with good value.""",
             ],
             'shap_explanation': sample_prediction['shap_values']
         }
-    
+
     async def analyze_spreads(self, request: PropOllamaRequest) -> Dict[str, Any]:
         """Analyze point spreads with AI insights"""
         return {
@@ -290,7 +295,7 @@ Focus on LeBron points prop - highest confidence with good value.""",
 **AI Model Explanation:**
 The ensemble model combines:
 - Statistical regression (40% weight)
-- Machine learning prediction (35% weight) 
+- Machine learning prediction (35% weight)
 - Market efficiency analysis (25% weight)
 
 **Better Alternative:**
@@ -303,7 +308,7 @@ Consider the UNDER 225.5 total points (73% confidence)""",
                 'Show model breakdown'
             ]
         }
-    
+
     async def provide_strategy_advice(self, request: PropOllamaRequest) -> Dict[str, Any]:
         """Provide betting strategy and bankroll management advice"""
         return {
@@ -321,7 +326,7 @@ Consider the UNDER 225.5 total points (73% confidence)""",
    - Kelly fraction: 0.048
    - Expected ROI: +12.4%
 
-2. **Total Points U225.5** - 2.8% of bankroll  
+2. **Total Points U225.5** - 2.8% of bankroll
    - Kelly fraction: 0.041
    - Expected ROI: +8.7%
 
@@ -346,7 +351,7 @@ Consider the UNDER 225.5 total points (73% confidence)""",
                 'Analyze bet correlation'
             ]
         }
-    
+
     async def general_analysis(self, request: PropOllamaRequest) -> Dict[str, Any]:
         """General sports betting analysis and advice"""
         return {
@@ -375,7 +380,7 @@ Hello! I'm your AI sports betting assistant. I can help you with:
 **Ask me about:**
 - "Analyze tonight's props"
 - "Explain this prediction"
-- "Show me value bets" 
+- "Show me value bets"
 - "What's the best strategy?"
 
 I use advanced machine learning models with explainable AI to give you the reasoning behind every prediction.""",
@@ -446,7 +451,7 @@ async def propollama_status():
         "model_version": "PropOllama_Enhanced_v5.0",
         "features": [
             "SHAP Explainable AI",
-            "Multi-sport Analysis", 
+            "Multi-sport Analysis",
             "Strategy Optimization",
             "Risk Assessment",
             "Real-time Insights"
@@ -464,7 +469,7 @@ async def propollama_status():
 async def get_enhanced_predictions():
     """Get predictions with SHAP explanations"""
     explainability_engine = AIExplainabilityEngine()
-    
+
     sample_predictions = [
         {
             "id": "pred_enhanced_1",
@@ -494,11 +499,11 @@ async def get_enhanced_predictions():
             "recommendation": "STRONG_BUY"
         }
     ]
-    
+
     # Add explanations
     for pred in sample_predictions:
         pred["explanation"] = explainability_engine.generate_prediction_explanation(pred)
-    
+
     return sample_predictions
 
 # Include existing routers if available
@@ -530,7 +535,7 @@ async def startup_event():
 
 if __name__ == "__main__":
     logger.info("🚀 Starting A1Betting Complete Enhanced Backend...")
-    
+
     uvicorn.run(
         "main_complete:app",
         host="0.0.0.0",
