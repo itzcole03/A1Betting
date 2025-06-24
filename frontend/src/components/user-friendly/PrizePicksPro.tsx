@@ -230,8 +230,12 @@ export const PrizePicksPro: React.FC = () => {
     propsError ||
     sportsError ||
     healthError ||
+    enhancedError ||
     (healthStatus && healthStatus.status === "offline") ||
-    (playerProps.length === 0 && !propsLoading);
+    (playerProps.length === 0 &&
+      enhancedProps.length === 0 &&
+      !propsLoading &&
+      !enhancedLoading);
 
   // Handle retry functionality
   const handleRetry = () => {
