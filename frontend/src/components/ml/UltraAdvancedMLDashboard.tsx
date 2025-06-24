@@ -1808,6 +1808,7 @@ const UltraAdvancedMLDashboard: React.FC = () => {
             "predictions",
             "health",
             "research",
+            "backend",
             "admin",
           ].includes(selectedView) && (
             <div className="text-center py-12">
