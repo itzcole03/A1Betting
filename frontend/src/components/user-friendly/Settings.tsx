@@ -56,7 +56,11 @@ interface UserSettings {
   };
 }
 
-export const Settings: React.FC = () => {
+interface SettingsProps {
+  onNavigate?: (page: string) => void;
+}
+
+export const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
   const queryClient = useQueryClient();
   const [settings, setSettings] = useState<UserSettings>({
     profile: {
