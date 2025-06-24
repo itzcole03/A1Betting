@@ -234,14 +234,16 @@ export const UserFriendlyApp: React.FC = () => {
     }
   };
 
-  // Extract real user data or use fallback values only for display
+  // Extract real user data or use fallback values only for display when offline
   const user: UserData = {
-    name: userProfile?.name || "User",
-    email: userProfile?.email || "user@a1betting.com",
-    balance: userAnalytics?.current_balance || 0,
-    tier: userProfile?.tier || "Free",
-    winRate: accuracyMetrics?.overall_accuracy * 100 || 0,
-    totalProfit: userAnalytics?.total_profit || 0,
+    name: isOffline ? "User" : userProfile?.name || "User",
+    email: isOffline
+      ? "user@a1betting.com"
+      : userProfile?.email || "user@a1betting.com",
+    balance: isOffline ? 0 : userAnalytics?.current_balance || 0,
+    tier: isOffline ? "Free" : userProfile?.tier || "Free",
+    winRate: isOffline ? 0 : accuracyMetrics?.overall_accuracy * 100 || 0,
+    totalProfit: isOffline ? 0 : userAnalytics?.total_profit || 0,
   };
 
   // Extract live stats from real API data
