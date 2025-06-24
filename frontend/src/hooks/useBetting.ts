@@ -350,6 +350,18 @@ export const useBetHistory = (userId: string) => {
   }, [betHistory, filters]);
 
   const stats = useMemo(() => {
+    // Ensure filteredHistory is an array before calculations
+    if (!Array.isArray(filteredHistory) || filteredHistory.length === 0) {
+      return {
+        totalBets: 0,
+        wonBets: 0,
+        winRate: 0,
+        totalProfit: 0,
+        totalStaked: 0,
+        roi: 0,
+      };
+    }
+
     const totalBets = filteredHistory.length;
     const wonBets = filteredHistory.filter(
       (bet) => bet.result === "won",
@@ -359,7 +371,7 @@ export const useBetHistory = (userId: string) => {
       0,
     );
     const totalStaked = filteredHistory.reduce(
-      (sum, bet) => sum + bet.stake,
+      (sum, bet) => sum + (bet.stake || 0),
       0,
     );
     const roi = totalStaked > 0 ? (totalProfit / totalStaked) * 100 : 0;
