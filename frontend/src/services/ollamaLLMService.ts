@@ -172,10 +172,28 @@ class OllamaLLMService {
   ): Promise<PropOllamaResponse> {
     const startTime = Date.now();
 
-    if (!this.isConnected) {
-      return this.generateFallbackResponse(request, startTime);
+    // Try direct Ollama connection first
+    if (this.isConnected) {
+      try {
+        return await this.generateDirectOllamaResponse(request, startTime);
+      } catch (error) {
+        console.warn("Direct Ollama failed, trying backend endpoint:", error);
+      }
     }
 
+    // Fallback to backend endpoint
+    try {
+      return await this.generateBackendResponse(request, startTime);
+    } catch (error) {
+      console.warn("Backend endpoint failed, using local fallback:", error);
+      return this.generateFallbackResponse(request, startTime);
+    }
+  }
+
+  private async generateDirectOllamaResponse(
+    request: PropOllamaRequest,
+    startTime: number,
+  ): Promise<PropOllamaResponse> {
     try {
       const enhancedPrompt = this.buildSportsPrompt(request);
 
@@ -357,7 +375,7 @@ Response:`;
   ): PropOllamaResponse {
     const fallbackContent = `🤖 **PropOllama Analysis** (Offline Mode)
 
-I'm currently operating in offline mode as I can't connect to your Ollama models right now. 
+I'm currently operating in offline mode as I can't connect to your Ollama models right now.
 
 For your question: "${request.message}"
 
@@ -366,7 +384,7 @@ While I can't provide real-time AI analysis, here are some general guidelines:
 
 📊 **Always Consider:**
 - Historical performance data
-- Recent team/player trends  
+- Recent team/player trends
 - Injury reports and lineup changes
 - Weather conditions (for outdoor sports)
 - Motivation factors (playoff implications, etc.)
