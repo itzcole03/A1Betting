@@ -46,6 +46,52 @@ export const PropOllama: React.FC = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
+  // Helper function to detect analysis type from user message
+  const detectAnalysisType = (
+    message: string,
+  ): "prop" | "spread" | "total" | "strategy" | "general" => {
+    const lowerMessage = message.toLowerCase();
+
+    if (
+      lowerMessage.includes("prop") ||
+      lowerMessage.includes("player") ||
+      lowerMessage.includes("points") ||
+      lowerMessage.includes("assists") ||
+      lowerMessage.includes("rebounds")
+    ) {
+      return "prop";
+    }
+
+    if (
+      lowerMessage.includes("spread") ||
+      lowerMessage.includes("line") ||
+      lowerMessage.includes("favorite") ||
+      lowerMessage.includes("underdog")
+    ) {
+      return "spread";
+    }
+
+    if (
+      lowerMessage.includes("total") ||
+      lowerMessage.includes("over") ||
+      lowerMessage.includes("under") ||
+      lowerMessage.includes("o/u")
+    ) {
+      return "total";
+    }
+
+    if (
+      lowerMessage.includes("strategy") ||
+      lowerMessage.includes("bankroll") ||
+      lowerMessage.includes("kelly") ||
+      lowerMessage.includes("manage")
+    ) {
+      return "strategy";
+    }
+
+    return "general";
+  };
+
   // Real API data fetching
   const { data: healthStatus, error: healthError } = useQuery({
     queryKey: ["healthStatus"],
