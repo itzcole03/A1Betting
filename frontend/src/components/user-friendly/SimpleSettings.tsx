@@ -116,7 +116,7 @@ export const SimpleSettings: React.FC<SimpleSettingsProps> = ({
         >
           <div className="flex items-center justify-center gap-3 mb-4">
             <SettingsIcon className="w-10 h-10 text-cyan-400" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold text-cyan-400 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text">
               Settings
             </h1>
           </div>
