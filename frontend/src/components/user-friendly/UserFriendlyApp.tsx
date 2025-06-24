@@ -189,26 +189,46 @@ export const UserFriendlyApp: React.FC = () => {
   // Real API data fetching
   const { data: userProfile, error: userError } = useQuery({
     queryKey: ["userProfile"],
-    queryFn: () => api.getUserProfile("default_user"),
+    queryFn: async () => {
+      console.log("[Debug] Fetching user profile...");
+      const result = await api.getUserProfile("default_user");
+      console.log("[Debug] User profile result:", result);
+      return result;
+    },
     retry: false,
   });
 
   const { data: userAnalytics, error: analyticsError } = useQuery({
     queryKey: ["userAnalytics"],
-    queryFn: () => api.getUserAnalytics("default_user"),
+    queryFn: async () => {
+      console.log("[Debug] Fetching user analytics...");
+      const result = await api.getUserAnalytics("default_user");
+      console.log("[Debug] User analytics result:", result);
+      return result;
+    },
     retry: false,
   });
 
   const { data: healthStatus, error: healthError } = useQuery({
     queryKey: ["healthStatus"],
-    queryFn: () => api.getHealthStatus(),
+    queryFn: async () => {
+      console.log("[Debug] Fetching health status...");
+      const result = await api.getHealthStatus();
+      console.log("[Debug] Health status result:", result);
+      return result;
+    },
     refetchInterval: 30000,
     retry: false,
   });
 
   const { data: accuracyMetrics, error: accuracyError } = useQuery({
     queryKey: ["accuracyMetrics"],
-    queryFn: () => api.getAccuracyMetrics(),
+    queryFn: async () => {
+      console.log("[Debug] Fetching accuracy metrics...");
+      const result = await api.getAccuracyMetrics();
+      console.log("[Debug] Accuracy metrics result:", result);
+      return result;
+    },
     refetchInterval: 10000,
     retry: false,
   });
