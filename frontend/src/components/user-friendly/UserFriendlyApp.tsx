@@ -216,6 +216,8 @@ export const UserFriendlyApp: React.FC = () => {
     email: "user@a1betting.com",
     darkMode: true,
   });
+  const [showSearch, setShowSearch] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const queryClient = useQueryClient();
 
   // Initialize settings on app mount
