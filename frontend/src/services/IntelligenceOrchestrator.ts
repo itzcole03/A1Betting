@@ -122,7 +122,7 @@ export class IntelligenceOrchestrator {
         modelsCount: this.activeModels.size,
       });
     } catch (error) {
-      this.logger.error(
+      unifiedLogger.error(
         "Failed to initialize Intelligence Orchestrator",
         error,
       );
