@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import joblib
 import numpy as np
 from cachetools import TTLCache
-from backend.config import config_manager
+from config import config_manager
 from database import db_manager
 from feature_engineering import FeatureEngineering
 from prometheus_client import Counter, Histogram
