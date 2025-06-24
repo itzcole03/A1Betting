@@ -22,6 +22,7 @@ import {
   RealPlayerProp,
 } from "../../services/RealDataManager";
 import { api } from "../../services/api";
+import { getPrizePicksRecommendations } from "../../services/enhancedIntegrationBridge";
 import OfflineIndicator from "../ui/OfflineIndicator";
 import toast from "react-hot-toast";
 
