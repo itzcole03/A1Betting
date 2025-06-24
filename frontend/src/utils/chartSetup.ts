@@ -55,6 +55,12 @@ ChartJS.defaults.plugins.legend.labels.usePointStyle = true;
 ChartJS.defaults.elements.point.radius = 4;
 ChartJS.defaults.elements.point.hoverRadius = 6;
 
+// Improve text rendering
+ChartJS.defaults.font.family =
+  "'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+ChartJS.defaults.font.size = 12;
+ChartJS.defaults.color = "#e5e7eb";
+
 // Theme-aware color scheme
 export const chartTheme = {
   colors: {
