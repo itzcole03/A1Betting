@@ -106,7 +106,10 @@ export const SimpleSettings: React.FC<SimpleSettingsProps> = ({
   };
 
   return (
-    <div className="w-full h-full overflow-auto bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
+    <div
+      className="w-full h-full overflow-auto bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white"
+      style={{ color: "#ffffff" }}
+    >
       <div className="max-w-4xl mx-auto p-6">
         {/* Header */}
         <motion.div
