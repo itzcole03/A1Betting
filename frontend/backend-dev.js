@@ -286,6 +286,88 @@ app.get("/api/analytics/advanced", (req, res) => {
   });
 });
 
+// Ollama LLM endpoints
+app.get("/api/ollama/status", (req, res) => {
+  res.json({
+    connected: false,
+    endpoint: "http://localhost:11434",
+    available_models: [],
+    message:
+      "Ollama not detected. Install Ollama locally to enable AI chat features.",
+    fallback_mode: true,
+  });
+});
+
+app.post("/api/ollama/chat", (req, res) => {
+  const { message, context, analysisType } = req.body;
+
+  // Mock response when Ollama is not available
+  const mockResponse = {
+    content: `🤖 **PropOllama Analysis** (Mock Mode)
+
+Your question: "${message}"
+
+**Quick Analysis:**
+This is a development mock response. To get real AI-powered analysis:
+
+1. **Install Ollama**: Download from https://ollama.ai
+2. **Install a model**: Run \`ollama pull llama3.2\`
+3. **Start Ollama**: Ensure it's running on localhost:11434
+
+**General Betting Advice:**
+- Always practice responsible gambling
+- Never bet more than you can afford to lose
+- Research thoroughly before placing bets
+- Consider using bankroll management strategies
+
+🎯 **Value Betting Tips:**
+- Look for positive expected value (+EV) bets
+- Compare odds across multiple sportsbooks
+- Track your betting performance over time
+- Focus on sports/markets you understand best
+
+*This is a mock response. Real AI analysis requires Ollama installation.*`,
+    confidence: 75,
+    suggestions: [
+      "Install Ollama locally",
+      "Ask about bankroll management",
+      "Learn about value betting",
+      "Explain betting terminology",
+    ],
+    model_used: "development_mock",
+    response_time: 150,
+    analysis_type: analysisType || "general",
+  };
+
+  // Simulate AI thinking time
+  setTimeout(
+    () => {
+      res.json(mockResponse);
+    },
+    1000 + Math.random() * 2000,
+  );
+});
+
+app.get("/api/ollama/models", (req, res) => {
+  res.json({
+    models: [],
+    message:
+      "No Ollama models detected. Install Ollama and download models to enable AI features.",
+    suggested_models: [
+      "llama3.2:latest",
+      "llama3.1:latest",
+      "mistral:latest",
+      "phi3:latest",
+    ],
+    installation_guide: {
+      step1: "Download Ollama from https://ollama.ai",
+      step2: "Install and start Ollama",
+      step3: "Run: ollama pull llama3.2",
+      step4: "Restart your development server",
+    },
+  });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
