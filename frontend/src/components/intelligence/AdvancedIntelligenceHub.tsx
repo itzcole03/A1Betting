@@ -127,6 +127,7 @@ import ShapExplanation from "../analytics/ShapExplanation";
 import ModelComparison from "../analytics/ModelComparison";
 import TimeSeriesInsights from "../analytics/TimeSeriesInsights";
 import { SHAPInsight } from "../analytics/SHAPInsight";
+import TrendAnalysisChart from "../analytics/TrendAnalysisChart";
 
 // Import monitoring modules
 import PerformanceDashboard from "../monitoring/PerformanceDashboard";
