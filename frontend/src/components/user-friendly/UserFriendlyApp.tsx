@@ -221,7 +221,8 @@ export const UserFriendlyApp: React.FC = () => {
       console.log("[Debug] User profile result:", result);
       return result;
     },
-    retry: false,
+    retry: 2,
+    retryDelay: 1000,
   });
 
   const { data: userAnalytics, error: analyticsError } = useQuery({
@@ -232,7 +233,8 @@ export const UserFriendlyApp: React.FC = () => {
       console.log("[Debug] User analytics result:", result);
       return result;
     },
-    retry: false,
+    retry: 2,
+    retryDelay: 1000,
   });
 
   const { data: healthStatus, error: healthError } = useQuery({
@@ -244,7 +246,8 @@ export const UserFriendlyApp: React.FC = () => {
       return result;
     },
     refetchInterval: 30000,
-    retry: false,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   const { data: accuracyMetrics, error: accuracyError } = useQuery({
@@ -256,7 +259,8 @@ export const UserFriendlyApp: React.FC = () => {
       return result;
     },
     refetchInterval: 10000,
-    retry: false,
+    retry: 2,
+    retryDelay: 1000,
   });
 
   // Debug error logging
