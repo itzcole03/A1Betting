@@ -411,8 +411,6 @@ export const UserFriendlyApp: React.FC = () => {
 
         {/* Header */}
         <header className="sticky top-0 z-50 bg-black/30 backdrop-blur-2xl border-b border-cyan-500/20 shadow-lg shadow-cyan-500/10 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-green-500/5" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent animate-pulse" />
           <div className="relative max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               {/* Logo & Brand */}
