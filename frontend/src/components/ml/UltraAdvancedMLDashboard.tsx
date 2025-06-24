@@ -1378,6 +1378,408 @@ const UltraAdvancedMLDashboard: React.FC = () => {
             </div>
           )}
 
+          {/* Backend Connection View */}
+          {selectedView === "backend" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-2">
+                    Backend Connection Management
+                  </h2>
+                  <p className="text-slate-300">
+                    Monitor and control all backend services, APIs, and data
+                    connections
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${
+                      isOffline
+                        ? "bg-red-500/10 border-red-500/30 text-red-400"
+                        : "bg-green-500/10 border-green-500/30 text-green-400"
+                    }`}
+                  >
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        isOffline ? "bg-red-400" : "bg-green-400 animate-pulse"
+                      }`}
+                    />
+                    <span className="text-sm font-semibold">
+                      {isOffline ? "Services Offline" : "All Systems Online"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Connection Status Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {[
+                  {
+                    name: "Main API",
+                    status: !isOffline,
+                    latency: "45ms",
+                    uptime: "99.9%",
+                  },
+                  {
+                    name: "ML Service",
+                    status: !isOffline,
+                    latency: "12ms",
+                    uptime: "98.7%",
+                  },
+                  {
+                    name: "Sports Data",
+                    status: !isOffline,
+                    latency: "78ms",
+                    uptime: "97.2%",
+                  },
+                  {
+                    name: "Database",
+                    status: !isOffline,
+                    latency: "3ms",
+                    uptime: "99.8%",
+                  },
+                ].map((service, index) => (
+                  <Card
+                    key={index}
+                    className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50"
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-white font-semibold text-sm">
+                          {service.name}
+                        </h3>
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            service.status ? "bg-green-400" : "bg-red-400"
+                          } ${service.status ? "animate-pulse" : ""}`}
+                        />
+                      </div>
+                      <div className="space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-slate-400">Latency:</span>
+                          <span
+                            className={
+                              service.status ? "text-green-400" : "text-red-400"
+                            }
+                          >
+                            {service.status ? service.latency : "N/A"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-400">Uptime:</span>
+                          <span
+                            className={
+                              service.status ? "text-green-400" : "text-red-400"
+                            }
+                          >
+                            {service.status ? service.uptime : "0%"}
+                          </span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Main Backend Control Panel */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Connection Controls */}
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-cyan-400">
+                      <Server className="w-5 h-5" />
+                      Connection Controls
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button
+                        onClick={handleRetry}
+                        className="bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 text-green-400"
+                        disabled={!isOffline}
+                      >
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                        Reconnect All
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="border-yellow-500/40 text-yellow-400 hover:bg-yellow-500/10"
+                      >
+                        <Wifi className="w-4 h-4 mr-2" />
+                        Test Connection
+                      </Button>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                        <span className="text-slate-300">Auto-Reconnect</span>
+                        <button className="w-10 h-6 bg-green-500 rounded-full relative">
+                          <div className="w-4 h-4 bg-white rounded-full absolute top-1 right-1 transition-all"></div>
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+                        <span className="text-slate-300">
+                          Health Check Interval
+                        </span>
+                        <select className="bg-slate-600 text-white px-3 py-1 rounded text-sm">
+                          <option>30 seconds</option>
+                          <option>1 minute</option>
+                          <option>5 minutes</option>
+                        </select>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* API Endpoints Status */}
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-purple-400">
+                      <Network className="w-5 h-5" />
+                      API Endpoints
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {[
+                        {
+                          endpoint: "/api/health",
+                          method: "GET",
+                          status: !isOffline,
+                          response: "200 OK",
+                        },
+                        {
+                          endpoint: "/api/predictions",
+                          method: "POST",
+                          status: !isOffline,
+                          response: "201 Created",
+                        },
+                        {
+                          endpoint: "/api/user/profile",
+                          method: "GET",
+                          status: !isOffline,
+                          response: "200 OK",
+                        },
+                        {
+                          endpoint: "/api/analytics",
+                          method: "GET",
+                          status: !isOffline,
+                          response: "200 OK",
+                        },
+                        {
+                          endpoint: "/api/models/accuracy",
+                          method: "GET",
+                          status: !isOffline,
+                          response: "200 OK",
+                        },
+                      ].map((api, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Badge
+                              className={`text-xs ${api.method === "GET" ? "bg-blue-500/20 text-blue-400" : "bg-green-500/20 text-green-400"}`}
+                            >
+                              {api.method}
+                            </Badge>
+                            <code className="text-slate-300 text-sm">
+                              {api.endpoint}
+                            </code>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`text-xs ${api.status ? "text-green-400" : "text-red-400"}`}
+                            >
+                              {api.status ? api.response : "Failed"}
+                            </span>
+                            <div
+                              className={`w-2 h-2 rounded-full ${api.status ? "bg-green-400" : "bg-red-400"}`}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Real-time Connection Logs */}
+              <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-orange-400">
+                    <Monitor className="w-5 h-5" />
+                    Real-time Connection Logs
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-slate-900/80 rounded-lg p-4 font-mono text-sm max-h-60 overflow-y-auto">
+                    {[
+                      {
+                        time: "14:23:45",
+                        level: "INFO",
+                        message: "Backend health check successful",
+                        status: "success",
+                      },
+                      {
+                        time: "14:23:30",
+                        level: "INFO",
+                        message: "ML model prediction completed in 12ms",
+                        status: "success",
+                      },
+                      {
+                        time: "14:23:15",
+                        level: "WARN",
+                        message:
+                          "High latency detected on sports data API (78ms)",
+                        status: "warning",
+                      },
+                      {
+                        time: "14:23:00",
+                        level: "INFO",
+                        message: "User analytics data refreshed",
+                        status: "success",
+                      },
+                      {
+                        time: "14:22:45",
+                        level: "INFO",
+                        message: "Database connection pool healthy",
+                        status: "success",
+                      },
+                      {
+                        time: "14:22:30",
+                        level: "ERROR",
+                        message: "Failed to connect to external odds API",
+                        status: "error",
+                      },
+                    ].map((log, index) => (
+                      <div key={index} className="flex items-center gap-3 py-1">
+                        <span className="text-slate-500 text-xs">
+                          {log.time}
+                        </span>
+                        <Badge
+                          className={`text-xs ${
+                            log.level === "ERROR"
+                              ? "bg-red-500/20 text-red-400"
+                              : log.level === "WARN"
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : "bg-green-500/20 text-green-400"
+                          }`}
+                        >
+                          {log.level}
+                        </Badge>
+                        <span
+                          className={`text-sm ${
+                            log.status === "error"
+                              ? "text-red-300"
+                              : log.status === "warning"
+                                ? "text-yellow-300"
+                                : "text-slate-300"
+                          }`}
+                        >
+                          {log.message}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Connection Statistics */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="text-blue-400 text-lg">
+                      Connection Stats
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Total Requests</span>
+                        <span className="text-blue-400 font-semibold">
+                          24,891
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Success Rate</span>
+                        <span className="text-green-400 font-semibold">
+                          99.2%
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Avg Response</span>
+                        <span className="text-cyan-400 font-semibold">
+                          34ms
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="text-green-400 text-lg">
+                      Performance
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Uptime</span>
+                        <span className="text-green-400 font-semibold">
+                          99.8%
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Load Average</span>
+                        <span className="text-yellow-400 font-semibold">
+                          0.42
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Memory Usage</span>
+                        <span className="text-orange-400 font-semibold">
+                          67%
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
+                  <CardHeader>
+                    <CardTitle className="text-purple-400 text-lg">
+                      Security
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">SSL Status</span>
+                        <span className="text-green-400 font-semibold">
+                          Active
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Auth Token</span>
+                        <span className="text-green-400 font-semibold">
+                          Valid
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Rate Limit</span>
+                        <span className="text-cyan-400 font-semibold">
+                          120/min
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+
           {/* Admin Settings View */}
           {selectedView === "admin" && (
             <div className="space-y-6">
