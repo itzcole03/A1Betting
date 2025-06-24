@@ -231,6 +231,13 @@ export const AdvancedIntelligenceHub: React.FC = () => {
     "grid" | "tabs" | "accordion"
   >("tabs");
   const [isQuantumMode, setIsQuantumMode] = useState(false);
+
+  // Refresh control states
+  const [isAutoRefreshEnabled, setIsAutoRefreshEnabled] = useState(true);
+  const [refreshInterval, setRefreshInterval] = useState(5000);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [isManualRefreshing, setIsManualRefreshing] = useState(false);
+
   const [automationConfig, setAutomationConfig] = useState<AutomationSettings>({
     enableAutoOptimization: true,
     enableRealTimeEnsemble: true,
