@@ -532,6 +532,12 @@ const UltraAdvancedMLDashboard: React.FC = () => {
       active: selectedView === "research",
     },
     {
+      id: "backend",
+      label: "Backend Connection",
+      icon: Server,
+      active: selectedView === "backend",
+    },
+    {
       id: "admin",
       label: "Admin Panel",
       icon: Settings,
