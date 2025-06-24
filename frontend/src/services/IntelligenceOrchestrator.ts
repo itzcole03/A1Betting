@@ -227,7 +227,7 @@ export class IntelligenceOrchestrator {
         this.currentPredictions.set(pred.id, pred);
       });
 
-      this.eventBus.emit("orchestrator:predictions_generated", {
+      eventBus.emit("orchestrator:predictions_generated", {
         count: filteredPredictions.length,
         timestamp: Date.now(),
       });
@@ -420,7 +420,7 @@ export class IntelligenceOrchestrator {
         );
         await this.optimizeEnsemble();
 
-        this.eventBus.emit("orchestrator:auto_optimization", {
+        eventBus.emit("orchestrator:auto_optimization", {
           trigger: "performance_threshold",
           timestamp: Date.now(),
         });
@@ -517,7 +517,7 @@ export class IntelligenceOrchestrator {
       this.startAutomationTimers();
     }
 
-    this.eventBus.emit("orchestrator:settings_updated", settings);
+    eventBus.emit("orchestrator:settings_updated", settings);
   }
 
   public getAutomationSettings(): AutomationSettings {
