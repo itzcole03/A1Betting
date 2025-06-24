@@ -117,31 +117,34 @@ class BackendApiService {
   private api: AxiosInstance;
   private wsConnection: WebSocket | null = null;
   private wsCallbacks: Map<string, Function[]> = new Map();
+  private isCloudEnvironment: boolean;
+  private useMockService: boolean;
 
   constructor() {
-    // Use environment variable first, detect cloud environment, then use appropriate URL
+    this.isCloudEnvironment = window.location.hostname.includes("fly.dev");
+    this.useMockService = this.isCloudEnvironment;
+
+    // Detect environment and set appropriate backend URL
     const isCloudEnvironment = window.location.hostname.includes("fly.dev");
-    const isDevelopment = import.meta.env.DEV;
+    const isDevelopment = import.meta.env.DEV && !isCloudEnvironment;
 
     let baseURL = import.meta.env.VITE_API_URL;
 
     if (!baseURL) {
-      if (isCloudEnvironment) {
-        // In cloud, try direct localhost first, then fallback to deployed backend
-        baseURL = "http://localhost:8000";
-      } else if (isDevelopment) {
-        // In development, use relative URLs to leverage Vite proxy
+      if (isDevelopment) {
+        // Local development - use Vite proxy
         baseURL = "";
       } else {
-        // Production fallback
-        baseURL = "http://localhost:8000";
+        // Cloud environment - will use mock data service
+        baseURL = "MOCK_SERVICE";
       }
     }
 
     console.log("[BackendApi] Environment:", {
-      isCloudEnvironment,
+      isCloudEnvironment: this.isCloudEnvironment,
       isDevelopment,
       baseURL,
+      useMockService: this.useMockService,
     });
 
     this.api = axios.create({
