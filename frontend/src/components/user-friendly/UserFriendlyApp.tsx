@@ -37,6 +37,8 @@ import SettingsTest from "./SettingsTest";
 import UltraAdvancedMLDashboard from "../ml/UltraAdvancedMLDashboard";
 // Import ultra-accuracy component
 import UltraAccuracyDashboard from "../prediction/UltraAccuracyDashboard";
+// Import admin settings
+import AdminSettings from "../admin/AdminSettings";
 
 interface NavigationItem {
   id: string;
