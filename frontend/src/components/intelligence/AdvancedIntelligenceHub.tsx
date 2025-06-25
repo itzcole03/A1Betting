@@ -1195,62 +1195,225 @@ export const AdvancedIntelligenceHub: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Module Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {moduleConfigs.map((module) => (
-              <motion.div
-                key={module.id}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                  activeModules.has(module.id)
-                    ? "bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-500/50"
-                    : "bg-slate-700/30 border-slate-600/50 hover:border-slate-500"
-                }`}
-                onClick={() => toggleModule(module.id)}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    {module.icon}
-                    <span className="font-medium text-sm">{module.name}</span>
-                  </div>
-                  {activeModules.has(module.id) ? (
-                    <ToggleRight className="w-5 h-5 text-green-400" />
-                  ) : (
-                    <ToggleLeft className="w-5 h-5 text-slate-400" />
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between mb-2">
-                  <Badge
-                    variant="outline"
-                    className={`text-xs ${
-                      module.priority === "critical"
-                        ? "border-red-500 text-red-400"
-                        : module.priority === "high"
-                          ? "border-orange-500 text-orange-400"
-                          : module.priority === "medium"
-                            ? "border-yellow-500 text-yellow-400"
-                            : "border-green-500 text-green-400"
-                    }`}
-                  >
-                    {module.priority}
-                  </Badge>
-                  <Badge variant="secondary" className="text-xs">
-                    {module.category}
-                  </Badge>
-                </div>
-
+          {/* Module Performance Summary */}
+          <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20">
+              <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">
-                    Load: {module.computationLevel}
-                  </span>
-                  <span className="text-xs text-slate-400">
-                    Deps: {module.dependencies.length}
-                  </span>
+                  <div>
+                    <p className="text-xs text-green-300 uppercase tracking-wide">
+                      Active Profit Engine
+                    </p>
+                    <p className="text-xl font-bold text-green-400">
+                      $
+                      {getActiveModuleConfigs()
+                        .reduce(
+                          (sum, m) =>
+                            sum +
+                            (getModuleMetrics(m.id).profitContribution || 0),
+                          0,
+                        )
+                        .toLocaleString()}
+                    </p>
+                    <p className="text-xs text-green-300">
+                      Last 24h contribution
+                    </p>
+                  </div>
+                  <DollarSign className="w-8 h-8 text-green-400" />
                 </div>
-              </motion.div>
-            ))}
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-blue-300 uppercase tracking-wide">
+                      Prediction Accuracy
+                    </p>
+                    <p className="text-xl font-bold text-blue-400">
+                      {(
+                        getActiveModuleConfigs().reduce(
+                          (sum, m) =>
+                            sum +
+                            (getModuleMetrics(m.id).predictionImpact || 0),
+                          0,
+                        ) / Math.max(getActiveModuleConfigs().length, 1)
+                      ).toFixed(1)}
+                      %
+                    </p>
+                    <p className="text-xs text-blue-300">Ensemble average</p>
+                  </div>
+                  <Target className="w-8 h-8 text-blue-400" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-purple-300 uppercase tracking-wide">
+                      Active Modules
+                    </p>
+                    <p className="text-xl font-bold text-purple-400">
+                      {activeModules.size}/{moduleConfigs.length}
+                    </p>
+                    <p className="text-xs text-purple-300">
+                      Optimal: 6-8 modules
+                    </p>
+                  </div>
+                  <Brain className="w-8 h-8 text-purple-400" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Enhanced Module Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {moduleConfigs
+              .sort(
+                (a, b) =>
+                  (getModuleMetrics(b.id).moneyMakingScore || 0) -
+                  (getModuleMetrics(a.id).moneyMakingScore || 0),
+              )
+              .map((module) => {
+                const metrics = getModuleMetrics(module.id);
+                const isActive = activeModules.has(module.id);
+
+                return (
+                  <motion.div
+                    key={module.id}
+                    whileHover={{ scale: 1.02, rotateY: 2 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`relative p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 backdrop-blur-sm ${
+                      isActive
+                        ? "bg-gradient-to-br from-green-500/20 via-emerald-500/15 to-blue-500/20 border-green-400/60 shadow-lg shadow-green-500/25"
+                        : "bg-slate-800/40 border-slate-600/40 hover:border-slate-500/60 hover:bg-slate-700/30"
+                    }`}
+                    onClick={() => toggleModule(module.id)}
+                  >
+                    {/* Money-Making Score Badge */}
+                    {metrics.moneyMakingScore > 80 && (
+                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                        💰 {metrics.moneyMakingScore}%
+                      </div>
+                    )}
+
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`p-2 rounded-lg ${isActive ? "bg-green-500/20" : "bg-slate-600/20"}`}
+                        >
+                          {module.icon}
+                        </div>
+                        <div>
+                          <span className="font-semibold text-sm block">
+                            {module.name}
+                          </span>
+                          <span className="text-xs text-slate-400">
+                            {module.category}
+                          </span>
+                        </div>
+                      </div>
+                      {isActive ? (
+                        <div className="flex items-center gap-1">
+                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                          <ToggleRight className="w-5 h-5 text-green-400" />
+                        </div>
+                      ) : (
+                        <ToggleLeft className="w-5 h-5 text-slate-400" />
+                      )}
+                    </div>
+
+                    {/* Performance Metrics */}
+                    <div className="space-y-2 mb-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-slate-400">
+                          Profit Impact
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <div
+                            className={`w-12 h-1.5 rounded-full bg-gradient-to-r ${
+                              metrics.moneyMakingScore >= 90
+                                ? "from-green-500 to-emerald-400"
+                                : metrics.moneyMakingScore >= 70
+                                  ? "from-yellow-500 to-orange-400"
+                                  : "from-red-500 to-pink-400"
+                            }`}
+                            style={{
+                              width: `${Math.max(metrics.moneyMakingScore * 0.5, 6)}px`,
+                            }}
+                          ></div>
+                          <span className="text-xs font-medium">
+                            {metrics.moneyMakingScore}%
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-slate-400">
+                          Prediction Boost
+                        </span>
+                        <span className="text-xs font-medium text-blue-400">
+                          +{metrics.predictionImpact}%
+                        </span>
+                      </div>
+
+                      {metrics.profitContribution > 0 && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-slate-400">
+                            24h Profit
+                          </span>
+                          <span className="text-xs font-medium text-green-400">
+                            +${metrics.profitContribution.toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Priority and Status */}
+                    <div className="flex items-center justify-between">
+                      <Badge
+                        variant="outline"
+                        className={`text-xs ${
+                          module.priority === "critical"
+                            ? "border-red-400/60 text-red-300 bg-red-500/10"
+                            : module.priority === "high"
+                              ? "border-orange-400/60 text-orange-300 bg-orange-500/10"
+                              : module.priority === "medium"
+                                ? "border-yellow-400/60 text-yellow-300 bg-yellow-500/10"
+                                : "border-green-400/60 text-green-300 bg-green-500/10"
+                        }`}
+                      >
+                        {module.priority}
+                      </Badge>
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs text-slate-500">
+                          {module.computationLevel}
+                        </span>
+                        <div
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            module.computationLevel === "light"
+                              ? "bg-green-400"
+                              : module.computationLevel === "medium"
+                                ? "bg-yellow-400"
+                                : module.computationLevel === "heavy"
+                                  ? "bg-orange-400"
+                                  : "bg-red-400"
+                          }`}
+                        ></div>
+                      </div>
+                    </div>
+
+                    {/* Active indicator glow */}
+                    {isActive && (
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-green-500/5 to-blue-500/5 animate-pulse pointer-events-none"></div>
+                    )}
+                  </motion.div>
+                );
+              })}
           </div>
 
           {/* Quick Actions */}
