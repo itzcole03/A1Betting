@@ -384,6 +384,13 @@ const UserFriendlyApp: React.FC = () => {
         icon: <SettingsIcon className="w-5 h-5" />,
         component: SimpleSettings,
       },
+      {
+        id: "profile",
+        label: "My Profile",
+        icon: <User className="w-5 h-5" />,
+        component: UserProfile,
+        badge: "👤",
+      },
     ],
     [isUltimateBrainInitialized, ultimateBrainHealth],
   );
