@@ -1421,10 +1421,10 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                     key={module.id}
                     whileHover={{ scale: 1.03, rotateY: 1 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`relative p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 backdrop-blur-sm ${
+                    className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all duration-500 backdrop-blur-xl ${
                       activeModules.has(module.id)
-                        ? "bg-gradient-to-br from-green-500/15 via-emerald-500/10 to-blue-500/15 border-green-400/50 shadow-lg shadow-green-500/20"
-                        : "bg-slate-800/30 border-slate-600/30 hover:border-slate-500/50 hover:bg-slate-700/25"
+                        ? "bg-gradient-to-br from-green-500/20 via-emerald-500/15 to-blue-500/20 border-green-400/60 shadow-2xl shadow-green-500/25"
+                        : "bg-gradient-to-br from-slate-800/60 via-slate-700/40 to-slate-800/60 border-slate-600/40 hover:border-slate-500/60 hover:shadow-xl hover:shadow-black/20"
                     }`}
                     onClick={() => toggleModule(module.id)}
                   >
