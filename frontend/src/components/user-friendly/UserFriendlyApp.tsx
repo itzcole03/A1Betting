@@ -281,24 +281,33 @@ const UserFriendlyApp: React.FC = () => {
 
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    const initializeUltimateBrain = async () => {
+      try {
         // Initialize Ultimate Brain System in background with timeout
         const brainInitPromise = new Promise(async (resolve) => {
           try {
-            const initResult = await ultimateBrainCentralNervousSystem.initialize();
+            const initResult =
+              await ultimateBrainCentralNervousSystem.initialize();
             setIsUltimateBrainInitialized(initResult.success);
             if (initResult.success) {
               toast.success("🧠 Ultimate Brain System Activated!");
             }
             resolve(initResult.success);
           } catch (brainError) {
-            console.warn("Ultimate Brain initialization failed, using autonomous mode:", brainError);
+            console.warn(
+              "Ultimate Brain initialization failed, using autonomous mode:",
+              brainError,
+            );
             setIsUltimateBrainInitialized(false);
             resolve(false);
           }
         });
 
         // Don't wait more than 2 seconds for Ultimate Brain
-        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(false), 2000));
+        const timeoutPromise = new Promise((resolve) =>
+          setTimeout(() => resolve(false), 2000),
+        );
 
         Promise.race([brainInitPromise, timeoutPromise]).then(() => {
           // Brain initialization handled above, continue either way
