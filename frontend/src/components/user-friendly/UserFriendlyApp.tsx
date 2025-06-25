@@ -40,7 +40,7 @@ import {
 } from "../../utils/userSettings";
 import toast from "react-hot-toast";
 
-// Import ULTIMATE BRAIN SYSTEM ����⚡
+// Import ULTIMATE BRAIN SYSTEM 🧠⚡
 import {
   ultimateBrainCentralNervousSystem,
   type UltimateAccuracyResult,
@@ -312,10 +312,6 @@ const UserFriendlyApp: React.FC = () => {
         Promise.race([brainInitPromise, timeoutPromise]).then(() => {
           // Brain initialization handled above, continue either way
         });
-        const healthInterval = setInterval(() => {
-          const health = ultimateBrainCentralNervousSystem.getSystemHealth();
-          setUltimateBrainHealth(health);
-        }, 10000); // Check every 10 seconds
       } catch (error) {
         console.error("Failed to initialize Ultimate Brain:", error);
         toast.error("⚠️ Ultimate Brain initialization failed", {
