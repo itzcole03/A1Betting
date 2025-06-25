@@ -420,7 +420,7 @@ For the best real-time analysis, ensure the PropOllama backend is running with O
             ))}
           </AnimatePresence>
 
-          {/* Typing Indicator */}
+          {/* Typing Indicator - FIXED: Better contrast */}
           <AnimatePresence>
             {isTyping && (
               <motion.div
