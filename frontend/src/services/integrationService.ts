@@ -185,6 +185,7 @@ export const integrationService = IntegrationService.getInstance();
 
 // Export for backward compatibility with existing API service usage
 export const api = {
+  getUser: () => integrationService.getUserProfile("default-user"),
   getUserProfile: (userId: string) => integrationService.getUserProfile(userId),
   getUserAnalytics: (userId: string) =>
     integrationService.getUserAnalytics(userId),
