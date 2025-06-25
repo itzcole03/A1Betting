@@ -31,9 +31,8 @@ export const StyledSelect: React.FC<StyledSelectProps> = ({
     shadow-lg shadow-purple-500/20
     appearance-none
     cursor-pointer
+    ${className}
   `;
-
-  const selectClasses = `${baseClasses} ${className}`;
 
   return (
     <div className="w-full">
@@ -43,7 +42,7 @@ export const StyledSelect: React.FC<StyledSelectProps> = ({
         </label>
       )}
       <div className="relative">
-        <select className={selectClasses} {...props}>
+        <select className={baseClasses} {...props}>
           {children}
         </select>
         {/* Custom dropdown arrow */}
