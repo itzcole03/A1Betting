@@ -277,7 +277,7 @@ const UserProfile: React.FC<{ onNavigate: (page: string) => void }> = ({
           {
             id: "settings",
             label: "Settings",
-            icon: <Settings className="w-4 h-4" />,
+            icon: <SettingsIcon className="w-4 h-4" />,
           },
           {
             id: "security",
