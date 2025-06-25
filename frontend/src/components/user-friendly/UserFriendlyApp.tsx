@@ -8,22 +8,19 @@ import {
   DollarSign,
   Home,
   Menu,
-  MessageCircle,
   Search,
   Settings as SettingsIcon,
   Trophy,
   TrendingUp,
-  X,
   User,
 } from "lucide-react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import OfflineIndicator from "../ui/OfflineIndicator";
 import ApiErrorBoundary from "../ApiErrorBoundary";
 import {
   initializeSettings,
   getUserDisplayName,
   getUserEmail,
-  getUserSettings,
 } from "../../utils/userSettings";
 import toast from "react-hot-toast";
 
@@ -37,10 +34,12 @@ import SimpleSettings from "./SimpleSettings";
 // Import existing components to integrate
 import { AdvancedIntelligenceHub } from "../intelligence/AdvancedIntelligenceHub";
 
-// Import user profile components separately to reduce main component size
+// Import user profile and handlers
 import UserProfile from "./UserProfile";
-import SearchModal from "./SearchModal";
-import NotificationsModal from "./NotificationsModal";
+import {
+  handleSearchClick,
+  handleNotificationClick,
+} from "./SearchNotificationHandlers";
 
 interface NavigationItem {
   id: string;
@@ -88,8 +87,6 @@ const useHealthCheck = () => {
 const UserFriendlyApp: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const { isOnline, accuracy } = useHealthCheck();
@@ -198,14 +195,6 @@ const UserFriendlyApp: React.FC = () => {
   );
 
   // Modal handlers - memoized to prevent re-renders
-  const toggleSearch = useCallback(
-    () => setSearchModalOpen((prev) => !prev),
-    [],
-  );
-  const toggleNotifications = useCallback(
-    () => setNotificationsOpen((prev) => !prev),
-    [],
-  );
   const toggleSidebar = useCallback(() => setSidebarOpen((prev) => !prev), []);
 
   const ActiveComponent = activeComponent;
@@ -262,7 +251,7 @@ const UserFriendlyApp: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex items-center gap-3">
               <button
-                onClick={toggleSearch}
+                onClick={handleSearchClick}
                 className="p-2 hover:bg-gray-800/60 rounded-lg transition-colors"
                 aria-label="Search"
               >
@@ -270,7 +259,7 @@ const UserFriendlyApp: React.FC = () => {
               </button>
 
               <button
-                onClick={toggleNotifications}
+                onClick={handleNotificationClick}
                 className="relative p-2 hover:bg-gray-800/60 rounded-lg transition-colors"
                 aria-label="Notifications"
               >
@@ -434,13 +423,6 @@ const UserFriendlyApp: React.FC = () => {
             </div>
           </main>
         </div>
-
-        {/* Modals */}
-        <SearchModal isOpen={searchModalOpen} onClose={toggleSearch} />
-        <NotificationsModal
-          isOpen={notificationsOpen}
-          onClose={toggleNotifications}
-        />
 
         {/* Footer */}
         <footer className="relative z-10 bg-black/20 backdrop-blur-xl border-t border-cyan-500/20 p-6 mt-auto">
