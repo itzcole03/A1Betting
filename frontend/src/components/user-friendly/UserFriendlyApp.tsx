@@ -58,8 +58,6 @@ import SimpleSettings from "./SimpleSettings";
 import { AdvancedIntelligenceHub } from "../intelligence/AdvancedIntelligenceHub";
 import { UltraAccuracyDashboard } from "../overview/UltraAccuracyOverview";
 import { AdminSettings } from "../admin/AdminSettings";
-// Import admin settings
-import AdminSettings from "../admin/AdminSettings";
 
 interface NavigationItem {
   id: string;
