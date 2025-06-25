@@ -859,6 +859,91 @@ export const AdvancedIntelligenceHub: React.FC = () => {
   }, [moduleConfigs, activeModules]);
 
   // ========== MONEY-MAKING METRICS ==========
+  const getModuleMetrics = useCallback((moduleId: string) => {
+    const scoreMap: Record<string, any> = {
+      "advanced-analytics": {
+        moneyMakingScore: 95,
+        predictionImpact: 12,
+        profitContribution: 25000,
+        reliabilityScore: 98,
+      },
+      "ultra-accuracy": {
+        moneyMakingScore: 92,
+        predictionImpact: 18,
+        profitContribution: 22000,
+        reliabilityScore: 96,
+      },
+      "ultra-ml": {
+        moneyMakingScore: 88,
+        predictionImpact: 15,
+        profitContribution: 20000,
+        reliabilityScore: 94,
+      },
+      "realtime-accuracy": {
+        moneyMakingScore: 85,
+        predictionImpact: 10,
+        profitContribution: 18000,
+        reliabilityScore: 92,
+      },
+      "strategy-engine": {
+        moneyMakingScore: 82,
+        predictionImpact: 6,
+        profitContribution: 15000,
+        reliabilityScore: 90,
+      },
+      "performance-analytics": {
+        moneyMakingScore: 78,
+        predictionImpact: 5,
+        profitContribution: 10000,
+        reliabilityScore: 88,
+      },
+      "ml-model-center": {
+        moneyMakingScore: 75,
+        predictionImpact: 8,
+        profitContribution: 12000,
+        reliabilityScore: 86,
+      },
+      "mega-analytics": {
+        moneyMakingScore: 90,
+        predictionImpact: 20,
+        profitContribution: 30000,
+        reliabilityScore: 95,
+      },
+      "ensemble-insights": {
+        moneyMakingScore: 68,
+        predictionImpact: 14,
+        profitContribution: 8000,
+        reliabilityScore: 84,
+      },
+      "cyber-analytics": {
+        moneyMakingScore: 70,
+        predictionImpact: 7,
+        profitContribution: 9000,
+        reliabilityScore: 82,
+      },
+      "universal-analytics": {
+        moneyMakingScore: 72,
+        predictionImpact: 6,
+        profitContribution: 8500,
+        reliabilityScore: 80,
+      },
+      "feature-insights": {
+        moneyMakingScore: 65,
+        predictionImpact: 9,
+        profitContribution: 7000,
+        reliabilityScore: 78,
+      },
+    };
+    return (
+      scoreMap[moduleId] || {
+        moneyMakingScore: 50,
+        predictionImpact: 3,
+        profitContribution: 5000,
+        reliabilityScore: 75,
+      }
+    );
+  }, []);
+
   const getModuleMoneyScore = useCallback((moduleId: string) => {
     const scoreMap: Record<string, number> = {
       "advanced-analytics": 95,
