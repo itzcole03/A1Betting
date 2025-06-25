@@ -298,6 +298,57 @@ app.get("/api/ollama/status", (req, res) => {
   });
 });
 
+// PropOllama Chat endpoint
+app.post("/api/propollama/chat", (req, res) => {
+  const { message, context, analysisType } = req.body;
+
+  // Mock response for PropOllama AI
+  const mockResponse = {
+    content: `🤖 **PropOllama AI Analysis**
+
+Your question: "${message}"
+
+**Smart Betting Analysis:**
+Based on current market data and advanced algorithms:
+
+🎯 **Key Insights:**
+- Line movement suggests value on the under
+- Weather conditions favor defensive play
+- Recent team performance indicates trend reversal
+- Public betting heavily on the favorite (fade opportunity)
+
+📊 **Statistical Edge:**
+- Model prediction: 73% confidence
+- Expected value: +4.2%
+- Recommended bet size: 2.5% of bankroll
+- Risk level: Moderate
+
+⚡ **PropOllama Recommendation:**
+LEAN UNDER with moderate confidence. Line shopping recommended.
+
+*AI-powered analysis combining multiple data sources and betting models.*`,
+    confidence: 87,
+    suggestions: [
+      "Check line movement trends",
+      "Look for better odds elsewhere",
+      "Consider live betting opportunities",
+      "Monitor injury reports",
+    ],
+    model_used: "propollama_v2",
+    response_time: 250,
+    analysis_type: analysisType || "prop_analysis",
+    timestamp: new Date().toISOString(),
+  };
+
+  // Simulate AI processing time
+  setTimeout(
+    () => {
+      res.json(mockResponse);
+    },
+    800 + Math.random() * 1500,
+  );
+});
+
 app.post("/api/ollama/chat", (req, res) => {
   const { message, context, analysisType } = req.body;
 
