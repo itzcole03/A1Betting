@@ -1333,15 +1333,36 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                 return (
                   <motion.div
                     key={module.id}
-                    whileHover={{ scale: 1.02, rotateY: 2 }}
+                    whileHover={{ scale: 1.03, rotateY: 1 }}
                     whileTap={{ scale: 0.98 }}
                     className={`relative p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 backdrop-blur-sm ${
-                      isActive
-                        ? "bg-gradient-to-br from-green-500/20 via-emerald-500/15 to-blue-500/20 border-green-400/60 shadow-lg shadow-green-500/25"
-                        : "bg-slate-800/40 border-slate-600/40 hover:border-slate-500/60 hover:bg-slate-700/30"
+                      activeModules.has(module.id)
+                        ? "bg-gradient-to-br from-green-500/15 via-emerald-500/10 to-blue-500/15 border-green-400/50 shadow-lg shadow-green-500/20"
+                        : "bg-slate-800/30 border-slate-600/30 hover:border-slate-500/50 hover:bg-slate-700/25"
                     }`}
                     onClick={() => toggleModule(module.id)}
                   >
+                    {/* Money-Making Score Badge for high-value modules */}
+                    {[
+                      "advanced-analytics",
+                      "ultra-accuracy",
+                      "ultra-ml",
+                      "realtime-accuracy",
+                      "mega-analytics",
+                    ].includes(module.id) && (
+                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse">
+                        💰{" "}
+                        {module.id === "advanced-analytics"
+                          ? "95%"
+                          : module.id === "ultra-accuracy"
+                            ? "92%"
+                            : module.id === "ultra-ml"
+                              ? "88%"
+                              : module.id === "mega-analytics"
+                                ? "90%"
+                                : "85%"}
+                      </div>
+                    )}
                     {/* Money-Making Score Badge */}
                     {metrics.moneyMakingScore > 80 && (
                       <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold px-2 py-1 rounded-full shadow-lg">
