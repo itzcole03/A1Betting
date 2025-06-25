@@ -31,6 +31,7 @@ import {
   Calendar,
   Edit3,
   Key,
+  Award,
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import OfflineIndicator from "../ui/OfflineIndicator";
