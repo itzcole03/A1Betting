@@ -945,7 +945,28 @@ export const AdvancedIntelligenceHub: React.FC = () => {
     );
   }, []);
 
-  const getModuleMoneyScore = useCallback((moduleId: string) => {
+  const getModuleMoneyScore = useCallback(
+    (moduleId: string) => {
+      return getModuleMetrics(moduleId).moneyMakingScore;
+    },
+    [getModuleMetrics],
+  );
+
+  const getModuleAccuracyBoost = useCallback(
+    (moduleId: string) => {
+      return getModuleMetrics(moduleId).predictionImpact;
+    },
+    [getModuleMetrics],
+  );
+
+  const getModuleProfitScore = useCallback(
+    (moduleId: string) => {
+      return getModuleMetrics(moduleId).profitContribution / 1000;
+    },
+    [getModuleMetrics],
+  );
+
+  const getModuleMoneyScoreOld = useCallback((moduleId: string) => {
     const scoreMap: Record<string, number> = {
       "advanced-analytics": 95,
       "ultra-accuracy": 92,
