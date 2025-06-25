@@ -449,7 +449,7 @@ const UserProfile: React.FC<{ onNavigate: (page: string) => void }> = ({
           <div className="space-y-6">
             <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-6">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <Settings className="w-5 h-5 text-cyan-400" />
+                <SettingsIcon className="w-5 h-5 text-cyan-400" />
                 Account Settings
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
