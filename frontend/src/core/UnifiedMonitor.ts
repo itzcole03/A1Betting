@@ -110,7 +110,7 @@ export class UnifiedMonitor {
   >;
 }
 
-export const unifiedMonitor = new UnifiedMonitor();
+export const unifiedMonitor = UnifiedMonitor.getInstance();
 
 // Example Usage:
 // unifiedMonitor.reportError(new Error('Something went wrong in payment processing'), { orderId: '12345' });
