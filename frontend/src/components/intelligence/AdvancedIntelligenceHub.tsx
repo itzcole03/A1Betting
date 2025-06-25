@@ -4,6 +4,8 @@ import React, {
   useCallback,
   useMemo,
   useRef,
+  Suspense,
+  lazy,
 } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
@@ -83,133 +85,51 @@ import {
   Satellite,
   Globe,
   DollarSign,
+  ChevronDown,
+  X,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import SafeChart from "../ui/SafeChart";
 import { api } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
 import OfflineIndicator from "../ui/OfflineIndicator";
 import toast from "react-hot-toast";
 
-// Import core engines
-import { UnifiedPredictionEngine } from "../../core/UnifiedPredictionEngine";
-import { UnifiedStrategyEngine } from "../../core/UnifiedStrategyEngine";
-import { unifiedDataEngine } from "../../core/UnifiedDataEngine";
+// Lazy load heavy components for better performance
+const UltraAccuracyDashboard = lazy(
+  () => import("../overview/UltraAccuracyOverview"),
+);
+const QuantumPredictionsInterface = lazy(
+  () => import("../prediction/QuantumPredictionsInterface"),
+);
+const UnifiedStrategyEngineDisplay = lazy(
+  () => import("../strategy/UnifiedStrategyEngineDisplay"),
+);
+const CyberAnalyticsHub = lazy(() => import("../cyber/CyberAnalyticsHub"));
+const CyberMLDashboard = lazy(() => import("../cyber/CyberMLDashboard"));
 
-// Import Intelligence Orchestrator
-import {
-  intelligenceOrchestrator,
-  type EnsemblePrediction,
-  type AutomationSettings,
-} from "../../services/IntelligenceOrchestrator";
-
-// Import PropOllama for explanations
-import { PropOllama } from "../user-friendly/PropOllama";
-
-// Import advanced analytics modules
-import AdvancedAnalyticsHub from "../analytics/AdvancedAnalyticsHub";
-import UniversalAnalytics from "../analytics/UniversalAnalytics";
-import PerformanceAnalyticsDashboard from "../analytics/PerformanceAnalyticsDashboard";
-import RealTimeAccuracyDashboard from "../analytics/RealTimeAccuracyDashboard";
-import MLInsights from "../analytics/MLInsights";
-import UltraMLInsights from "../analytics/UltraMLInsights";
-import HyperMLInsights from "../analytics/HyperMLInsights";
-import EvolutionaryInsights from "../analytics/EvolutionaryInsights";
-import ClusteringInsights from "../analytics/ClusteringInsights";
-import EnsembleInsights from "../analytics/EnsembleInsights";
-import FeatureInsights from "../analytics/FeatureInsights";
-import RiskInsights from "../analytics/RiskInsights";
-import RiskAssessmentMatrix from "../analytics/RiskAssessmentMatrix";
-import ShapExplanation from "../analytics/ShapExplanation";
-import ModelComparison from "../analytics/ModelComparison";
-import TimeSeriesInsights from "../analytics/TimeSeriesInsights";
-import { SHAPInsight } from "../analytics/SHAPInsight";
-import TrendAnalysisChart from "../analytics/TrendAnalysisChart";
-
-// Import monitoring modules
-import PerformanceDashboard from "../monitoring/PerformanceDashboard";
-
-// Import ML modules
-import UltraAdvancedMLDashboard from "../ml/UltraAdvancedMLDashboard";
-import MLModelCenter from "../ml/MLModelCenter";
-
-// Import mega and cyber modules
-import MegaAnalytics from "../mega/MegaAnalytics";
-import CyberAnalyticsHub from "../cyber/CyberAnalyticsHub";
-import CyberMLDashboard from "../cyber/CyberMLDashboard";
-
-// Import prediction modules
-import UltraAccuracyDashboard from "../prediction/UltraAccuracyDashboard";
-import QuantumPredictionsInterface from "../prediction/QuantumPredictionsInterface";
-import UniversalPredictions from "../predictions/UniversalPredictions";
-
-// Import strategy modules
-import UnifiedStrategyEngineDisplay from "../strategy/UnifiedStrategyEngineDisplay";
-import { UnifiedStrategyConfig } from "../strategy/UnifiedStrategyConfig";
-
-// Import quantum modules
-import { QuantumPlatform } from "../../quantum";
-
-// ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
-
-interface IntelligenceMetrics {
-  overallHealth: number;
-  ensembleAccuracy: number;
-  predictionLatency: number;
-  activeModels: number;
-  dataQuality: number;
-  systemLoad: number;
-  automationLevel: number;
-  confidenceScore: number;
-  quantumCoherence: number;
-  neuralSyncLevel: number;
-  evolutionaryProgress: number;
-  cyberIntegrationScore: number;
-}
-
-interface EnsembleOutput {
-  predictions: Array<{
-    id: string;
-    sport: string;
-    market: string;
-    prediction: string;
-    confidence: number;
-    expectedValue: number;
-    kellyFraction: number;
-    reasoning: string[];
-    contributingModels: string[];
-    timestamp: number;
-  }>;
-  metaAnalysis: {
-    overallConfidence: number;
-    diversityScore: number;
-    consensusLevel: number;
-    riskAssessment: string;
-  };
-}
-
-interface QuantumState {
-  coherence: number;
-  entanglement: number;
-  superposition: number;
-  interference: number;
-}
-
-interface ModuleConfig {
+// Types
+interface IntelligenceModule {
   id: string;
   name: string;
-  component: React.ComponentType<any>;
+  description: string;
   icon: React.ReactNode;
   category:
+    | "prediction"
     | "analytics"
     | "ml"
-    | "prediction"
     | "strategy"
     | "monitoring"
     | "quantum"
@@ -218,1887 +138,687 @@ interface ModuleConfig {
   dependencies: string[];
   computationLevel: "light" | "medium" | "heavy" | "extreme";
   isActive: boolean;
+  component: React.ComponentType<any>;
+  status: "healthy" | "warning" | "error" | "offline";
+  lastUpdated: Date;
+  metrics?: {
+    accuracy?: number;
+    performance?: number;
+    reliability?: number;
+  };
 }
 
-// ============================================================================
-// MAIN COMPONENT
-// ============================================================================
+interface SystemMetrics {
+  cpu: number;
+  memory: number;
+  gpu: number;
+  network: number;
+  activeModules: number;
+  totalPredictions: number;
+  accuracy: number;
+  uptime: number;
+}
+
+// Default placeholder components for missing modules
+const DefaultModuleComponent: React.FC<{ moduleName: string }> = ({
+  moduleName,
+}) => (
+  <div className="flex items-center justify-center h-64 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-dashed border-gray-300">
+    <div className="text-center space-y-4">
+      <Brain className="w-16 h-16 text-gray-400 mx-auto" />
+      <div>
+        <h3 className="text-lg font-semibold text-gray-600">{moduleName}</h3>
+        <p className="text-sm text-gray-500">Module loading or not available</p>
+      </div>
+    </div>
+  </div>
+);
+
+// Enhanced loading component
+const ModuleLoader: React.FC = () => (
+  <div className="flex items-center justify-center h-64">
+    <div className="text-center space-y-4">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+      >
+        <Brain className="w-12 h-12 text-blue-500" />
+      </motion.div>
+      <p className="text-sm text-gray-600">Loading AI Module...</p>
+    </div>
+  </div>
+);
 
 export const AdvancedIntelligenceHub: React.FC = () => {
-  // ========== STATE MANAGEMENT ==========
-  const [selectedView, setSelectedView] = useState("orchestrator");
-  const [selectedModule, setSelectedModule] = useState<string | null>(null);
-  const [moduleLayout, setModuleLayout] = useState<
-    "grid" | "tabs" | "accordion"
-  >("tabs");
-  const [isQuantumMode, setIsQuantumMode] = useState(false);
-
-  // Refresh control states
-  const [isAutoRefreshEnabled, setIsAutoRefreshEnabled] = useState(true);
-  const [refreshInterval, setRefreshInterval] = useState(5000);
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  const [isManualRefreshing, setIsManualRefreshing] = useState(false);
-
-  const [automationConfig, setAutomationConfig] = useState<AutomationSettings>({
-    enableAutoOptimization: true,
-    enableRealTimeEnsemble: true,
-    enableSmartRebalancing: true,
-    enablePredictiveScaling: false,
-    optimizationThreshold: 0.85,
-    rebalanceFrequency: 5,
-    maxConcurrentPredictions: 50,
-    confidenceThreshold: 0.75,
-  });
-  const [isSystemOptimizing, setIsSystemOptimizing] = useState(false);
-  const [showPropOllama, setShowPropOllama] = useState(false);
-  const [activeModules, setActiveModules] = useState<Set<string>>(
-    new Set(["orchestrator", "advanced-analytics", "ultra-ml"]),
-  );
-  const [quantumState, setQuantumState] = useState<QuantumState>({
-    coherence: 0.95,
-    entanglement: 0.87,
-    superposition: 0.92,
-    interference: 0.03,
+  // State management
+  const [activeTab, setActiveTab] = useState("overview");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [isSystemOptimized, setIsSystemOptimized] = useState(true);
+  const [moduleStates, setModuleStates] = useState<Record<string, boolean>>({});
+  const [systemMetrics, setSystemMetrics] = useState<SystemMetrics>({
+    cpu: 68,
+    memory: 45,
+    gpu: 78,
+    network: 92,
+    activeModules: 12,
+    totalPredictions: 15847,
+    accuracy: 94.7,
+    uptime: 99.8,
   });
 
+  // Real-time data
+  const { isConnected, lastMessage } = useWebSocket("ws://localhost:8000");
   const queryClient = useQueryClient();
-  const webSocketRef = useRef<WebSocket | null>(null);
 
-  // ========== CORE ENGINE INSTANCES ==========
-  const predictionEngine = useMemo(
-    () => UnifiedPredictionEngine.getInstance(),
-    [],
-  );
-  const strategyEngine = useMemo(() => UnifiedStrategyEngine.getInstance(), []);
-  const quantumPlatform = useMemo(() => QuantumPlatform.getInstance(), []);
-
-  // ========== MODULE CONFIGURATIONS ==========
-  const moduleConfigs: ModuleConfig[] = useMemo(
+  // Module definitions with comprehensive configuration
+  const modules: IntelligenceModule[] = useMemo(
     () => [
-      // Analytics Modules - High money-making potential
-      {
-        id: "advanced-analytics",
-        name: "Advanced Analytics Hub",
-        component: AdvancedAnalyticsHub,
-        icon: <BarChart3 className="w-5 h-5" />,
-        category: "analytics",
-        priority: "critical",
-        dependencies: [],
-        computationLevel: "heavy",
-        isActive: true,
-        moneyMakingScore: 95,
-        predictionImpact: 88,
-        description:
-          "Core analytics engine driving 95% of profitable opportunities",
-        profitContribution: "$12,547",
-      },
-      {
-        id: "universal-analytics",
-        name: "Universal Analytics",
-        component: UniversalAnalytics,
-        icon: <Layers className="w-5 h-5" />,
-        category: "analytics",
-        priority: "high",
-        dependencies: ["advanced-analytics"],
-        computationLevel: "medium",
-        isActive: true,
-      },
-      {
-        id: "performance-analytics",
-        name: "Performance Analytics Dashboard",
-        component: PerformanceAnalyticsDashboard,
-        icon: <TrendingUp className="w-5 h-5" />,
-        category: "analytics",
-        priority: "high",
-        dependencies: [],
-        computationLevel: "medium",
-        isActive: true,
-      },
-      {
-        id: "realtime-accuracy",
-        name: "Real-Time Accuracy Dashboard",
-        component: RealTimeAccuracyDashboard,
-        icon: <Activity className="w-5 h-5" />,
-        category: "analytics",
-        priority: "critical",
-        dependencies: [],
-        computationLevel: "heavy",
-        isActive: true,
-      },
-      {
-        id: "mega-analytics",
-        name: "Mega Analytics",
-        component: MegaAnalytics,
-        icon: <Flame className="w-5 h-5" />,
-        category: "analytics",
-        priority: "high",
-        dependencies: ["advanced-analytics"],
-        computationLevel: "extreme",
-        isActive: false,
-      },
-
-      // ML Modules
-      {
-        id: "ultra-ml",
-        name: "Ultra Advanced ML Dashboard",
-        component: UltraAdvancedMLDashboard,
-        icon: <Brain className="w-5 h-5" />,
-        category: "ml",
-        priority: "critical",
-        dependencies: [],
-        computationLevel: "extreme",
-        isActive: true,
-      },
-      {
-        id: "ml-model-center",
-        name: "ML Model Center",
-        component: MLModelCenter,
-        icon: <Cpu className="w-5 h-5" />,
-        category: "ml",
-        priority: "high",
-        dependencies: ["ultra-ml"],
-        computationLevel: "heavy",
-        isActive: true,
-      },
-      {
-        id: "ml-insights",
-        name: "ML Insights",
-        component: MLInsights,
-        icon: <Lightbulb className="w-5 h-5" />,
-        category: "ml",
-        priority: "medium",
-        dependencies: ["ultra-ml"],
-        computationLevel: "medium",
-        isActive: false,
-      },
-      {
-        id: "ultra-ml-insights",
-        name: "Ultra ML Insights",
-        component: UltraMLInsights,
-        icon: <Sparkles className="w-5 h-5" />,
-        category: "ml",
-        priority: "high",
-        dependencies: ["ultra-ml", "ml-insights"],
-        computationLevel: "heavy",
-        isActive: false,
-      },
-      {
-        id: "hyper-ml-insights",
-        name: "Hyper ML Insights",
-        component: HyperMLInsights,
-        icon: <Zap className="w-5 h-5" />,
-        category: "ml",
-        priority: "high",
-        dependencies: ["ultra-ml-insights"],
-        computationLevel: "extreme",
-        isActive: false,
-      },
-      {
-        id: "evolutionary-insights",
-        name: "Evolutionary Insights",
-        component: EvolutionaryInsights,
-        icon: <GitBranch className="w-5 h-5" />,
-        category: "ml",
-        priority: "medium",
-        dependencies: ["ultra-ml"],
-        computationLevel: "heavy",
-        isActive: false,
-      },
-      {
-        id: "clustering-insights",
-        name: "Clustering Insights",
-        component: ClusteringInsights,
-        icon: <Network className="w-5 h-5" />,
-        category: "ml",
-        priority: "medium",
-        dependencies: ["ultra-ml"],
-        computationLevel: "medium",
-        isActive: false,
-      },
-      {
-        id: "ensemble-insights",
-        name: "Ensemble Insights",
-        component: EnsembleInsights,
-        icon: <Layers3 className="w-5 h-5" />,
-        category: "ml",
-        priority: "high",
-        dependencies: ["ultra-ml"],
-        computationLevel: "heavy",
-        isActive: false,
-      },
-      {
-        id: "feature-insights",
-        name: "Feature Insights",
-        component: FeatureInsights,
-        icon: <Hash className="w-5 h-5" />,
-        category: "ml",
-        priority: "medium",
-        dependencies: ["ultra-ml"],
-        computationLevel: "medium",
-        isActive: false,
-      },
-
-      // Cyber Modules
-      {
-        id: "cyber-analytics",
-        name: "Cyber Analytics Hub",
-        component: CyberAnalyticsHub,
-        icon: <Shield className="w-5 h-5" />,
-        category: "cyber",
-        priority: "high",
-        dependencies: ["advanced-analytics"],
-        computationLevel: "extreme",
-        isActive: false,
-      },
-      {
-        id: "cyber-ml",
-        name: "Cyber ML Dashboard",
-        component: CyberMLDashboard,
-        icon: <Atom className="w-5 h-5" />,
-        category: "cyber",
-        priority: "high",
-        dependencies: ["ultra-ml", "cyber-analytics"],
-        computationLevel: "extreme",
-        isActive: false,
-      },
-
-      // Prediction Modules
       {
         id: "ultra-accuracy",
         name: "Ultra Accuracy Dashboard",
-        component: UltraAccuracyDashboard,
+        description:
+          "97.3% accuracy prediction engine with real-time model performance",
         icon: <Target className="w-5 h-5" />,
         category: "prediction",
         priority: "critical",
         dependencies: [],
         computationLevel: "heavy",
         isActive: true,
+        component: UltraAccuracyDashboard,
+        status: "healthy",
+        lastUpdated: new Date(),
+        metrics: { accuracy: 97.3, performance: 94.8, reliability: 99.2 },
       },
       {
         id: "quantum-predictions",
         name: "Quantum Predictions Interface",
-        component: QuantumPredictionsInterface,
+        description:
+          "Quantum-enhanced prediction engine with superposition algorithms",
         icon: <Atom className="w-5 h-5" />,
         category: "quantum",
         priority: "high",
         dependencies: ["ultra-accuracy"],
         computationLevel: "extreme",
         isActive: false,
+        component: QuantumPredictionsInterface,
+        status: "healthy",
+        lastUpdated: new Date(),
+        metrics: { accuracy: 98.1, performance: 92.3, reliability: 97.8 },
       },
-      {
-        id: "universal-predictions",
-        name: "Universal Predictions",
-        component: UniversalPredictions,
-        icon: <Globe className="w-5 h-5" />,
-        category: "prediction",
-        priority: "high",
-        dependencies: ["ultra-accuracy"],
-        computationLevel: "medium",
-        isActive: false,
-      },
-
-      // Strategy Modules
       {
         id: "strategy-engine",
         name: "Unified Strategy Engine",
-        component: UnifiedStrategyEngineDisplay,
+        description:
+          "Intelligent betting strategy optimization with risk management",
         icon: <Compass className="w-5 h-5" />,
         category: "strategy",
         priority: "high",
         dependencies: [],
         computationLevel: "medium",
         isActive: true,
+        component: UnifiedStrategyEngineDisplay,
+        status: "healthy",
+        lastUpdated: new Date(),
+        metrics: { accuracy: 89.4, performance: 96.1, reliability: 94.7 },
       },
       {
-        id: "strategy-config",
-        name: "Strategy Configuration",
-        component: UnifiedStrategyConfig,
-        icon: <Settings className="w-5 h-5" />,
-        category: "strategy",
-        priority: "medium",
+        id: "cyber-analytics",
+        name: "Cyber Analytics Hub",
+        description: "Advanced cybersecurity-inspired analytics and monitoring",
+        icon: <Shield className="w-5 h-5" />,
+        category: "cyber",
+        priority: "high",
         dependencies: ["strategy-engine"],
-        computationLevel: "light",
+        computationLevel: "extreme",
         isActive: false,
+        component: CyberAnalyticsHub,
+        status: "warning",
+        lastUpdated: new Date(),
+        metrics: { accuracy: 91.2, performance: 88.9, reliability: 93.4 },
       },
-
-      // Monitoring Modules
+      {
+        id: "cyber-ml",
+        name: "Cyber ML Dashboard",
+        description:
+          "Machine learning dashboard with cyber-grade security monitoring",
+        icon: <Brain className="w-5 h-5" />,
+        category: "cyber",
+        priority: "high",
+        dependencies: ["cyber-analytics"],
+        computationLevel: "extreme",
+        isActive: false,
+        component: CyberMLDashboard,
+        status: "healthy",
+        lastUpdated: new Date(),
+        metrics: { accuracy: 95.6, performance: 90.2, reliability: 96.8 },
+      },
       {
         id: "performance-monitoring",
         name: "Performance Dashboard",
-        component: PerformanceDashboard,
+        description: "Real-time system performance and model monitoring",
         icon: <Monitor className="w-5 h-5" />,
         category: "monitoring",
         priority: "high",
         dependencies: [],
         computationLevel: "medium",
         isActive: false,
+        component: ({ moduleName }: { moduleName: string }) => (
+          <DefaultModuleComponent moduleName={moduleName} />
+        ),
+        status: "healthy",
+        lastUpdated: new Date(),
+        metrics: { accuracy: 93.7, performance: 97.8, reliability: 99.1 },
       },
       {
         id: "risk-insights",
-        name: "Risk Insights",
-        component: RiskInsights,
+        name: "Risk Assessment Matrix",
+        description: "Advanced risk analysis and mitigation strategies",
         icon: <AlertCircle className="w-5 h-5" />,
         category: "analytics",
+        priority: "medium",
+        dependencies: ["performance-monitoring"],
+        computationLevel: "medium",
+        isActive: false,
+        component: ({ moduleName }: { moduleName: string }) => (
+          <DefaultModuleComponent moduleName={moduleName} />
+        ),
+        status: "healthy",
+        lastUpdated: new Date(),
+        metrics: { accuracy: 87.9, performance: 91.3, reliability: 88.6 },
+      },
+      {
+        id: "ensemble-ml",
+        name: "Ensemble ML Engine",
+        description:
+          "Multi-model ensemble learning with automatic optimization",
+        icon: <Layers3 className="w-5 h-5" />,
+        category: "ml",
         priority: "high",
-        dependencies: ["advanced-analytics"],
-        computationLevel: "medium",
-        isActive: false,
-      },
-      {
-        id: "risk-assessment",
-        name: "Risk Assessment Matrix",
-        component: RiskAssessmentMatrix,
-        icon: <Grid className="w-5 h-5" />,
-        category: "analytics",
-        priority: "medium",
-        dependencies: ["risk-insights"],
-        computationLevel: "medium",
-        isActive: false,
-      },
-
-      // Additional Advanced Modules
-      {
-        id: "timeseries-insights",
-        name: "Time Series Insights",
-        component: TimeSeriesInsights,
-        icon: <Clock className="w-5 h-5" />,
-        category: "analytics",
-        priority: "medium",
-        dependencies: ["advanced-analytics"],
-        computationLevel: "medium",
-        isActive: false,
-      },
-      {
-        id: "shap-explanation",
-        name: "SHAP Explanations",
-        component: ShapExplanation,
-        icon: <Eye className="w-5 h-5" />,
-        category: "ml",
-        priority: "medium",
-        dependencies: ["ultra-ml"],
+        dependencies: ["ultra-accuracy"],
         computationLevel: "heavy",
         isActive: false,
-      },
-      {
-        id: "shap-insights",
-        name: "SHAP Insights",
-        component: SHAPInsight,
-        icon: <Microscope className="w-5 h-5" />,
-        category: "ml",
-        priority: "medium",
-        dependencies: ["shap-explanation"],
-        computationLevel: "heavy",
-        isActive: false,
-      },
-      {
-        id: "model-comparison",
-        name: "Model Comparison",
-        component: ModelComparison,
-        icon: <BarChart className="w-5 h-5" />,
-        category: "ml",
-        priority: "medium",
-        dependencies: ["ultra-ml"],
-        computationLevel: "medium",
-        isActive: false,
-      },
-      {
-        id: "trend-analysis",
-        name: "Trend Analysis",
-        component: TrendAnalysisChart,
-        icon: <TrendingUp className="w-5 h-5" />,
-        category: "analytics",
-        priority: "medium",
-        dependencies: ["advanced-analytics"],
-        computationLevel: "medium",
-        isActive: false,
+        component: ({ moduleName }: { moduleName: string }) => (
+          <DefaultModuleComponent moduleName={moduleName} />
+        ),
+        status: "healthy",
+        lastUpdated: new Date(),
+        metrics: { accuracy: 96.4, performance: 89.7, reliability: 95.3 },
       },
     ],
     [],
   );
 
-  // ========== API QUERIES ==========
-  const { data: intelligenceMetrics, isLoading: metricsLoading } = useQuery({
-    queryKey: ["intelligenceMetrics"],
-    queryFn: async () => {
-      const [health, accuracy, models, system] = await Promise.allSettled([
-        api.getHealthStatus(),
-        api.getAccuracyMetrics(),
-        api.getModelMetrics(),
-        api.getSystemResources(),
-      ]);
+  // Filtered modules based on search and category
+  const filteredModules = useMemo(() => {
+    return modules.filter((module) => {
+      const matchesSearch =
+        module.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        module.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "all" || module.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [modules, searchQuery, selectedCategory]);
 
-      return {
-        overallHealth:
-          health.status === "fulfilled"
-            ? health.value?.overallHealth * 100 || 85
-            : 85,
-        ensembleAccuracy:
-          accuracy.status === "fulfilled"
-            ? accuracy.value?.overall_accuracy * 100 || 92
-            : 92,
-        predictionLatency:
-          accuracy.status === "fulfilled"
-            ? accuracy.value?.prediction_latency || 150
-            : 150,
-        activeModels:
-          models.status === "fulfilled"
-            ? models.value?.active_models || 12
-            : 12,
-        dataQuality:
-          health.status === "fulfilled"
-            ? health.value?.dataQuality * 100 || 94
-            : 94,
-        systemLoad:
-          system.status === "fulfilled" ? system.value?.cpu_usage || 65 : 65,
-        automationLevel: 98,
-        confidenceScore: 96.5,
-        quantumCoherence: quantumState.coherence * 100,
-        neuralSyncLevel: 94.7,
-        evolutionaryProgress: 89.3,
-        cyberIntegrationScore: 91.8,
-      } as IntelligenceMetrics;
-    },
-    refetchInterval: isAutoRefreshEnabled ? refreshInterval : false,
-    retry: 2,
-    onSuccess: () => {
-      setLastUpdated(new Date());
-      setIsManualRefreshing(false);
-    },
-  });
+  // Active modules
+  const activeModules = useMemo(
+    () =>
+      modules.filter((module) => moduleStates[module.id] ?? module.isActive),
+    [modules, moduleStates],
+  );
 
-  const { data: ensembleOutput, isLoading: ensembleLoading } = useQuery({
-    queryKey: ["ensembleOutput"],
-    queryFn: async () => {
-      try {
-        if (!intelligenceOrchestrator) {
-          throw new Error("Intelligence Orchestrator not available");
-        }
+  // System status
+  const systemStatus = useMemo(() => {
+    const healthyModules = activeModules.filter(
+      (m) => m.status === "healthy",
+    ).length;
+    const totalActive = activeModules.length;
 
-        const predictions =
-          await intelligenceOrchestrator.generateEnsemblePredictions();
-        const confidences = predictions.map((p) => p.confidence);
-        const diversityScores = predictions.map(
-          (p) => p.metadata.diversityScore,
-        );
-        const consensusLevels = predictions.map(
-          (p) => p.metadata.consensusLevel,
-        );
+    if (totalActive === 0) return { status: "offline", color: "bg-gray-500" };
+    if (healthyModules === totalActive)
+      return { status: "optimal", color: "bg-green-500" };
+    if (healthyModules / totalActive > 0.7)
+      return { status: "good", color: "bg-yellow-500" };
+    return { status: "degraded", color: "bg-red-500" };
+  }, [activeModules]);
 
-        return {
-          predictions,
-          metaAnalysis: {
-            overallConfidence:
-              confidences.reduce((a, b) => a + b, 0) / confidences.length || 0,
-            diversityScore:
-              diversityScores.reduce((a, b) => a + b, 0) /
-                diversityScores.length || 0,
-            consensusLevel:
-              consensusLevels.reduce((a, b) => a + b, 0) /
-                consensusLevels.length || 0,
-            riskAssessment:
-              predictions.length > 0
-                ? predictions[0].metadata.riskAssessment
-                : "Unknown",
-          },
-        };
-      } catch (error) {
-        console.warn("Using fallback ensemble data:", error);
-        return {
-          predictions: [
-            {
-              id: "pred-1",
-              sport: "NBA",
-              market: "Player Points",
-              prediction: "LeBron James Over 27.5 Points",
-              confidence: 94.2,
-              expectedValue: 0.185,
-              kellyFraction: 0.12,
-              reasoning: [
-                "Historical performance vs this opponent: 31.2 avg",
-                "Recent form: 29.8 points in last 5 games",
-                "Matchup advantage: Weak opposing defense",
-                "Rest advantage: 2 days vs opponent's back-to-back",
-              ],
-              contributingModels: [
-                "XGBoost-Ensemble",
-                "Neural-Deep-V3",
-                "Bayesian-Optimizer",
-                "Pattern-Recognition",
-              ],
-              timestamp: Date.now(),
-              metadata: {
-                diversityScore: 0.87,
-                consensusLevel: 0.91,
-                riskAssessment: "Moderate",
-                dataQuality: 0.94,
-              },
-            },
-          ] as EnsemblePrediction[],
-          metaAnalysis: {
-            overallConfidence: 94.2,
-            diversityScore: 0.87,
-            consensusLevel: 0.91,
-            riskAssessment: "Moderate - Well-balanced portfolio",
-          },
-        };
-      }
-    },
-    refetchInterval: 10000,
-    retry: 2,
-  });
-
-  // ========== ORCHESTRATOR INITIALIZATION ==========
-  useEffect(() => {
-    const initializeOrchestrator = async () => {
-      try {
-        await intelligenceOrchestrator.initialize();
-        const currentSettings =
-          intelligenceOrchestrator.getAutomationSettings();
-        setAutomationConfig(currentSettings);
-        toast.success("Intelligence Orchestrator initialized successfully");
-      } catch (error) {
-        console.error("Failed to initialize orchestrator:", error);
-        toast.error("Failed to initialize orchestrator - using fallback mode");
-      }
-    };
-
-    initializeOrchestrator();
-  }, []);
-
-  // ========== QUANTUM STATE MANAGEMENT ==========
-  useEffect(() => {
-    if (isQuantumMode) {
-      const interval = setInterval(() => {
-        setQuantumState((prev) => ({
-          coherence: Math.min(
-            0.98,
-            prev.coherence + (Math.random() - 0.5) * 0.02,
-          ),
-          entanglement: Math.min(
-            0.95,
-            prev.entanglement + (Math.random() - 0.5) * 0.03,
-          ),
-          superposition: Math.min(
-            0.97,
-            prev.superposition + (Math.random() - 0.5) * 0.025,
-          ),
-          interference: Math.max(
-            0.01,
-            prev.interference + (Math.random() - 0.5) * 0.01,
-          ),
-        }));
-      }, 2000);
-      return () => clearInterval(interval);
-    }
-  }, [isQuantumMode]);
-
-  // ========== WEBSOCKET CONNECTION FOR REAL-TIME UPDATES ==========
-  useEffect(() => {
-    const connectWebSocket = () => {
-      try {
-        webSocketRef.current = new WebSocket("ws://localhost:8000");
-
-        webSocketRef.current.onopen = () => {
-          console.log("Intelligence Hub WebSocket connected");
-          toast.success("Real-time data stream connected");
-        };
-
-        webSocketRef.current.onmessage = (event) => {
-          const data = JSON.parse(event.data);
-
-          // Handle real-time updates
-          if (data.type === "metrics_update") {
-            queryClient.invalidateQueries({
-              queryKey: ["intelligenceMetrics"],
-            });
-          } else if (data.type === "prediction_update") {
-            queryClient.invalidateQueries({ queryKey: ["ensembleOutput"] });
-          }
-        };
-
-        webSocketRef.current.onerror = () => {
-          console.warn("WebSocket connection failed - using polling mode");
-        };
-      } catch (error) {
-        console.warn("WebSocket not available - using polling mode");
-      }
-    };
-
-    connectWebSocket();
-
-    return () => {
-      if (webSocketRef.current) {
-        webSocketRef.current.close();
-      }
-    };
-  }, [queryClient]);
-
-  // ========== MODULE MANAGEMENT ==========
+  // Module toggle handler
   const toggleModule = useCallback(
     (moduleId: string) => {
-      setActiveModules((prev) => {
-        const newSet = new Set(prev);
-        if (newSet.has(moduleId)) {
-          newSet.delete(moduleId);
-          toast.success(
-            `Deactivated ${moduleConfigs.find((m) => m.id === moduleId)?.name}`,
-          );
-        } else {
-          newSet.add(moduleId);
-          toast.success(
-            `Activated ${moduleConfigs.find((m) => m.id === moduleId)?.name}`,
-          );
-        }
-        return newSet;
-      });
-    },
-    [moduleConfigs],
-  );
+      setModuleStates((prev) => ({
+        ...prev,
+        [moduleId]: !prev[moduleId],
+      }));
 
-  const getActiveModuleConfigs = useCallback(() => {
-    return moduleConfigs.filter((config) => activeModules.has(config.id));
-  }, [moduleConfigs, activeModules]);
-
-  // ========== MONEY-MAKING METRICS ==========
-  const getModuleMetrics = useCallback((moduleId: string) => {
-    const scoreMap: Record<string, any> = {
-      "advanced-analytics": {
-        moneyMakingScore: 95,
-        predictionImpact: 12,
-        profitContribution: 25000,
-        reliabilityScore: 98,
-      },
-      "ultra-accuracy": {
-        moneyMakingScore: 92,
-        predictionImpact: 18,
-        profitContribution: 22000,
-        reliabilityScore: 96,
-      },
-      "ultra-ml": {
-        moneyMakingScore: 88,
-        predictionImpact: 15,
-        profitContribution: 20000,
-        reliabilityScore: 94,
-      },
-      "realtime-accuracy": {
-        moneyMakingScore: 85,
-        predictionImpact: 10,
-        profitContribution: 18000,
-        reliabilityScore: 92,
-      },
-      "strategy-engine": {
-        moneyMakingScore: 82,
-        predictionImpact: 6,
-        profitContribution: 15000,
-        reliabilityScore: 90,
-      },
-      "performance-analytics": {
-        moneyMakingScore: 78,
-        predictionImpact: 5,
-        profitContribution: 10000,
-        reliabilityScore: 88,
-      },
-      "ml-model-center": {
-        moneyMakingScore: 75,
-        predictionImpact: 8,
-        profitContribution: 12000,
-        reliabilityScore: 86,
-      },
-      "mega-analytics": {
-        moneyMakingScore: 90,
-        predictionImpact: 20,
-        profitContribution: 30000,
-        reliabilityScore: 95,
-      },
-      "ensemble-insights": {
-        moneyMakingScore: 68,
-        predictionImpact: 14,
-        profitContribution: 8000,
-        reliabilityScore: 84,
-      },
-      "cyber-analytics": {
-        moneyMakingScore: 70,
-        predictionImpact: 7,
-        profitContribution: 9000,
-        reliabilityScore: 82,
-      },
-      "universal-analytics": {
-        moneyMakingScore: 72,
-        predictionImpact: 6,
-        profitContribution: 8500,
-        reliabilityScore: 80,
-      },
-      "feature-insights": {
-        moneyMakingScore: 65,
-        predictionImpact: 9,
-        profitContribution: 7000,
-        reliabilityScore: 78,
-      },
-    };
-    return (
-      scoreMap[moduleId] || {
-        moneyMakingScore: 50,
-        predictionImpact: 3,
-        profitContribution: 5000,
-        reliabilityScore: 75,
+      const module = modules.find((m) => m.id === moduleId);
+      if (module) {
+        toast.success(
+          `${module.name} ${moduleStates[moduleId] ? "deactivated" : "activated"}`,
+        );
       }
-    );
+    },
+    [modules, moduleStates],
+  );
+
+  // System optimization
+  const optimizeSystem = useCallback(async () => {
+    toast.loading("Optimizing AI system...");
+
+    // Simulate optimization process
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setSystemMetrics((prev) => ({
+      ...prev,
+      cpu: Math.max(30, prev.cpu - 15),
+      memory: Math.max(25, prev.memory - 10),
+      accuracy: Math.min(99.9, prev.accuracy + 1.2),
+    }));
+
+    setIsSystemOptimized(true);
+    toast.dismiss();
+    toast.success("System optimized successfully!");
   }, []);
 
-  const getModuleMoneyScore = useCallback(
-    (moduleId: string) => {
-      return getModuleMetrics(moduleId).moneyMakingScore;
-    },
-    [getModuleMetrics],
-  );
+  // Real-time updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSystemMetrics((prev) => ({
+        ...prev,
+        cpu: Math.max(20, Math.min(90, prev.cpu + (Math.random() - 0.5) * 10)),
+        memory: Math.max(
+          15,
+          Math.min(85, prev.memory + (Math.random() - 0.5) * 8),
+        ),
+        gpu: Math.max(30, Math.min(95, prev.gpu + (Math.random() - 0.5) * 12)),
+        network: Math.max(
+          60,
+          Math.min(100, prev.network + (Math.random() - 0.5) * 5),
+        ),
+        totalPredictions: prev.totalPredictions + Math.floor(Math.random() * 5),
+      }));
+    }, 3000);
 
-  const getModuleAccuracyBoost = useCallback(
-    (moduleId: string) => {
-      return getModuleMetrics(moduleId).predictionImpact;
-    },
-    [getModuleMetrics],
-  );
-
-  const getModuleProfitScore = useCallback(
-    (moduleId: string) => {
-      return getModuleMetrics(moduleId).profitContribution / 1000;
-    },
-    [getModuleMetrics],
-  );
-
-  const getModuleMoneyScoreOld = useCallback((moduleId: string) => {
-    const scoreMap: Record<string, number> = {
-      "advanced-analytics": 95,
-      "ultra-accuracy": 92,
-      "ultra-ml": 88,
-      "realtime-accuracy": 85,
-      "strategy-engine": 82,
-      "performance-analytics": 78,
-      "ml-model-center": 75,
-      "universal-analytics": 72,
-      "ensemble-insights": 68,
-      "feature-insights": 65,
-      "mega-analytics": 90,
-      "cyber-analytics": 70,
-    };
-    return scoreMap[moduleId] || Math.floor(Math.random() * 40) + 40;
+    return () => clearInterval(interval);
   }, []);
 
+  // Categories for filtering
+  const categories = [
+    { value: "all", label: "All Modules" },
+    { value: "prediction", label: "Prediction" },
+    { value: "analytics", label: "Analytics" },
+    { value: "ml", label: "Machine Learning" },
+    { value: "strategy", label: "Strategy" },
+    { value: "monitoring", label: "Monitoring" },
+    { value: "quantum", label: "Quantum" },
+    { value: "cyber", label: "Cyber" },
+  ];
 
-
-  // ========== AUTOMATION HANDLERS ==========
-  const triggerSystemOptimization = useCallback(async () => {
-    setIsSystemOptimizing(true);
-    try {
-      toast.loading("Initiating system-wide optimization...", {
-        duration: 2000,
-      });
-
-      const metrics = await intelligenceOrchestrator.getOrchestrationMetrics();
-      toast.success(
-        `System optimization complete! Performance: ${(metrics.ensemblePerformance * 100).toFixed(1)}%`,
-      );
-      queryClient.invalidateQueries();
-    } catch (error) {
-      toast.error("Optimization failed - please check system status");
-    } finally {
-      setIsSystemOptimizing(false);
-    }
-  }, [queryClient]);
-
-  const handleAutomationToggle = useCallback(
-    (key: keyof AutomationSettings, value: boolean | string | number) => {
-      const newConfig = { ...automationConfig, [key]: value };
-      setAutomationConfig(newConfig);
-      intelligenceOrchestrator.updateAutomationSettings(newConfig);
-      toast.success(`Automation setting updated: ${key}`);
-    },
-    [automationConfig],
-  );
-
-  // ========== ORCHESTRATOR VIEW ==========
-  const OrchestratorView = () => (
-    <div className="space-y-6">
-      {/* System Status Header with Quantum Integration */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30 relative overflow-hidden">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-green-300">System Health</p>
-                <p className="text-2xl font-bold text-green-400">
-                  {intelligenceMetrics?.overallHealth.toFixed(1) || "98.5"}%
-                </p>
-              </div>
-              <CheckCircle className="w-8 h-8 text-green-400" />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent animate-pulse" />
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-blue-500/30 relative overflow-hidden">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-blue-300">Ensemble Accuracy</p>
-                <p className="text-2xl font-bold text-blue-400">
-                  {intelligenceMetrics?.ensembleAccuracy.toFixed(1) || "96.8"}%
-                </p>
-              </div>
-              <Brain className="w-8 h-8 text-blue-400" />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent animate-pulse" />
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-br from-purple-500/20 to-violet-500/20 border-purple-500/30 relative overflow-hidden">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-purple-300">Active Modules</p>
-                <p className="text-2xl font-bold text-purple-400">
-                  {activeModules.size}
-                </p>
-              </div>
-              <Layers className="w-8 h-8 text-purple-400" />
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent animate-pulse" />
-          </CardContent>
-        </Card>
-
-        <Card
-          className={`bg-gradient-to-br ${isQuantumMode ? "from-pink-500/20 to-cyan-500/20 border-pink-500/30" : "from-orange-500/20 to-red-500/20 border-orange-500/30"} relative overflow-hidden transition-all duration-1000`}
-        >
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-orange-300">
-                  {isQuantumMode ? "Quantum Coherence" : "Automation Level"}
-                </p>
-                <p className="text-2xl font-bold text-orange-400">
-                  {isQuantumMode
-                    ? `${(quantumState.coherence * 100).toFixed(1)}%`
-                    : `${intelligenceMetrics?.automationLevel || "98"}%`}
-                </p>
-              </div>
-              {isQuantumMode ? (
-                <Atom className="w-8 h-8 text-pink-400 animate-spin" />
-              ) : (
-                <Zap className="w-8 h-8 text-orange-400" />
-              )}
-            </div>
-            <div
-              className={`absolute inset-0 bg-gradient-to-r ${isQuantumMode ? "from-pink-500/20" : "from-orange-500/10"} to-transparent animate-pulse`}
-            />
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Quantum Controls */}
-      {isQuantumMode && (
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4"
+          className="text-center space-y-4"
         >
-          {Object.entries(quantumState).map(([key, value]) => (
-            <Card
-              key={key}
-              className="bg-gradient-to-br from-pink-500/10 to-cyan-500/10 border-pink-500/20"
+          <div className="flex items-center justify-center space-x-3">
+            <div className="relative">
+              <Brain className="w-12 h-12 text-blue-600" />
+              <div
+                className={`absolute -top-1 -right-1 w-4 h-4 ${systemStatus.color} rounded-full animate-pulse`}
+              />
+            </div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Advanced Intelligence Hub
+            </h1>
+          </div>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Unified AI-powered betting intelligence platform with quantum
+            predictions, cyber-grade analytics, and revolutionary accuracy
+            systems
+          </p>
+          <div className="flex items-center justify-center space-x-4">
+            <Badge
+              variant={isConnected ? "default" : "destructive"}
+              className="px-3 py-1"
             >
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm text-pink-300 capitalize">{key}</p>
-                  <Satellite className="w-4 h-4 text-pink-400" />
-                </div>
-                <p className="text-lg font-bold text-pink-400">
-                  {(value * 100).toFixed(2)}%
-                </p>
-                <Progress value={value * 100} className="mt-2 h-1" />
-              </CardContent>
-            </Card>
-          ))}
+              {isConnected ? "🟢 Connected" : "🔴 Offline"}
+            </Badge>
+            <Badge variant="outline" className="px-3 py-1">
+              {activeModules.length} Active Modules
+            </Badge>
+            <Badge variant="outline" className="px-3 py-1">
+              System {systemStatus.status}
+            </Badge>
+          </div>
         </motion.div>
-      )}
 
-      {/* Real-time Ensemble Output */}
-      <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
-        <CardHeader>
-          <CardTitle className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-yellow-400" />
-              Live Ensemble Predictions
-              <Badge variant="outline">
-                {ensembleOutput?.predictions.length || 0} Active
-              </Badge>
-            </div>
-
-            <div className="flex items-center gap-2 ml-auto">
+        {/* System Overview */}
+        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center space-x-2">
+                <Activity className="w-5 h-5 text-blue-600" />
+                <span>System Overview</span>
+              </CardTitle>
               <Button
-                size="sm"
+                onClick={optimizeSystem}
                 variant="outline"
-                onClick={() => setIsQuantumMode(!isQuantumMode)}
-                className={`${isQuantumMode ? "bg-pink-500/20 border-pink-500/50" : ""}`}
+                size="sm"
+                className="hover:bg-blue-50"
               >
-                {isQuantumMode ? (
-                  <Atom className="w-4 h-4 mr-1 animate-spin" />
-                ) : (
-                  <Binary className="w-4 h-4 mr-1" />
-                )}
-                {isQuantumMode ? "Quantum" : "Classical"}
+                <Zap className="w-4 h-4 mr-2" />
+                Optimize System
               </Button>
-
-              {/* Refresh Controls */}
-              <div className="flex items-center gap-1 relative z-10">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setIsAutoRefreshEnabled(!isAutoRefreshEnabled)}
-                  className={`${isAutoRefreshEnabled ? "bg-green-500/20 border-green-500/50" : "bg-gray-500/20 border-gray-500/50"}`}
-                >
-                  {isAutoRefreshEnabled ? (
-                    <Play className="w-4 h-4" />
-                  ) : (
-                    <Pause className="w-4 h-4" />
-                  )}
-                </Button>
-
-                <select
-                  value={refreshInterval}
-                  onChange={(e) => setRefreshInterval(Number(e.target.value))}
-                  className="text-xs bg-slate-700 border border-slate-600 rounded px-2 py-1 text-white"
-                >
-                  <option value={2000}>2s</option>
-                  <option value={5000}>5s</option>
-                  <option value={10000}>10s</option>
-                  <option value={30000}>30s</option>
-                </select>
-
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    setIsManualRefreshing(true);
-                    // This will trigger a refetch in the next render
-                  }}
-                  disabled={isManualRefreshing}
-                  className="h-7"
-                >
-                  <RefreshCw
-                    className={`w-4 h-4 ${isManualRefreshing ? "animate-spin" : ""}`}
-                  />
-                </Button>
-
-                <span className="text-xs text-slate-400">
-                  {lastUpdated.toLocaleTimeString()}
-                </span>
-              </div>
             </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {ensembleOutput?.predictions.map((prediction, index) => (
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <motion.div
-                key={prediction.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="p-4 bg-gradient-to-r from-slate-700/50 to-slate-600/50 rounded-lg border border-slate-600/50 relative overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                className="text-center space-y-2"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h4 className="font-semibold text-white">
-                      {prediction.prediction}
-                    </h4>
-                    <p className="text-sm text-slate-300">
-                      {prediction.sport} • {prediction.market}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-green-400">
-                      {prediction.confidence.toFixed(1)}%
-                    </div>
-                    <div className="text-sm text-slate-400">Confidence</div>
-                  </div>
+                <div className="relative">
+                  <Progress value={systemMetrics.cpu} className="h-2" />
+                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
+                    {systemMetrics.cpu}%
+                  </span>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4 mb-3">
-                  <div>
-                    <span className="text-sm text-slate-400">
-                      Expected Value:
-                    </span>
-                    <span className="ml-2 text-green-400 font-semibold">
-                      +{(prediction.expectedValue * 100).toFixed(1)}%
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-sm text-slate-400">
-                      Kelly Fraction:
-                    </span>
-                    <span className="ml-2 text-blue-400 font-semibold">
-                      {(prediction.kellyFraction * 100).toFixed(1)}%
-                    </span>
-                  </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">CPU Usage</p>
+                  <p className="text-xs text-gray-500">Processing Power</p>
                 </div>
-
-                <div className="mb-3">
-                  <p className="text-sm text-slate-400 mb-2">
-                    Contributing Models:
-                  </p>
-                  <div className="flex flex-wrap gap-1">
-                    {prediction.contributingModels.map((model, idx) => (
-                      <Badge key={idx} variant="secondary" className="text-xs">
-                        {model}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setShowPropOllama(true)}
-                    className="flex-1"
-                  >
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    Explain with PropOllama
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setSelectedModule("shap-explanation")}
-                  >
-                    <Eye className="w-4 h-4 mr-2" />
-                    SHAP Analysis
-                  </Button>
-                </div>
-
-                {isQuantumMode && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-cyan-500/5 animate-pulse" />
-                )}
               </motion.div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
 
-  // ========== MODULE SELECTION VIEW ==========
-  const ModuleSelectionView = () => (
-    <div className="space-y-6">
-      {/* Module Layout Controls */}
-      <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span className="flex items-center gap-2">
-              <Grid className="w-5 h-5" />
-              Module Management
-            </span>
-            <div className="flex items-center gap-2">
-              <Button
-                size="sm"
-                variant={moduleLayout === "grid" ? "default" : "outline"}
-                onClick={() => setModuleLayout("grid")}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="text-center space-y-2"
               >
-                <Grid className="w-4 h-4" />
-              </Button>
-              <Button
-                size="sm"
-                variant={moduleLayout === "tabs" ? "default" : "outline"}
-                onClick={() => setModuleLayout("tabs")}
+                <div className="relative">
+                  <Progress value={systemMetrics.memory} className="h-2" />
+                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
+                    {systemMetrics.memory}%
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Memory</p>
+                  <p className="text-xs text-gray-500">RAM Usage</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="text-center space-y-2"
               >
-                <List className="w-4 h-4" />
-              </Button>
-              <Button
-                size="sm"
-                variant={moduleLayout === "accordion" ? "default" : "outline"}
-                onClick={() => setModuleLayout("accordion")}
+                <div className="relative">
+                  <Progress value={systemMetrics.accuracy} className="h-2" />
+                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
+                    {systemMetrics.accuracy}%
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Accuracy</p>
+                  <p className="text-xs text-gray-500">Overall Performance</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="text-center space-y-2"
               >
-                <Layers2 className="w-4 h-4" />
-              </Button>
+                <div className="relative">
+                  <Progress value={systemMetrics.network} className="h-2" />
+                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
+                    {systemMetrics.network}%
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Network</p>
+                  <p className="text-xs text-gray-500">Connection Quality</p>
+                </div>
+              </motion.div>
             </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* Module Performance Summary */}
-          <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-green-300 uppercase tracking-wide">
-                      Active Profit Engine
-                    </p>
-                    <p className="text-xl font-bold text-green-400">
-                      $
-                      {getActiveModuleConfigs()
-                        .reduce(
-                          (sum, m) =>
-                            sum +
-                            (getModuleMetrics(m.id).profitContribution || 0),
-                          0,
-                        )
-                        .toLocaleString()}
-                    </p>
-                    <p className="text-xs text-green-300">
-                      Last 24h contribution
-                    </p>
+
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold text-blue-700">
+                    {systemMetrics.totalPredictions.toLocaleString()}
                   </div>
-                  <DollarSign className="w-8 h-8 text-green-400" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-blue-300 uppercase tracking-wide">
-                      Prediction Accuracy
-                    </p>
-                    <p className="text-xl font-bold text-blue-400">
-                      {(
-                        getActiveModuleConfigs().reduce(
-                          (sum, m) =>
-                            sum +
-                            (getModuleMetrics(m.id).predictionImpact || 0),
-                          0,
-                        ) / Math.max(getActiveModuleConfigs().length, 1)
-                      ).toFixed(1)}
-                      %
-                    </p>
-                    <p className="text-xs text-blue-300">Ensemble average</p>
+                  <div className="text-sm text-blue-600">Total Predictions</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold text-green-700">
+                    {systemMetrics.uptime}%
                   </div>
-                  <Target className="w-8 h-8 text-blue-400" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-purple-300 uppercase tracking-wide">
-                      Active Modules
-                    </p>
-                    <p className="text-xl font-bold text-purple-400">
-                      {activeModules.size}/{moduleConfigs.length}
-                    </p>
-                    <p className="text-xs text-purple-300">
-                      Optimal: 6-8 modules
-                    </p>
+                  <div className="text-sm text-green-600">System Uptime</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200">
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold text-purple-700">
+                    {activeModules.length}
                   </div>
-                  <Brain className="w-8 h-8 text-purple-400" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                  <div className="text-sm text-purple-600">Active Modules</div>
+                </CardContent>
+              </Card>
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Enhanced Module Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {moduleConfigs
-              .sort(
-                (a, b) =>
-                  (getModuleMetrics(b.id).moneyMakingScore || 0) -
-                  (getModuleMetrics(a.id).moneyMakingScore || 0),
-              )
-              .map((module) => {
-                const metrics = getModuleMetrics(module.id);
-                const isActive = activeModules.has(module.id);
+        {/* Module Controls */}
+        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Filter className="w-5 h-5 text-blue-600" />
+              <span>Module Controls</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Input
+                  placeholder="Search modules..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
+                <SelectTrigger className="w-full sm:w-48">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.value} value={category.value}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        </Card>
 
-                return (
-                  <motion.div
-                    key={module.id}
-                    whileHover={{ scale: 1.03, rotateY: 1 }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all duration-500 backdrop-blur-xl ${
-                      activeModules.has(module.id)
-                        ? "bg-gradient-to-br from-green-500/20 via-emerald-500/15 to-blue-500/20 border-green-400/60 shadow-2xl shadow-green-500/25"
-                        : "bg-gradient-to-br from-slate-800/60 via-slate-700/40 to-slate-800/60 border-slate-600/40 hover:border-slate-500/60 hover:shadow-xl hover:shadow-black/20"
-                    }`}
-                    onClick={() => toggleModule(module.id)}
-                  >
-                    {/* Money-Making Score Badge for high-value modules */}
-                    {[
-                      "advanced-analytics",
-                      "ultra-accuracy",
-                      "ultra-ml",
-                      "realtime-accuracy",
-                      "mega-analytics",
-                    ].includes(module.id) && (
-                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse">
-                        💰{" "}
-                        {module.id === "advanced-analytics"
-                          ? "95%"
-                          : module.id === "ultra-accuracy"
-                            ? "92%"
-                            : module.id === "ultra-ml"
-                              ? "88%"
-                              : module.id === "mega-analytics"
-                                ? "90%"
-                                : "85%"}
-                      </div>
-                    )}
-                    {/* Money-Making Score Badge */}
-                    {metrics.moneyMakingScore > 80 && (
-                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-xs font-bold px-2 py-1 rounded-full shadow-lg">
-                        💰 {metrics.moneyMakingScore}%
-                      </div>
-                    )}
-
-                    {/* Header */}
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
+        {/* Modules Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <AnimatePresence>
+            {filteredModules.map((module) => (
+              <motion.div
+                key={module.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                whileHover={{ y: -5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Card className="border-0 shadow-xl bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center space-x-3">
                         <div
-                          className={`p-2 rounded-lg ${isActive ? "bg-green-500/20" : "bg-slate-600/20"}`}
+                          className={`p-2 rounded-lg ${
+                            module.status === "healthy"
+                              ? "bg-green-100 text-green-600"
+                              : module.status === "warning"
+                                ? "bg-yellow-100 text-yellow-600"
+                                : module.status === "error"
+                                  ? "bg-red-100 text-red-600"
+                                  : "bg-gray-100 text-gray-600"
+                          }`}
                         >
                           {module.icon}
                         </div>
                         <div>
-                          <span className="font-semibold text-sm block">
+                          <h3 className="font-semibold text-gray-900">
                             {module.name}
-                          </span>
-                          <span className="text-xs text-slate-400">
+                          </h3>
+                          <Badge variant="outline" className="mt-1">
                             {module.category}
-                          </span>
+                          </Badge>
                         </div>
                       </div>
-                      {isActive ? (
-                        <div className="flex items-center gap-1">
-                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                          <ToggleRight className="w-5 h-5 text-green-400" />
-                        </div>
-                      ) : (
-                        <ToggleLeft className="w-5 h-5 text-slate-400" />
-                      )}
-                    </div>
-
-                    {/* Performance Metrics */}
-                    <div className="space-y-2 mb-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-slate-400">
-                          Profit Impact
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <div
-                            className={`w-12 h-1.5 rounded-full bg-gradient-to-r ${
-                              metrics.moneyMakingScore >= 90
-                                ? "from-green-500 to-emerald-400"
-                                : metrics.moneyMakingScore >= 70
-                                  ? "from-yellow-500 to-orange-400"
-                                  : "from-red-500 to-pink-400"
-                            }`}
-                            style={{
-                              width: `${Math.max(metrics.moneyMakingScore * 0.5, 6)}px`,
-                            }}
-                          ></div>
-                          <span className="text-xs font-medium">
-                            {metrics.moneyMakingScore}%
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-slate-400">
-                          Prediction Boost
-                        </span>
-                        <span className="text-xs font-medium text-blue-400">
-                          +{metrics.predictionImpact}%
-                        </span>
-                      </div>
-
-                      {metrics.profitContribution > 0 && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-slate-400">
-                            24h Profit
-                          </span>
-                          <span className="text-xs font-medium text-green-400">
-                            +${metrics.profitContribution.toLocaleString()}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Priority and Status */}
-                    <div className="flex items-center justify-between">
-                      <Badge
-                        variant="outline"
-                        className={`text-xs ${
-                          module.priority === "critical"
-                            ? "border-red-400/60 text-red-300 bg-red-500/10"
-                            : module.priority === "high"
-                              ? "border-orange-400/60 text-orange-300 bg-orange-500/10"
-                              : module.priority === "medium"
-                                ? "border-yellow-400/60 text-yellow-300 bg-yellow-500/10"
-                                : "border-green-400/60 text-green-300 bg-green-500/10"
-                        }`}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleModule(module.id)}
+                        className={
+                          (moduleStates[module.id] ?? module.isActive)
+                            ? "text-green-600 hover:text-green-700 hover:bg-green-50"
+                            : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+                        }
                       >
-                        {module.priority}
-                      </Badge>
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-slate-500">
-                          {module.computationLevel}
-                        </span>
-                        <div
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            module.computationLevel === "light"
-                              ? "bg-green-400"
-                              : module.computationLevel === "medium"
-                                ? "bg-yellow-400"
-                                : module.computationLevel === "heavy"
-                                  ? "bg-orange-400"
-                                  : "bg-red-400"
-                          }`}
-                        ></div>
+                        {(moduleStates[module.id] ?? module.isActive) ? (
+                          <ToggleRight className="w-5 h-5" />
+                        ) : (
+                          <ToggleLeft className="w-5 h-5" />
+                        )}
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-gray-600">
+                      {module.description}
+                    </p>
+
+                    {module.metrics && (
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-xs">
+                          <span>Accuracy</span>
+                          <span>{module.metrics.accuracy}%</span>
+                        </div>
+                        <Progress
+                          value={module.metrics.accuracy}
+                          className="h-1"
+                        />
+
+                        <div className="flex justify-between text-xs">
+                          <span>Performance</span>
+                          <span>{module.metrics.performance}%</span>
+                        </div>
+                        <Progress
+                          value={module.metrics.performance}
+                          className="h-1"
+                        />
                       </div>
+                    )}
+
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                      <span>Priority: {module.priority}</span>
+                      <span>Load: {module.computationLevel}</span>
                     </div>
 
-                    {/* Active indicator glow */}
-                    {isActive && (
-                      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-green-500/5 to-blue-500/5 animate-pulse pointer-events-none"></div>
+                    {module.dependencies.length > 0 && (
+                      <div className="text-xs text-gray-500">
+                        Dependencies: {module.dependencies.join(", ")}
+                      </div>
                     )}
-                  </motion.div>
-                );
-              })}
-          </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
 
-          {/* Quick Actions */}
-          <div className="mt-6 flex gap-2">
-            <Button
-              onClick={() => {
-                const criticalModules = moduleConfigs
-                  .filter((m) => m.priority === "critical")
-                  .map((m) => m.id);
-                setActiveModules(new Set(criticalModules));
-                toast.success("Activated all critical modules");
-              }}
-              className="flex-1"
-            >
-              <Zap className="w-4 h-4 mr-2" />
-              Critical Only
-            </Button>
-            <Button
-              onClick={() => {
-                const allModules = moduleConfigs.map((m) => m.id);
-                setActiveModules(new Set(allModules));
-                toast.success("Activated all modules");
-              }}
-              variant="outline"
-              className="flex-1"
-            >
-              <Power className="w-4 h-4 mr-2" />
-              Full Power
-            </Button>
-            <Button
-              onClick={() => {
-                setActiveModules(new Set(["orchestrator"]));
-                toast.success("Minimal mode activated");
-              }}
-              variant="outline"
-              className="flex-1"
-            >
-              <Minimize className="w-4 h-4 mr-2" />
-              Minimal
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  // ========== AUTOMATION CONTROLS ==========
-  const AutomationView = () => (
-    <div className="space-y-6">
-      <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Settings className="w-5 h-5" />
-            Automation Configuration
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {Object.entries(automationConfig).map(([key, value]) => (
-            <div
-              key={key}
-              className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg"
-            >
-              <div>
-                <h4 className="font-medium text-white capitalize">
-                  {key
-                    .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, (str) => str.toUpperCase())}
-                </h4>
-                <p className="text-sm text-slate-400">
-                  {key === "enableAutoOptimization" &&
-                    "Automatically optimize models based on performance"}
-                  {key === "enableRealTimeEnsemble" &&
-                    "Real-time ensemble prediction updates"}
-                  {key === "enableSmartRebalancing" &&
-                    "Intelligent model weight rebalancing"}
-                  {key === "enablePredictiveScaling" &&
-                    "Predictive resource scaling"}
-                  {key === "optimizationThreshold" &&
-                    "Threshold for triggering optimization (0-1)"}
-                  {key === "rebalanceFrequency" &&
-                    "Frequency of model rebalancing (minutes)"}
-                  {key === "maxConcurrentPredictions" &&
-                    "Maximum concurrent predictions"}
-                  {key === "confidenceThreshold" &&
-                    "Minimum confidence for predictions (0-1)"}
-                </p>
-              </div>
-              <div>
-                {typeof value === "boolean" ? (
-                  <Button
-                    variant={value ? "default" : "outline"}
-                    size="sm"
-                    onClick={() =>
-                      handleAutomationToggle(
-                        key as keyof AutomationSettings,
-                        !value,
-                      )
-                    }
-                  >
-                    {value ? "Enabled" : "Disabled"}
-                  </Button>
-                ) : (
-                  <span className="text-blue-400 font-semibold">
-                    {typeof value === "number"
-                      ? value.toFixed(key.includes("Threshold") ? 2 : 0)
-                      : value}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* System Actions */}
-      <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
-        <CardHeader>
-          <CardTitle>System Actions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Button
-              onClick={triggerSystemOptimization}
-              disabled={isSystemOptimizing}
-              className="h-16 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-            >
-              <Brain className="w-5 h-5 mr-2" />
-              {isSystemOptimizing
-                ? "Optimizing..."
-                : "Trigger Full Optimization"}
-            </Button>
-
-            <Button
-              variant="outline"
-              className="h-16"
-              onClick={() => queryClient.invalidateQueries()}
-            >
-              <RefreshCw className="w-5 h-5 mr-2" />
-              Refresh All Data
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  // ========== ANALYTICS INTEGRATION VIEW ==========
-  const AnalyticsIntegrationView = () => {
-    const activeAnalyticsModules = getActiveModuleConfigs().filter(
-      (m) => m.category === "analytics" || m.category === "ml",
-    );
-
-    return (
-      <div className="space-y-6">
-        <Card className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="w-5 h-5" />
-              Integrated Analytics Suite
-              <Badge variant="outline" className="ml-auto">
-                {activeAnalyticsModules.length} Active
-              </Badge>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {moduleLayout === "tabs" ? (
-              <Tabs
-                defaultValue={activeAnalyticsModules[0]?.id}
-                className="space-y-4"
-              >
-                <TabsList className="grid w-full grid-cols-6 bg-slate-700/30">
-                  {activeAnalyticsModules.slice(0, 6).map((module) => (
+        {/* Active Module Display */}
+        {activeModules.length > 0 && (
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Play className="w-5 h-5 text-blue-600" />
+                <span>Active Modules</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 h-auto p-2">
+                  {activeModules.slice(0, 8).map((module) => (
                     <TabsTrigger
                       key={module.id}
                       value={module.id}
-                      className="flex items-center gap-1 text-xs"
+                      className="flex items-center space-x-2 p-3 data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700"
                     >
                       {module.icon}
-                      <span className="hidden lg:inline">
-                        {module.name.split(" ")[0]}
-                      </span>
+                      <span className="hidden sm:inline">{module.name}</span>
                     </TabsTrigger>
                   ))}
                 </TabsList>
 
-                {activeAnalyticsModules.map((module) => (
+                {activeModules.map((module) => (
                   <TabsContent
                     key={module.id}
                     value={module.id}
-                    className="space-y-4"
+                    className="mt-6"
                   >
-                    <div className="min-h-[500px] bg-slate-900/30 rounded-lg p-4">
-                      <React.Suspense
-                        fallback={
-                          <div className="flex items-center justify-center h-96">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+                    <div className="border rounded-xl p-6 bg-gradient-to-br from-white to-gray-50">
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
+                            {module.icon}
                           </div>
-                        }
-                      >
-                        <module.component />
-                      </React.Suspense>
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900">
+                              {module.name}
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              {module.description}
+                            </p>
+                          </div>
+                        </div>
+                        <Badge
+                          variant={
+                            module.status === "healthy"
+                              ? "default"
+                              : "destructive"
+                          }
+                          className="capitalize"
+                        >
+                          {module.status}
+                        </Badge>
+                      </div>
+
+                      <Suspense fallback={<ModuleLoader />}>
+                        <module.component moduleName={module.name} />
+                      </Suspense>
                     </div>
                   </TabsContent>
                 ))}
               </Tabs>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {activeAnalyticsModules.map((module) => (
-                  <motion.div
-                    key={module.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-slate-900/30 rounded-lg p-4 border border-slate-700/50"
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold flex items-center gap-2">
-                        {module.icon}
-                        {module.name}
-                      </h3>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setSelectedModule(module.id)}
-                      >
-                        <Maximize className="w-4 h-4" />
-                      </Button>
-                    </div>
-                    <div className="h-64 overflow-hidden">
-                      <React.Suspense
-                        fallback={
-                          <div className="flex items-center justify-center h-full">
-                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-400"></div>
-                          </div>
-                        }
-                      >
-                        <module.component />
-                      </React.Suspense>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    );
-  };
-
-  // ========== MAIN RENDER ==========
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white p-6 relative overflow-hidden">
-      {/* Quantum Background Effects */}
-      {isQuantumMode && (
-        <div className="fixed inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 via-transparent to-cyan-500/5 animate-pulse" />
-          <div
-            className="absolute top-1/4 left-1/4 w-32 h-32 bg-pink-500/10 rounded-full blur-xl animate-bounce"
-            style={{ animationDelay: "1s" }}
-          />
-          <div
-            className="absolute top-3/4 right-1/4 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl animate-bounce"
-            style={{ animationDelay: "2s" }}
-          />
-        </div>
-      )}
-
-      {/* Header */}
-      <div className="mb-8 relative z-10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <div
-                className={`absolute inset-0 rounded-xl blur-xl opacity-60 transition-all duration-1000 ${
-                  isQuantumMode
-                    ? "bg-gradient-to-r from-pink-400 to-cyan-400"
-                    : "bg-gradient-to-r from-blue-400 to-purple-400"
-                }`}
-              />
-              <div
-                className={`relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-1000 ${
-                  isQuantumMode
-                    ? "bg-gradient-to-br from-pink-400 to-cyan-400"
-                    : "bg-gradient-to-br from-blue-400 to-purple-400"
-                }`}
-              >
-                {isQuantumMode ? (
-                  <Atom className="w-7 h-7 text-white animate-spin" />
-                ) : (
-                  <Brain className="w-7 h-7 text-white" />
-                )}
-              </div>
-            </div>
-            <div>
-              <h1
-                className={`text-3xl font-bold bg-clip-text text-transparent transition-all duration-1000 ${
-                  isQuantumMode
-                    ? "bg-gradient-to-r from-pink-400 to-cyan-400"
-                    : "bg-gradient-to-r from-blue-400 to-purple-400"
-                }`}
-              >
-                {isQuantumMode
-                  ? "Quantum Intelligence Hub"
-                  : "Advanced Intelligence Hub"}
-              </h1>
-              <p className="text-slate-400">
-                {isQuantumMode
-                  ? "Quantum-Enhanced Ensemble Orchestration & Reality Synthesis"
-                  : "Automated Ensemble Orchestration & Prediction System"}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setShowPropOllama(true)}
-              className="gap-2"
-            >
-              <MessageCircle className="w-4 h-4" />
-              PropOllama
-            </Button>
-            <Badge variant="outline" className="px-3 py-1">
-              {intelligenceMetrics?.confidenceScore.toFixed(1) || "96.5"}%
-              System Confidence
-            </Badge>
-            <Button
-              variant="outline"
-              onClick={() => setIsQuantumMode(!isQuantumMode)}
-              className={`gap-2 transition-all duration-300 ${
-                isQuantumMode
-                  ? "bg-gradient-to-r from-pink-500/20 to-cyan-500/20 border-pink-500/50"
-                  : ""
-              }`}
-            >
-              {isQuantumMode ? (
-                <Atom className="w-4 h-4 animate-spin" />
-              ) : (
-                <Zap className="w-4 h-4" />
-              )}
-              {isQuantumMode ? "Quantum Mode" : "Enter Quantum"}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation Tabs */}
-      <Tabs
-        value={selectedView}
-        onValueChange={setSelectedView}
-        className="space-y-6 relative z-10 mt-8"
-      >
-        <TabsList className="flex w-full justify-center items-center space-x-1 bg-slate-800/50 backdrop-blur-sm relative z-[60] min-h-[3rem]">
-          <TabsTrigger value="orchestrator" className="flex items-center gap-2">
-            <Workflow className="w-4 h-4" />
-            Orchestrator
-          </TabsTrigger>
-          <TabsTrigger value="modules" className="flex items-center gap-2">
-            <Grid className="w-4 h-4" />
-            Modules
-          </TabsTrigger>
-          <TabsTrigger value="analytics" className="flex items-center gap-2">
-            <BarChart3 className="w-4 h-4" />
-            Analytics Suite
-          </TabsTrigger>
-          <TabsTrigger value="automation" className="flex items-center gap-2">
-            <Settings className="w-4 h-4" />
-            Automation
-          </TabsTrigger>
-          <TabsTrigger value="quantum" className="flex items-center gap-2">
-            <Atom className="w-4 h-4" />
-            Quantum Lab
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="orchestrator">
-          <OrchestratorView />
-        </TabsContent>
-
-        <TabsContent value="modules">
-          <ModuleSelectionView />
-        </TabsContent>
-
-        <TabsContent value="analytics">
-          <AnalyticsIntegrationView />
-        </TabsContent>
-
-        <TabsContent value="automation">
-          <AutomationView />
-        </TabsContent>
-
-        <TabsContent value="quantum">
-          <div className="space-y-6">
-            <Card className="bg-gradient-to-br from-pink-500/10 to-cyan-500/10 border-pink-500/30">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Atom className="w-5 h-5 text-pink-400 animate-spin" />
-                  Quantum Computing Lab
-                  <Badge
-                    variant="outline"
-                    className="ml-auto border-pink-500/50 text-pink-400"
-                  >
-                    Experimental
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-pink-400">
-                      Quantum State Monitor
-                    </h3>
-                    {Object.entries(quantumState).map(([key, value]) => (
-                      <div key={key} className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-sm text-slate-300 capitalize">
-                            {key}
-                          </span>
-                          <span className="text-sm text-pink-400">
-                            {(value * 100).toFixed(2)}%
-                          </span>
-                        </div>
-                        <Progress value={value * 100} className="h-2" />
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-cyan-400">
-                      Quantum Predictions Interface
-                    </h3>
-                    <div className="bg-slate-900/50 rounded-lg p-4 min-h-[200px]">
-                      <React.Suspense
-                        fallback={
-                          <div className="flex items-center justify-center h-full">
-                            <Atom className="w-8 h-8 text-pink-400 animate-spin" />
-                          </div>
-                        }
-                      >
-                        <QuantumPredictionsInterface />
-                      </React.Suspense>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
-
-      {/* Selected Module Modal */}
-      <AnimatePresence>
-        {selectedModule && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-            onClick={() => setSelectedModule(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="w-full max-w-7xl max-h-[90vh] bg-slate-900 rounded-xl border border-slate-700 overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-4 border-b border-slate-700 flex items-center justify-between">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  {moduleConfigs.find((m) => m.id === selectedModule)?.icon}
-                  {moduleConfigs.find((m) => m.id === selectedModule)?.name}
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedModule(null)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-              <div className="h-[calc(90vh-80px)] overflow-auto p-4">
-                <React.Suspense
-                  fallback={
-                    <div className="flex items-center justify-center h-96">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
-                    </div>
-                  }
-                >
-                  {(() => {
-                    const module = moduleConfigs.find(
-                      (m) => m.id === selectedModule,
-                    );
-                    return module ? <module.component /> : null;
-                  })()}
-                </React.Suspense>
-              </div>
-            </motion.div>
-          </motion.div>
+            </CardContent>
+          </Card>
         )}
-      </AnimatePresence>
 
-      {/* PropOllama Modal */}
-      <AnimatePresence>
-        {showPropOllama && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-            onClick={() => setShowPropOllama(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="w-full max-w-4xl max-h-[80vh] bg-slate-900 rounded-xl border border-slate-700 overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-4 border-b border-slate-700 flex items-center justify-between">
-                <h3 className="text-lg font-semibold">
-                  PropOllama AI Assistant
-                </h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowPropOllama(false)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-              <div className="h-96 overflow-hidden">
-                <PropOllama />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Offline Indicator */}
+        <OfflineIndicator />
+      </div>
     </div>
   );
 };
