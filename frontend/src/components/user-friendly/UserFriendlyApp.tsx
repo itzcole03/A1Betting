@@ -37,6 +37,8 @@ import {
   initializeSettings,
   getUserDisplayName,
   getUserEmail,
+  getUserSettings,
+  saveUserSettings,
 } from "../../utils/userSettings";
 import toast from "react-hot-toast";
 
