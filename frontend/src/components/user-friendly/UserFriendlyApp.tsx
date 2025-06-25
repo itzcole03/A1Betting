@@ -329,7 +329,7 @@ const UserFriendlyApp: React.FC = () => {
         id: "dashboard",
         label: "Ultimate Dashboard",
         icon: <Home className="w-5 h-5" />,
-        component: UserFriendlyDashboard,
+        component: (props: any) => <UserFriendlyDashboard {...props} />,
         badge: isUltimateBrainInitialized ? "🧠" : undefined,
       },
       {
