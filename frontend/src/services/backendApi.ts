@@ -91,10 +91,12 @@ class BackendApi {
       (response) => response,
       async (error) => {
         // If we get HTML instead of JSON, we're hitting the frontend server
+        // Check for 404 errors or HTML responses (hitting frontend server)
         if (
-          error.response?.data &&
-          typeof error.response.data === "string" &&
-          error.response.data.includes("<!doctype html>")
+          error.response?.status === 404 ||
+          (error.response?.data &&
+            typeof error.response.data === "string" &&
+            error.response.data.includes("<!doctype html>"))
         ) {
           console.warn("⚠️ Backend API not available - Using mock data");
           this.useMockData = true;
