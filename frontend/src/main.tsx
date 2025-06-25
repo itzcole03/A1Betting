@@ -54,14 +54,31 @@ window.addEventListener("error", (event) => {
 
 // Handle unhandled promise rejections
 window.addEventListener("unhandledrejection", (event) => {
-  logger.error(
-    "Unhandled promise rejection",
-    {
-      reason: event.reason,
-      promise: event.promise,
-    },
-    "Global",
-  );
+  // Properly serialize the error reason
+  const errorDetails = {
+    reasonType: typeof event.reason,
+    reasonString: String(event.reason),
+    message: event.reason?.message || "No message",
+    stack: event.reason?.stack || "No stack trace",
+    name: event.reason?.name || "Unknown error",
+    code: event.reason?.code,
+    cause: event.reason?.cause,
+  };
+
+  // Try to extract more details if it's an Error object
+  if (event.reason instanceof Error) {
+    errorDetails.message = event.reason.message;
+    errorDetails.stack = event.reason.stack || "No stack trace";
+    errorDetails.name = event.reason.name;
+  }
+
+  logger.error("Unhandled promise rejection detected", errorDetails, "Global");
+
+  // Also log to console for immediate debugging
+  console.error("Unhandled promise rejection:", event.reason);
+
+  // Prevent the default browser handling to avoid "Uncaught (in promise)" errors
+  event.preventDefault();
 });
 
 const rootElement = document.getElementById("root");
