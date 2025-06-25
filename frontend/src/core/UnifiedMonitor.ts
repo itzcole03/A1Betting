@@ -95,6 +95,11 @@ export class UnifiedMonitor {
     this.reportError(error, context);
   }
 
+  trackEvent(eventName: string, data?: any) {
+    console.debug(`[EVENT] ${eventName}`, data || {});
+    // In production, this would send events to analytics services
+  }
+
   private metrics?: Map<
     string,
     {
