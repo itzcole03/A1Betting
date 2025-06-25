@@ -392,7 +392,9 @@ export class ApiService {
 
   static async getAccuracyMetrics(): Promise<AccuracyMetrics> {
     try {
-      const response = await apiClient.get("/api/v4/accuracy/current-metrics");
+      const response = await apiClient.get(
+        "/api/ultra-accuracy/model-performance",
+      );
       return response.data;
     } catch (error) {
       return ApiErrorHandler.handleError(error, "getAccuracyMetrics", {
