@@ -246,7 +246,7 @@ export const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                     onChange={(e) =>
                       handleSectionUpdate("profile", { name: e.target.value })
                     }
-                    className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                   />
                 </div>
 
@@ -258,7 +258,7 @@ export const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                     onChange={(e) =>
                       handleSectionUpdate("profile", { email: e.target.value })
                     }
-                    className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                   />
                 </div>
 
@@ -272,7 +272,7 @@ export const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                           timezone: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                     >
                       <option value="UTC-5">Eastern Time</option>
                       <option value="UTC-6">Central Time</option>
@@ -290,7 +290,7 @@ export const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                           currency: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-cyan-400 focus:outline-none"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                     >
                       <option value="USD">USD ($)</option>
                       <option value="EUR">EUR (€)</option>
@@ -438,7 +438,7 @@ export const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                         defaultStake: parseFloat(e.target.value),
                       })
                     }
-                    className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                   />
                 </div>
 
@@ -454,7 +454,7 @@ export const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                         maxStake: parseFloat(e.target.value),
                       })
                     }
-                    className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                   />
                 </div>
 
@@ -467,7 +467,7 @@ export const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                         riskLevel: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-yellow-400 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                   >
                     <option value="conservative">Conservative</option>
                     <option value="moderate">Moderate</option>

@@ -385,7 +385,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   onChange={(e) =>
                     handleModelSettingsChange({ modelType: e.target.value })
                   }
-                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-purple-400 focus:outline-none"
+                  className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                 >
                   <option value="ensemble">Ensemble</option>
                   <option value="neural">Neural Network</option>
@@ -446,7 +446,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                         | "aggressive",
                     })
                   }
-                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-purple-400 focus:outline-none"
+                  className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                 >
                   <option value="conservative">Conservative</option>
                   <option value="moderate">Moderate</option>
@@ -494,7 +494,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   onChange={(e) =>
                     handleApiKeyChange("sportsRadar", e.target.value)
                   }
-                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-green-400 focus:outline-none"
+                  className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                 />
               </div>
 
@@ -509,7 +509,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   onChange={(e) =>
                     handleApiKeyChange("theOddsApi", e.target.value)
                   }
-                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-green-400 focus:outline-none"
+                  className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                 />
               </div>
 
@@ -522,7 +522,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   placeholder="Enter API key"
                   value={apiKeys.openAI}
                   onChange={(e) => handleApiKeyChange("openAI", e.target.value)}
-                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-green-400 focus:outline-none"
+                  className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                 />
               </div>
 
@@ -537,7 +537,7 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ onNavigate }) => {
                   onChange={(e) =>
                     handleApiKeyChange("anthropic", e.target.value)
                   }
-                  className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:border-green-400 focus:outline-none"
+                  className="w-full px-4 py-3 bg-gradient-to-r from-slate-800/90 via-purple-700/80 to-slate-800/90 border border-purple-500/30 rounded-lg text-white font-medium focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all duration-200 hover:border-purple-400 backdrop-blur-sm shadow-lg shadow-purple-500/20 appearance-none cursor-pointer"
                 />
               </div>
             </div>
