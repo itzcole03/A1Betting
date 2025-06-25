@@ -27,6 +27,7 @@ import {
   Network,
   Eye,
   Gauge,
+  User,
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import OfflineIndicator from "../ui/OfflineIndicator";
@@ -72,6 +73,18 @@ interface UserData {
   winRate: number;
   totalProfit: number;
 }
+
+// Placeholder for UserProfile component
+const UserProfile: React.FC<{ onNavigate: (page: string) => void }> = ({
+  onNavigate,
+}) => {
+  return (
+    <div className="p-6 bg-gray-800/40 rounded-lg">
+      <h2 className="text-xl font-bold text-white mb-4">User Profile</h2>
+      <p className="text-gray-400">Profile functionality coming soon...</p>
+    </div>
+  );
+};
 
 // Search Modal Component
 const SearchModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
@@ -294,7 +307,7 @@ const UserFriendlyApp: React.FC = () => {
               await ultimateBrainCentralNervousSystem.initialize();
             setIsUltimateBrainInitialized(initResult.success);
             if (initResult.success) {
-              toast.success("�� Ultimate Brain System Activated!");
+              toast.success("🧠 Ultimate Brain System Activated!");
             }
             resolve(initResult.success);
           } catch (brainError) {
@@ -468,7 +481,7 @@ const UserFriendlyApp: React.FC = () => {
                     1,
                   ) || "85.0"}
                   % ACC
-                </span></button>
+                </span>
               </div>
             )}
 
@@ -487,7 +500,7 @@ const UserFriendlyApp: React.FC = () => {
               >
                 <Bell className="w-5 h-5 text-gray-400 hover:text-red-400" />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-bold">2</span></button>
+                  <span className="text-xs text-white font-bold">2</span>
                 </div>
               </button>
 
@@ -499,11 +512,14 @@ const UserFriendlyApp: React.FC = () => {
                   </p>
                   <p className="text-xs text-gray-400">{userData.tier}</p>
                 </div>
-                <button onClick={() => handleNavigate("profile")} className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center hover:scale-105 transition-transform cursor-pointer">
+                <button
+                  onClick={() => handleNavigate("profile")}
+                  className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center hover:scale-105 transition-transform cursor-pointer"
+                >
                   <span className="text-sm font-bold text-white">
                     {userData.name.charAt(0)}
-                  </span></button>
-                </div>
+                  </span>
+                </button>
               </div>
             </div>
           </div>
@@ -514,24 +530,24 @@ const UserFriendlyApp: React.FC = () => {
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
                   <DollarSign className="w-4 h-4 text-green-400" />
-                  <span className="text-gray-400">Balance:</span></button>
+                  <span className="text-gray-400">Balance:</span>
                   <span className="text-green-400 font-semibold">
                     ${userData.balance.toLocaleString()}
-                  </span></button>
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-cyan-400" />
-                  <span className="text-gray-400">Win Rate:</span></button>
+                  <span className="text-gray-400">Win Rate:</span>
                   <span className="text-cyan-400 font-semibold">
                     {(userData.winRate * 100).toFixed(1)}%
-                  </span></button>
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Trophy className="w-4 h-4 text-purple-400" />
-                  <span className="text-gray-400">Profit:</span></button>
+                  <span className="text-gray-400">Profit:</span>
                   <span className="text-purple-400 font-semibold">
                     +${userData.totalProfit.toLocaleString()}
-                  </span></button>
+                  </span>
                 </div>
               </div>
               <OfflineIndicator />
@@ -579,9 +595,9 @@ const UserFriendlyApp: React.FC = () => {
                       }`}
                     >
                       {item.icon}
-                      <span className="font-medium">{item.label}</span></button>
+                      <span className="font-medium">{item.label}</span>
                       {item.badge && (
-                        <span className="ml-auto text-xs">{item.badge}</span></button>
+                        <span className="ml-auto text-xs">{item.badge}</span>
                       )}
                     </button>
                   ))}
@@ -595,11 +611,11 @@ const UserFriendlyApp: React.FC = () => {
                     <Brain className="w-4 h-4 text-cyan-400" />
                     <span className="text-sm font-medium text-cyan-400">
                       Ultimate Brain
-                    </span></button>
+                    </span>
                   </div>
                   <div className="text-xs text-gray-400 space-y-1">
                     <div className="flex justify-between">
-                      <span>Status:</span></button>
+                      <span>Status:</span>
                       <span
                         className={`${
                           isUltimateBrainInitialized
@@ -608,22 +624,22 @@ const UserFriendlyApp: React.FC = () => {
                         }`}
                       >
                         {isUltimateBrainInitialized ? "ACTIVE" : "INITIALIZING"}
-                      </span></button>
+                      </span>
                     </div>
                     {ultimateBrainHealth && (
                       <>
                         <div className="flex justify-between">
-                          <span>Accuracy:</span></button>
+                          <span>Accuracy:</span>
                           <span className="text-cyan-400">
                             {(
                               (ultimateBrainHealth.performance?.avgAccuracy ||
                                 0.85) * 100
                             ).toFixed(1)}
                             %
-                          </span></button>
+                          </span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Engines:</span></button>
+                          <span>Engines:</span>
                           <span className="text-purple-400">
                             {ultimateBrainHealth.engines
                               ? Object.values(
@@ -634,7 +650,7 @@ const UserFriendlyApp: React.FC = () => {
                             {ultimateBrainHealth.engines
                               ? Object.keys(ultimateBrainHealth.engines).length
                               : 6}
-                          </span></button>
+                          </span>
                         </div>
                       </>
                     )}
@@ -676,7 +692,7 @@ const UserFriendlyApp: React.FC = () => {
             <div className="text-cyan-400 bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 bg-clip-text font-bold mb-2 text-lg drop-shadow-2xl relative">
               <span className="relative z-10">
                 A1BETTING ULTIMATE BRAIN INTELLIGENCE
-              </span></button>
+              </span>
             </div>
             <div className="text-cyan-300/60 font-medium">
               © 2024 Ultimate Sports Intelligence Platform • Maximum Accuracy
