@@ -65,17 +65,18 @@ class BackendApi {
   private api: AxiosInstance;
   private baseURL: string;
   private useMockData: boolean = false;
+  private isBackendAvailable: boolean = false;
 
   constructor() {
-    // Try different backend endpoints
-    this.baseURL =
-      import.meta.env.VITE_BACKEND_URL ||
-      import.meta.env.VITE_API_URL ||
-      "http://localhost:8000";
+    // Determine the correct backend URL
+    this.baseURL = this.determineBackendURL();
+
+    // Check if we should use mock data immediately
+    this.checkBackendAvailability();
 
     this.api = axios.create({
       baseURL: this.baseURL,
-      timeout: 10000,
+      timeout: 8000,
       headers: {
         "Content-Type": "application/json",
       },
@@ -92,11 +93,25 @@ class BackendApi {
       },
     );
 
-    // Response interceptor with automatic fallback
+    // Response interceptor with intelligent fallback
     this.api.interceptors.response.use(
       (response) => response,
       async (error) => {
-        console.warn(`API Error: ${error.message}. Falling back to mock data.`);
+        // If we get HTML instead of JSON, we're hitting the frontend server
+        if (
+          error.response?.data &&
+          typeof error.response.data === "string" &&
+          error.response.data.includes("<!doctype html>")
+        ) {
+          console.warn(
+            "⚠️ Backend API not available - Frontend server returned HTML. Using mock data.",
+          );
+          this.useMockData = true;
+        } else {
+          console.warn(
+            `API Error: ${error.message}. Falling back to mock data.`,
+          );
+        }
 
         // Enable mock data mode on any API failure
         this.useMockData = true;
