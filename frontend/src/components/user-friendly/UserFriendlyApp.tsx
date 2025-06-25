@@ -19,6 +19,14 @@ import {
   AlertCircle,
   CheckCircle,
   Target,
+  Activity,
+  Zap,
+  Shield,
+  Database,
+  Cpu,
+  Network,
+  Eye,
+  Gauge,
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../services/integrationService";
@@ -39,17 +47,17 @@ import {
   type SportsPredictionRequest,
 } from "../../core/UltimateBrainCentralNervousSystem";
 
-// Import user-friendly components
+// Import user-friendly components with enhanced AI
 import MoneyMakerPro from "./MoneyMakerPro";
 import PrizePicksPro from "./PrizePicksPro";
 import PropOllama from "./PropOllama";
 import UserFriendlyDashboard from "./UserFriendlyDashboard";
 import SimpleSettings from "./SimpleSettings";
-import SettingsTest from "./SettingsTest";
-// Import advanced intelligence hub
-import AdvancedIntelligenceHub from "../intelligence/AdvancedIntelligenceHub";
-// Import ultra-accuracy component
-import UltraAccuracyDashboard from "../prediction/UltraAccuracyDashboard";
+
+// Import existing components to integrate
+import { AdvancedIntelligenceHub } from "../intelligence/AdvancedIntelligenceHub";
+import { UltraAccuracyDashboard } from "../overview/UltraAccuracyOverview";
+import { AdminSettings } from "../admin/AdminSettings";
 // Import admin settings
 import AdminSettings from "../admin/AdminSettings";
 
