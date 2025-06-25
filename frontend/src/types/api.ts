@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
 export interface User {
   id: string;
@@ -8,13 +8,22 @@ export interface User {
 }
 
 export interface UserPreferences {
-  theme: 'light' | 'dark';
+  theme: "light" | "dark";
   notifications: boolean;
   defaultSport: Sport;
-  riskLevel: 'low' | 'medium' | 'high';
+  riskLevel: "low" | "medium" | "high";
 }
 
-export type Sport = 'NBA' | 'WNBA' | 'MLB' | 'NHL' | 'SOCCER';
+export type Sport =
+  | "NBA"
+  | "WNBA"
+  | "MLB"
+  | "NFL"
+  | "Soccer"
+  | "PGA"
+  | "Tennis"
+  | "Esports"
+  | "MMA";
 
 export interface Player {
   id: string;
@@ -37,7 +46,7 @@ export interface PlayerStats {
 
 export interface PlayerStatus {
   isActive: boolean;
-  injuryStatus?: 'OUT' | 'QUESTIONABLE' | 'PROBABLE';
+  injuryStatus?: "OUT" | "QUESTIONABLE" | "PROBABLE";
   lastUpdated: string;
 }
 
@@ -45,7 +54,7 @@ export interface BettingLine {
   id: string;
   playerId: string;
   sport: Sport;
-  type: 'OVER' | 'UNDER';
+  type: "OVER" | "UNDER";
   value: number;
   odds: number;
   confidence: number;
@@ -64,7 +73,7 @@ export interface Lineup {
 export interface LineupLeg {
   playerId: string;
   lineId: string;
-  type: 'OVER' | 'UNDER';
+  type: "OVER" | "UNDER";
   value: number;
   odds: number;
 }
@@ -87,7 +96,7 @@ export interface PredictionFactor {
 
 export interface ApiResponse<T> {
   data: T;
-  status: 'success' | 'error';
+  status: "success" | "error";
   message?: string;
   timestamp: string;
 }
@@ -103,7 +112,7 @@ export interface PaginationParams {
   page: number;
   limit: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 export interface FilterParams {
@@ -135,4 +144,7 @@ export interface ExpressApiResponse extends Response {
   status(code: number): this;
 }
 
-export type ExpressApiHandler = (req: ExpressApiRequest, res: ExpressApiResponse) => Promise<void | ExpressApiResponse>;
+export type ExpressApiHandler = (
+  req: ExpressApiRequest,
+  res: ExpressApiResponse,
+) => Promise<void | ExpressApiResponse>;

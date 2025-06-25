@@ -54,7 +54,7 @@ export interface BackendArbitrageOpportunity {
     confidence: number;
     timeSensitivity: number;
   };
-  status: 'pending' | 'active' | 'expired' | 'filled';
+  status: "pending" | "active" | "expired" | "filled";
   timestamp: number;
 }
 
@@ -102,32 +102,36 @@ export interface ArbitrageOpportunity {
   bookmaker2?: string;
   odds2?: number;
   roi?: number;
-  riskLevel?: 'low' | 'medium' | 'high';
+  riskLevel?: "low" | "medium" | "high";
 }
 
 // Legacy alias for backward compatibility
 export type ArbitrageOpportunityItem = ArbitrageOpportunity;
 
 // Re-export market analytics types for dashboard usage
-export type { MarketAnomaly, MarketEfficiencyMetrics, MarketMetrics } from './market';
+export type {
+  MarketAnomaly,
+  MarketEfficiencyMetrics,
+  MarketMetrics,
+} from "./market";
 // Core betting types
 export enum BetType {
-  STRAIGHT = 'straight',
-  PARLAY = 'parlay',
-  TEASER = 'teaser',
-  ARBITRAGE = 'arbitrage',
+  STRAIGHT = "straight",
+  PARLAY = "parlay",
+  TEASER = "teaser",
+  ARBITRAGE = "arbitrage",
 }
 
 export enum RiskProfileType {
-  CONSERVATIVE = 'CONSERVATIVE',
-  MODERATE = 'MODERATE',
-  AGGRESSIVE = 'AGGRESSIVE',
+  CONSERVATIVE = "CONSERVATIVE",
+  MODERATE = "MODERATE",
+  AGGRESSIVE = "AGGRESSIVE",
 }
 
 export enum BetClassification {
-  SAFE_BET = 'Safe Bet',
-  SURE_ODDS = 'Sure Odds',
-  AGGRESSIVE_EDGE = 'Aggressive Edge',
+  SAFE_BET = "Safe Bet",
+  SURE_ODDS = "Sure Odds",
+  AGGRESSIVE_EDGE = "Aggressive Edge",
 }
 
 // Bookmaker and odds types
@@ -186,8 +190,8 @@ export const DEFAULT_RISK_PROFILES: Record<RiskProfileType, RiskProfile> = {
     min_confidence_threshold: 0.75,
     volatility_tolerance: 0.3,
     max_risk_score: 0.4,
-    preferred_sports: ['NBA', 'NFL'],
-    preferred_markets: ['moneyline', 'spread'],
+    preferred_sports: ["NBA", "NFL"],
+    preferred_markets: ["moneyline", "spread"],
     excluded_events: [],
     max_daily_loss: 0.05,
     max_concurrent_bets: 2,
@@ -199,8 +203,8 @@ export const DEFAULT_RISK_PROFILES: Record<RiskProfileType, RiskProfile> = {
     min_confidence_threshold: 0.6,
     volatility_tolerance: 0.5,
     max_risk_score: 0.6,
-    preferred_sports: ['NBA', 'NFL', 'MLB'],
-    preferred_markets: ['moneyline', 'spread', 'totals'],
+    preferred_sports: ["NBA", "NFL", "MLB"],
+    preferred_markets: ["moneyline", "spread", "totals"],
     excluded_events: [],
     max_daily_loss: 0.1,
     max_concurrent_bets: 3,
@@ -212,8 +216,8 @@ export const DEFAULT_RISK_PROFILES: Record<RiskProfileType, RiskProfile> = {
     min_confidence_threshold: 0.5,
     volatility_tolerance: 0.7,
     max_risk_score: 0.8,
-    preferred_sports: ['NBA', 'NFL', 'MLB', 'NHL'],
-    preferred_markets: ['moneyline', 'spread', 'totals', 'props'],
+    preferred_sports: ["NBA", "NFL", "MLB", "NHL"],
+    preferred_markets: ["moneyline", "spread", "totals", "props"],
     excluded_events: [],
     max_daily_loss: 0.15,
     max_concurrent_bets: 5,
@@ -242,7 +246,7 @@ export interface BettingOdds {
   timestamp: number;
   bookmaker?: string;
   lastUpdated?: string;
-  format?: 'decimal' | 'american' | 'fractional';
+  format?: "decimal" | "american" | "fractional";
   maxStake?: number;
   volume?: number;
 }
@@ -315,7 +319,7 @@ export interface BettingHistoryEntry {
   bet_type: BetType;
   stake: number;
   odds: number;
-  outcome: 'win' | 'loss' | 'push';
+  outcome: "win" | "loss" | "push";
   profit: number;
   timestamp: string;
 }
@@ -403,7 +407,7 @@ export interface AnalyticsMetrics {
 }
 
 export interface BettingAlert {
-  type: 'opportunity' | 'warning' | 'info';
+  type: "opportunity" | "warning" | "info";
   message: string;
   data: {
     prediction: PredictionData;
@@ -435,7 +439,7 @@ export interface LineMovement {
   oldOdds: number;
   newOdds: number;
   timestamp: number;
-  direction: 'up' | 'down';
+  direction: "up" | "down";
   bookmaker?: string;
   volume?: number;
 }
@@ -512,7 +516,7 @@ export interface Bet {
   odds: number;
   stake: number;
   potentialWinnings: number;
-  status: 'pending' | 'won' | 'lost' | 'cancelled';
+  status: "pending" | "won" | "lost" | "cancelled";
   timestamp: string;
   sportName: string;
 }
@@ -541,7 +545,7 @@ export interface Event {
   name: string;
   sport: string;
   startTime: string;
-  status: 'scheduled' | 'live' | 'finished';
+  status: "scheduled" | "live" | "finished";
   teams: {
     home: string;
     away: string;
@@ -557,7 +561,7 @@ export interface Market {
   eventId: string;
   name: string;
   type: string;
-  status: 'open' | 'closed' | 'suspended';
+  status: "open" | "closed" | "suspended";
   selections: Selection[];
 }
 
@@ -566,11 +570,11 @@ export interface Selection {
   marketId: string;
   name: string;
   odds: number;
-  status: 'active' | 'suspended' | 'settled';
-  result?: 'won' | 'lost' | 'void';
+  status: "active" | "suspended" | "settled";
+  result?: "won" | "lost" | "void";
 }
 
-export type BettingStrategy = 'kelly' | 'fixed' | 'martingale' | 'fibonacci';
+export type BettingStrategy = "kelly" | "fixed" | "martingale" | "fibonacci";
 
 export interface BettingState {
   bets: Bet[];
@@ -606,7 +610,7 @@ export interface BettingSubscription {
 }
 
 export interface BettingStateContext {
-  state: 'idle' | 'preview' | 'confirming' | 'submitting' | 'success' | 'error';
+  state: "idle" | "preview" | "confirming" | "submitting" | "success" | "error";
   error: string | null;
   preview: {
     stake: number;
@@ -673,10 +677,32 @@ export interface ModelPerformance {
 
 export interface UnifiedAnalyticsConfig {
   investment: number;
-  modelSet: 'ensemble' | 'traditional' | 'deeplearning' | 'timeseries' | 'optimization';
+  modelSet:
+    | "ensemble"
+    | "traditional"
+    | "deeplearning"
+    | "timeseries"
+    | "optimization";
   confidence: number;
-  strategy: 'maximum' | 'balanced' | 'conservative' | 'aggressive' | 'arbitrage' | 'ai_adaptive';
-  sports: 'all' | 'nba' | 'nfl' | 'mlb' | 'nhl' | 'soccer' | 'wnba' | 'mixed';
+  strategy:
+    | "maximum"
+    | "balanced"
+    | "conservative"
+    | "aggressive"
+    | "arbitrage"
+    | "ai_adaptive";
+  sports:
+    | "all"
+    | "nba"
+    | "wnba"
+    | "mlb"
+    | "nfl"
+    | "soccer"
+    | "pga"
+    | "tennis"
+    | "esports"
+    | "mma"
+    | "mixed";
   ml?: {
     autoUpdate?: boolean;
     updateInterval?: number;
@@ -727,7 +753,7 @@ export interface TeamStats {
 
 export interface RecentGame {
   opponent: string;
-  result: 'W' | 'L';
+  result: "W" | "L";
   score: {
     team: number;
     opponent: number;
@@ -763,7 +789,7 @@ export interface PlayerForm {
 }
 
 export interface InjuryStatus {
-  status: 'healthy' | 'questionable' | 'doubtful' | 'out';
+  status: "healthy" | "questionable" | "doubtful" | "out";
   expectedReturn: string | null;
 }
 
@@ -772,7 +798,7 @@ export interface Game {
   homeTeam: string;
   awayTeam: string;
   startTime: string;
-  status: 'scheduled' | 'live' | 'finished';
+  status: "scheduled" | "live" | "finished";
   score?: {
     home: number;
     away: number;
@@ -799,7 +825,7 @@ export interface Bet {
   selection: Selection;
   stake: number;
   potentialWinnings: number;
-  status: 'pending' | 'won' | 'lost' | 'cancelled';
+  status: "pending" | "won" | "lost" | "cancelled";
   timestamp: string;
   sportName: string;
 }
