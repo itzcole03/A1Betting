@@ -283,11 +283,11 @@ For the best real-time analysis, ensure the PropOllama backend is running with O
         <div className="relative">
           <div className="text-6xl mb-4">🤖</div>
           <h1 className="holographic text-5xl font-black mb-4">PropOllama</h1>
-          <p className="text-xl text-gray-200 mb-6">
+          <p className="text-xl text-gray-200 font-medium mb-6">
             Your AI Sports Betting Assistant
           </p>
 
-          {/* Live Stats */}
+          {/* Live Stats - FIXED: Better contrast */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
             <div className="glass-card rounded-xl p-3 border border-white/10">
               <div className="text-lg font-bold text-purple-400">
@@ -378,12 +378,12 @@ For the best real-time analysis, ensure the PropOllama backend is running with O
                         {message.content}
                       </div>
 
-                      {/* Timestamp */}
+                      {/* Timestamp - FIXED: Better contrast */}
                       <div
-                        className={`text-xs mt-2 ${
+                        className={`text-xs mt-2 font-medium ${
                           message.type === "user"
                             ? "text-white/90"
-                            : "text-gray-300"
+                            : "text-gray-200"
                         }`}
                       >
                         {message.timestamp.toLocaleTimeString([], {
@@ -392,7 +392,7 @@ For the best real-time analysis, ensure the PropOllama backend is running with O
                         })}
                       </div>
 
-                      {/* AI Suggestions */}
+                      {/* AI Suggestions - FIXED: Better contrast */}
                       {message.suggestions && message.type === "ai" && (
                         <div className="mt-4 space-y-2">
                           <div className="text-xs text-gray-200 font-semibold">
@@ -405,7 +405,7 @@ For the best real-time analysis, ensure the PropOllama backend is running with O
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => sendMessage(suggestion)}
-                                className="px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-200 hover:bg-purple-500/30 hover:text-purple-100 transition-all font-medium"
+                                className="px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-200 hover:bg-purple-500/30 hover:text-white transition-all font-medium"
                               >
                                 {suggestion}
                               </motion.button>
@@ -446,7 +446,7 @@ For the best real-time analysis, ensure the PropOllama backend is running with O
                           style={{ animationDelay: "0.2s" }}
                         />
                       </div>
-                      <span className="text-sm text-purple-300 font-medium">
+                      <span className="text-sm text-purple-200 font-medium">
                         PropOllama is analyzing...
                       </span>
                     </div>
@@ -490,7 +490,7 @@ For the best real-time analysis, ensure the PropOllama backend is running with O
                 e.key === "Enter" && !e.shiftKey && sendMessage()
               }
               placeholder="Ask about props, odds, trends, or get betting advice..."
-              className="flex-1 px-6 py-4 bg-gray-800/80 border-2 border-gray-500 rounded-2xl text-white placeholder-gray-300 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all text-lg backdrop-blur-sm shadow-lg"
+              className="flex-1 px-6 py-4 bg-gray-800/80 border-2 border-gray-500 rounded-2xl text-white placeholder-gray-300 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all text-lg backdrop-blur-sm shadow-lg font-medium"
               disabled={isTyping}
             />
             <motion.button
@@ -504,6 +504,7 @@ For the best real-time analysis, ensure the PropOllama backend is running with O
             </motion.button>
           </div>
 
+          {/* Footer - FIXED: Better contrast */}
           <div className="text-center mt-4">
             <p className="text-xs text-gray-200 font-medium">
               PropOllama provides AI-powered analysis. Always gamble
