@@ -145,18 +145,32 @@ export const QuantumPredictionsInterface: React.FC = () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
-      // Make actual API call
-      const response = await fetch("/api/v4/predict/ultra-accuracy", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(predictionRequest),
-      });
+      // Make actual API call with error handling
+      try {
+        const response = await fetch("/api/v4/predict/ultra-accuracy", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(predictionRequest),
+        });
 
-      if (response.ok) {
-        const result = await response.json();
-        setPredictionResult(result);
-      } else {
-        // Fallback with simulated data
+        if (response.ok) {
+          const responseText = await response.text();
+
+          // Check if response is HTML (not JSON)
+          if (responseText.includes('<script>') || responseText.includes('<!doctype html>')) {
+            console.warn("⚠️ Quantum API returned HTML instead of JSON - Using simulated data");
+            throw new Error("Backend not available");
+          }
+
+          const result = JSON.parse(responseText);
+          setPredictionResult(result);
+          return;
+        }
+      } catch (fetchError) {
+        console.warn("⚠️ Quantum prediction API not available - Using simulated data");
+      }
+
+      // Fallback with simulated data
         const simulatedResult: QuantumPredictionResult = {
           event_id: predictionRequest.event_id,
           prediction: {
