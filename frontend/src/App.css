@@ -13,8 +13,18 @@
 html,
 body {
   height: 100%;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Roboto",
+    "Oxygen",
+    "Ubuntu",
+    "Cantarell",
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -25,6 +35,51 @@ body {
 
 #root {
   height: 100%;
+}
+
+/* ============================================================================
+   DROPDOWN/SELECT UNIVERSAL STYLING - PURPLE GRADIENT THEME
+   ============================================================================ */
+
+select:not(.no-style) {
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.9) 0%,
+    rgba(124, 58, 237, 0.8) 50%,
+    rgba(15, 23, 42, 0.9) 100%
+  ) !important;
+  border: 1px solid rgba(124, 58, 237, 0.3) !important;
+  border-radius: 8px !important;
+  color: white !important;
+  font-weight: 500 !important;
+  padding: 12px 16px !important;
+  backdrop-filter: blur(4px) !important;
+  box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.2) !important;
+  transition: all 0.2s ease !important;
+  appearance: none !important;
+  cursor: pointer !important;
+}
+
+select:not(.no-style):hover {
+  border-color: rgba(168, 85, 247, 0.5) !important;
+  box-shadow: 0 6px 8px -1px rgba(124, 58, 237, 0.3) !important;
+}
+
+select:not(.no-style):focus {
+  border-color: #06b6d4 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.5) !important;
+}
+
+select:not(.no-style) option {
+  background-color: #1e293b !important;
+  color: white !important;
+  padding: 8px 16px !important;
+}
+
+select:not(.no-style) option:hover,
+select:not(.no-style) option:checked {
+  background-color: #7c3aed !important;
 }
 
 /* ============================================================================
@@ -60,7 +115,7 @@ body {
 }
 
 .cyber-glow::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -2px;
   background: linear-gradient(45deg, #06b6d4, #3b82f6, #8b5cf6, #06b6d4);
@@ -100,7 +155,6 @@ body {
 }
 
 @keyframes neon-flicker {
-
   0%,
   100% {
     text-shadow:
@@ -124,13 +178,15 @@ body {
    ============================================================================ */
 
 .holographic {
-  background: linear-gradient(45deg,
-      #06b6d4,
-      #3b82f6,
-      #8b5cf6,
-      #ec4899,
-      #f59e0b,
-      #06b6d4);
+  background: linear-gradient(
+    45deg,
+    #06b6d4,
+    #3b82f6,
+    #8b5cf6,
+    #ec4899,
+    #f59e0b,
+    #06b6d4
+  );
   background-size: 400% 400%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -139,7 +195,6 @@ body {
 }
 
 @keyframes holographic-shift {
-
   0%,
   100% {
     background-position: 0% 50%;
@@ -159,7 +214,6 @@ body {
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0px);
@@ -175,7 +229,6 @@ body {
 }
 
 @keyframes float-slow {
-
   0%,
   100% {
     transform: translateY(0px) rotate(0deg);
@@ -247,7 +300,6 @@ body {
 }
 
 @keyframes pulse-glow {
-
   0%,
   100% {
     box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
@@ -263,7 +315,6 @@ body {
 }
 
 @keyframes pulse-scale {
-
   0%,
   100% {
     transform: scale(1);
@@ -341,7 +392,6 @@ body {
 }
 
 @keyframes loading-bounce {
-
   0%,
   80%,
   100% {
@@ -371,13 +421,18 @@ body {
 }
 
 .cyber-button::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -451,7 +506,6 @@ body {
    ============================================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
@@ -484,7 +538,9 @@ textarea:focus-visible {
 .border-gradient {
   border: 1px solid transparent;
   background: linear-gradient(45deg, #06b6d4, #3b82f6) border-box;
-  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: destination-out;
 }
 
@@ -514,7 +570,6 @@ textarea:focus-visible {
 
 /* Reduce motion for performance on mobile */
 @media (max-width: 768px) {
-
   .float-element,
   .float-slow {
     animation: none;
