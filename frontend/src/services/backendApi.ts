@@ -66,6 +66,7 @@ class BackendApi {
   private baseURL: string;
   private useMockData: boolean = false;
   private isBackendAvailable: boolean = false;
+  private isBackendAvailable: boolean = false;
 
   constructor() {
     // Determine the correct backend URL
