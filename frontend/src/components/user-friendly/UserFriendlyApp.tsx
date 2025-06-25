@@ -492,7 +492,7 @@ const UserFriendlyApp: React.FC = () => {
                   </p>
                   <p className="text-xs text-gray-400">{userData.tier}</p>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center">
+                <button onClick={() => handleNavigate("profile")} className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center hover:scale-105 transition-transform cursor-pointer">
                   <span className="text-sm font-bold text-white">
                     {userData.name.charAt(0)}
                   </span>
