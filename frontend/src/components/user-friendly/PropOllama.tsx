@@ -1,13 +1,18 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { Brain, Send } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { llmService } from "../../services/LLMService";
-import { ollamaLLMService } from "../../services/ollamaLLMService";
-import { api } from "../../services/integrationService";
-import { useValueBets } from "../../hooks/useBetting";
-import OfflineIndicator from "../ui/OfflineIndicator";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Brain,
+  Send,
+  TrendingUp,
+  BarChart3,
+  DollarSign,
+  Target,
+  Zap,
+  Activity,
+} from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import OfflineIndicator from "../ui/OfflineIndicator";
 
 interface Message {
   id: string;
@@ -17,312 +22,248 @@ interface Message {
   suggestions?: string[];
 }
 
-interface QuickAction {
-  id: string;
-  icon: string;
-  title: string;
-  prompt: string;
-  category: "analysis" | "picks" | "trends" | "live";
-}
-
 export const PropOllama: React.FC = () => {
   const queryClient = useQueryClient();
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: "1",
+      id: "welcome",
       type: "ai",
       content:
         "🏀 Hey! I'm PropOllama, your AI sports betting assistant. I can analyze player props, find value bets, track line movements, and provide real-time insights across all major sports. What would you like to explore today?",
       timestamp: new Date(),
       suggestions: [
-        "Analyze tonight's NBA props",
-        "Show me the best value bets",
-        "What are the trending picks?",
-        "Find props with 90%+ confidence",
+        "Show me today's best props",
+        "Analyze NBA player props",
+        "Find value bets",
+        "Explain betting strategy",
       ],
     },
   ]);
-
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [liveData, setLiveData] = useState({
-    activeAnalyses: 0,
-    liveGames: 0,
-    confidencePicks: 0,
-    valueBets: 0,
-  });
-
-  // Helper function to detect analysis type from user message
-  const detectAnalysisType = (
-    message: string,
-  ): "prop" | "spread" | "total" | "strategy" | "general" => {
-    const lowerMessage = message.toLowerCase();
-
-    if (
-      lowerMessage.includes("prop") ||
-      lowerMessage.includes("player") ||
-      lowerMessage.includes("points") ||
-      lowerMessage.includes("assists") ||
-      lowerMessage.includes("rebounds")
-    ) {
-      return "prop";
-    }
-
-    if (
-      lowerMessage.includes("spread") ||
-      lowerMessage.includes("line") ||
-      lowerMessage.includes("favorite") ||
-      lowerMessage.includes("underdog")
-    ) {
-      return "spread";
-    }
-
-    if (
-      lowerMessage.includes("total") ||
-      lowerMessage.includes("over") ||
-      lowerMessage.includes("under") ||
-      lowerMessage.includes("o/u")
-    ) {
-      return "total";
-    }
-
-    if (
-      lowerMessage.includes("strategy") ||
-      lowerMessage.includes("bankroll") ||
-      lowerMessage.includes("kelly") ||
-      lowerMessage.includes("manage")
-    ) {
-      return "strategy";
-    }
-
-    return "general";
-  };
-
-  // Real API data fetching
-  const { data: healthStatus, error: healthError } = useQuery({
-    queryKey: ["healthStatus"],
-    queryFn: () => api.getHealthStatus(),
-    refetchInterval: 30000,
-    retry: false,
-    onError: (error) =>
-      console.warn("Health status API unavailable:", error.message),
-  });
-
-  const { data: accuracyMetrics, error: accuracyError } = useQuery({
-    queryKey: ["accuracyMetrics"],
-    queryFn: () => api.getAccuracyMetrics(),
-    refetchInterval: 10000,
-    retry: false,
-    onError: (error) =>
-      console.warn("Accuracy metrics API unavailable:", error.message),
-  });
-
-  const { valueBets, error: valueBetsError } = useValueBets();
-
-  // Check if backend is offline
-  const isOffline =
-    healthError ||
-    accuracyError ||
-    valueBetsError ||
-    (healthStatus && healthStatus.status === "offline") ||
-    (accuracyMetrics && accuracyMetrics.overall_accuracy === 0);
-
-  // Handle retry functionality
-  const handleRetry = () => {
-    queryClient.invalidateQueries();
-    toast.success("Reconnecting to PropOllama services...");
-  };
-
-  // Initialize live data from APIs when available
-  useEffect(() => {
-    if (healthStatus && valueBets) {
-      const newData = {
-        activeAnalyses: healthStatus?.metrics?.active_predictions || 0,
-        liveGames: healthStatus?.metrics?.active_predictions || 0,
-        confidencePicks:
-          valueBets?.filter((bet) => bet.confidence > 0.9).length || 0,
-        valueBets: valueBets?.length || 0,
-      };
-
-      // Only update if data actually changed
-      setLiveData((prev) => {
-        const hasChanged =
-          prev.activeAnalyses !== newData.activeAnalyses ||
-          prev.liveGames !== newData.liveGames ||
-          prev.confidencePicks !== newData.confidencePicks ||
-          prev.valueBets !== newData.valueBets;
-        return hasChanged ? newData : prev;
-      });
-    }
-  }, [healthStatus, valueBets]);
-
+  const [isOffline, setIsOffline] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const quickActions: QuickAction[] = [
+  // Live data simulation
+  const [liveData, setLiveData] = useState({
+    activeAnalyses: 147,
+    liveGames: 12,
+    confidencePicks: 8,
+    valueBets: 23,
+  });
+
+  // Quick action buttons
+  const quickActions = [
     {
-      id: "1",
-      icon: "📊",
-      title: "Analyze Props",
-      prompt:
-        "Analyze tonight's player props and give me the best opportunities",
-      category: "analysis",
-    },
-    {
-      id: "2",
-      icon: "💰",
-      title: "Value Bets",
-      prompt: "Find the best value bets with positive expected value",
-      category: "picks",
-    },
-    {
-      id: "3",
-      icon: "📈",
-      title: "Line Movement",
-      prompt: "Show me significant line movements and what they mean",
-      category: "live",
-    },
-    {
-      id: "4",
-      icon: "🔥",
-      title: "Hot Trends",
-      prompt: "What are the hottest betting trends and patterns right now?",
-      category: "trends",
-    },
-    {
-      id: "5",
+      id: "props",
+      title: "Best Props",
       icon: "🎯",
-      title: "High Confidence",
-      prompt: "Give me your highest confidence picks for today",
-      category: "picks",
+      prompt: "Show me today's best player props with high confidence",
     },
     {
-      id: "6",
+      id: "value",
+      title: "Value Bets",
+      icon: "💎",
+      prompt: "Find me the best value bets for tonight's games",
+    },
+    {
+      id: "nba",
+      title: "NBA Focus",
+      icon: "🏀",
+      prompt: "Analyze tonight's NBA games and player props",
+    },
+    {
+      id: "strategy",
+      title: "Strategy",
+      icon: "🧠",
+      prompt: "Help me improve my betting strategy and bankroll management",
+    },
+    {
+      id: "live",
+      title: "Live Odds",
       icon: "⚡",
-      title: "Live Alerts",
-      prompt: "What live betting opportunities should I watch right now?",
-      category: "live",
+      prompt: "Show me live odds movements and line changes",
+    },
+    {
+      id: "trends",
+      title: "Trends",
+      icon: "📈",
+      prompt: "What are the current betting trends I should know about?",
     },
   ];
 
-  // Auto-scroll to bottom when new messages arrive
+  // Scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Update live data
+  // Live data updates
   useEffect(() => {
     const interval = setInterval(() => {
       setLiveData((prev) => ({
-        activeAnalyses: prev.activeAnalyses + Math.floor(Math.random() * 5),
-        liveGames: Math.max(
-          15,
-          prev.liveGames + Math.floor(Math.random() * 3 - 1),
-        ),
-        confidencePicks: Math.max(
-          8,
-          prev.confidencePicks + Math.floor(Math.random() * 3 - 1),
-        ),
-        valueBets: Math.max(
-          5,
-          prev.valueBets + Math.floor(Math.random() * 2 - 1),
-        ),
+        activeAnalyses: prev.activeAnalyses + Math.floor(Math.random() * 3),
+        liveGames: 12 + Math.floor(Math.random() * 3),
+        confidencePicks: 8 + Math.floor(Math.random() * 2),
+        valueBets: prev.valueBets + Math.floor(Math.random() * 2),
       }));
-    }, 8000);
+    }, 10000);
+
     return () => clearInterval(interval);
   }, []);
 
-  const sendMessage = async (messageContent: string = input) => {
-    if (!messageContent.trim()) return;
+  const handleRetry = useCallback(() => {
+    setIsOffline(false);
+    queryClient.invalidateQueries();
+    toast.success("Reconnecting to PropOllama services...");
+  }, [queryClient]);
 
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      type: "user",
-      content: messageContent.trim(),
-      timestamp: new Date(),
-    };
+  const sendMessage = useCallback(
+    async (messageText?: string) => {
+      const text = messageText || input.trim();
+      if (!text) return;
 
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setIsTyping(true);
+      // Clear input if using typed message
+      if (!messageText) setInput("");
 
-    try {
-      // Use enhanced Ollama service
-      let aiResponse;
+      // Add user message
+      const userMessage: Message = {
+        id: `user-${Date.now()}`,
+        type: "user",
+        content: text,
+        timestamp: new Date(),
+      };
+
+      setMessages((prev) => [...prev, userMessage]);
+      setIsTyping(true);
 
       try {
-        // Use Ollama service for real AI analysis
-        const ollamaResponse = await ollamaLLMService.generateResponse({
-          message: messageContent,
-          context: {
-            previousMessages: messages.slice(-3), // Last 3 messages for context
-            gameData: liveData,
-            userPreferences: {
-              riskTolerance: "moderate",
-              preferredSports: ["NBA", "NFL"],
-              betTypes: ["player_props", "game_totals"],
-            },
-          },
-          analysisType: detectAnalysisType(messageContent),
-        });
+        // Determine analysis type
+        let analysisType = "general";
+        if (text.toLowerCase().includes("prop")) analysisType = "prop_analysis";
+        if (text.toLowerCase().includes("value"))
+          analysisType = "value_analysis";
+        if (text.toLowerCase().includes("strategy"))
+          analysisType = "strategy_advice";
+        if (text.toLowerCase().includes("odds")) analysisType = "odds_analysis";
 
-        aiResponse = {
-          content: ollamaResponse.content,
-          confidence: ollamaResponse.confidence / 100,
-          suggestions: ollamaResponse.suggestions,
+        // Try enhanced Ollama endpoint first
+        let ollamaResponse;
+        try {
+          const response = await fetch("/api/propollama/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: text,
+              context: {
+                previousMessages: messages.slice(-3),
+                analysisType,
+                timestamp: new Date().toISOString(),
+              },
+              analysisType,
+            }),
+          });
+
+          if (response.ok) {
+            ollamaResponse = await response.json();
+            console.log(
+              `🤖 PropOllama using model: ${ollamaResponse.model_used} (${ollamaResponse.response_time}ms)`,
+            );
+          }
+        } catch (error) {
+          console.warn("PropOllama enhanced API not available:", error);
+        }
+
+        // Fallback to basic Ollama
+        if (!ollamaResponse) {
+          try {
+            const response = await fetch("/api/ollama/chat", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                message: text,
+                context: { previousMessages: messages.slice(-3) },
+                analysisType,
+              }),
+            });
+
+            if (response.ok) {
+              ollamaResponse = await response.json();
+            }
+          } catch (error) {
+            console.warn("Ollama fallback failed:", error);
+            setIsOffline(true);
+          }
+        }
+
+        // Create AI response
+        const aiMessage: Message = {
+          id: `ai-${Date.now()}`,
+          type: "ai",
+          content: ollamaResponse?.content || generateFallbackResponse(text),
+          timestamp: new Date(),
+          suggestions: ollamaResponse?.suggestions || [
+            "Tell me more",
+            "Show examples",
+            "Get different analysis",
+            "Explain strategy",
+          ],
         };
 
-        // Show connection status in successful responses
-        if (ollamaResponse.model_used !== "offline_fallback") {
-          console.log(
-            `🤖 PropOllama using model: ${ollamaResponse.model_used} (${ollamaResponse.response_time}ms)`,
-          );
-        }
-      } catch (ollamaError) {
-        console.warn("Ollama service failed:", ollamaError);
+        setMessages((prev) => [...prev, aiMessage]);
+      } catch (error) {
+        console.error("LLM response error:", error);
 
-        // Use basic LLM service
-        aiResponse = await llmService.processChatMessage(messageContent, {
-          previousMessages: messages,
-          gameData: liveData,
-          userPreferences: {
-            riskTolerance: "moderate",
-            preferredSports: ["NBA", "NFL"],
-            betTypes: ["player_props", "game_totals"],
-          },
-        });
+        // Error response
+        const errorMessage: Message = {
+          id: `ai-${Date.now()}`,
+          type: "ai",
+          content:
+            "I'm experiencing some technical difficulties connecting to my analysis engine. Please try again in a moment, or check the system status.",
+          timestamp: new Date(),
+          suggestions: [
+            "Check system status",
+            "Retry request",
+            "Contact support",
+          ],
+        };
+
+        setMessages((prev) => [...prev, errorMessage]);
+      } finally {
+        setIsTyping(false);
       }
+    },
+    [input, messages, queryClient],
+  );
 
-      const aiMessage: Message = {
-        id: `ai-${Date.now()}`,
-        type: "ai",
-        content: aiResponse.content,
-        timestamp: new Date(),
-        suggestions: aiResponse.suggestions,
-      };
+  // Generate fallback response when APIs are unavailable
+  const generateFallbackResponse = useCallback((userInput: string): string => {
+    const responses = [
+      `🤖 **PropOllama Analysis** (Demo Mode)
 
-      setMessages((prev) => [...prev, aiMessage]);
-    } catch (error) {
-      console.error("LLM response error:", error);
+Based on your query: "${userInput}"
 
-      // Error response
-      const errorMessage: Message = {
-        id: `ai-${Date.now()}`,
-        type: "ai",
-        content:
-          "I'm experiencing some technical difficulties connecting to my analysis engine. Please try again in a moment, or check the system status.",
-        timestamp: new Date(),
-        suggestions: [
-          "Check system status",
-          "Retry request",
-          "Contact support",
-        ],
-      };
+I'm currently running in demo mode, but here's what I'd typically analyze:
 
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsTyping(false);
-    }
-  };
+🎯 **Key Insights:**
+- Player performance trends and recent form
+- Line movement patterns and market sentiment  
+- Weather and venue factors for outdoor sports
+- Injury reports and lineup changes
+
+📊 **Statistical Edge:**
+- Historical matchup data analysis
+- Advanced metrics and efficiency ratings
+- Public vs sharp money indicators
+- Model predictions with confidence intervals
+
+⚡ **PropOllama Recommendation:**
+For the best real-time analysis, ensure the PropOllama backend is running with Ollama integration.
+
+*Demo response - Connect to Ollama for live AI analysis*`,
+    ];
+
+    return responses[0];
+  }, []);
 
   return (
     <div className="space-y-6 animate-slide-in-up h-full flex flex-col">
@@ -342,7 +283,7 @@ export const PropOllama: React.FC = () => {
         <div className="relative">
           <div className="text-6xl mb-4">🤖</div>
           <h1 className="holographic text-5xl font-black mb-4">PropOllama</h1>
-          <p className="text-xl text-gray-300 mb-6">
+          <p className="text-xl text-gray-200 mb-6">
             Your AI Sports Betting Assistant
           </p>
 
@@ -352,7 +293,7 @@ export const PropOllama: React.FC = () => {
               <div className="text-lg font-bold text-purple-400">
                 {liveData.activeAnalyses}
               </div>
-              <div className="text-xs text-gray-300 font-medium">
+              <div className="text-xs text-gray-200 font-medium">
                 Live Analyses
               </div>
             </div>
@@ -360,7 +301,7 @@ export const PropOllama: React.FC = () => {
               <div className="text-lg font-bold text-green-400">
                 {liveData.liveGames}
               </div>
-              <div className="text-xs text-gray-300 font-medium">
+              <div className="text-xs text-gray-200 font-medium">
                 Games Today
               </div>
             </div>
@@ -368,7 +309,7 @@ export const PropOllama: React.FC = () => {
               <div className="text-lg font-bold text-blue-400">
                 {liveData.confidencePicks}
               </div>
-              <div className="text-xs text-gray-300 font-medium">
+              <div className="text-xs text-gray-200 font-medium">
                 High Confidence
               </div>
             </div>
@@ -376,7 +317,7 @@ export const PropOllama: React.FC = () => {
               <div className="text-lg font-bold text-yellow-400">
                 {liveData.valueBets}
               </div>
-              <div className="text-xs text-gray-300 font-medium">
+              <div className="text-xs text-gray-200 font-medium">
                 Value Bets
               </div>
             </div>
@@ -394,38 +335,46 @@ export const PropOllama: React.FC = () => {
                 key={message.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex ${
+                  message.type === "user" ? "justify-end" : "justify-start"
+                }`}
               >
                 <div
-                  className={`max-w-4xl ${message.type === "user" ? "order-2" : "order-1"}`}
+                  className={`max-w-4xl ${
+                    message.type === "user" ? "order-2" : "order-1"
+                  }`}
                 >
                   <div
-                    className={`flex items-start space-x-3 ${message.type === "user" ? "flex-row-reverse space-x-reverse" : ""}`}
+                    className={`flex items-start space-x-3 ${
+                      message.type === "user"
+                        ? "flex-row-reverse space-x-reverse"
+                        : ""
+                    }`}
                   >
                     {/* Avatar */}
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                         message.type === "user"
-                          ? "bg-gradient-to-r from-green-500 to-blue-500"
+                          ? "bg-gradient-to-r from-blue-500 to-purple-500"
                           : "bg-gradient-to-r from-purple-500 to-pink-500"
                       }`}
                     >
                       {message.type === "user" ? (
-                        <span className="text-white font-bold">U</span>
+                        <div className="w-6 h-6 bg-white rounded-full" />
                       ) : (
                         <Brain className="w-5 h-5 text-white" />
                       )}
                     </div>
 
-                    {/* Message Bubble */}
+                    {/* Message Content */}
                     <div
-                      className={`rounded-2xl p-4 ${
+                      className={`flex-1 ${
                         message.type === "user"
-                          ? "bg-gradient-to-r from-green-500 to-blue-500 text-white"
-                          : "bg-gray-800/50 border border-gray-700/50 text-white"
-                      }`}
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+                          : "bg-gray-800/50 border border-gray-700/50 text-gray-100"
+                      } rounded-2xl p-4 shadow-lg backdrop-blur-sm`}
                     >
-                      <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                      <div className="whitespace-pre-wrap text-sm leading-relaxed font-medium">
                         {message.content}
                       </div>
 
@@ -433,7 +382,7 @@ export const PropOllama: React.FC = () => {
                       <div
                         className={`text-xs mt-2 ${
                           message.type === "user"
-                            ? "text-white/80"
+                            ? "text-white/90"
                             : "text-gray-300"
                         }`}
                       >
@@ -497,7 +446,7 @@ export const PropOllama: React.FC = () => {
                           style={{ animationDelay: "0.2s" }}
                         />
                       </div>
-                      <span className="text-sm text-purple-400">
+                      <span className="text-sm text-purple-300 font-medium">
                         PropOllama is analyzing...
                       </span>
                     </div>
@@ -541,7 +490,7 @@ export const PropOllama: React.FC = () => {
                 e.key === "Enter" && !e.shiftKey && sendMessage()
               }
               placeholder="Ask about props, odds, trends, or get betting advice..."
-              className="flex-1 px-6 py-4 bg-gray-800/80 border-2 border-gray-500 rounded-2xl text-white placeholder-gray-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all text-lg backdrop-blur-sm shadow-lg"
+              className="flex-1 px-6 py-4 bg-gray-800/80 border-2 border-gray-500 rounded-2xl text-white placeholder-gray-300 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all text-lg backdrop-blur-sm shadow-lg"
               disabled={isTyping}
             />
             <motion.button
@@ -556,7 +505,7 @@ export const PropOllama: React.FC = () => {
           </div>
 
           <div className="text-center mt-4">
-            <p className="text-xs text-gray-300 font-medium">
+            <p className="text-xs text-gray-200 font-medium">
               PropOllama provides AI-powered analysis. Always gamble
               responsibly.
             </p>
