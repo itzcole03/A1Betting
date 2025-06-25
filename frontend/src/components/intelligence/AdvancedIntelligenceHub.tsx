@@ -3,90 +3,33 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
-  useRef,
   Suspense,
   lazy,
 } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain,
   Activity,
-  TrendingUp,
-  Zap,
   Target,
   Settings,
-  BarChart3,
+  Shield,
+  Monitor,
+  Atom,
+  Compass,
+  Search,
+  Filter,
+  Zap,
+  Play,
+  ToggleRight,
+  ToggleLeft,
   Cpu,
-  Layers,
   Network,
-  GitBranch,
-  Microscope,
-  RefreshCw,
   AlertCircle,
   CheckCircle,
-  Award,
-  Gauge,
-  Sparkles,
-  Eye,
-  Calculator,
-  Atom,
-  Binary,
-  Play,
-  Pause,
-  Radar,
-  Monitor,
-  Database,
-  Cloud,
-  Shield,
-  Clock,
-  Users,
-  PieChart,
-  LineChart,
+  TrendingUp,
   Layers3,
-  Box,
-  Workflow,
-  Hexagon,
-  ArrowUp,
-  ArrowDown,
-  MessageCircle,
-  Cog,
-  Filter,
-  Download,
-  Share,
-  MoreVertical,
-  Server,
-  Wifi,
-  Bell,
-  Search,
-  Maximize,
-  Minimize,
-  Grid,
-  List,
-  Hash,
-  Lightbulb,
-  Flame,
-  ChevronRight,
-  ExternalLink,
-  RotateCcw,
-  BarChart,
-  TrendingDown,
-  ToggleLeft,
-  ToggleRight,
-  Power,
-  Waves,
-  Shuffle,
-  Layers2,
-  Compass,
-  Crosshair,
-  Scan,
-  Bluetooth,
-  RadioIcon,
-  Satellite,
-  Globe,
-  DollarSign,
-  ChevronDown,
-  X,
+  Eye,
+  BarChart3,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -101,13 +44,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SafeChart from "../ui/SafeChart";
-import { api } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
-import OfflineIndicator from "../ui/OfflineIndicator";
 import toast from "react-hot-toast";
 
-// Lazy load heavy components for better performance
+// Lazy load components for better performance
 const UltraAccuracyDashboard = lazy(
   () => import("../overview/UltraAccuracyOverview"),
 );
@@ -117,8 +57,6 @@ const QuantumPredictionsInterface = lazy(
 const UnifiedStrategyEngineDisplay = lazy(
   () => import("../strategy/UnifiedStrategyEngineDisplay"),
 );
-const CyberAnalyticsHub = lazy(() => import("../cyber/CyberAnalyticsHub"));
-const CyberMLDashboard = lazy(() => import("../cyber/CyberMLDashboard"));
 
 // Types
 interface IntelligenceModule {
@@ -135,226 +73,153 @@ interface IntelligenceModule {
     | "quantum"
     | "cyber";
   priority: "critical" | "high" | "medium" | "low";
-  dependencies: string[];
-  computationLevel: "light" | "medium" | "heavy" | "extreme";
   isActive: boolean;
   component: React.ComponentType<any>;
-  status: "healthy" | "warning" | "error" | "offline";
-  lastUpdated: Date;
-  metrics?: {
-    accuracy?: number;
-    performance?: number;
-    reliability?: number;
-  };
+  status: "healthy" | "warning" | "error";
+  metrics: { accuracy: number; performance: number; reliability: number };
 }
 
 interface SystemMetrics {
   cpu: number;
   memory: number;
-  gpu: number;
-  network: number;
+  accuracy: number;
   activeModules: number;
   totalPredictions: number;
-  accuracy: number;
   uptime: number;
 }
 
-// Default placeholder components for missing modules
-const DefaultModuleComponent: React.FC<{ moduleName: string }> = ({
-  moduleName,
-}) => (
+// Loading component
+const ModuleLoader: React.FC = () => (
+  <div className="flex items-center justify-center h-64">
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+      className="w-12 h-12 text-blue-500"
+    >
+      <Brain className="w-full h-full" />
+    </motion.div>
+  </div>
+);
+
+// Default component for missing modules
+const DefaultModule: React.FC<{ name: string }> = ({ name }) => (
   <div className="flex items-center justify-center h-64 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-dashed border-gray-300">
     <div className="text-center space-y-4">
       <Brain className="w-16 h-16 text-gray-400 mx-auto" />
       <div>
-        <h3 className="text-lg font-semibold text-gray-600">{moduleName}</h3>
-        <p className="text-sm text-gray-500">Module loading or not available</p>
+        <h3 className="text-lg font-semibold text-gray-600">{name}</h3>
+        <p className="text-sm text-gray-500">Module ready for activation</p>
       </div>
     </div>
   </div>
 );
 
-// Enhanced loading component
-const ModuleLoader: React.FC = () => (
-  <div className="flex items-center justify-center h-64">
-    <div className="text-center space-y-4">
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-      >
-        <Brain className="w-12 h-12 text-blue-500" />
-      </motion.div>
-      <p className="text-sm text-gray-600">Loading AI Module...</p>
-    </div>
-  </div>
-);
-
 export const AdvancedIntelligenceHub: React.FC = () => {
-  // State management
-  const [activeTab, setActiveTab] = useState("overview");
+  // State
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [isSystemOptimized, setIsSystemOptimized] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [activeTab, setActiveTab] = useState("ultra-accuracy");
   const [moduleStates, setModuleStates] = useState<Record<string, boolean>>({});
   const [systemMetrics, setSystemMetrics] = useState<SystemMetrics>({
     cpu: 68,
     memory: 45,
-    gpu: 78,
-    network: 92,
-    activeModules: 12,
-    totalPredictions: 15847,
     accuracy: 94.7,
+    activeModules: 3,
+    totalPredictions: 15847,
     uptime: 99.8,
   });
 
-  // Real-time data
-  const { isConnected, lastMessage } = useWebSocket("ws://localhost:8000");
-  const queryClient = useQueryClient();
+  // WebSocket connection
+  const { isConnected } = useWebSocket("ws://localhost:8000");
 
-  // Module definitions with comprehensive configuration
+  // Module definitions
   const modules: IntelligenceModule[] = useMemo(
     () => [
       {
         id: "ultra-accuracy",
         name: "Ultra Accuracy Dashboard",
         description:
-          "97.3% accuracy prediction engine with real-time model performance",
+          "97.3% accuracy prediction engine with real-time performance",
         icon: <Target className="w-5 h-5" />,
         category: "prediction",
         priority: "critical",
-        dependencies: [],
-        computationLevel: "heavy",
         isActive: true,
         component: UltraAccuracyDashboard,
         status: "healthy",
-        lastUpdated: new Date(),
         metrics: { accuracy: 97.3, performance: 94.8, reliability: 99.2 },
       },
       {
         id: "quantum-predictions",
-        name: "Quantum Predictions Interface",
+        name: "Quantum Predictions",
         description:
           "Quantum-enhanced prediction engine with superposition algorithms",
         icon: <Atom className="w-5 h-5" />,
         category: "quantum",
         priority: "high",
-        dependencies: ["ultra-accuracy"],
-        computationLevel: "extreme",
         isActive: false,
         component: QuantumPredictionsInterface,
         status: "healthy",
-        lastUpdated: new Date(),
         metrics: { accuracy: 98.1, performance: 92.3, reliability: 97.8 },
       },
       {
         id: "strategy-engine",
-        name: "Unified Strategy Engine",
+        name: "Strategy Engine",
         description:
           "Intelligent betting strategy optimization with risk management",
         icon: <Compass className="w-5 h-5" />,
         category: "strategy",
         priority: "high",
-        dependencies: [],
-        computationLevel: "medium",
         isActive: true,
         component: UnifiedStrategyEngineDisplay,
         status: "healthy",
-        lastUpdated: new Date(),
         metrics: { accuracy: 89.4, performance: 96.1, reliability: 94.7 },
       },
       {
         id: "cyber-analytics",
-        name: "Cyber Analytics Hub",
+        name: "Cyber Analytics",
         description: "Advanced cybersecurity-inspired analytics and monitoring",
         icon: <Shield className="w-5 h-5" />,
         category: "cyber",
         priority: "high",
-        dependencies: ["strategy-engine"],
-        computationLevel: "extreme",
         isActive: false,
-        component: CyberAnalyticsHub,
+        component: DefaultModule,
         status: "warning",
-        lastUpdated: new Date(),
         metrics: { accuracy: 91.2, performance: 88.9, reliability: 93.4 },
       },
       {
-        id: "cyber-ml",
-        name: "Cyber ML Dashboard",
-        description:
-          "Machine learning dashboard with cyber-grade security monitoring",
-        icon: <Brain className="w-5 h-5" />,
-        category: "cyber",
-        priority: "high",
-        dependencies: ["cyber-analytics"],
-        computationLevel: "extreme",
-        isActive: false,
-        component: CyberMLDashboard,
-        status: "healthy",
-        lastUpdated: new Date(),
-        metrics: { accuracy: 95.6, performance: 90.2, reliability: 96.8 },
-      },
-      {
         id: "performance-monitoring",
-        name: "Performance Dashboard",
+        name: "Performance Monitor",
         description: "Real-time system performance and model monitoring",
         icon: <Monitor className="w-5 h-5" />,
         category: "monitoring",
-        priority: "high",
-        dependencies: [],
-        computationLevel: "medium",
+        priority: "medium",
         isActive: false,
-        component: ({ moduleName }: { moduleName: string }) => (
-          <DefaultModuleComponent moduleName={moduleName} />
-        ),
+        component: DefaultModule,
         status: "healthy",
-        lastUpdated: new Date(),
         metrics: { accuracy: 93.7, performance: 97.8, reliability: 99.1 },
       },
       {
-        id: "risk-insights",
-        name: "Risk Assessment Matrix",
-        description: "Advanced risk analysis and mitigation strategies",
-        icon: <AlertCircle className="w-5 h-5" />,
-        category: "analytics",
-        priority: "medium",
-        dependencies: ["performance-monitoring"],
-        computationLevel: "medium",
-        isActive: false,
-        component: ({ moduleName }: { moduleName: string }) => (
-          <DefaultModuleComponent moduleName={moduleName} />
-        ),
-        status: "healthy",
-        lastUpdated: new Date(),
-        metrics: { accuracy: 87.9, performance: 91.3, reliability: 88.6 },
-      },
-      {
-        id: "ensemble-ml",
-        name: "Ensemble ML Engine",
-        description:
-          "Multi-model ensemble learning with automatic optimization",
-        icon: <Layers3 className="w-5 h-5" />,
+        id: "ml-insights",
+        name: "ML Insights",
+        description: "Advanced machine learning insights and analysis",
+        icon: <Brain className="w-5 h-5" />,
         category: "ml",
         priority: "high",
-        dependencies: ["ultra-accuracy"],
-        computationLevel: "heavy",
         isActive: false,
-        component: ({ moduleName }: { moduleName: string }) => (
-          <DefaultModuleComponent moduleName={moduleName} />
-        ),
+        component: DefaultModule,
         status: "healthy",
-        lastUpdated: new Date(),
-        metrics: { accuracy: 96.4, performance: 89.7, reliability: 95.3 },
+        metrics: { accuracy: 95.6, performance: 90.2, reliability: 96.8 },
       },
     ],
     [],
   );
 
-  // Filtered modules based on search and category
+  // Filtered modules
   const filteredModules = useMemo(() => {
     return modules.filter((module) => {
-      const matchesSearch =
-        module.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        module.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = module.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
       const matchesCategory =
         selectedCategory === "all" || module.category === selectedCategory;
       return matchesSearch && matchesCategory;
@@ -383,29 +248,31 @@ export const AdvancedIntelligenceHub: React.FC = () => {
     return { status: "degraded", color: "bg-red-500" };
   }, [activeModules]);
 
-  // Module toggle handler
+  // Toggle module
   const toggleModule = useCallback(
     (moduleId: string) => {
       setModuleStates((prev) => ({
         ...prev,
-        [moduleId]: !prev[moduleId],
+        [moduleId]: !(
+          prev[moduleId] ?? modules.find((m) => m.id === moduleId)?.isActive
+        ),
       }));
 
       const module = modules.find((m) => m.id === moduleId);
       if (module) {
+        const newState = !(moduleStates[moduleId] ?? module.isActive);
         toast.success(
-          `${module.name} ${moduleStates[moduleId] ? "deactivated" : "activated"}`,
+          `${module.name} ${newState ? "activated" : "deactivated"}`,
         );
       }
     },
     [modules, moduleStates],
   );
 
-  // System optimization
+  // Optimize system
   const optimizeSystem = useCallback(async () => {
-    toast.loading("Optimizing AI system...");
+    const loadingToast = toast.loading("Optimizing AI system...");
 
-    // Simulate optimization process
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     setSystemMetrics((prev) => ({
@@ -415,8 +282,7 @@ export const AdvancedIntelligenceHub: React.FC = () => {
       accuracy: Math.min(99.9, prev.accuracy + 1.2),
     }));
 
-    setIsSystemOptimized(true);
-    toast.dismiss();
+    toast.dismiss(loadingToast);
     toast.success("System optimized successfully!");
   }, []);
 
@@ -430,19 +296,13 @@ export const AdvancedIntelligenceHub: React.FC = () => {
           15,
           Math.min(85, prev.memory + (Math.random() - 0.5) * 8),
         ),
-        gpu: Math.max(30, Math.min(95, prev.gpu + (Math.random() - 0.5) * 12)),
-        network: Math.max(
-          60,
-          Math.min(100, prev.network + (Math.random() - 0.5) * 5),
-        ),
         totalPredictions: prev.totalPredictions + Math.floor(Math.random() * 5),
       }));
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
-  // Categories for filtering
   const categories = [
     { value: "all", label: "All Modules" },
     { value: "prediction", label: "Prediction" },
@@ -480,109 +340,66 @@ export const AdvancedIntelligenceHub: React.FC = () => {
             systems
           </p>
           <div className="flex items-center justify-center space-x-4">
-            <Badge
-              variant={isConnected ? "default" : "destructive"}
-              className="px-3 py-1"
-            >
+            <Badge variant={isConnected ? "default" : "destructive"}>
               {isConnected ? "🟢 Connected" : "🔴 Offline"}
             </Badge>
-            <Badge variant="outline" className="px-3 py-1">
+            <Badge variant="outline">
               {activeModules.length} Active Modules
             </Badge>
-            <Badge variant="outline" className="px-3 py-1">
-              System {systemStatus.status}
-            </Badge>
+            <Badge variant="outline">System {systemStatus.status}</Badge>
           </div>
         </motion.div>
 
         {/* System Overview */}
-        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+        <Card className="shadow-xl bg-white/80 backdrop-blur-sm">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center space-x-2">
                 <Activity className="w-5 h-5 text-blue-600" />
                 <span>System Overview</span>
               </CardTitle>
-              <Button
-                onClick={optimizeSystem}
-                variant="outline"
-                size="sm"
-                className="hover:bg-blue-50"
-              >
+              <Button onClick={optimizeSystem} variant="outline" size="sm">
                 <Zap className="w-4 h-4 mr-2" />
-                Optimize System
+                Optimize
               </Button>
             </div>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="text-center space-y-2"
-              >
-                <div className="relative">
-                  <Progress value={systemMetrics.cpu} className="h-2" />
-                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
-                    {systemMetrics.cpu}%
-                  </span>
-                </div>
+              <div className="text-center space-y-2">
+                <Progress value={systemMetrics.cpu} className="h-3" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">CPU Usage</p>
-                  <p className="text-xs text-gray-500">Processing Power</p>
+                  <p className="font-medium">CPU: {systemMetrics.cpu}%</p>
+                  <p className="text-sm text-gray-500">Processing Power</p>
                 </div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="text-center space-y-2"
-              >
-                <div className="relative">
-                  <Progress value={systemMetrics.memory} className="h-2" />
-                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
-                    {systemMetrics.memory}%
-                  </span>
-                </div>
+              </div>
+              <div className="text-center space-y-2">
+                <Progress value={systemMetrics.memory} className="h-3" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Memory</p>
-                  <p className="text-xs text-gray-500">RAM Usage</p>
+                  <p className="font-medium">Memory: {systemMetrics.memory}%</p>
+                  <p className="text-sm text-gray-500">RAM Usage</p>
                 </div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="text-center space-y-2"
-              >
-                <div className="relative">
-                  <Progress value={systemMetrics.accuracy} className="h-2" />
-                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
-                    {systemMetrics.accuracy}%
-                  </span>
-                </div>
+              </div>
+              <div className="text-center space-y-2">
+                <Progress value={systemMetrics.accuracy} className="h-3" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Accuracy</p>
-                  <p className="text-xs text-gray-500">Overall Performance</p>
+                  <p className="font-medium">
+                    Accuracy: {systemMetrics.accuracy}%
+                  </p>
+                  <p className="text-sm text-gray-500">Overall Performance</p>
                 </div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="text-center space-y-2"
-              >
-                <div className="relative">
-                  <Progress value={systemMetrics.network} className="h-2" />
-                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium">
-                    {systemMetrics.network}%
-                  </span>
-                </div>
+              </div>
+              <div className="text-center space-y-2">
+                <Progress value={systemMetrics.uptime} className="h-3" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Network</p>
-                  <p className="text-xs text-gray-500">Connection Quality</p>
+                  <p className="font-medium">Uptime: {systemMetrics.uptime}%</p>
+                  <p className="text-sm text-gray-500">System Reliability</p>
                 </div>
-              </motion.div>
+              </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card className="bg-gradient-to-r from-blue-50 to-blue-100">
                 <CardContent className="p-4 text-center">
                   <div className="text-2xl font-bold text-blue-700">
                     {systemMetrics.totalPredictions.toLocaleString()}
@@ -590,20 +407,12 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                   <div className="text-sm text-blue-600">Total Predictions</div>
                 </CardContent>
               </Card>
-              <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
+              <Card className="bg-gradient-to-r from-green-50 to-green-100">
                 <CardContent className="p-4 text-center">
                   <div className="text-2xl font-bold text-green-700">
-                    {systemMetrics.uptime}%
-                  </div>
-                  <div className="text-sm text-green-600">System Uptime</div>
-                </CardContent>
-              </Card>
-              <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200">
-                <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-bold text-purple-700">
                     {activeModules.length}
                   </div>
-                  <div className="text-sm text-purple-600">Active Modules</div>
+                  <div className="text-sm text-green-600">Active Modules</div>
                 </CardContent>
               </Card>
             </div>
@@ -611,7 +420,7 @@ export const AdvancedIntelligenceHub: React.FC = () => {
         </Card>
 
         {/* Module Controls */}
-        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+        <Card className="shadow-xl bg-white/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Filter className="w-5 h-5 text-blue-600" />
@@ -634,7 +443,7 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                 onValueChange={setSelectedCategory}
               >
                 <SelectTrigger className="w-full sm:w-48">
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
@@ -651,65 +460,64 @@ export const AdvancedIntelligenceHub: React.FC = () => {
         {/* Modules Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           <AnimatePresence>
-            {filteredModules.map((module) => (
-              <motion.div
-                key={module.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Card className="border-0 shadow-xl bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div
-                          className={`p-2 rounded-lg ${
-                            module.status === "healthy"
-                              ? "bg-green-100 text-green-600"
-                              : module.status === "warning"
-                                ? "bg-yellow-100 text-yellow-600"
-                                : module.status === "error"
-                                  ? "bg-red-100 text-red-600"
-                                  : "bg-gray-100 text-gray-600"
-                          }`}
+            {filteredModules.map((module) => {
+              const isModuleActive = moduleStates[module.id] ?? module.isActive;
+              return (
+                <motion.div
+                  key={module.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  whileHover={{ y: -5 }}
+                >
+                  <Card className="shadow-xl bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-all">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div
+                            className={`p-2 rounded-lg ${
+                              module.status === "healthy"
+                                ? "bg-green-100 text-green-600"
+                                : module.status === "warning"
+                                  ? "bg-yellow-100 text-yellow-600"
+                                  : "bg-red-100 text-red-600"
+                            }`}
+                          >
+                            {module.icon}
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{module.name}</h3>
+                            <Badge
+                              variant="outline"
+                              className="mt-1 capitalize"
+                            >
+                              {module.category}
+                            </Badge>
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleModule(module.id)}
+                          className={
+                            isModuleActive
+                              ? "text-green-600 hover:bg-green-50"
+                              : "text-gray-400 hover:bg-gray-50"
+                          }
                         >
-                          {module.icon}
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-900">
-                            {module.name}
-                          </h3>
-                          <Badge variant="outline" className="mt-1">
-                            {module.category}
-                          </Badge>
-                        </div>
+                          {isModuleActive ? (
+                            <ToggleRight className="w-5 h-5" />
+                          ) : (
+                            <ToggleLeft className="w-5 h-5" />
+                          )}
+                        </Button>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleModule(module.id)}
-                        className={
-                          (moduleStates[module.id] ?? module.isActive)
-                            ? "text-green-600 hover:text-green-700 hover:bg-green-50"
-                            : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
-                        }
-                      >
-                        {(moduleStates[module.id] ?? module.isActive) ? (
-                          <ToggleRight className="w-5 h-5" />
-                        ) : (
-                          <ToggleLeft className="w-5 h-5" />
-                        )}
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <p className="text-sm text-gray-600">
-                      {module.description}
-                    </p>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-gray-600">
+                        {module.description}
+                      </p>
 
-                    {module.metrics && (
                       <div className="space-y-2">
                         <div className="flex justify-between text-xs">
                           <span>Accuracy</span>
@@ -729,28 +537,31 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                           className="h-1"
                         />
                       </div>
-                    )}
 
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span>Priority: {module.priority}</span>
-                      <span>Load: {module.computationLevel}</span>
-                    </div>
-
-                    {module.dependencies.length > 0 && (
-                      <div className="text-xs text-gray-500">
-                        Dependencies: {module.dependencies.join(", ")}
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span>Priority: {module.priority}</span>
+                        <Badge
+                          variant={
+                            module.status === "healthy"
+                              ? "default"
+                              : "destructive"
+                          }
+                          className="text-xs"
+                        >
+                          {module.status}
+                        </Badge>
                       </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
 
         {/* Active Module Display */}
         {activeModules.length > 0 && (
-          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+          <Card className="shadow-xl bg-white/80 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Play className="w-5 h-5 text-blue-600" />
@@ -760,11 +571,11 @@ export const AdvancedIntelligenceHub: React.FC = () => {
             <CardContent>
               <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 h-auto p-2">
-                  {activeModules.slice(0, 8).map((module) => (
+                  {activeModules.map((module) => (
                     <TabsTrigger
                       key={module.id}
                       value={module.id}
-                      className="flex items-center space-x-2 p-3 data-[state=active]:bg-blue-100 data-[state=active]:text-blue-700"
+                      className="flex items-center space-x-2 p-3"
                     >
                       {module.icon}
                       <span className="hidden sm:inline">{module.name}</span>
@@ -785,7 +596,7 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                             {module.icon}
                           </div>
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-900">
+                            <h3 className="text-lg font-semibold">
                               {module.name}
                             </h3>
                             <p className="text-sm text-gray-600">
@@ -799,14 +610,13 @@ export const AdvancedIntelligenceHub: React.FC = () => {
                               ? "default"
                               : "destructive"
                           }
-                          className="capitalize"
                         >
                           {module.status}
                         </Badge>
                       </div>
 
                       <Suspense fallback={<ModuleLoader />}>
-                        <module.component moduleName={module.name} />
+                        <module.component name={module.name} />
                       </Suspense>
                     </div>
                   </TabsContent>
@@ -815,9 +625,6 @@ export const AdvancedIntelligenceHub: React.FC = () => {
             </CardContent>
           </Card>
         )}
-
-        {/* Offline Indicator */}
-        <OfflineIndicator />
       </div>
     </div>
   );
