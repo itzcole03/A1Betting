@@ -66,14 +66,16 @@ class BackendApi {
   private baseURL: string;
   private useMockData: boolean = false;
   private isBackendAvailable: boolean = false;
-  private isBackendAvailable: boolean = false;
 
   constructor() {
     // Determine the correct backend URL
     this.baseURL = this.determineBackendURL();
 
-    // Check if we should use mock data immediately
-    this.checkBackendAvailability();
+    // Check if we should use mock data immediately in production
+    if (this.isProductionEnvironment()) {
+      this.useMockData = true;
+      console.log("🎭 Production environment detected - Using mock data");
+    }
 
     this.api = axios.create({
       baseURL: this.baseURL,
