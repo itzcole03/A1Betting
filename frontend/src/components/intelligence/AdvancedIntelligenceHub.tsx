@@ -985,7 +985,6 @@ export const AdvancedIntelligenceHub: React.FC = () => {
   }, []);
 
 
-  }, []);
 
   // ========== AUTOMATION HANDLERS ==========
   const triggerSystemOptimization = useCallback(async () => {
