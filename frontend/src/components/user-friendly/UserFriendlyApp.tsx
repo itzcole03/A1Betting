@@ -28,6 +28,9 @@ import {
   Eye,
   Gauge,
   User,
+  Calendar,
+  Edit3,
+  Key,
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import OfflineIndicator from "../ui/OfflineIndicator";
