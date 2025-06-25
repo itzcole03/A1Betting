@@ -985,19 +985,6 @@ export const AdvancedIntelligenceHub: React.FC = () => {
   }, []);
 
 
-  const getModuleProfitScore = useCallback((moduleId: string) => {
-    const profitMap: Record<string, number> = {
-      "advanced-analytics": 25,
-      "ultra-accuracy": 22,
-      "ultra-ml": 20,
-      "realtime-accuracy": 18,
-      "strategy-engine": 15,
-      "ml-model-center": 12,
-      "performance-analytics": 10,
-      "ensemble-insights": 8,
-      "mega-analytics": 30,
-    };
-    return profitMap[moduleId] || Math.floor(Math.random() * 5) + 1;
   }, []);
 
   // ========== AUTOMATION HANDLERS ==========
