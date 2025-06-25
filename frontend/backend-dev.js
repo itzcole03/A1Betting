@@ -152,6 +152,31 @@ app.get("/api/arbitrage-opportunities", (req, res) => {
   res.json(mockArbitrageOpportunities.slice(0, parseInt(limit)));
 });
 
+// Value bets endpoint (v4 API)
+app.get("/api/v4/betting/value-bets", (req, res) => {
+  const { limit = 10 } = req.query;
+  const valueBets = mockBettingOpportunities
+    .filter((opp) => opp.expected_value > 0.05) // Only high value bets
+    .map((opp) => ({
+      id: opp.id,
+      sport: opp.sport,
+      event: opp.event,
+      market: opp.market,
+      odds: opp.odds,
+      probability: opp.probability,
+      expected_value: opp.expected_value,
+      confidence: opp.confidence,
+      recommendation: opp.recommendation,
+      value_score: opp.expected_value * opp.confidence,
+    }))
+    .slice(0, parseInt(limit));
+
+  res.json({
+    value_bets: valueBets,
+    total_count: valueBets.length,
+  });
+});
+
 app.get("/api/transactions", (req, res) => {
   res.json({
     transactions: mockTransactions,
