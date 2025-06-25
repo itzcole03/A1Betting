@@ -243,7 +243,7 @@ class OllamaLLMService {
 
     // Try enhanced PropOllama API first
     try {
-      const response = await fetch(`${backendUrl}/api/propollama/chat`, {
+      const response = await fetch(`${backendUrl}/api/ollama/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
