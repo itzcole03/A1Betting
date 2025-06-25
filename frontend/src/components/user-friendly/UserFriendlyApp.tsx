@@ -56,7 +56,7 @@ import SimpleSettings from "./SimpleSettings";
 
 // Import existing components to integrate
 import { AdvancedIntelligenceHub } from "../intelligence/AdvancedIntelligenceHub";
-import { UltraAccuracyDashboard } from "../overview/UltraAccuracyOverview";
+import { UltraAccuracyDashboard } from "../overview";
 import { AdminSettings } from "../admin/AdminSettings";
 
 interface NavigationItem {
