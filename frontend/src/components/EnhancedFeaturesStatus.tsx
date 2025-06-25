@@ -67,7 +67,7 @@ export const EnhancedFeaturesStatus: React.FC = () => {
             "Strategy and bankroll advice",
             "Real-time model insights",
           ],
-          endpoint: "/api/propollama/chat",
+          endpoint: "/api/ollama/chat",
           accuracy: data.accuracy_metrics?.overall * 100 || 74,
         });
       } else {
