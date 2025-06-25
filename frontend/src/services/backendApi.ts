@@ -184,10 +184,10 @@ class BackendApi {
     }
 
     try {
-      const response = await this.api.get("/api/value-bets");
+      const response = await this.api.get("/api/v4/betting/value-bets");
       return Array.isArray(response.data)
         ? response.data
-        : response.data?.bets || [];
+        : response.data?.value_bets || [];
     } catch (error) {
       console.warn(
         "❌ getValueBets: " + error.message + " - Using fallback data",
