@@ -984,7 +984,6 @@ export const AdvancedIntelligenceHub: React.FC = () => {
     return scoreMap[moduleId] || Math.floor(Math.random() * 40) + 40;
   }, []);
 
-  }, []);
 
   const getModuleProfitScore = useCallback((moduleId: string) => {
     const profitMap: Record<string, number> = {
