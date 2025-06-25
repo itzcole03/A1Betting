@@ -352,25 +352,33 @@ export const PropOllama: React.FC = () => {
               <div className="text-lg font-bold text-purple-400">
                 {liveData.activeAnalyses}
               </div>
-              <div className="text-xs text-gray-400">Live Analyses</div>
+              <div className="text-xs text-gray-300 font-medium">
+                Live Analyses
+              </div>
             </div>
             <div className="glass-card rounded-xl p-3 border border-white/10">
               <div className="text-lg font-bold text-green-400">
                 {liveData.liveGames}
               </div>
-              <div className="text-xs text-gray-400">Games Today</div>
+              <div className="text-xs text-gray-300 font-medium">
+                Games Today
+              </div>
             </div>
             <div className="glass-card rounded-xl p-3 border border-white/10">
               <div className="text-lg font-bold text-blue-400">
                 {liveData.confidencePicks}
               </div>
-              <div className="text-xs text-gray-400">High Confidence</div>
+              <div className="text-xs text-gray-300 font-medium">
+                High Confidence
+              </div>
             </div>
             <div className="glass-card rounded-xl p-3 border border-white/10">
               <div className="text-lg font-bold text-yellow-400">
                 {liveData.valueBets}
               </div>
-              <div className="text-xs text-gray-400">Value Bets</div>
+              <div className="text-xs text-gray-300 font-medium">
+                Value Bets
+              </div>
             </div>
           </div>
         </div>
@@ -425,8 +433,8 @@ export const PropOllama: React.FC = () => {
                       <div
                         className={`text-xs mt-2 ${
                           message.type === "user"
-                            ? "text-white/70"
-                            : "text-gray-400"
+                            ? "text-white/80"
+                            : "text-gray-300"
                         }`}
                       >
                         {message.timestamp.toLocaleTimeString([], {
@@ -438,7 +446,7 @@ export const PropOllama: React.FC = () => {
                       {/* AI Suggestions */}
                       {message.suggestions && message.type === "ai" && (
                         <div className="mt-4 space-y-2">
-                          <div className="text-xs text-gray-400 font-semibold">
+                          <div className="text-xs text-gray-200 font-semibold">
                             Quick follow-ups:
                           </div>
                           <div className="flex flex-wrap gap-2">
@@ -448,7 +456,7 @@ export const PropOllama: React.FC = () => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => sendMessage(suggestion)}
-                                className="px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-300 hover:bg-purple-500/30 transition-all"
+                                className="px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-200 hover:bg-purple-500/30 hover:text-purple-100 transition-all font-medium"
                               >
                                 {suggestion}
                               </motion.button>
@@ -533,7 +541,7 @@ export const PropOllama: React.FC = () => {
                 e.key === "Enter" && !e.shiftKey && sendMessage()
               }
               placeholder="Ask about props, odds, trends, or get betting advice..."
-              className="flex-1 px-6 py-4 bg-gray-800/80 border-2 border-gray-500 rounded-2xl text-white placeholder-gray-300 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all text-lg backdrop-blur-sm shadow-lg"
+              className="flex-1 px-6 py-4 bg-gray-800/80 border-2 border-gray-500 rounded-2xl text-white placeholder-gray-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/50 transition-all text-lg backdrop-blur-sm shadow-lg"
               disabled={isTyping}
             />
             <motion.button
@@ -548,7 +556,7 @@ export const PropOllama: React.FC = () => {
           </div>
 
           <div className="text-center mt-4">
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-300 font-medium">
               PropOllama provides AI-powered analysis. Always gamble
               responsibly.
             </p>
