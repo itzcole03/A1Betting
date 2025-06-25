@@ -401,10 +401,21 @@ export async function getPrizePicksRecommendations(
   sport?: string,
 ): Promise<any[]> {
   try {
-    const opportunities = await integrationService.getBettingOpportunities(
+    const response = await integrationService.getBettingOpportunities(
       sport,
       10,
     );
+
+    // Handle both array and object responses
+    const opportunities = Array.isArray(response)
+      ? response
+      : response?.opportunities || [];
+
+    // Ensure we have an array to work with
+    if (!Array.isArray(opportunities)) {
+      console.warn("API returned non-array data for betting opportunities");
+      return [];
+    }
 
     // Convert betting opportunities to PrizePicks format
     const baseProps = opportunities.map((opp: any) => ({
