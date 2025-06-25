@@ -65,16 +65,17 @@ class BackendApi {
   private api: AxiosInstance;
   private baseURL: string;
   private useMockData: boolean = false;
-  private isBackendAvailable: boolean = false;
 
   constructor() {
-    // Determine the correct backend URL
+    // Determine if we should use mock data based on environment
     this.baseURL = this.determineBackendURL();
 
-    // Check if we should use mock data immediately in production
-    if (this.isProductionEnvironment()) {
+    // If we're in production without a proper backend, use mock data
+    if (this.isProductionWithoutBackend()) {
       this.useMockData = true;
-      console.log("🎭 Production environment detected - Using mock data");
+      console.log(
+        "🎭 Production environment without backend detected - Using mock data",
+      );
     }
 
     this.api = axios.create({
@@ -84,17 +85,6 @@ class BackendApi {
         "Content-Type": "application/json",
       },
     });
-
-    // Request interceptor
-    this.api.interceptors.request.use(
-      (config) => {
-        // Add auth headers if needed
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      },
-    );
 
     // Response interceptor with intelligent fallback
     this.api.interceptors.response.use(
@@ -106,24 +96,14 @@ class BackendApi {
           typeof error.response.data === "string" &&
           error.response.data.includes("<!doctype html>")
         ) {
-          console.warn(
-            "⚠️ Backend API not available - Frontend server returned HTML. Using mock data.",
-          );
+          console.warn("⚠️ Backend API not available - Using mock data");
           this.useMockData = true;
-        } else {
-          console.warn(
-            `API Error: ${error.message}. Falling back to mock data.`,
-          );
         }
-
-        // Enable mock data mode on any API failure
-        this.useMockData = true;
 
         // Return mock data for common endpoints
         const endpoint = error.config?.url || "";
-
-        if (endpoint.includes("health")) {
-          return { data: await cloudMockService.getHealth() };
+        if (endpoint.includes("value-bets")) {
+          return { data: await cloudMockService.getValueBets() };
         }
         if (endpoint.includes("betting-opportunities")) {
           return { data: await cloudMockService.getBettingOpportunities() };
@@ -131,20 +111,43 @@ class BackendApi {
         if (endpoint.includes("arbitrage-opportunities")) {
           return { data: await cloudMockService.getArbitrageOpportunities() };
         }
-        if (endpoint.includes("predictions")) {
-          return { data: await cloudMockService.getPredictions() };
-        }
-        if (endpoint.includes("analytics")) {
-          return { data: await cloudMockService.getAdvancedAnalytics() };
-        }
-        if (endpoint.includes("value-bets")) {
-          return { data: await cloudMockService.getValueBets() };
-        }
 
-        // For other endpoints, return empty/default data
-        return { data: [] };
+        throw error;
       },
     );
+  }
+
+  private determineBackendURL(): string {
+    // Environment variables for backend URL
+    if (import.meta.env.VITE_BACKEND_URL) {
+      return import.meta.env.VITE_BACKEND_URL;
+    }
+    if (import.meta.env.VITE_API_URL) {
+      return import.meta.env.VITE_API_URL;
+    }
+
+    // Local development
+    if (
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1"
+    ) {
+      return "http://localhost:8000";
+    }
+
+    // Production fallback - this will trigger mock data usage
+    return window.location.origin;
+  }
+
+  private isProductionWithoutBackend(): boolean {
+    // Check if we're in production environment (not localhost)
+    const isProduction =
+      !window.location.hostname.includes("localhost") &&
+      !window.location.hostname.includes("127.0.0.1");
+
+    // Check if backend URL points to the same origin as frontend (no separate backend)
+    const backendSameAsOrigin = this.baseURL === window.location.origin;
+
+    return isProduction && backendSameAsOrigin;
   }
 
   // Health check
@@ -157,41 +160,8 @@ class BackendApi {
       const response = await this.api.get("/health");
       return response.data;
     } catch (error) {
+      this.useMockData = true;
       return await cloudMockService.getHealth();
-    }
-  }
-
-  // Betting opportunities
-  public async getBettingOpportunities(): Promise<BettingOpportunity[]> {
-    if (this.useMockData) {
-      return await cloudMockService.getBettingOpportunities();
-    }
-
-    try {
-      const response = await this.api.get("/api/betting-opportunities");
-      return Array.isArray(response.data)
-        ? response.data
-        : response.data?.opportunities || [];
-    } catch (error) {
-      console.warn("Failed to fetch betting opportunities, using mock data");
-      return await cloudMockService.getBettingOpportunities();
-    }
-  }
-
-  // Arbitrage opportunities
-  public async getArbitrageOpportunities(): Promise<ArbitrageOpportunity[]> {
-    if (this.useMockData) {
-      return await cloudMockService.getArbitrageOpportunities();
-    }
-
-    try {
-      const response = await this.api.get("/api/arbitrage-opportunities");
-      return Array.isArray(response.data)
-        ? response.data
-        : response.data?.opportunities || [];
-    } catch (error) {
-      console.warn("Failed to fetch arbitrage opportunities, using mock data");
-      return await cloudMockService.getArbitrageOpportunities();
     }
   }
 
@@ -210,22 +180,98 @@ class BackendApi {
       console.warn(
         "❌ getValueBets: " + error.message + " - Using fallback data",
       );
+      this.useMockData = true;
       return await cloudMockService.getValueBets();
     }
   }
 
+  // Betting opportunities
+  public async getBettingOpportunities(): Promise<BettingOpportunity[]> {
+    if (this.useMockData) {
+      return await cloudMockService.getBettingOpportunities();
+    }
+
+    try {
+      const response = await this.api.get("/api/betting-opportunities");
+      return Array.isArray(response.data)
+        ? response.data
+        : response.data?.opportunities || [];
+    } catch (error) {
+      console.warn("Failed to fetch betting opportunities, using mock data");
+      this.useMockData = true;
+      return await cloudMockService.getBettingOpportunities();
+    }
+  }
+
+  // Arbitrage opportunities
+  public async getArbitrageOpportunities(): Promise<ArbitrageOpportunity[]> {
+    if (this.useMockData) {
+      return await cloudMockService.getArbitrageOpportunities();
+    }
+
+    try {
+      const response = await this.api.get("/api/arbitrage-opportunities");
+      return Array.isArray(response.data)
+        ? response.data
+        : response.data?.opportunities || [];
+    } catch (error) {
+      console.warn("Failed to fetch arbitrage opportunities, using mock data");
+      this.useMockData = true;
+      return await cloudMockService.getArbitrageOpportunities();
+    }
+  }
+
   // Predictions
-  public async getPredictions(params: any = {}) {
+  public async getPredictions(params?: any) {
     if (this.useMockData) {
       return await cloudMockService.getPredictions();
     }
 
     try {
       const response = await this.api.get("/api/predictions", { params });
-      return response.data;
+      return Array.isArray(response.data)
+        ? response.data
+        : response.data?.predictions || [];
     } catch (error) {
       console.warn("Failed to fetch predictions, using mock data");
+      this.useMockData = true;
       return await cloudMockService.getPredictions();
+    }
+  }
+
+  // Transactions
+  public async getTransactions(): Promise<Transaction[]> {
+    if (this.useMockData) {
+      return await cloudMockService.getTransactions();
+    }
+
+    try {
+      const response = await this.api.get("/api/transactions");
+      return Array.isArray(response.data)
+        ? response.data
+        : response.data?.transactions || [];
+    } catch (error) {
+      console.warn("Failed to fetch transactions, using mock data");
+      this.useMockData = true;
+      return await cloudMockService.getTransactions();
+    }
+  }
+
+  // Active bets
+  public async getActiveBets(): Promise<ActiveBet[]> {
+    if (this.useMockData) {
+      return await cloudMockService.getActiveBets();
+    }
+
+    try {
+      const response = await this.api.get("/api/active-bets");
+      return Array.isArray(response.data)
+        ? response.data
+        : response.data?.active_bets || [];
+    } catch (error) {
+      console.warn("Failed to fetch active bets, using mock data");
+      this.useMockData = true;
+      return await cloudMockService.getActiveBets();
     }
   }
 
@@ -236,101 +282,16 @@ class BackendApi {
     }
 
     try {
-      const response = await this.api.get("/api/advanced-analytics");
+      const response = await this.api.get("/api/analytics/advanced");
       return response.data;
     } catch (error) {
       console.warn("Failed to fetch analytics, using mock data");
+      this.useMockData = true;
       return await cloudMockService.getAdvancedAnalytics();
-    }
-  }
-
-  // Active bets
-  public async getActiveBets(): Promise<ActiveBet[]> {
-    if (this.useMockData) {
-      return [];
-    }
-
-    try {
-      const response = await this.api.get("/api/active-bets");
-      return Array.isArray(response.data) ? response.data : [];
-    } catch (error) {
-      console.warn("Failed to fetch active bets");
-      return [];
-    }
-  }
-
-  // Transactions
-  public async getTransactions(): Promise<Transaction[]> {
-    if (this.useMockData) {
-      return [];
-    }
-
-    try {
-      const response = await this.api.get("/api/transactions");
-      return Array.isArray(response.data) ? response.data : [];
-    } catch (error) {
-      console.warn("Failed to fetch transactions");
-      return [];
-    }
-  }
-
-  // Risk profiles
-  public async getRiskProfiles(): Promise<RiskProfile[]> {
-    if (this.useMockData) {
-      return [];
-    }
-
-    try {
-      const response = await this.api.get("/api/risk-profiles");
-      return Array.isArray(response.data) ? response.data : [];
-    } catch (error) {
-      console.warn("Failed to fetch risk profiles");
-      return [];
-    }
-  }
-
-  // Generic methods with error handling
-  public async get(endpoint: string, params?: any) {
-    try {
-      const response = await this.api.get(endpoint, { params });
-      return response.data;
-    } catch (error) {
-      console.warn(`GET ${endpoint} failed:`, error);
-      return null;
-    }
-  }
-
-  public async post(endpoint: string, data?: any) {
-    try {
-      const response = await this.api.post(endpoint, data);
-      return response.data;
-    } catch (error) {
-      console.warn(`POST ${endpoint} failed:`, error);
-      return null;
-    }
-  }
-
-  public async put(endpoint: string, data?: any) {
-    try {
-      const response = await this.api.put(endpoint, data);
-      return response.data;
-    } catch (error) {
-      console.warn(`PUT ${endpoint} failed:`, error);
-      return null;
-    }
-  }
-
-  public async delete(endpoint: string) {
-    try {
-      const response = await this.api.delete(endpoint);
-      return response.data;
-    } catch (error) {
-      console.warn(`DELETE ${endpoint} failed:`, error);
-      return null;
     }
   }
 }
 
-// Export singleton instance
+// Create singleton instance
 export const backendApi = new BackendApi();
 export default backendApi;
