@@ -274,7 +274,7 @@ export const AdvancedIntelligenceHub: React.FC = () => {
   // ========== MODULE CONFIGURATIONS ==========
   const moduleConfigs: ModuleConfig[] = useMemo(
     () => [
-      // Analytics Modules
+      // Analytics Modules - High money-making potential
       {
         id: "advanced-analytics",
         name: "Advanced Analytics Hub",
@@ -285,6 +285,11 @@ export const AdvancedIntelligenceHub: React.FC = () => {
         dependencies: [],
         computationLevel: "heavy",
         isActive: true,
+        moneyMakingScore: 95,
+        predictionImpact: 88,
+        description:
+          "Core analytics engine driving 95% of profitable opportunities",
+        profitContribution: "$12,547",
       },
       {
         id: "universal-analytics",
