@@ -863,8 +863,8 @@ export class UltimateBrainCentralNervousSystem extends EventEmitter {
   private setupEventListeners(): void {
     this.on("ultimate-prediction:generated", (data) => {
       try {
-        if (this.monitor && typeof this.monitor.trackEvent === "function") {
-          this.monitor.trackEvent("ultimate_prediction_generated", data);
+        if (this.monitor && typeof // this.monitor.trackEvent === "function") {
+          // this.monitor.trackEvent("ultimate_prediction_generated", data);
         } else {
           console.debug("[EVENT] ultimate_prediction_generated", data);
         }
@@ -875,8 +875,8 @@ export class UltimateBrainCentralNervousSystem extends EventEmitter {
 
     this.on("ultimate-brain:initialized", () => {
       try {
-        if (this.monitor && typeof this.monitor.trackEvent === "function") {
-          this.monitor.trackEvent("ultimate_brain_initialized", {});
+        if (this.monitor && typeof // this.monitor.trackEvent === "function") {
+          // this.monitor.trackEvent("ultimate_brain_initialized", {});
         } else {
           console.debug("[EVENT] ultimate_brain_initialized");
         }
