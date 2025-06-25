@@ -984,19 +984,6 @@ export const AdvancedIntelligenceHub: React.FC = () => {
     return scoreMap[moduleId] || Math.floor(Math.random() * 40) + 40;
   }, []);
 
-  const getModuleAccuracyBoost = useCallback((moduleId: string) => {
-    const boostMap: Record<string, number> = {
-      "advanced-analytics": 12,
-      "ultra-ml": 15,
-      "ultra-accuracy": 18,
-      "realtime-accuracy": 10,
-      "ml-model-center": 8,
-      "ensemble-insights": 14,
-      "strategy-engine": 6,
-      "performance-analytics": 5,
-      "mega-analytics": 20,
-    };
-    return boostMap[moduleId] || Math.floor(Math.random() * 8) + 2;
   }, []);
 
   const getModuleProfitScore = useCallback((moduleId: string) => {
