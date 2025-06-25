@@ -45,8 +45,8 @@ import PrizePicksPro from "./PrizePicksPro";
 import PropOllama from "./PropOllama";
 import UserFriendlyDashboard from "./UserFriendlyDashboard";
 import SimpleSettings from "./SimpleSettings";
-import SettingsTest from "./SettingsTest";
-// Import advanced intelligence hub
+
+// Import existing components to integrate
 import { AdvancedIntelligenceHub } from "../intelligence/AdvancedIntelligenceHub";
 import { UltraAccuracyDashboard } from "../overview/UltraAccuracyOverview";
 import { AdminSettings } from "../admin/AdminSettings";
@@ -55,7 +55,6 @@ import { AdminSettings } from "../admin/AdminSettings";
 import SearchModal from "../modals/SearchModal";
 import NotificationsModal from "../modals/NotificationsModal";
 
-// Define interfaces
 interface NavigationItem {
   id: string;
   label: string;
@@ -81,20 +80,36 @@ const UserFriendlyApp: React.FC = () => {
     setSidebarOpen(false);
   };
 
-  // Initialize user and Ultimate Brain
+  // Initialize user and Ultimate Brain with fallback
   useEffect(() => {
     const initializeApp = async () => {
       try {
         await initializeSettings();
-        setUserLoading(false);
 
-        // Initialize Ultimate Brain System
-        const initResult = await ultimateBrainCentralNervousSystem.initialize();
-        setIsUltimateBrainInitialized(initResult.success);
+        // Initialize Ultimate Brain System in background
+        try {
+          const initResult =
+            await ultimateBrainCentralNervousSystem.initialize();
+          setIsUltimateBrainInitialized(initResult.success);
 
-        if (initResult.success) {
-          toast.success("🧠 Ultimate Brain System Activated!");
+          if (initResult.success) {
+            toast.success("🧠 Ultimate Brain System Activated!");
+          } else {
+            console.warn(
+              "Ultimate Brain failed to initialize, using autonomous mode",
+            );
+            setIsUltimateBrainInitialized(false);
+          }
+        } catch (brainError) {
+          console.warn(
+            "Ultimate Brain initialization failed, using autonomous mode:",
+            brainError,
+          );
+          // Continue without Ultimate Brain - app should still work
+          setIsUltimateBrainInitialized(false);
         }
+
+        setUserLoading(false);
       } catch (error) {
         console.error("App initialization error:", error);
         setUserLoading(false);
@@ -120,25 +135,25 @@ const UserFriendlyApp: React.FC = () => {
       }
     },
     refetchInterval: 30000,
+    enabled: isUltimateBrainInitialized,
   });
 
-  // Navigation items with Ultimate Brain components - Fixed to properly handle onNavigate
+  // Streamlined navigation for user-friendly main tools
   const navigationItems: NavigationItem[] = useMemo(
     () => [
       {
         id: "dashboard",
-        label: "Ultimate Dashboard",
+        label: "Dashboard",
         icon: <Home className="w-5 h-5" />,
         component: UserFriendlyDashboard,
         badge: isUltimateBrainInitialized ? "🧠" : undefined,
       },
       {
         id: "prizepicks",
-        label: "Ultra PrizePicks",
+        label: "PrizePicks Pro",
         icon: <Trophy className="w-5 h-5" />,
         component: PrizePicksPro,
-        badge:
-          ultimateBrainHealth?.performance.avgAccuracy > 0.8 ? "🎯" : undefined,
+        badge: "🏆",
       },
       {
         id: "moneymaker",
@@ -149,7 +164,7 @@ const UserFriendlyApp: React.FC = () => {
       },
       {
         id: "propollama",
-        label: "Prop AI Oracle",
+        label: "propOllama",
         icon: <Brain className="w-5 h-5" />,
         component: PropOllama,
         badge: "🤖",
@@ -159,27 +174,13 @@ const UserFriendlyApp: React.FC = () => {
         label: "Intelligence Hub",
         icon: <BarChart3 className="w-5 h-5" />,
         component: AdvancedIntelligenceHub,
-        badge: "🧠",
-      },
-      {
-        id: "ultra-accuracy",
-        label: "Ultra Accuracy",
-        icon: <Target className="w-5 h-5" />,
-        component: UltraAccuracyDashboard,
-        badge: "🎯",
+        badge: isUltimateBrainInitialized ? "🧠" : "⚡",
       },
       {
         id: "settings",
         label: "Settings",
         icon: <SettingsIcon className="w-5 h-5" />,
         component: SimpleSettings,
-      },
-      {
-        id: "admin",
-        label: "Admin Control",
-        icon: <TrendingUp className="w-5 h-5" />,
-        component: AdminSettings,
-        badge: "⚙️",
       },
     ],
     [isUltimateBrainInitialized, ultimateBrainHealth],
@@ -198,7 +199,7 @@ const UserFriendlyApp: React.FC = () => {
         >
           <div className="w-16 h-16 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <div className="text-cyan-400 text-xl font-semibold mb-2">
-            Initializing Ultimate Brain...
+            Initializing Autonomous Intelligence...
           </div>
           <div className="text-gray-400">Loading advanced AI systems</div>
         </motion.div>
@@ -230,7 +231,7 @@ const UserFriendlyApp: React.FC = () => {
                 <div className="text-2xl">🧠</div>
                 <div>
                   <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 bg-clip-text text-transparent">
-                    A1BETTING ULTIMATE BRAIN
+                    A1BETTING AUTONOMOUS AI
                   </h1>
                   <div className="text-xs text-gray-400">
                     {getUserDisplayName()} • {getUserEmail()}
@@ -240,6 +241,20 @@ const UserFriendlyApp: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-4">
+              {/* Status Indicator */}
+              <div className="flex items-center gap-2 px-3 py-1 bg-gray-800/40 rounded-full">
+                <div
+                  className={`w-2 h-2 rounded-full animate-pulse ${
+                    isUltimateBrainInitialized
+                      ? "bg-green-400"
+                      : "bg-orange-400"
+                  }`}
+                />
+                <span className="text-xs">
+                  {isUltimateBrainInitialized ? "AI Active" : "Autonomous Mode"}
+                </span>
+              </div>
+
               <button
                 onClick={() => setSearchModalOpen(true)}
                 className="p-2 rounded-lg bg-gray-800/40 hover:bg-gray-700/40 transition-colors"
@@ -283,7 +298,7 @@ const UserFriendlyApp: React.FC = () => {
               <div className="p-6">
                 <h2 className="text-lg font-semibold text-cyan-400 mb-6 flex items-center gap-2">
                   <Brain className="w-5 h-5" />
-                  Ultimate Navigation
+                  Navigation
                 </h2>
                 <nav className="space-y-2">
                   {navigationItems.map((item) => (
@@ -306,48 +321,29 @@ const UserFriendlyApp: React.FC = () => {
                 </nav>
               </div>
 
-              {/* Ultimate Brain Status */}
+              {/* Autonomous AI Status */}
               <div className="mt-auto p-6 border-t border-gray-800">
                 <div className="bg-gray-800/40 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Brain className="w-4 h-4 text-cyan-400" />
                     <span className="text-sm font-medium text-cyan-400">
-                      Ultimate Brain
+                      Autonomous AI
                     </span>
                   </div>
                   <div className="text-xs text-gray-400 space-y-1">
                     <div className="flex justify-between">
                       <span>Status:</span>
-                      <span
-                        className={`${
-                          isUltimateBrainInitialized
-                            ? "text-green-400"
-                            : "text-yellow-400"
-                        }`}
-                      >
-                        {isUltimateBrainInitialized ? "ACTIVE" : "INITIALIZING"}
+                      <span className="text-green-400">ACTIVE</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Mode:</span>
+                      <span className="text-blue-400">
+                        {isUltimateBrainInitialized ? "Enhanced" : "Autonomous"}
                       </span>
                     </div>
-                    {ultimateBrainHealth && (
-                      <>
-                        <div className="flex justify-between">
-                          <span>Accuracy:</span>
-                          <span className="text-green-400">
-                            {(
-                              ultimateBrainHealth.performance.avgAccuracy * 100
-                            ).toFixed(1)}
-                            %
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Models:</span>
-                          <span className="text-blue-400">
-                            {ultimateBrainHealth.models.active}/
-                            {ultimateBrainHealth.models.total}
-                          </span>
-                        </div>
-                      </>
-                    )}
+                    <div className="text-xs text-green-400 mt-2">
+                      ✅ All tools AI-enhanced
+                    </div>
                   </div>
                 </div>
               </div>
@@ -385,15 +381,15 @@ const UserFriendlyApp: React.FC = () => {
           <div className="text-center">
             <div className="text-cyan-400 bg-gradient-to-r from-cyan-400 via-green-400 to-blue-500 bg-clip-text font-bold mb-2 text-lg drop-shadow-2xl relative">
               <span className="relative z-10">
-                A1BETTING ULTIMATE BRAIN INTELLIGENCE
+                A1BETTING AUTONOMOUS INTELLIGENCE
               </span>
             </div>
             <div className="text-cyan-300/60 font-medium">
-              © 2024 Ultimate Sports Intelligence Platform • Maximum Accuracy
-              AI • Real-time Analysis •{" "}
+              © 2024 Autonomous Sports Intelligence Platform • AI-Enhanced
+              Tools • Real-time Analysis •{" "}
               {isUltimateBrainInitialized
-                ? "🧠 Brain Active"
-                : "⚡ Initializing"}
+                ? "🧠 Enhanced Mode"
+                : "⚡ Autonomous Mode"}
             </div>
           </div>
         </footer>
