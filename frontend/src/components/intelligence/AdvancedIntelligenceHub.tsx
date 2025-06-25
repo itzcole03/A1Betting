@@ -858,6 +858,55 @@ export const AdvancedIntelligenceHub: React.FC = () => {
     return moduleConfigs.filter((config) => activeModules.has(config.id));
   }, [moduleConfigs, activeModules]);
 
+  // ========== MONEY-MAKING METRICS ==========
+  const getModuleMoneyScore = useCallback((moduleId: string) => {
+    const scoreMap: Record<string, number> = {
+      "advanced-analytics": 95,
+      "ultra-accuracy": 92,
+      "ultra-ml": 88,
+      "realtime-accuracy": 85,
+      "strategy-engine": 82,
+      "performance-analytics": 78,
+      "ml-model-center": 75,
+      "universal-analytics": 72,
+      "ensemble-insights": 68,
+      "feature-insights": 65,
+      "mega-analytics": 90,
+      "cyber-analytics": 70,
+    };
+    return scoreMap[moduleId] || Math.floor(Math.random() * 40) + 40;
+  }, []);
+
+  const getModuleAccuracyBoost = useCallback((moduleId: string) => {
+    const boostMap: Record<string, number> = {
+      "advanced-analytics": 12,
+      "ultra-ml": 15,
+      "ultra-accuracy": 18,
+      "realtime-accuracy": 10,
+      "ml-model-center": 8,
+      "ensemble-insights": 14,
+      "strategy-engine": 6,
+      "performance-analytics": 5,
+      "mega-analytics": 20,
+    };
+    return boostMap[moduleId] || Math.floor(Math.random() * 8) + 2;
+  }, []);
+
+  const getModuleProfitScore = useCallback((moduleId: string) => {
+    const profitMap: Record<string, number> = {
+      "advanced-analytics": 25,
+      "ultra-accuracy": 22,
+      "ultra-ml": 20,
+      "realtime-accuracy": 18,
+      "strategy-engine": 15,
+      "ml-model-center": 12,
+      "performance-analytics": 10,
+      "ensemble-insights": 8,
+      "mega-analytics": 30,
+    };
+    return profitMap[moduleId] || Math.floor(Math.random() * 5) + 1;
+  }, []);
+
   // ========== AUTOMATION HANDLERS ==========
   const triggerSystemOptimization = useCallback(async () => {
     setIsSystemOptimizing(true);
