@@ -462,7 +462,7 @@ const UserFriendlyApp: React.FC = () => {
                 />
                 <span className="text-xs text-gray-300">
                   Brain {ultimateBrainHealth.status.toUpperCase()}
-                </span></button>
+                </span>
                 <span className="text-xs text-cyan-400">
                   {(ultimateBrainHealth.performance?.avgAccuracy * 100).toFixed(
                     1,
