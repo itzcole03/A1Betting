@@ -74,14 +74,597 @@ interface UserData {
   totalProfit: number;
 }
 
-// Placeholder for UserProfile component
+// Comprehensive User Profile Component - Consolidated from all profile components
 const UserProfile: React.FC<{ onNavigate: (page: string) => void }> = ({
   onNavigate,
 }) => {
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "settings" | "security" | "risk"
+  >("overview");
+  const [isEditing, setIsEditing] = useState(false);
+  const [userSettings, setUserSettings] = useState(getUserSettings());
+
+  // Comprehensive user profile data consolidated from existing components
+  const [profile] = useState({
+    name: getUserDisplayName(),
+    email: getUserEmail(),
+    phone: "+1 (555) 123-4567",
+    location: "New York, NY",
+    joinDate: "January 2023",
+    tier: "Ultimate Brain Pro",
+    verified: true,
+    twoFactorEnabled: true,
+    bio: "Professional sports bettor leveraging AI and machine learning for data-driven betting strategies.",
+    stats: {
+      totalProfit: 47350.75,
+      winRate: 84.7,
+      totalBets: 234,
+      avgROI: 23.8,
+      currentStreak: 7,
+      bestStreak: 15,
+      totalVolume: 125000,
+    },
+    riskProfile: {
+      type: "moderate",
+      maxStake: 500,
+      minStake: 25,
+      confidenceThreshold: 0.75,
+      maxExposure: 2500,
+      stopLossPercentage: 0.15,
+      takeProfitPercentage: 0.3,
+    },
+    achievements: [
+      {
+        id: 1,
+        title: "High Roller",
+        description: "Placed $50k+ in total bets",
+        icon: "💰",
+        unlocked: true,
+      },
+      {
+        id: 2,
+        title: "Accuracy Expert",
+        description: "80%+ win rate for 30 days",
+        icon: "🎯",
+        unlocked: true,
+      },
+      {
+        id: 3,
+        title: "Streak Master",
+        description: "15+ win streak achieved",
+        icon: "🔥",
+        unlocked: true,
+      },
+      {
+        id: 4,
+        title: "Brain Power",
+        description: "100 AI-assisted bets",
+        icon: "🧠",
+        progress: 87,
+        target: 100,
+      },
+    ],
+    recentActivity: [
+      {
+        id: 1,
+        type: "win",
+        title: "Lakers vs Warriors - Over 220.5",
+        amount: 275,
+        time: "2 hours ago",
+        confidence: 89,
+      },
+      {
+        id: 2,
+        type: "pending",
+        title: "Chiefs ML vs Bills",
+        amount: 150,
+        time: "1 day ago",
+        confidence: 82,
+      },
+      {
+        id: 3,
+        type: "achievement",
+        title: "Earned 'Accuracy Expert' achievement",
+        time: "2 days ago",
+      },
+    ],
+  });
+
+  const handleSettingChange = (
+    category: keyof typeof userSettings,
+    setting: string,
+    value: any,
+  ) => {
+    const newSettings = {
+      ...userSettings,
+      [category]: {
+        ...userSettings[category],
+        [setting]: value,
+      },
+    };
+    setUserSettings(newSettings);
+    saveUserSettings(newSettings);
+    toast.success("Settings updated!", { icon: "⚙️" });
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(amount);
+  };
+
+  const getRiskProfileColor = (type: string) => {
+    switch (type) {
+      case "conservative":
+        return "text-green-400 bg-green-500/20";
+      case "moderate":
+        return "text-yellow-400 bg-yellow-500/20";
+      case "aggressive":
+        return "text-red-400 bg-red-500/20";
+      default:
+        return "text-gray-400 bg-gray-500/20";
+    }
+  };
+
   return (
-    <div className="p-6 bg-gray-800/40 rounded-lg">
-      <h2 className="text-xl font-bold text-white mb-4">User Profile</h2>
-      <p className="text-gray-400">Profile functionality coming soon...</p>
+    <div className="space-y-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-8"
+      >
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+          👤 Ultimate User Profile
+        </h2>
+        <p className="text-gray-400 mt-2">
+          Comprehensive profile management and performance analytics
+        </p>
+      </motion.div>
+
+      {/* Profile Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-gray-800/40 backdrop-blur-sm rounded-2xl border border-cyan-500/20 p-6"
+      >
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 flex items-center justify-center">
+            <User size={32} className="text-white" />
+          </div>
+
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <h3 className="text-2xl font-bold text-white">{profile.name}</h3>
+              <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                ✓ Verified
+              </span>
+              <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400">
+                {profile.tier}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-400 mb-4">
+              <Calendar size={16} />
+              <span>Member since {profile.joinDate}</span>
+            </div>
+            <p className="text-gray-300">{profile.bio}</p>
+          </div>
+
+          <button
+            onClick={() => setIsEditing(!isEditing)}
+            className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors flex items-center gap-2"
+          >
+            <Edit3 size={16} />
+            Edit Profile
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Navigation Tabs */}
+      <div className="flex flex-wrap gap-2 bg-gray-800/40 backdrop-blur-sm rounded-xl p-2">
+        {[
+          {
+            id: "overview",
+            label: "Overview",
+            icon: <User className="w-4 h-4" />,
+          },
+          {
+            id: "settings",
+            label: "Settings",
+            icon: <Settings className="w-4 h-4" />,
+          },
+          {
+            id: "security",
+            label: "Security",
+            icon: <Shield className="w-4 h-4" />,
+          },
+          {
+            id: "risk",
+            label: "Risk Profile",
+            icon: <Target className="w-4 h-4" />,
+          },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+              activeTab === tab.id
+                ? "bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 text-cyan-400"
+                : "text-gray-400 hover:text-white hover:bg-gray-800/40"
+            }`}
+          >
+            {tab.icon}
+            <span className="font-medium">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      <motion.div
+        key={activeTab}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* Overview Tab */}
+        {activeTab === "overview" && (
+          <div className="space-y-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-green-500/20 p-6 text-center">
+                <DollarSign className="w-8 h-8 text-green-400 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-green-400">
+                  {formatCurrency(profile.stats.totalProfit)}
+                </div>
+                <div className="text-sm text-gray-400">Total Profit</div>
+              </div>
+              <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-6 text-center">
+                <Target className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-cyan-400">
+                  {profile.stats.winRate}%
+                </div>
+                <div className="text-sm text-gray-400">Win Rate</div>
+              </div>
+              <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-purple-500/20 p-6 text-center">
+                <TrendingUp className="w-8 h-8 text-purple-400 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-purple-400">
+                  {profile.stats.totalBets}
+                </div>
+                <div className="text-sm text-gray-400">Total Bets</div>
+              </div>
+              <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-orange-500/20 p-6 text-center">
+                <Trophy className="w-8 h-8 text-orange-400 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-orange-400">
+                  {profile.stats.avgROI}%
+                </div>
+                <div className="text-sm text-gray-400">Avg ROI</div>
+              </div>
+            </div>
+
+            {/* Achievements */}
+            <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-yellow-500/20 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Award className="w-5 h-5 text-yellow-400" />
+                Achievements
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {profile.achievements.map((achievement) => (
+                  <div
+                    key={achievement.id}
+                    className={`p-4 rounded-lg border-2 ${
+                      achievement.unlocked
+                        ? "bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-yellow-500/30"
+                        : "bg-gray-800/40 border-gray-600/30"
+                    }`}
+                  >
+                    <div className="text-2xl mb-2">{achievement.icon}</div>
+                    <h4
+                      className={`font-semibold mb-1 ${achievement.unlocked ? "text-yellow-400" : "text-gray-400"}`}
+                    >
+                      {achievement.title}
+                    </h4>
+                    <p
+                      className={`text-xs ${achievement.unlocked ? "text-yellow-300" : "text-gray-500"}`}
+                    >
+                      {achievement.description}
+                    </p>
+                    {achievement.progress && achievement.target && (
+                      <div className="mt-2">
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-gray-400">Progress</span>
+                          <span className="text-gray-400">
+                            {achievement.progress}/{achievement.target}
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-700 rounded-full h-1.5">
+                          <div
+                            className="bg-gradient-to-r from-cyan-500 to-purple-500 h-1.5 rounded-full"
+                            style={{
+                              width: `${(achievement.progress / achievement.target) * 100}%`,
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Recent Activity */}
+            <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-cyan-400" />
+                Recent Activity
+              </h3>
+              <div className="space-y-3">
+                {profile.recentActivity.map((activity) => (
+                  <div
+                    key={activity.id}
+                    className={`p-3 rounded-lg ${
+                      activity.type === "win"
+                        ? "bg-green-500/10 border border-green-500/20"
+                        : activity.type === "pending"
+                          ? "bg-blue-500/10 border border-blue-500/20"
+                          : "bg-yellow-500/10 border border-yellow-500/20"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-white">
+                          {activity.title}
+                        </div>
+                        <div className="text-sm text-gray-400 flex items-center gap-2">
+                          <Clock className="w-3 h-3" />
+                          {activity.time}
+                          {activity.confidence && (
+                            <span>• Confidence: {activity.confidence}%</span>
+                          )}
+                        </div>
+                      </div>
+                      {activity.amount && (
+                        <div
+                          className={`font-bold ${activity.type === "win" ? "text-green-400" : "text-blue-400"}`}
+                        >
+                          {activity.type === "win" ? "+" : ""}
+                          {formatCurrency(activity.amount)}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Settings Tab */}
+        {activeTab === "settings" && (
+          <div className="space-y-6">
+            <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-cyan-500/20 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Settings className="w-5 h-5 text-cyan-400" />
+                Account Settings
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Display Name
+                  </label>
+                  <input
+                    type="text"
+                    value={userSettings.profile.name}
+                    onChange={(e) =>
+                      handleSettingChange("profile", "name", e.target.value)
+                    }
+                    className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-800/60 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={userSettings.profile.email}
+                    onChange={(e) =>
+                      handleSettingChange("profile", "email", e.target.value)
+                    }
+                    className="w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-800/60 text-white"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-purple-500/20 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Bell className="w-5 h-5 text-purple-400" />
+                Notifications
+              </h3>
+              <div className="space-y-4">
+                {[
+                  {
+                    key: "email",
+                    label: "Email Notifications",
+                    desc: "Receive updates via email",
+                  },
+                  {
+                    key: "push",
+                    label: "Push Notifications",
+                    desc: "Real-time browser notifications",
+                  },
+                  {
+                    key: "sound",
+                    label: "Sound Alerts",
+                    desc: "Audio notifications for important events",
+                  },
+                ].map((setting) => (
+                  <div
+                    key={setting.key}
+                    className="flex items-center justify-between"
+                  >
+                    <div>
+                      <div className="font-medium text-white">
+                        {setting.label}
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        {setting.desc}
+                      </div>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={
+                          userSettings.notifications[
+                            setting.key as keyof typeof userSettings.notifications
+                          ]
+                        }
+                        onChange={(e) =>
+                          handleSettingChange(
+                            "notifications",
+                            setting.key,
+                            e.target.checked,
+                          )
+                        }
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-cyan-600"></div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Security Tab */}
+        {activeTab === "security" && (
+          <div className="space-y-6">
+            <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-green-500/20 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-green-400" />
+                Security Settings
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+                  <div className="flex items-center gap-3">
+                    <Key className="w-5 h-5 text-green-400" />
+                    <div>
+                      <div className="font-medium text-green-300">
+                        Two-Factor Authentication
+                      </div>
+                      <div className="text-sm text-green-400">
+                        Extra security for your account
+                      </div>
+                    </div>
+                  </div>
+                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400">
+                    {profile.twoFactorEnabled ? "Enabled" : "Disabled"}
+                  </span>
+                </div>
+
+                <div className="space-y-3">
+                  {[
+                    {
+                      label: "Change Password",
+                      desc: "Update your account password",
+                    },
+                    {
+                      label: "Login Sessions",
+                      desc: "Manage your active sessions",
+                    },
+                    {
+                      label: "Download Security Report",
+                      desc: "View your security activity",
+                    },
+                  ].map((action) => (
+                    <button
+                      key={action.label}
+                      className="w-full px-4 py-3 text-left bg-gray-700/40 rounded-lg hover:bg-gray-700/60 transition-colors"
+                    >
+                      <div className="font-medium text-white">
+                        {action.label}
+                      </div>
+                      <div className="text-sm text-gray-400">{action.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Risk Profile Tab */}
+        {activeTab === "risk" && (
+          <div className="space-y-6">
+            <div className="bg-gray-800/40 backdrop-blur-sm rounded-xl border border-orange-500/20 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Target className="w-5 h-5 text-orange-400" />
+                Risk Management Profile
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="text-sm text-gray-400 mb-1">Profile Type</div>
+                  <div
+                    className={`px-3 py-2 rounded-md font-medium text-center ${getRiskProfileColor(profile.riskProfile.type)}`}
+                  >
+                    {profile.riskProfile.type.charAt(0).toUpperCase() +
+                      profile.riskProfile.type.slice(1)}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-sm text-gray-400 mb-1">
+                    Maximum Stake
+                  </div>
+                  <div className="text-lg font-bold text-green-400">
+                    {formatCurrency(profile.riskProfile.maxStake)}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-sm text-gray-400 mb-1">
+                    Minimum Stake
+                  </div>
+                  <div className="text-lg font-bold text-blue-400">
+                    {formatCurrency(profile.riskProfile.minStake)}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-sm text-gray-400 mb-1">
+                    Confidence Threshold
+                  </div>
+                  <div className="text-lg font-bold text-cyan-400">
+                    {(profile.riskProfile.confidenceThreshold * 100).toFixed(0)}
+                    %
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-sm text-gray-400 mb-1">
+                    Maximum Exposure
+                  </div>
+                  <div className="text-lg font-bold text-purple-400">
+                    {formatCurrency(profile.riskProfile.maxExposure)}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-sm text-gray-400 mb-1">Stop Loss</div>
+                  <div className="text-lg font-bold text-red-400">
+                    {(profile.riskProfile.stopLossPercentage * 100).toFixed(0)}%
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6">
+                <button
+                  onClick={() => onNavigate("settings")}
+                  className="w-full px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+                >
+                  Modify Risk Settings
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </motion.div>
     </div>
   );
 };
