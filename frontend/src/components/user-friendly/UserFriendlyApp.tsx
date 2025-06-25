@@ -248,7 +248,7 @@ const NotificationsModal: React.FC<{
                           <Clock className="w-3 h-3 text-gray-500" />
                           <span className="text-xs text-gray-500">
                             {notification.time}
-                          </span></button>
+                          </span>
                         </div>
                       </div>
                     </div>
