@@ -368,7 +368,7 @@ export class ApiService {
   // Monitoring endpoints
   static async getHealthStatus(): Promise<HealthStatus> {
     try {
-      const response = await apiClient.get("/api/v4/health/comprehensive");
+      const response = await apiClient.get("/health");
       return response.data;
     } catch (error) {
       return ApiErrorHandler.handleError(error, "getHealthStatus", {

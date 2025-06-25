@@ -388,6 +388,12 @@ const UserFriendlyApp: React.FC = () => {
   const activeComponent = navigationItems.find((item) => item.id === activeTab);
   const ActiveComponent = activeComponent?.component || UserFriendlyDashboard;
 
+  // Navigation handler
+  const handleNavigate = (page: string) => {
+    setActiveTab(page);
+    setSidebarOpen(false);
+  };
+
   if (userLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
@@ -653,7 +659,7 @@ const UserFriendlyApp: React.FC = () => {
                 transition={{ duration: 0.3 }}
                 className="w-full"
               >
-                <ActiveComponent />
+                <ActiveComponent onNavigate={handleNavigate} />
               </motion.div>
             </div>
           </main>
