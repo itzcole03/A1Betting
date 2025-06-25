@@ -281,19 +281,28 @@ const UserFriendlyApp: React.FC = () => {
 
   const queryClient = useQueryClient();
 
-  // Initialize Ultimate Brain System on mount
-  useEffect(() => {
-    const initializeUltimateBrain = async () => {
-      try {
-        await ultimateBrainCentralNervousSystem.initialize();
-        setIsUltimateBrainInitialized(true);
-
-        toast.success("🧠⚡ Ultimate Brain System Activated!", {
-          duration: 4000,
-          icon: "🚀",
+        // Initialize Ultimate Brain System in background with timeout
+        const brainInitPromise = new Promise(async (resolve) => {
+          try {
+            const initResult = await ultimateBrainCentralNervousSystem.initialize();
+            setIsUltimateBrainInitialized(initResult.success);
+            if (initResult.success) {
+              toast.success("🧠 Ultimate Brain System Activated!");
+            }
+            resolve(initResult.success);
+          } catch (brainError) {
+            console.warn("Ultimate Brain initialization failed, using autonomous mode:", brainError);
+            setIsUltimateBrainInitialized(false);
+            resolve(false);
+          }
         });
 
-        // Setup health monitoring
+        // Don't wait more than 2 seconds for Ultimate Brain
+        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(false), 2000));
+
+        Promise.race([brainInitPromise, timeoutPromise]).then(() => {
+          // Brain initialization handled above, continue either way
+        });
         const healthInterval = setInterval(() => {
           const health = ultimateBrainCentralNervousSystem.getSystemHealth();
           setUltimateBrainHealth(health);
@@ -365,27 +374,13 @@ const UserFriendlyApp: React.FC = () => {
         label: "Intelligence Hub",
         icon: <BarChart3 className="w-5 h-5" />,
         component: AdvancedIntelligenceHub,
-        badge: "🧠",
-      },
-      {
-        id: "ultra-accuracy",
-        label: "Ultra Accuracy",
-        icon: <Target className="w-5 h-5" />,
-        component: UltraAccuracyDashboard,
-        badge: "🎯",
+        badge: isUltimateBrainInitialized ? "🧠" : "⚡",
       },
       {
         id: "settings",
         label: "Settings",
         icon: <SettingsIcon className="w-5 h-5" />,
         component: SimpleSettings,
-      },
-      {
-        id: "admin",
-        label: "Admin Control",
-        icon: <TrendingUp className="w-5 h-5" />,
-        component: AdminSettings,
-        badge: "⚙️",
       },
     ],
     [isUltimateBrainInitialized, ultimateBrainHealth],
